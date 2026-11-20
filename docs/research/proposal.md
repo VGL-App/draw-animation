@@ -7,7 +7,7 @@ reference_apps: [com.vblast.flipaclip, com.banix.drawsketch.animationmaker, com.
 status: approved               # draft | approved. Chỉ dev ghi approved
 approved_by: anh Nhật
 approved_at: 2026-11-20
-design_direction:              # tên hướng thiết kế dev đã chọn (mục 10), điền sau bước chọn hướng
+design_direction: Studio Night # tên hướng thiết kế dev đã chọn (mục 10), điền sau bước chọn hướng
 ---
 
 # ĐỀ XUẤT APP: FRAMELOOP – DRAW ANIMATION
@@ -113,7 +113,7 @@ Tên gói giữ nguyên. Tên trên store và tên dưới icon đổi được 
 | Rào cản trước nét vẽ đầu tiên | FlipaClip 10 thao tác và một màn trả phí không đóng bằng back; Banix 11 QC và màn VIP; ZenByte chỉ 4 thao tác (FC, Banix, ZB) | Không có màn trả phí hay onboarding nhiều trang trước màn vẽ; hướng dẫn trên màn vẽ bỏ qua được | ≤ 4 thao tác từ lần mở đầu tới nét vẽ đầu tiên |
 | Lời mời nâng cấp nhẹ nhàng giữ được việc đang làm | ZenByte: ở khung 150, một thẻ nhỏ trên canvas báo giới hạn và có nút "Nâng cấp", không chặn, không làm tối nền, tự ẩn sau vài giây (ZB). FlipaClip đẩy màn trả phí toàn màn hình (FC) | Khi chạm giới hạn layer, mời rewarded bằng thẻ nhỏ trên màn vẽ, không mở màn toàn màn hình | Không có màn toàn màn hình nào tự mở trên màn vẽ |
 | Bài học mở thẳng vào màn vẽ giữ người mới | ZenByte: 115 bài trong 6 nhóm, bài mở thẳng vào màn vẽ với khung dựng sẵn, nét dẫn màu đỏ, biểu đồ nhịp và âm thanh đặt sẵn; bộ truyện nhiều tập; nút "Thử bài học miễn phí" ở màn dự án trống (ZB). Stickman có bản đồ bài học kiểu Duolingo (APK) | Bài học là một dự án dựng sẵn mở trong màn vẽ, có lớp dẫn; không tính vào số dự án | Tỉ lệ người mới hoàn thành bài đầu tiên trong ngày đầu (sự kiện `lesson_complete`) |
-| Canvas nhỏ vì nhiều hàng điều khiển | ZenByte có 4 hàng điều khiển dưới canvas, canvas 16:9 chỉ còn khoảng 25% chiều cao màn (ZB) | Thanh công cụ một bên, dòng thời gian thu gọn được (khuôn của FlipaClip, dòng thời gian 56 dp) | Canvas 16:9 chiếm ≥ 40% chiều cao màn ở khung 411 × 891 |
+| Canvas nhỏ vì nhiều hàng điều khiển | ZenByte có 4 hàng điều khiển dưới canvas, canvas 16:9 chỉ còn khoảng 25% chiều cao màn (ZB) | Thanh công cụ một bên, dòng thời gian thu gọn được (khuôn của FlipaClip, dòng thời gian 56 dp) | Canvas của dự án 9:16 chiếm ≥ 40% chiều cao màn ở khung 411 × 891; dự án 16:9 cho xoay ngang màn vẽ, vì canvas 16:9 rộng hết màn dọc chỉ cao khoảng 26% |
 | Rewarded không đóng được làm người dùng kẹt | Rewarded Pangle của FlipaClip không có nút đóng sau 60 giây rồi tự mở Play; interstitial Pangle của Banix chờ 42 đến 66 giây (FC, Banix) | Chỉ AdMob (Q7) | Không quảng cáo nào chờ quá 30 giây mới đóng được (đo trên staging) |
 
 ## 5. Tính năng
@@ -229,9 +229,13 @@ Tranh, dự án, âm thanh chỉ lưu trên máy. Không tài khoản. Không c�
 
 | Hướng | Ý chính | Màu | Chữ | Icon | Link Figma |
 | --- | --- | --- | --- | --- | --- |
-| | | | | | |
+| Studio Night | Tối, tối giản, kiểu phần mềm dựng phim; giao diện lùi vào nền tối để tranh nổi bật | Nền #0E1014, bề mặt #171A20, nhấn xanh chanh #B6F35C, xanh dương #6EA8FF; onion skin đỏ #FF5A5F và xanh #3D8BFF | Space Grotesk (tiêu đề), Inter (nội dung) | Material Symbols Rounded (Apache 2.0) | [Direction/Studio Night](https://www.figma.com/design/uDdqi9ojRvIy4689FvCh5O?node-id=2-2) |
+| Paper & Ink | Sáng, ấm, như sổ phác thảo; tiêu đề chữ có chân | Nền giấy #F6F1E8, mực xanh #2340C8, cam đất #E0673A | Fraunces, DM Sans | Material Symbols Rounded | [Direction/Paper & Ink](https://www.figma.com/design/uDdqi9ojRvIy4689FvCh5O?node-id=3-2) |
+| Loop Pop | Nhiều màu, vui nhưng không trẻ con; bo tròn lớn, chữ đậm | Tím #6B4EFF, vàng #FFB800, nền trắng | Bricolage Grotesque, Plus Jakarta Sans | Material Symbols Rounded | [Direction/Loop Pop](https://www.figma.com/design/uDdqi9ojRvIy4689FvCh5O?node-id=3-309) |
 
-Dev chọn: <hướng>, ngày <YYYY-MM-DD>.
+Mỗi hướng có bảng phong cách (biến màu Light và Dark, chữ, bo góc, khoảng cách, icon), 7 component và hai màn `ProjectsScreen_list` và `EditorScreen_drawing` ở khung 411 × 891, cùng một bố cục để so phong cách. So với màn tương ứng của FlipaClip (ảnh khảo sát `10-home`, `16-first-strokes`): nút tạo hoạt hình lớn ở đầu màn dự án thay cho nút + giữa thanh đáy; thanh công cụ dọc bên trái và tùy chọn cọ bên phải để canvas 9:16 chiếm khoảng 57% chiều cao màn; dải khung hiện 8 khung kèm onion skin, số khung, tốc độ khung; không có quảng cáo trên màn vẽ.
+
+Dev chọn: **Studio Night**, ngày 2026-11-20 (anh Nhật).
 
 ## 11. Tài sản mượn tạm dự kiến
 
