@@ -102,7 +102,7 @@ Tên gói giữ nguyên. Tên trên store và tên dưới icon đổi được 
 
 | Bài học | Bằng chứng | Cải tiến | Cách đo |
 | --- | --- | --- | --- |
-| Quảng cáo chen vào lúc vẽ bị phạt nặng nhất | CEM bật QC khi đang kéo nét; FlipaClip "3 QC trong chưa tới 5 phút"; Banix "8 QC trước khi vẽ được khung đầu" (Play §3). Đo trên máy: Banix 11 QC trước màn chính (Banix); Banix, CEM đặt native thu gọn trên màn vẽ (APK) | Không có vị trí quảng cáo nào trên màn vẽ, không quảng cáo chen vào giữa nét vẽ hay lúc phát. Quảng cáo `resume` khi quay lại app vẫn hiện ở mọi màn (Q4) | 0 vị trí QC đặt trên màn vẽ; số QC từ lúc mở app tới nét vẽ đầu tiên ≤ 1 |
+| Quảng cáo chen vào lúc vẽ bị phạt nặng nhất | CEM bật QC khi đang kéo nét; FlipaClip "3 QC trong chưa tới 5 phút"; Banix "8 QC trước khi vẽ được khung đầu" (Play §3). Đo trên máy: Banix 11 QC trước màn chính (Banix); Banix, CEM đặt native thu gọn trên màn vẽ (APK) | Không quảng cáo nào hiện lên chen vào giữa nét vẽ hay lúc phát. Màn vẽ có đúng một vị trí: dải native nhỏ cố định ngay dưới thanh tiêu đề (Q17), giữ chỗ 56 dp cả khi chưa có quảng cáo để canvas không nhảy, cách canvas ít nhất 16 dp để nét vẽ không bắt đầu trên quảng cáo. Quảng cáo `resume` khi quay lại app vẫn hiện ở mọi màn (Q4) | Màn vẽ có 1 vị trí quảng cáo (dải trên), 0 vị trí trong canvas, dòng thời gian và các bảng công cụ; canvas không đổi chỗ khi quảng cáo nạp hay lỗi; số QC từ lúc mở app tới nét vẽ đầu tiên ≤ 1 |
 | Quảng cáo sát nút gây bấm nhầm | Banix đặt QC sát nút, che khung hình (Play §3). Đo trên máy: trang 4 hướng dẫn Banix dời nút "Tiếp theo" lên giữa và đặt nút CTA quảng cáo cùng cỡ, cùng màu đúng chỗ cũ; native ở màn ngôn ngữ đổi quảng cáo đúng lúc nút Apply hiện, cách nút 16 dp; khóa `CTR_CLICK_*` trong APK (Banix, APK) | Không có vị trí quảng cáo trên màn vẽ; native, MREC chỉ ở các màn liệt kê ở mục 9.1; native medium và MREC trong nội dung cách nút của app ít nhất 24 dp (thanh đáy và ô native trong lưới theo khoảng cách của `:core:ads` và của lưới); vị trí cạnh nút giữ chỗ khi chưa có quảng cáo (`keepSpaceWhenEmpty`) hoặc nút ghim đáy, để nút không dịch chỗ | Rà ảnh thiết kế; không có vị trí QC trên màn vẽ và dòng thời gian |
 | Mở khoá từng món bằng QC làm người dùng bực | FlipaClip mỗi layer một QC, có khi xem 3 lần (Play §3, §4 điểm 4) | Một lượt rewarded mở trọn một phạm vi: layer 6 đến 10 cho cả dự án; gói cọ nâng cao, gói âm thanh trong 24 giờ; tùy chọn xuất cho lần xuất đó | Mỗi lần mở khóa cần đúng 1 lượt xem; số lượt xem để mở layer 6 đến 10 trong một dự án = 1 |
 | Khoá tính năng cốt lõi | CEM khoá sau 4 khung; FlipaClip khoá nhập nhạc (Play §3) | Không giới hạn khung; 5 layer miễn phí; nhập nhạc miễn phí | Dự án 200 khung × 5 layer không gặp màn khoá nào |
@@ -134,7 +134,7 @@ Tên gói giữ nguyên. Tên trên store và tên dưới icon đổi được 
 | Gói hiệu ứng âm thanh thêm (ngoài bộ cơ bản), mở 24 giờ bằng rewarded | khác biệt | FlipaClip (gói âm thanh chỉ cho Plus) | Q15; nội dung CC0 trên R2 |
 | Xuất MP4, GIF; watermark bỏ bằng rewarded | bắt buộc | Mọi app | `:feature:export` |
 | Tự lưu, khôi phục sau crash | bắt buộc | | Chỉ lưu trên máy |
-| Quảng cáo ở điểm ngắt: không có vị trí quảng cáo trên màn vẽ, không quảng cáo trước nét vẽ đầu tiên của lần mở đầu (mục 9.1) | khác biệt | | Banix, CEM đặt native trên màn vẽ |
+| Quảng cáo không chen vào lúc vẽ: màn vẽ chỉ có một dải native cố định ở trên, không quảng cáo nào hiện lên giữa nét vẽ; trước nét vẽ đầu tiên của lần mở đầu chỉ có một native trên màn trống (mục 9.1) | khác biệt | | Banix, CEM đặt native thu gọn trên màn vẽ, bật lên che canvas |
 | Sao lưu dự án ra file và khôi phục (bộ chọn file hệ thống, chọn được Google Drive) | khác biệt | SMS (qua Drive) | Không cần backend |
 | Tô màu đóng khe hở | khác biệt | Chưa app miễn phí nào làm tốt | |
 | Camera ảo: lia, phóng, xoay cả cảnh | khác biệt | Stick Nodes | Có trong bản đầu (Q3) |
@@ -187,7 +187,7 @@ Hỗ trợ điện thoại màn hình gập theo mặc định của mẫu: thê
 
 ## 8. Điểm nổi bật
 
-- Vẽ thoải mái: không quảng cáo nào chen vào lúc bạn đang vẽ hay xem lại.
+- Vẽ thoải mái: không quảng cáo nào bật lên giữa lúc bạn đang vẽ hay xem lại.
 - Không giới hạn khung, 5 layer miễn phí, nhập nhạc của bạn miễn phí.
 - Không bao giờ mất bài: tự lưu liên tục, sao lưu cả dự án ra một file.
 - Tô màu không tràn, kể cả khi nét vẽ còn hở.
@@ -205,16 +205,19 @@ App mẫu: FlipaClip dày (open, sau thao tác, rewarded từng layer); Banix r�
 | `open_app` | App open | Loading | Mỗi lần mở app (`show_open_ads`); lần đầu sau khi cài tắt (`show_open_ads_first_open`) | A |
 | `resume`, `resume_inter` | App open, interstitial | Quay lại app | Mọi màn, kể cả màn vẽ (Q4); chỉ khi quay lại app | A |
 | `native_combo` | Native toàn màn hình | Sau mỗi interstitial của feature (không sau inter lúc mở app hay quay lại app) | Đếm ngược `time_close_native` | A |
+| `projects_empty_native` | Native medium | Danh sách dự án, trống (lần mở đầu) | Dưới hai nút, cách ít nhất 24 dp; là quảng cáo duy nhất trước nét vẽ đầu tiên (Q18) | A |
 | `projects_bottom` | Thanh đáy native nhỏ | Danh sách dự án | Trên thanh điều hướng | A |
+| `restore_mrec` | Banner MREC | Hộp thoại khôi phục dự án | Dưới thanh tiến độ; hộp thoại rộng 348 dp cho vừa 300 dp | A |
 | `projects_grid` | Native trong lưới | Danh sách dự án | Một ô sau mỗi 6 dự án | A |
 | `create_inter` | Interstitial | Tạo dự án, khi bấm Create | Từ dự án thứ 2; theo `ads_interval` | A |
 | `new_project_native` | Native medium | Tạo dự án | Giữa các nhóm tùy chọn; nút Create ghim đáy, cách ít nhất 24 dp; `keepSpaceWhenEmpty` | B |
 | `editor_exit_inter` | Interstitial | Rời màn vẽ | Sau khi đã tự lưu; theo `ads_interval` | A |
+| `editor_top_native` | Native nhỏ (dải 56 dp) | Màn vẽ, ngay dưới thanh tiêu đề | Giữ chỗ cố định (`keepSpaceWhenEmpty`), cách canvas ít nhất 16 dp; mọi trạng thái của màn vẽ, kể cả lúc phát (Q17) | A |
 | `editor_rw_layer` | Rewarded | Màn vẽ, thêm layer thứ 6 | Mở layer 6 đến 10 cho cả dự án | A |
 | `editor_rw_brushes` | Rewarded | Màn vẽ, chọn cọ nâng cao | Mở gói cọ nâng cao 24 giờ; 8 đến 10 cọ cơ bản luôn miễn phí | A |
 | `editor_rw_sounds` | Rewarded | Màn vẽ, bảng âm thanh | Mở gói hiệu ứng âm thanh 24 giờ; nhập nhạc riêng, ghi âm, bộ hiệu ứng cơ bản luôn miễn phí | A |
 | `export_rw_extra` | Rewarded | Xuất | Bỏ watermark, chuỗi PNG, nền trong: mở cho lần xuất đó của dự án | A |
-| `export_options_mrec` | Banner MREC | Xuất, tùy chọn | Trong phần cuộn, dưới mục Chất lượng; nút Export ghim đáy, cách ít nhất 24 dp, nên MREC co về 0 khi nạp lỗi không làm nút dịch chỗ | B |
+| `export_options_mrec` | Banner MREC | Xuất, tùy chọn | Ngay dưới thẻ tóm tắt dự án, trên danh sách định dạng (Q18); không dùng thanh đáy vì sẽ sát nút Export ghim đáy, không chen giữa các thẻ định dạng (bảng "Luôn giữ") | A |
 | `export_wait_mrec` | Banner MREC | Xuất, đang chờ | Màn chờ có chỗ trống cố định 300 × 250 và không có nút nào gần (chỉ Hủy ở trên), nên dùng MREC thay native medium; so eCPM với native medium sau khi phát hành | A |
 | `export_done_native` | Native medium | Xuất xong | Dưới ảnh xem trước; các nút ghim đáy, cách ít nhất 24 dp | A |
 | `export_interstitial` | Interstitial | Rời màn Xuất xong | Sau khi file đã lưu; theo `ads_interval` | A |
@@ -227,9 +230,9 @@ App mẫu: FlipaClip dày (open, sau thao tác, rewarded từng layer); Banix r�
 
 `ads_interval` đặt 30 giây trên Remote Config (Q16; mặc định của PARTNER là 45 giây). Khóa này là khoảng cách giữa hai interstitial của feature; app open, `resume_inter` và rewarded không bị nó chặn.
 
-**Trước nét vẽ đầu tiên (app tự làm, `:core:ads` không có luật này):** tới khi người dùng vẽ nét đầu tiên ở bất kỳ dự án hay bài học nào, app không hiện vị trí quảng cáo nào (thanh đáy, ô lưới, native medium, MREC, interstitial như `create_inter`, `lesson_start_inter`; rewarded chỉ khi người dùng tự chọn). Từ lần mở thứ hai, `open_app` vẫn hiện dù người dùng chưa vẽ nét nào; thước đo ở mục 4 chỉ tính lần mở đầu. Vị trí toàn app `open_app` đã tắt ở lần mở đầu; `resume` vẫn chạy theo Q4 nếu người dùng rời app rồi quay lại. Các điều kiện "từ dự án thứ 2" và "mở 24 giờ" cũng do app tự làm (đếm dự án, lưu thời điểm mở khóa).
+**Trước nét vẽ đầu tiên (app tự làm, `:core:ads` không có luật này):** tới khi người dùng vẽ nét đầu tiên ở bất kỳ dự án hay bài học nào, app chỉ hiện `projects_empty_native` trên màn trống (Q18) và `editor_top_native` khi đã vào màn vẽ, không hiện vị trí quảng cáo nào khác (thanh đáy, ô lưới, native medium, MREC, interstitial như `create_inter`, `lesson_start_inter`; rewarded chỉ khi người dùng tự chọn). Từ lần mở thứ hai, `open_app` vẫn hiện dù người dùng chưa vẽ nét nào; thước đo ở mục 4 chỉ tính lần mở đầu. Vị trí toàn app `open_app` đã tắt ở lần mở đầu; `resume` vẫn chạy theo Q4 nếu người dùng rời app rồi quay lại. Các điều kiện "từ dự án thứ 2" và "mở 24 giờ" cũng do app tự làm (đếm dự án, lưu thời điểm mở khóa).
 
-Không đặt vị trí quảng cáo ở: canvas, dòng thời gian, các bảng công cụ của màn vẽ (cọ, tô, chữ, layer, âm thanh, onion skin), lúc đang phát, menu của dự án. Rewarded mà người dùng tự chọn (thêm layer thứ 6, chọn cọ nâng cao, mở gói âm thanh) được mở từ màn vẽ: đó là hộp thoại mời sau một thao tác, không phải vị trí hiển thị sẵn. Không làm quảng cáo giống nút của app hay đặt sát nút để tăng lượt bấm (bảng "Luôn giữ"). Nhóm C (đã xét, không làm): hộp thoại "Thoát?" có native medium.
+Không đặt vị trí quảng cáo ở: canvas, dòng thời gian, các bảng công cụ của màn vẽ (cọ, tô, chữ, layer, âm thanh, onion skin), menu của dự án; ngoài dải trên (`editor_top_native`), không quảng cáo nào hiện lên trong lúc vẽ hay phát. Rewarded mà người dùng tự chọn (thêm layer thứ 6, chọn cọ nâng cao, mở gói âm thanh) được mở từ màn vẽ: đó là hộp thoại mời sau một thao tác, không phải vị trí hiển thị sẵn. Không làm quảng cáo giống nút của app hay đặt sát nút để tăng lượt bấm (bảng "Luôn giữ"). Nhóm C (đã xét, không làm): hộp thoại "Thoát?" có native medium.
 
 ### 9.2 Sự kiện phân tích đề xuất
 
@@ -265,7 +268,7 @@ Không có. Hiệu ứng âm thanh lấy từ nguồn CC0 ngay từ đầu, cả
 
 ## 12. Câu hỏi còn mở
 
-Mọi câu đã có trả lời của anh Nhật, ghi ở cột cuối: Q1 đến Q14 ngày 2026-11-19, Q15 và Q16 ngày 2026-11-20.
+Mọi câu đã có trả lời của anh Nhật, ghi ở cột cuối: Q1 đến Q14 ngày 2026-11-19, Q15 đến Q18 ngày 2026-11-20.
 
 | # | Câu hỏi | Phương án AI đề xuất | Dev trả lời |
 | --- | --- | --- | --- |
@@ -290,3 +293,5 @@ Câu hỏi mới sau khảo sát trên máy:
 | Q14 | Q10 (bản Pro) có xem lại không? ZenByte bán Pro trọn đời 140.000 ₫, FlipaClip và Banix bán thuê bao | Giữ "chưa trong bản đầu"; ghi lại mức giá trọn đời làm mốc khi bàn bản Pro || Giữ: chưa làm |
 | Q15 | Tối đa hóa doanh thu quảng cáo: thêm vị trí ở đâu? (anh Nhật hỏi 2026-11-20) | Nhóm A (bật khi phát hành) và nhóm B (dựng sẵn, bật dần) ở mục 9.1; không đặt trên màn vẽ; không làm hộp thoại thoát có quảng cáo | **A + B**; thêm màn Hoàn thành bài học và màn Cài đặt vào mục 7 |
 | Q16 | `ads_interval` (khoảng cách tối thiểu giữa hai interstitial của feature; mặc định PARTNER 45 giây) | 90 giây | **30 giây**, chỉnh được từ xa |
+| Q17 | Thêm một native nhỏ trên màn vẽ? (anh Nhật đề nghị 2026-11-20). AI nêu rủi ro: đảo định vị đã duyệt, nét vẽ bắt đầu trên quảng cáo thành lượt bấm không hợp lệ | Dải trên, ngay dưới thanh tiêu đề, giữ chỗ cố định, cách canvas 16 dp | **Dải trên** |
+| Q18 | Thêm quảng cáo ở màn Projects trống, hộp thoại khôi phục, và đưa quảng cáo màn Xuất lên trên (anh Nhật đề nghị 2026-11-20) | Native medium dưới hai nút trên màn trống (quảng cáo duy nhất trước nét vẽ đầu tiên); MREC trong hộp thoại khôi phục; MREC ngay dưới thẻ tóm tắt ở màn Xuất | **Như đề xuất** |
