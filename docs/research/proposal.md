@@ -160,10 +160,10 @@ Tên gói giữ nguyên. Tên trên store và tên dưới icon đổi được 
 
 Đối chiếu với khảo sát: FlipaClip mất 10 thao tác và một màn trả phí, ZenByte 4 thao tác, Banix hơn 10 thao tác và 11 quảng cáo (mục 2). Frameloop theo cách của ZenByte.
 
-- **Mở đầu, lần đầu:** Loading > hộp thoại đồng ý quảng cáo > Danh sách dự án (trống, có nút "Tạo dự án" và thẻ "Học bài đầu tiên") > Tạo dự án (chọn khung, tốc độ; có giá trị mặc định) > Màn vẽ (hướng dẫn trên màn vẽ, bỏ qua được). **3 đến 4 bước tới nét vẽ đầu tiên**, không có quảng cáo toàn màn hình (open app chỉ từ lần mở thứ 3), không có màn trả phí.
-- **Mở lại:** Loading > (open app từ lần mở thứ 3, tối đa một lần mỗi phiên) > Danh sách dự án > chạm dự án > Màn vẽ.
+- **Mở đầu, lần đầu:** Loading > hộp thoại đồng ý quảng cáo > Danh sách dự án (trống, có nút "Tạo dự án" và thẻ "Học bài đầu tiên") > Tạo dự án (chọn khung, tốc độ; có giá trị mặc định) > Màn vẽ (hướng dẫn trên màn vẽ, bỏ qua được). **3 đến 4 bước tới nét vẽ đầu tiên**, không có quảng cáo toàn màn hình (open app tắt ở lần mở đầu sau khi cài; interstitial khi tạo dự án chỉ từ dự án thứ 2), không có màn trả phí.
+- **Mở lại:** Loading > (open app) > Danh sách dự án > chạm dự án > Màn vẽ > (rời màn vẽ: interstitial theo `ads_interval`).
 - **Luồng chính:** Màn vẽ: vẽ > thêm khung > onion skin > phát thử > lặp lại. Mọi công cụ nằm trong màn vẽ (thanh công cụ, bảng layer, dòng thời gian, bảng âm thanh).
-- **Xuất:** Màn vẽ > Xuất > chọn định dạng, chất lượng (rewarded nếu bỏ watermark, PNG, nền trong) > Màn chờ xuất (native) > Xong: lưu vào thư viện, chia sẻ > (interstitial sau khi file đã lưu) > quay lại.
+- **Xuất:** Màn vẽ > Xuất > chọn định dạng, chất lượng (rewarded nếu bỏ watermark, PNG, nền trong) > Màn chờ xuất (MREC) > Xong (native medium): lưu vào thư viện, chia sẻ > (interstitial khi rời màn, sau khi file đã lưu) > quay lại.
 - **Bài học:** Danh sách dự án > Bài học > chọn bài > dự án mẫu mở trong màn vẽ, có chỉ dẫn từng bước.
 - **Sao lưu:** Danh sách dự án > menu dự án > Sao lưu ra file > bộ chọn file hệ thống. Khôi phục: Danh sách dự án > Nhập từ file.
 
@@ -177,6 +177,8 @@ Tên gói giữ nguyên. Tên trên store và tên dưới icon đổi được 
 | Xuất | `ExportScreen_...` | options, exporting, done, error | export |
 | Bài học | `LessonsScreen_...` | list, loading, error | lessons |
 | Chỉ dẫn bài học trên màn vẽ | `EditorScreen_lesson_...` | step | editor |
+| Hoàn thành bài học | `LessonDoneScreen_...` | default | lessons |
+| Cài đặt | `SettingsScreen_...` | default | app |
 
 Hỗ trợ điện thoại màn hình gập theo mặc định của mẫu: thêm frame `_unfolded` (673 × 841) cho Màn vẽ và Danh sách dự án, vì bố cục đổi khi rộng (bảng layer và dòng thời gian nằm cạnh canvas). Máy tính bảng: Q6.
 
@@ -193,21 +195,34 @@ Hỗ trợ điện thoại màn hình gập theo mặc định của mẫu: thê
 
 ### 9.1 Vị trí quảng cáo
 
-App mẫu: FlipaClip dày (open, sau thao tác, rewarded từng layer); Banix rất dày, sát nút; Stick Nodes một lần lúc mở (Play §3). AI đề xuất theo Play §7, ánh xạ vào `AdPlacement` của `:core:ads` (bộ PARTNER của AdsKit, ADR-0045):
+App mẫu: FlipaClip dày (open, sau thao tác, rewarded từng layer); Banix rất dày, sát nút; Stick Nodes một lần lúc mở (Play §3). Ngày 2026-11-20 anh Nhật yêu cầu tối đa hóa doanh thu quảng cáo (Q15): dựng sẵn mọi chỗ có điểm ngắt tự nhiên, mọi vị trí mặc định tắt và bật bằng Remote Config (`is_show_<mã vị trí>`); nhóm A bật khi phát hành, nhóm B bật dần theo ARPDAU so với tỷ lệ giữ chân D1, D7. Định dạng và hành vi theo `:core:ads` (bộ PARTNER, ADR-0045) và bảng "Luôn giữ" của `docs/ops/ads-guide.md`.
 
-| Vị trí | Định dạng | Màn | Quy tắc đề xuất |
-| --- | --- | --- | --- |
-| `open_app` | App open | Loading | Từ lần mở thứ 3, tối đa một lần mỗi phiên |
-| `resume`, `resume_inter` | App open, interstitial | Quay lại app | Hiện như mọi màn, kể cả màn vẽ (Q4); chỉ khi quay lại app, không chen vào giữa nét vẽ |
-| `projects_native` | Native medium | Danh sách dự án | Cuối danh sách hoặc dưới cùng, cách xa nút |
-| `lessons_native` | Native small | Bài học | |
-| `editor_rw_layer` | Rewarded | Màn vẽ, khi thêm layer thứ 6 | Mở layer 6 đến 10 cho cả dự án |
-| `export_rw_extra` | Rewarded | Xuất | Bỏ watermark, chuỗi PNG, nền trong: mở cho lần xuất đó của dự án |
-| `export_native` | Native medium | Màn chờ xuất | |
-| `export_interstitial` | Interstitial | Sau khi xuất xong | Sau khi file đã lưu; theo `ads_interval` |
-| (không bao giờ) | | Vị trí đặt trên màn vẽ, chen vào lúc đang phát, đè canvas hay dòng thời gian | |
+| Vị trí | Định dạng | Màn | Quy tắc | Nhóm |
+| --- | --- | --- | --- | --- |
+| `open_app` | App open | Loading | Mỗi lần mở app; lần đầu sau khi cài tắt (`show_open_ads_first_open`) | A |
+| `resume`, `resume_inter` | App open, interstitial | Quay lại app | Mọi màn, kể cả màn vẽ (Q4); chỉ khi quay lại app | A |
+| `native_combo` | Native toàn màn hình | Sau mỗi interstitial | Đếm ngược `time_close_native` | A |
+| `projects_bottom` | Thanh đáy native nhỏ | Danh sách dự án | Trên thanh điều hướng | A |
+| `projects_grid` | Native trong lưới | Danh sách dự án | Một ô sau mỗi 6 dự án | A |
+| `create_inter` | Interstitial | Tạo dự án, khi bấm Create | Từ dự án thứ 2; theo `ads_interval` | A |
+| `new_project_native` | Native medium | Tạo dự án | Giữa các nhóm tùy chọn, cách nút Create ít nhất 24 dp | B |
+| `editor_exit_inter` | Interstitial | Rời màn vẽ | Sau khi đã tự lưu; theo `ads_interval` | A |
+| `editor_rw_layer` | Rewarded | Màn vẽ, thêm layer thứ 6 | Mở layer 6 đến 10 cho cả dự án | A |
+| `editor_rw_brushes` | Rewarded | Màn vẽ, chọn cọ nâng cao | Mở gói cọ nâng cao 24 giờ; 8 đến 10 cọ cơ bản luôn miễn phí | A |
+| `editor_rw_sounds` | Rewarded | Màn vẽ, bảng âm thanh | Mở gói hiệu ứng âm thanh 24 giờ; nhập nhạc riêng, ghi âm, bộ hiệu ứng cơ bản luôn miễn phí | A |
+| `export_rw_extra` | Rewarded | Xuất | Bỏ watermark, chuỗi PNG, nền trong: mở cho lần xuất đó của dự án | A |
+| `export_options_mrec` | Banner MREC | Xuất, tùy chọn | Dưới mục Chất lượng, cách nút Export | B |
+| `export_wait_mrec` | Banner MREC | Xuất, đang chờ | Thay native medium; người dùng chờ khoảng 10 giây | A |
+| `export_done_native` | Native medium | Xuất xong | Dưới ảnh xem trước, cách các nút | A |
+| `export_interstitial` | Interstitial | Rời màn Xuất xong | Sau khi file đã lưu; theo `ads_interval` | A |
+| `lessons_grid` | Native trong lưới | Bài học | Một ô sau mỗi 4 thẻ | A |
+| `lessons_bottom` | Thanh đáy native nhỏ | Bài học | Trên thanh điều hướng | A |
+| `lesson_start_inter` | Interstitial | Vào bài học | Theo `ads_interval` | A |
+| `lesson_done_native` | Native medium | Hoàn thành bài học (màn mới) | Dưới kết quả | B |
+| `lesson_next_inter` | Interstitial | Bấm "Bài tiếp" | Theo `ads_interval` | B |
+| `settings_bottom` | Thanh đáy native nhỏ | Cài đặt | | B |
 
-Gói âm thanh, gói cọ mở bằng rewarded (Play §7) để bản sau, khi có nội dung thêm.
+`ads_interval` mặc định 30 giây (Q16). Không đặt quảng cáo ở: canvas, dòng thời gian, các bảng công cụ của màn vẽ (cọ, tô, chữ, layer, âm thanh, onion skin), lúc đang phát, menu của dự án, và trước nét vẽ đầu tiên của lần mở đầu. Không làm quảng cáo giống nút của app hay đặt sát nút để tăng lượt bấm (bảng "Luôn giữ"). Hộp thoại "Thoát?" có native (nhóm C) không làm.
 
 ### 9.2 Sự kiện phân tích đề xuất
 
@@ -266,3 +281,5 @@ Câu hỏi mới sau khảo sát trên máy:
 | Q12 | Số bài học bản đầu | 6 đến 10 bài, mỗi bài là dự án dựng sẵn mở trong màn vẽ (khung có sẵn, lớp nét dẫn, biểu đồ nhịp), theo cách ZenByte. Bộ truyện nhiều tập để bản sau || **15 đến 20 bài, chia nhóm** |
 | Q13 | Layer miễn phí: ZenByte cho không giới hạn, FlipaClip 3 | Giữ 5 miễn phí, 6 đến 10 bằng một rewarded cho cả dự án; nâng lên nếu số liệu cho thấy người dùng chạm giới hạn nhiều mà ít xem quảng cáo || Như đề xuất |
 | Q14 | Q10 (bản Pro) có xem lại không? ZenByte bán Pro trọn đời 140.000 ₫, FlipaClip và Banix bán thuê bao | Giữ "chưa trong bản đầu"; ghi lại mức giá trọn đời làm mốc khi bàn bản Pro || Giữ: chưa làm |
+| Q15 | Tối đa hóa doanh thu quảng cáo: thêm vị trí ở đâu? (anh Nhật hỏi 2026-11-20) | Nhóm A (bật khi phát hành) và nhóm B (dựng sẵn, bật dần) ở mục 9.1; không đặt trên màn vẽ; không làm hộp thoại thoát có quảng cáo | **A + B**; thêm màn Hoàn thành bài học và màn Cài đặt vào mục 7 |
+| Q16 | `ads_interval` (nhịp tối thiểu giữa hai quảng cáo toàn màn hình) | 90 giây | **30 giây**, chỉnh được từ xa |
