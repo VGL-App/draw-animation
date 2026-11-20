@@ -176,12 +176,12 @@ Tên gói giữ nguyên. Tên trên store và tên dưới icon đổi được 
 | Màn hình | Tên frame | Trạng thái cần dựng | Feature |
 | --- | --- | --- | --- |
 | Onboarding | `OnboardingScreen_<trạng thái>_<light\|dark>` | page-1, page-2, page-3, page-4 | onboarding |
-| Danh sách dự án | `ProjectsScreen_<trạng thái>_<light\|dark>` | empty, list, menu, restoring, restore_error | projects |
+| Danh sách dự án | `ProjectsScreen_<trạng thái>_<light\|dark>` | empty, list, menu, restoring, restore-error | projects |
 | Tạo dự án | `NewProjectScreen_...` | default | projects |
-| Màn vẽ | `EditorScreen_...` | drawing, tour, tool_brush, tool_fill, tool_select, tool_text, layers, onion_settings, timeline_multiselect, playing, sound, layer_locked, brush_locked, sound_locked (mời rewarded) | editor |
+| Màn vẽ | `EditorScreen_...` | drawing, drawing-no-ad (dải quảng cáo tắt), tour, tool-brush, tool-fill, tool-select, tool-text, layers, onion-settings, timeline-multiselect, playing, sound, layer-locked, brush-locked, sound-locked (mời rewarded) | editor |
 | Xuất | `ExportScreen_...` | options, exporting, done, error | export |
 | Bài học | `LessonsScreen_...` | list, loading, error | lessons |
-| Chỉ dẫn bài học trên màn vẽ | `EditorScreen_lesson_...` | step | editor |
+| Chỉ dẫn bài học trên màn vẽ | `EditorScreen_...` | lesson-step | editor |
 | Hoàn thành bài học | `LessonDoneScreen_...` | default | lessons |
 | Cài đặt | `SettingsScreen_...` | default | app |
 
