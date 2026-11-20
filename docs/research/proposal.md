@@ -155,6 +155,7 @@ Tên gói giữ nguyên. Tên trên store và tên dưới icon đổi được 
 | `:feature:projects` | Danh sách dự án, tạo, đổi tên, xoá, nhân bản, khôi phục từ file |
 | `:feature:editor` | Canvas, công cụ, layer, onion skin, dòng thời gian, âm thanh, phát thử |
 | `:feature:export` | Xuất MP4, GIF, PNG; màn chờ xuất; lưu vào thư viện máy, chia sẻ |
+| `:feature:settings` | Màn Cài đặt: mặc định khi tạo dự án, sao lưu và khôi phục tất cả, lựa chọn quyền riêng tư quảng cáo, thông tin app |
 | `:feature:lessons` | Thư viện bài học, mở bài học thành dự án mẫu |
 
 `:feature:editor` là phần lớn và rủi ro nhất. Tuần đầu làm prototype lõi vẽ (Play §8): độ trễ nét vẽ, bộ nhớ với 200 khung × 5 layer, phát lại mượt trên máy yếu. Không đạt thì dừng để cân nhắc lại.
@@ -176,14 +177,14 @@ Tên gói giữ nguyên. Tên trên store và tên dưới icon đổi được 
 | Màn hình | Tên frame | Trạng thái cần dựng | Feature |
 | --- | --- | --- | --- |
 | Onboarding | `OnboardingScreen_<trạng thái>_<light\|dark>` | page-1, page-2, page-3, page-4 | onboarding |
-| Danh sách dự án | `ProjectsScreen_<trạng thái>_<light\|dark>` | empty, list, menu, restoring, restore_error | projects |
+| Danh sách dự án | `ProjectsScreen_<trạng thái>_<light\|dark>` | empty, list, menu, restoring, restore-error | projects |
 | Tạo dự án | `NewProjectScreen_...` | default | projects |
-| Màn vẽ | `EditorScreen_...` | drawing, tour, tool_brush, tool_fill, tool_select, tool_text, layers, onion_settings, timeline_multiselect, playing, sound, layer_locked, brush_locked, sound_locked (mời rewarded) | editor |
+| Màn vẽ | `EditorScreen_...` | drawing, drawing-no-ad (dải quảng cáo tắt), tour, tool-brush, tool-fill, tool-select, tool-text, layers, onion-settings, timeline-multiselect, playing, sound, layer-locked, brush-locked, sound-locked (mời rewarded) | editor |
 | Xuất | `ExportScreen_...` | options, exporting, done, error | export |
 | Bài học | `LessonsScreen_...` | list, loading, error | lessons |
-| Chỉ dẫn bài học trên màn vẽ | `EditorScreen_lesson_...` | step | editor |
+| Chỉ dẫn bài học trên màn vẽ | `EditorScreen_...` | lesson-step | editor |
 | Hoàn thành bài học | `LessonDoneScreen_...` | default | lessons |
-| Cài đặt | `SettingsScreen_...` | default | app |
+| Cài đặt | `SettingsScreen_...` | default | settings |
 
 Hỗ trợ điện thoại màn hình gập theo mặc định của mẫu: thêm frame `_unfolded` (673 × 841) cho Màn vẽ và Danh sách dự án, vì bố cục đổi khi rộng (bảng layer và dòng thời gian nằm cạnh canvas). Máy tính bảng: Q6.
 
