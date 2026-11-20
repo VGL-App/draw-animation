@@ -14,7 +14,7 @@ approved_at: 2026-11-20
 <!--
 Quy trình: docs/ops/design-workflow.md. Quyết định: ADR-0008, ADR-0020, ADR-0021.
 screens/ và context/ do scripts/figma-export.py sinh, không sửa tay. Thiết kế đổi thì chạy lại:
-  scripts/figma-export.py "<link section settings trên Figma>" settings
+  scripts/figma-export.py "https://www.figma.com/design/uDdqi9ojRvIy4689FvCh5O/Frameloop?node-id=26-935" settings
 Màu và chữ trong context/ phần lớn ghi "ngoài hệ thống" vì :core:designsystem chưa đổi sang
 thương hiệu Studio Night; plan đổi thương hiệu (docs/ops/new-app.md, mục 3) đưa các giá trị đó vào tokens.json.
 Phiên tự chạy chỉ đọc thư mục này, không mở được Figma.
@@ -24,49 +24,49 @@ Phiên tự chạy chỉ đọc thư mục này, không mở được Figma.
 
 Kịch bản: theo spec của feature (spec chưa có; bản đề xuất mục 6, 7).
 
-| Màn hình (composable) | Trạng thái | Ảnh trong `screens/`, số liệu trong `context/` |
-| --- | --- | --- |
-| `SettingsScreen` | default, chế độ tối | `SettingsScreen_default_dark` |
-| `SettingsScreen` | default | `SettingsScreen_default_light` |
+| Màn hình (composable) | Trạng thái | Ảnh trong `screens/`, số liệu trong `context/` | Kịch bản |
+| --- | --- | --- | --- |
+| `SettingsScreen` | default, chế độ tối | `SettingsScreen_default_dark` | chờ spec |
+| `SettingsScreen` | default | `SettingsScreen_default_light` | chờ spec |
 
 ## 2. Bảng chữ
 
 Chữ tiếng Anh như trên thiết kế (bản đề xuất Q9: tiếng Anh). Lấy từ frame chế độ tối; frame sáng cùng chữ. Chữ trong ô quảng cáo là chữ giữ chỗ, không vào `strings.xml`.
 
-| Màn hình, trạng thái | Chữ | Kiểu chữ (text style trên Figma) |
-| --- | --- | --- |
-| `SettingsScreen`, default, chế độ tối | Settings | titleLarge |
-| `SettingsScreen`, default, chế độ tối | Drawing | labelLarge |
-| `SettingsScreen`, default, chế độ tối | Default frame rate | bodyLarge |
-| `SettingsScreen`, default, chế độ tối | 12 fps | bodyMedium |
-| `SettingsScreen`, default, chế độ tối | Default canvas | bodyLarge |
-| `SettingsScreen`, default, chế độ tối | 9:16 | bodyMedium |
-| `SettingsScreen`, default, chế độ tối | Stylus pressure | bodyLarge |
-| `SettingsScreen`, default, chế độ tối | On | bodyMedium |
-| `SettingsScreen`, default, chế độ tối | Your projects | labelLarge |
-| `SettingsScreen`, default, chế độ tối | Back up all projects | bodyLarge |
-| `SettingsScreen`, default, chế độ tối | To a file | bodyMedium |
-| `SettingsScreen`, default, chế độ tối | Restore from a file | bodyLarge |
-| `SettingsScreen`, default, chế độ tối |  | bodyMedium |
-| `SettingsScreen`, default, chế độ tối | Autosave | bodyLarge |
-| `SettingsScreen`, default, chế độ tối | Every 30 s | bodyMedium |
-| `SettingsScreen`, default, chế độ tối | About | labelLarge |
-| `SettingsScreen`, default, chế độ tối | Ad privacy choices | bodyLarge |
-| `SettingsScreen`, default, chế độ tối | Privacy policy | bodyLarge |
-| `SettingsScreen`, default, chế độ tối | Rate Frameloop | bodyLarge |
-| `SettingsScreen`, default, chế độ tối | Version | bodyLarge |
-| `SettingsScreen`, default, chế độ tối | 1.0.0 | bodyMedium |
+| Màn hình, trạng thái | Vị trí (phần tử cha trong `context/`) | Chữ | Kiểu chữ (text style trên Figma) |
+| --- | --- | --- | --- |
+| `SettingsScreen`, default, chế độ tối | TopBar | Settings | titleLarge |
+| `SettingsScreen`, default, chế độ tối | Section Drawing | Drawing | labelLarge |
+| `SettingsScreen`, default, chế độ tối | ListItem | Default frame rate | bodyLarge |
+| `SettingsScreen`, default, chế độ tối | ListItem | 12 fps | bodyMedium |
+| `SettingsScreen`, default, chế độ tối | ListItem | Default canvas | bodyLarge |
+| `SettingsScreen`, default, chế độ tối | ListItem | 9:16 | bodyMedium |
+| `SettingsScreen`, default, chế độ tối | ListItem | Stylus pressure | bodyLarge |
+| `SettingsScreen`, default, chế độ tối | ListItem | On | bodyMedium |
+| `SettingsScreen`, default, chế độ tối | Section Your projects | Your projects | labelLarge |
+| `SettingsScreen`, default, chế độ tối | ListItem | Back up all projects | bodyLarge |
+| `SettingsScreen`, default, chế độ tối | ListItem | To a file | bodyMedium |
+| `SettingsScreen`, default, chế độ tối | ListItem | Restore from a file | bodyLarge |
+| `SettingsScreen`, default, chế độ tối | ListItem | Autosave | bodyLarge |
+| `SettingsScreen`, default, chế độ tối | ListItem | Every 30 s | bodyMedium |
+| `SettingsScreen`, default, chế độ tối | Section About | About | labelLarge |
+| `SettingsScreen`, default, chế độ tối | ListItem | Ad privacy choices | bodyLarge |
+| `SettingsScreen`, default, chế độ tối | ListItem | Privacy policy | bodyLarge |
+| `SettingsScreen`, default, chế độ tối | ListItem | Rate Frameloop | bodyLarge |
+| `SettingsScreen`, default, chế độ tối | ListItem | Version | bodyLarge |
+| `SettingsScreen`, default, chế độ tối | ListItem | 1.0.0 | bodyMedium |
 
 ## 3. Ánh xạ sang hệ thống thiết kế
 
 Vai trò màu theo `tokens.json` (tên vai trò Material 3); giá trị Studio Night nằm trong biến Figma collection "Frameloop" (trang Design system).
 
-| Phần tử trên thiết kế (component Figma) | Thành phần trong code | Màu (vai trò) | Kiểu chữ |
-| --- | --- | --- | --- |
-| Icon | `Icon(Icons.Rounded.<Tên>)` (material-icons-extended, bộ Rounded); tên ligature trong thiết kế là tên Material Symbols, đổi sang tên `Icons.Rounded` tương ứng | theo phần tử cha | - |
-| IconButton | `IconButton` / `FilledIconButton` / `FilledTonalIconButton` của Material 3, 48 dp | `onSurface`; Filled: `primary`/`onPrimary` | - |
-| ListItem | `ListItem` của Material 3 | `onSurface`, `onSurfaceVariant` | `bodyLarge`, `bodyMedium` |
-| StatusBar | Thanh trạng thái của hệ thống, không vẽ; màn hình dùng `WindowInsets.statusBars` | - | - |
+| Phần tử trên thiết kế (component Figma) | Thành phần trong code | Màu (vai trò) | Kiểu chữ | Khoảng cách |
+| --- | --- | --- | --- | --- |
+| Icon | `Icon(Icons.Rounded.<Tên>)` (material-icons-extended, bộ Rounded); tên ligature trong thiết kế là tên Material Symbols, đổi sang tên `Icons.Rounded` tương ứng | theo phần tử cha | - | theo `context/` |
+| IconButton | `IconButton` / `FilledIconButton` / `FilledTonalIconButton` của Material 3, 48 dp | `onSurface`; Filled: `primary`/`onPrimary` | - | theo `context/` |
+| ListItem | `ListItem` của Material 3 | `onSurface`, `onSurfaceVariant` | `bodyLarge`, `bodyMedium` | theo `context/` |
+| NativeAdBar | `BottomAdBarScaffold` của `:core:ads` (thanh đáy native nhỏ) | do `:core:ads` vẽ | - | theo `context/` |
+| StatusBar | Thanh trạng thái của hệ thống, không vẽ; màn hình dùng `WindowInsets.statusBars` | - | - | theo `context/` |
 
 - **Thành phần mới cần thêm vào hệ thống thiết kế:** Không có.
 

@@ -141,22 +141,25 @@ Toạ độ và cỡ tính theo dp, gốc là góc trên trái của khung. Th�
           - Text "glyph", vị trí 296,821, cỡ 24 x 24, chữ "school", kiểu ngoài hệ thống (24/24, đậm 400), màu #12141A (ngoài hệ thống)
       - Text "Label", vị trí 284,853, cỡ 48 x 16, chữ "Lessons", kiểu labelMedium (12/16, đậm 500), màu #5F6675 (ngoài hệ thống)
   - Rectangle "Scrim", vị trí 0,0, cỡ 411 x 891, nền #000000 (ngoài hệ thống), độ mờ của lớp 0.55
-  - Frame "RestoreProgress", vị trí 32,197, cỡ 348 x 498, nền #E3E6EA (ngoài hệ thống), bo góc 20, xếp dọc, cách nhau 16 (md), lề trên/phải/dưới/trái 24 (lg)/24 (lg)/24 (lg)/24 (lg), căn MIN/MIN
-    - Instance "Icon", vị trí 56,221, cỡ 28 x 28, CHÚ Ý: ghi đè màu nền của component gốc
-      - Text "glyph", vị trí 56,221, cỡ 28 x 28, chữ "restore", kiểu ngoài hệ thống (28/28, đậm 400), màu #3D6A00 (ngoài hệ thống)
-    - Text "Restoring “Walk cycle”", vị trí 56,265, cỡ 300 x 28, chữ "Restoring “Walk cycle”", kiểu ngoài hệ thống (22/28, đậm 500), màu #12141A (ngoài hệ thống)
-    - Text "Keep the app open. This ", vị trí 56,309, cỡ 300 x 40, chữ "Keep the app open. This takes a few seconds.", kiểu bodyMedium (14/20, đậm 400), màu #5F6675 (ngoài hệ thống)
-    - Instance "ProgressBar", vị trí 56,365, cỡ 300 x 8, nền #E3E6EA (ngoài hệ thống), bo góc 999
-      - Rectangle "Value", vị trí 56,365, cỡ 168 x 8, nền #3D6A00 (ngoài hệ thống), bo góc 4
-    - Frame "Meta", vị trí 56,389, cỡ 300 x 16, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
-      - Text "48 of 120 frames", vị trí 56,389, cỡ 98 x 16, chữ "48 of 120 frames", kiểu labelMedium (12/16, đậm 500), màu #5F6675 (ngoài hệ thống)
-      - Frame "spacer", vị trí 154,389, cỡ 176 x 1, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
-      - Text "40%", vị trí 330,389, cỡ 26 x 16, chữ "40%", kiểu labelMedium (12/16, đậm 500), màu #12141A (ngoài hệ thống)
-    - Frame "restore_mrec", vị trí 56,421, cỡ 300 x 250, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn CENTER/MIN
-      - Instance "MrecSlot", vị trí 56,421, cỡ 300 x 250, nền #F1F2F5 (ngoài hệ thống), viền #D2D6DC (ngoài hệ thống), dày 1.0, bo góc 4
-        - Text "Label", vị trí 135,538, cỡ 142 x 16, chữ "Banner MREC 300 × 250", kiểu labelMedium (12/16, đậm 500), màu #5F6675 (ngoài hệ thống)
-        - Frame "Ad badge", vị trí 62,427, cỡ 27 x 20, nền #D9DDE2 (ngoài hệ thống), bo góc 4, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 2 (ngoài hệ thống)/6 (ngoài hệ thống)/2 (ngoài hệ thống)/6 (ngoài hệ thống), căn MIN/MIN
-          - Text "Ad", vị trí 68,429, cỡ 15 x 16, chữ "Ad", kiểu labelSmall (11/16, đậm 500), màu #5F6675 (ngoài hệ thống)
+  - Frame "RestoreProgress", vị trí 32,165, cỡ 348 x 562, nền #E3E6EA (ngoài hệ thống), bo góc 20, xếp dọc, cách nhau 16 (md), lề trên/phải/dưới/trái 24 (lg)/24 (lg)/16 (md)/24 (lg), căn MIN/MIN
+    - Instance "Icon", vị trí 56,189, cỡ 28 x 28, CHÚ Ý: ghi đè màu nền của component gốc
+      - Text "glyph", vị trí 56,189, cỡ 28 x 28, chữ "restore", kiểu ngoài hệ thống (28/28, đậm 400), màu #3D6A00 (ngoài hệ thống)
+    - Text "Restoring “Walk cycle”", vị trí 56,233, cỡ 300 x 28, chữ "Restoring “Walk cycle”", kiểu ngoài hệ thống (22/28, đậm 500), màu #12141A (ngoài hệ thống)
+    - Text "Keep the app open. This ", vị trí 56,277, cỡ 300 x 40, chữ "Keep the app open. This takes a few seconds.", kiểu bodyMedium (14/20, đậm 400), màu #5F6675 (ngoài hệ thống)
+    - Instance "ProgressBar", vị trí 56,333, cỡ 300 x 8, nền #E3E6EA (ngoài hệ thống), bo góc 999
+      - Rectangle "Value", vị trí 56,333, cỡ 168 x 8, nền #3D6A00 (ngoài hệ thống), bo góc 4
+    - Frame "Meta", vị trí 56,357, cỡ 300 x 16, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
+      - Text "48 of 120 frames", vị trí 56,357, cỡ 98 x 16, chữ "48 of 120 frames", kiểu labelMedium (12/16, đậm 500), màu #5F6675 (ngoài hệ thống)
+      - Frame "spacer", vị trí 154,357, cỡ 176 x 1, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
+      - Text "40%", vị trí 330,357, cỡ 26 x 16, chữ "40%", kiểu labelMedium (12/16, đậm 500), màu #12141A (ngoài hệ thống)
+    - Frame "restore_mrec", vị trí 56,389, cỡ 300 x 250, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn CENTER/MIN
+      - Instance "MrecSlot", vị trí 56,389, cỡ 300 x 250, nền #F1F2F5 (ngoài hệ thống), viền #D2D6DC (ngoài hệ thống), dày 1.0, bo góc 4
+        - Text "Label", vị trí 135,506, cỡ 142 x 16, chữ "Banner MREC 300 × 250", kiểu labelMedium (12/16, đậm 500), màu #5F6675 (ngoài hệ thống)
+        - Frame "Ad badge", vị trí 62,395, cỡ 27 x 20, nền #D9DDE2 (ngoài hệ thống), bo góc 4, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 2 (ngoài hệ thống)/6 (ngoài hệ thống)/2 (ngoài hệ thống)/6 (ngoài hệ thống), căn MIN/MIN
+          - Text "Ad", vị trí 68,397, cỡ 15 x 16, chữ "Ad", kiểu labelSmall (11/16, đậm 500), màu #5F6675 (ngoài hệ thống)
+    - Frame "Actions", vị trí 56,655, cỡ 300 x 56, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 8 (sm)/0/0/0, căn MAX/MIN
+      - Instance "Button", vị trí 264,663, cỡ 92 x 48, bo góc 14, xếp ngang, cách nhau 8 (sm), lề trên/phải/dưới/trái 12 (ngoài hệ thống)/24 (lg)/12 (ngoài hệ thống)/20 (ngoài hệ thống), căn CENTER/CENTER
+        - Text "Label", vị trí 284,677, cỡ 48 x 20, chữ "Cancel", kiểu ngoài hệ thống (14/20, đậm 600), màu #3D6A00 (ngoài hệ thống)
 
 ## 4. Code tham khảo
 

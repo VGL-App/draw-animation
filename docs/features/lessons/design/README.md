@@ -14,7 +14,7 @@ approved_at: 2026-11-20
 <!--
 Quy trình: docs/ops/design-workflow.md. Quyết định: ADR-0008, ADR-0020, ADR-0021.
 screens/ và context/ do scripts/figma-export.py sinh, không sửa tay. Thiết kế đổi thì chạy lại:
-  scripts/figma-export.py "<link section lessons trên Figma>" lessons
+  scripts/figma-export.py "https://www.figma.com/design/uDdqi9ojRvIy4689FvCh5O/Frameloop?node-id=26-1438" lessons
 Màu và chữ trong context/ phần lớn ghi "ngoài hệ thống" vì :core:designsystem chưa đổi sang
 thương hiệu Studio Night; plan đổi thương hiệu (docs/ops/new-app.md, mục 3) đưa các giá trị đó vào tokens.json.
 Phiên tự chạy chỉ đọc thư mục này, không mở được Figma.
@@ -24,86 +24,88 @@ Phiên tự chạy chỉ đọc thư mục này, không mở được Figma.
 
 Kịch bản: theo spec của feature (spec chưa có; bản đề xuất mục 5, 6, Q12).
 
-| Màn hình (composable) | Trạng thái | Ảnh trong `screens/`, số liệu trong `context/` |
-| --- | --- | --- |
-| `LessonDoneScreen` | default, chế độ tối | `LessonDoneScreen_default_dark` |
-| `LessonDoneScreen` | default | `LessonDoneScreen_default_light` |
-| `LessonsScreen` | error, chế độ tối | `LessonsScreen_error_dark` |
-| `LessonsScreen` | error | `LessonsScreen_error_light` |
-| `LessonsScreen` | list, chế độ tối | `LessonsScreen_list_dark` |
-| `LessonsScreen` | list | `LessonsScreen_list_light` |
-| `LessonsScreen` | loading, chế độ tối | `LessonsScreen_loading_dark` |
-| `LessonsScreen` | loading | `LessonsScreen_loading_light` |
+| Màn hình (composable) | Trạng thái | Ảnh trong `screens/`, số liệu trong `context/` | Kịch bản |
+| --- | --- | --- | --- |
+| `LessonDoneScreen` | default, chế độ tối | `LessonDoneScreen_default_dark` | chờ spec |
+| `LessonDoneScreen` | default | `LessonDoneScreen_default_light` | chờ spec |
+| `LessonsScreen` | error, chế độ tối | `LessonsScreen_error_dark` | chờ spec |
+| `LessonsScreen` | error | `LessonsScreen_error_light` | chờ spec |
+| `LessonsScreen` | list, chế độ tối | `LessonsScreen_list_dark` | chờ spec |
+| `LessonsScreen` | list | `LessonsScreen_list_light` | chờ spec |
+| `LessonsScreen` | loading, chế độ tối | `LessonsScreen_loading_dark` | chờ spec |
+| `LessonsScreen` | loading | `LessonsScreen_loading_light` | chờ spec |
 
 ## 2. Bảng chữ
 
 Chữ tiếng Anh như trên thiết kế (bản đề xuất Q9: tiếng Anh). Lấy từ frame chế độ tối; frame sáng cùng chữ. Chữ trong ô quảng cáo là chữ giữ chỗ, không vào `strings.xml`.
 
-| Màn hình, trạng thái | Chữ | Kiểu chữ (text style trên Figma) |
-| --- | --- | --- |
-| `LessonDoneScreen`, default, chế độ tối | Lesson 1 · Bouncing ball | titleMedium |
-| `LessonDoneScreen`, default, chế độ tối | Lesson complete! | headlineSmall |
-| `LessonDoneScreen`, default, chế độ tối | 12 frames · 1.0 s · Squash and stretch unlocked next | bodyMedium |
-| `LessonDoneScreen`, default, chế độ tối | Next lesson | labelLarge |
-| `LessonDoneScreen`, default, chế độ tối | Export my animation | labelLarge |
-| `LessonsScreen`, error, chế độ tối | Lessons | headlineSmall |
-| `LessonsScreen`, error, chế độ tối | Lessons didn't load | headlineSmall |
-| `LessonsScreen`, error, chế độ tối | The lesson server is not responding. Your projects still work. | bodyLarge |
-| `LessonsScreen`, error, chế độ tối | Try again | labelLarge |
-| `LessonsScreen`, error, chế độ tối | Projects | labelMedium |
-| `LessonsScreen`, error, chế độ tối | Lessons | labelMedium |
-| `LessonsScreen`, list, chế độ tối | Lessons | headlineSmall |
-| `LessonsScreen`, list, chế độ tối | All | labelMedium |
-| `LessonsScreen`, list, chế độ tối | Basics | labelMedium |
-| `LessonsScreen`, list, chế độ tối | Motion | labelMedium |
-| `LessonsScreen`, list, chế độ tối | Characters | labelMedium |
-| `LessonsScreen`, list, chế độ tối | Effects | labelMedium |
-| `LessonsScreen`, list, chế độ tối | Basics | titleLarge |
-| `LessonsScreen`, list, chế độ tối | 2 of 6 | labelLarge |
-| `LessonsScreen`, list, chế độ tối | Done | labelSmall |
-| `LessonsScreen`, list, chế độ tối | Basics · 1 | labelSmall |
-| `LessonsScreen`, list, chế độ tối | Bouncing ball | titleSmall |
-| `LessonsScreen`, list, chế độ tối | 5 min · 12 frames | bodySmall |
-| `LessonsScreen`, list, chế độ tối | Basics · 2 | labelSmall |
-| `LessonsScreen`, list, chế độ tối | Squash and stretch | titleSmall |
-| `LessonsScreen`, list, chế độ tối | 6 min · 16 frames | bodySmall |
-| `LessonsScreen`, list, chế độ tối | Motion | titleLarge |
-| `LessonsScreen`, list, chế độ tối | Motion · 1 | labelSmall |
-| `LessonsScreen`, list, chế độ tối | Stick figure walk | titleSmall |
-| `LessonsScreen`, list, chế độ tối | 8 min · 24 frames | bodySmall |
-| `LessonsScreen`, list, chế độ tối | Motion · 2 | labelSmall |
-| `LessonsScreen`, list, chế độ tối | Blink and look | titleSmall |
-| `LessonsScreen`, list, chế độ tối | 4 min · 10 frames | bodySmall |
-| `LessonsScreen`, list, chế độ tối | Projects | labelMedium |
-| `LessonsScreen`, list, chế độ tối | Lessons | labelMedium |
-| `LessonsScreen`, loading, chế độ tối | Lessons | headlineSmall |
-| `LessonsScreen`, loading, chế độ tối | All | labelMedium |
-| `LessonsScreen`, loading, chế độ tối | Basics | labelMedium |
-| `LessonsScreen`, loading, chế độ tối | Motion | labelMedium |
-| `LessonsScreen`, loading, chế độ tối | Characters | labelMedium |
-| `LessonsScreen`, loading, chế độ tối | Effects | labelMedium |
-| `LessonsScreen`, loading, chế độ tối | Projects | labelMedium |
-| `LessonsScreen`, loading, chế độ tối | Lessons | labelMedium |
+| Màn hình, trạng thái | Vị trí (phần tử cha trong `context/`) | Chữ | Kiểu chữ (text style trên Figma) |
+| --- | --- | --- | --- |
+| `LessonDoneScreen`, default, chế độ tối | TopBar | Lesson 1 · Bouncing ball | titleMedium |
+| `LessonDoneScreen`, default, chế độ tối | Content | Lesson complete! | headlineSmall |
+| `LessonDoneScreen`, default, chế độ tối | Content | 12 frames · 1.0 s · Squash and stretch unlocked next | bodyMedium |
+| `LessonDoneScreen`, default, chế độ tối | Button | Next lesson | labelLarge |
+| `LessonDoneScreen`, default, chế độ tối | Button | Export my animation | labelLarge |
+| `LessonsScreen`, error, chế độ tối | TopBar | Lessons | headlineSmall |
+| `LessonsScreen`, error, chế độ tối | Content | Lessons didn't load | headlineSmall |
+| `LessonsScreen`, error, chế độ tối | Content | The lesson server is not responding. Your projects still work. | bodyLarge |
+| `LessonsScreen`, error, chế độ tối | Button | Try again | labelLarge |
+| `LessonsScreen`, error, chế độ tối | NavItem | Projects | labelMedium |
+| `LessonsScreen`, error, chế độ tối | NavItem | Lessons | labelMedium |
+| `LessonsScreen`, list, chế độ tối | TopBar | Lessons | headlineSmall |
+| `LessonsScreen`, list, chế độ tối | Chip | All | labelMedium |
+| `LessonsScreen`, list, chế độ tối | Chip | Basics | labelMedium |
+| `LessonsScreen`, list, chế độ tối | Chip | Motion | labelMedium |
+| `LessonsScreen`, list, chế độ tối | Chip | Characters | labelMedium |
+| `LessonsScreen`, list, chế độ tối | Chip | Effects | labelMedium |
+| `LessonsScreen`, list, chế độ tối | SectionHeader | Basics | titleLarge |
+| `LessonsScreen`, list, chế độ tối | SectionHeader | 2 of 6 | labelLarge |
+| `LessonsScreen`, list, chế độ tối | Done badge | Done | labelSmall |
+| `LessonsScreen`, list, chế độ tối | LessonCard | Basics · 1 | labelSmall |
+| `LessonsScreen`, list, chế độ tối | LessonCard | Bouncing ball | titleSmall |
+| `LessonsScreen`, list, chế độ tối | LessonCard | 5 min · 12 frames | bodySmall |
+| `LessonsScreen`, list, chế độ tối | LessonCard | Basics · 2 | labelSmall |
+| `LessonsScreen`, list, chế độ tối | LessonCard | Squash and stretch | titleSmall |
+| `LessonsScreen`, list, chế độ tối | LessonCard | 6 min · 16 frames | bodySmall |
+| `LessonsScreen`, list, chế độ tối | SectionHeader | Motion | titleLarge |
+| `LessonsScreen`, list, chế độ tối | LessonCard | Motion · 1 | labelSmall |
+| `LessonsScreen`, list, chế độ tối | LessonCard | Stick figure walk | titleSmall |
+| `LessonsScreen`, list, chế độ tối | LessonCard | 8 min · 24 frames | bodySmall |
+| `LessonsScreen`, list, chế độ tối | LessonCard | Motion · 2 | labelSmall |
+| `LessonsScreen`, list, chế độ tối | LessonCard | Blink and look | titleSmall |
+| `LessonsScreen`, list, chế độ tối | LessonCard | 4 min · 10 frames | bodySmall |
+| `LessonsScreen`, list, chế độ tối | NavItem | Projects | labelMedium |
+| `LessonsScreen`, list, chế độ tối | NavItem | Lessons | labelMedium |
+| `LessonsScreen`, loading, chế độ tối | TopBar | Lessons | headlineSmall |
+| `LessonsScreen`, loading, chế độ tối | Chip | All | labelMedium |
+| `LessonsScreen`, loading, chế độ tối | Chip | Basics | labelMedium |
+| `LessonsScreen`, loading, chế độ tối | Chip | Motion | labelMedium |
+| `LessonsScreen`, loading, chế độ tối | Chip | Characters | labelMedium |
+| `LessonsScreen`, loading, chế độ tối | Chip | Effects | labelMedium |
+| `LessonsScreen`, loading, chế độ tối | NavItem | Projects | labelMedium |
+| `LessonsScreen`, loading, chế độ tối | NavItem | Lessons | labelMedium |
 
 ## 3. Ánh xạ sang hệ thống thiết kế
 
 Vai trò màu theo `tokens.json` (tên vai trò Material 3); giá trị Studio Night nằm trong biến Figma collection "Frameloop" (trang Design system).
 
-| Phần tử trên thiết kế (component Figma) | Thành phần trong code | Màu (vai trò) | Kiểu chữ |
-| --- | --- | --- | --- |
-| Button | `PrimaryButton` (Style=Primary); `FilledTonalButton`, `OutlinedButton`, `TextButton` của Material 3 (Style=Tonal, Outlined, Text), truyền `colors` rõ | `primary`/`onPrimary`, `surfaceContainerHigh`/`onSurface`, `outline`, chữ `primary` | `labelLarge` |
-| Chip | `FilterChip` của Material 3 | Default `surfaceContainerHigh`; Selected `primaryContainer`/`onPrimaryContainer` | `labelMedium` |
-| Icon | `Icon(Icons.Rounded.<Tên>)` (material-icons-extended, bộ Rounded); tên ligature trong thiết kế là tên Material Symbols, đổi sang tên `Icons.Rounded` tương ứng | theo phần tử cha | - |
-| IconButton | `IconButton` / `FilledIconButton` / `FilledTonalIconButton` của Material 3, 48 dp | `onSurface`; Filled: `primary`/`onPrimary` | - |
-| LessonCard | Thành phần của feature `lessons` | `surfaceContainer`, nhãn cấp `primary` | `titleSmall`, `bodySmall`, `labelSmall` |
-| NavItem | `NavigationBarItem` trong `NavigationBar` (màn gập: `NavigationRail`) | chỉ báo `primaryContainer`, icon `onPrimaryContainer` | `labelMedium` |
-| StatusBar | Thanh trạng thái của hệ thống, không vẽ; màn hình dùng `WindowInsets.statusBars` | - | - |
+| Phần tử trên thiết kế (component Figma) | Thành phần trong code | Màu (vai trò) | Kiểu chữ | Khoảng cách |
+| --- | --- | --- | --- | --- |
+| Button | `PrimaryButton` (Style=Primary); `FilledTonalButton`, `OutlinedButton`, `TextButton` của Material 3 (Style=Tonal, Outlined, Text), truyền `colors` rõ | `primary`/`onPrimary`, `surfaceContainerHigh`/`onSurface`, `outline`, chữ `primary` | `labelLarge` | theo `context/` |
+| Chip | `FilterChip` của Material 3 | Default `surfaceContainerHigh`; Selected `primaryContainer`/`onPrimaryContainer` | `labelMedium` | theo `context/` |
+| Icon | `Icon(Icons.Rounded.<Tên>)` (material-icons-extended, bộ Rounded); tên ligature trong thiết kế là tên Material Symbols, đổi sang tên `Icons.Rounded` tương ứng | theo phần tử cha | - | theo `context/` |
+| IconButton | `IconButton` / `FilledIconButton` / `FilledTonalIconButton` của Material 3, 48 dp | `onSurface`; Filled: `primary`/`onPrimary` | - | theo `context/` |
+| LessonCard | Thành phần của feature `lessons` | `surfaceContainer`, nhãn cấp `primary` | `titleSmall`, `bodySmall`, `labelSmall` | theo `context/` |
+| NativeAdBar | `BottomAdBarScaffold` của `:core:ads` (thanh đáy native nhỏ) | do `:core:ads` vẽ | - | theo `context/` |
+| NativeAdMedium | `NativeAdSlot(placement)` native medium của `:core:ads` | do `:core:ads` vẽ | - | theo `context/` |
+| NavItem | `NavigationBarItem` trong `NavigationBar` (màn gập: `NavigationRail`) | chỉ báo `primaryContainer`, icon `onPrimaryContainer` | `labelMedium` | theo `context/` |
+| StatusBar | Thanh trạng thái của hệ thống, không vẽ; màn hình dùng `WindowInsets.statusBars` | - | - | theo `context/` |
 
 - **Thành phần mới cần thêm vào hệ thống thiết kế:** Không có thành phần dùng chung mới; `LessonCard` là thành phần của feature.
 
 ## 4. Luồng thao tác
 
-Thanh điều hướng > `LessonsScreen` (`list`; `loading` khi đang tải từ R2, `error` khi tải lỗi). Chạm thẻ bài > interstitial `lesson_start_inter` > `EditorScreen` (`lesson-step`). Hoàn thành bài > `LessonDoneScreen` > "Next lesson" (interstitial `lesson_next_inter`) hoặc "Export my animation" > `ExportScreen`.
+Thanh điều hướng > `LessonsScreen` (`list`; `loading` khi đang tải từ R2, `error` khi tải lỗi). Chạm thẻ bài > interstitial `lesson_start_inter` > `EditorScreen` (`lesson-step`). Trước nét vẽ đầu tiên không có interstitial lúc vào bài (bản đề xuất mục 9.1). Hoàn thành bài > `LessonDoneScreen` > "Next lesson" (interstitial `lesson_next_inter`) hoặc "Export my animation" > `ExportScreen`.
 
 ## 5. Vị trí quảng cáo
 

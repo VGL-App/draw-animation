@@ -190,7 +190,7 @@ Toạ độ và cỡ tính theo dp, gốc là góc trên trái của khung. Th�
       - Frame "Add frame", vị trí 348,811, cỡ 36 x 64, viền #B9BEC8 (ngoài hệ thống), dày 1.0, bo góc 8, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn CENTER/CENTER
         - Instance "Icon", vị trí 355,832, cỡ 22 x 22, CHÚ Ý: ghi đè màu nền của component gốc
           - Text "glyph", vị trí 355,832, cỡ 22 x 22, chữ "add", kiểu ngoài hệ thống (22/22, đậm 400), màu #5F6675 (ngoài hệ thống)
-  - Frame "Brush sheet", vị trí 0,363, cỡ 411 x 528, nền #E3E6EA (ngoài hệ thống), xếp dọc, cách nhau 12 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/24 (lg)/0, căn MIN/MIN
+  - Frame "Brush sheet", vị trí 0,363, cỡ 411 x 544, nền #E3E6EA (ngoài hệ thống), xếp dọc, cách nhau 12 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/24 (lg)/0, căn MIN/MIN
     - Instance "SheetHandle", vị trí 0,363, cỡ 411 x 24, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn CENTER/CENTER
       - Rectangle "Rectangle", vị trí 190,373, cỡ 32 x 4, nền #B9BEC8 (ngoài hệ thống), bo góc 2
     - Frame "Header", vị trí 0,399, cỡ 411 x 48, xếp ngang, cách nhau 4 (xs), lề trên/phải/dưới/trái 0/12 (ngoài hệ thống)/0/24 (lg), căn MIN/CENTER
@@ -199,95 +199,95 @@ Toạ độ và cỡ tính theo dp, gốc là góc trên trái của khung. Th�
       - Instance "IconButton", vị trí 351,399, cỡ 48 x 48, bo góc 999, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn CENTER/CENTER
         - Instance "Glyph", vị trí 363,411, cỡ 24 x 24
           - Text "glyph", vị trí 363,411, cỡ 24 x 24, chữ "close", kiểu ngoài hệ thống (24/24, đậm 400), màu #12141A (ngoài hệ thống)
-    - Frame "Body", vị trí 0,459, cỡ 411 x 408, xếp dọc, cách nhau 16 (md), lề trên/phải/dưới/trái 0/24 (lg)/0/24 (lg), căn MIN/MIN
-      - Frame "RewardedInvite", vị trí 24,459, cỡ 363 x 74, nền #DDF5B8 (ngoài hệ thống), bo góc 14, xếp ngang, cách nhau 12 (ngoài hệ thống), lề trên/phải/dưới/trái 10 (ngoài hệ thống)/12 (ngoài hệ thống)/10 (ngoài hệ thống)/12 (ngoài hệ thống), căn MIN/CENTER
-        - Instance "Icon", vị trí 36,484, cỡ 24 x 24, CHÚ Ý: ghi đè màu nền của component gốc
-          - Text "glyph", vị trí 36,484, cỡ 24 x 24, chữ "lock_open", kiểu ngoài hệ thống (24/24, đậm 400), màu #1C2C05 (ngoài hệ thống)
-        - Frame "Text", vị trí 72,469, cỡ 155 x 54, xếp dọc, cách nhau 2 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
+    - Frame "Body", vị trí 0,459, cỡ 411 x 424, xếp dọc, cách nhau 16 (md), lề trên/phải/dưới/trái 0/24 (lg)/0/24 (lg), căn MIN/MIN
+      - Frame "RewardedInvite", vị trí 24,459, cỡ 363 x 90, nền #DDF5B8 (ngoài hệ thống), bo góc 14, xếp ngang, cách nhau 12 (ngoài hệ thống), lề trên/phải/dưới/trái 10 (ngoài hệ thống)/12 (ngoài hệ thống)/10 (ngoài hệ thống)/12 (ngoài hệ thống), căn MIN/CENTER
+        - Instance "Icon", vị trí 36,492, cỡ 24 x 24, CHÚ Ý: ghi đè màu nền của component gốc
+          - Text "glyph", vị trí 36,492, cỡ 24 x 24, chữ "lock_open", kiểu ngoài hệ thống (24/24, đậm 400), màu #1C2C05 (ngoài hệ thống)
+        - Frame "Text", vị trí 72,469, cỡ 155 x 70, xếp dọc, cách nhau 2 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
           - Text "Pro brushes", vị trí 72,469, cỡ 81 x 20, chữ "Pro brushes", kiểu titleSmall, labelLarge (14/20, đậm 500), màu #1C2C05 (ngoài hệ thống)
-          - Text "Watch one ad to use all ", vị trí 72,491, cỡ 155 x 32, chữ "Watch one ad to use all 12 pro brushes for 24 hours.", kiểu bodySmall (12/16, đậm 400), màu #1C2C05 (ngoài hệ thống)
-        - Instance "Button", vị trí 239,472, cỡ 136 x 48, nền #3D6A00 (ngoài hệ thống), bo góc 14, xếp ngang, cách nhau 8 (sm), lề trên/phải/dưới/trái 12 (ngoài hệ thống)/24 (lg)/12 (ngoài hệ thống)/20 (ngoài hệ thống), căn CENTER/CENTER
-          - Instance "Leading icon", vị trí 259,486, cỡ 20 x 20
-            - Text "glyph", vị trí 259,486, cỡ 20 x 20, chữ "smart_display", kiểu ngoài hệ thống (20/20, đậm 400), màu #FFFFFF (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest)
-          - Text "Label", vị trí 287,486, cỡ 64 x 20, chữ "Watch ad", kiểu ngoài hệ thống (14/20, đậm 600), màu #FFFFFF (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest)
-      - Frame "Brushes", vị trí 24,549, cỡ 363 x 206, xếp dọc, cách nhau 8 (sm), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
-        - Frame "Row", vị trí 24,549, cỡ 363 x 66, xếp ngang, cách nhau 8 (sm), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
-          - Frame "Pencil", vị trí 24,549, cỡ 84 x 62, nền #ECEEF1 (ngoài hệ thống), bo góc 14, xếp dọc, cách nhau 4 (xs), lề trên/phải/dưới/trái 10 (ngoài hệ thống)/0/8 (sm)/0, căn MIN/CENTER
-            - Instance "Icon", vị trí 54,559, cỡ 24 x 24, CHÚ Ý: ghi đè màu nền của component gốc
-              - Text "glyph", vị trí 54,559, cỡ 24 x 24, chữ "edit", kiểu ngoài hệ thống (24/24, đậm 400), màu #12141A (ngoài hệ thống)
-            - Text "Pencil", vị trí 50,587, cỡ 32 x 16, chữ "Pencil", kiểu labelSmall (11/16, đậm 500), màu #5F6675 (ngoài hệ thống)
-          - Frame "Ink", vị trí 116,549, cỡ 88 x 66, nền #DDF5B8 (ngoài hệ thống), viền #3D6A00 (ngoài hệ thống), dày 2.0, bo góc 14, xếp dọc, cách nhau 4 (xs), lề trên/phải/dưới/trái 10 (ngoài hệ thống)/0/8 (sm)/0, căn MIN/CENTER
-            - Instance "Icon", vị trí 148,561, cỡ 24 x 24, CHÚ Ý: ghi đè màu nền của component gốc
-              - Text "glyph", vị trí 148,561, cỡ 24 x 24, chữ "ink_pen", kiểu ngoài hệ thống (24/24, đậm 400), màu #1C2C05 (ngoài hệ thống)
-            - Text "Ink", vị trí 152,589, cỡ 16 x 16, chữ "Ink", kiểu labelSmall (11/16, đậm 500), màu #1C2C05 (ngoài hệ thống)
-          - Frame "Marker", vị trí 212,549, cỡ 84 x 62, nền #ECEEF1 (ngoài hệ thống), bo góc 14, xếp dọc, cách nhau 4 (xs), lề trên/phải/dưới/trái 10 (ngoài hệ thống)/0/8 (sm)/0, căn MIN/CENTER
-            - Instance "Icon", vị trí 241,559, cỡ 24 x 24, CHÚ Ý: ghi đè màu nền của component gốc
-              - Text "glyph", vị trí 241,559, cỡ 24 x 24, chữ "ink_marker", kiểu ngoài hệ thống (24/24, đậm 400), màu #12141A (ngoài hệ thống)
-            - Text "Marker", vị trí 235,587, cỡ 37 x 16, chữ "Marker", kiểu labelSmall (11/16, đậm 500), màu #5F6675 (ngoài hệ thống)
-          - Frame "Airbrush", vị trí 303,549, cỡ 84 x 62, nền #ECEEF1 (ngoài hệ thống), bo góc 14, xếp dọc, cách nhau 4 (xs), lề trên/phải/dưới/trái 10 (ngoài hệ thống)/0/8 (sm)/0, căn MIN/CENTER
-            - Instance "Icon", vị trí 333,559, cỡ 24 x 24, CHÚ Ý: ghi đè màu nền của component gốc
-              - Text "glyph", vị trí 333,559, cỡ 24 x 24, chữ "blur_on", kiểu ngoài hệ thống (24/24, đậm 400), màu #12141A (ngoài hệ thống)
-            - Text "Airbrush", vị trí 323,587, cỡ 45 x 16, chữ "Airbrush", kiểu labelSmall (11/16, đậm 500), màu #5F6675 (ngoài hệ thống)
-        - Frame "Row", vị trí 24,623, cỡ 363 x 62, xếp ngang, cách nhau 8 (sm), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
-          - Frame "Soft", vị trí 24,623, cỡ 85 x 62, nền #ECEEF1 (ngoài hệ thống), bo góc 14, xếp dọc, cách nhau 4 (xs), lề trên/phải/dưới/trái 10 (ngoài hệ thống)/0/8 (sm)/0, căn MIN/CENTER
-            - Instance "Icon", vị trí 54,633, cỡ 24 x 24, CHÚ Ý: ghi đè màu nền của component gốc
-              - Text "glyph", vị trí 54,633, cỡ 24 x 24, chữ "brush", kiểu ngoài hệ thống (24/24, đậm 400), màu #12141A (ngoài hệ thống)
-            - Text "Soft", vị trí 55,661, cỡ 22 x 16, chữ "Soft", kiểu labelSmall (11/16, đậm 500), màu #5F6675 (ngoài hệ thống)
-          - Frame "Pixel", vị trí 117,623, cỡ 85 x 62, nền #ECEEF1 (ngoài hệ thống), bo góc 14, xếp dọc, cách nhau 4 (xs), lề trên/phải/dưới/trái 10 (ngoài hệ thống)/0/8 (sm)/0, căn MIN/CENTER
-            - Instance "Icon", vị trí 147,633, cỡ 24 x 24, CHÚ Ý: ghi đè màu nền của component gốc
-              - Text "glyph", vị trí 147,633, cỡ 24 x 24, chữ "grid_on", kiểu ngoài hệ thống (24/24, đậm 400), màu #12141A (ngoài hệ thống)
-            - Text "Pixel", vị trí 147,661, cỡ 25 x 16, chữ "Pixel", kiểu labelSmall (11/16, đậm 500), màu #5F6675 (ngoài hệ thống)
-          - Frame "Calligraphy", vị trí 210,623, cỡ 85 x 62, nền #ECEEF1 (ngoài hệ thống), bo góc 14, xếp dọc, cách nhau 4 (xs), lề trên/phải/dưới/trái 10 (ngoài hệ thống)/0/8 (sm)/0, căn MIN/CENTER
-            - Instance "Icon", vị trí 240,633, cỡ 24 x 24, CHÚ Ý: ghi đè màu nền của component gốc
-              - Text "glyph", vị trí 240,633, cỡ 24 x 24, chữ "history_edu", kiểu ngoài hệ thống (24/24, đậm 400), màu #12141A (ngoài hệ thống)
-            - Text "Calligraphy", vị trí 222,661, cỡ 60 x 16, chữ "Calligraphy", kiểu labelSmall (11/16, đậm 500), màu #5F6675 (ngoài hệ thống)
-          - Frame "Chalk", vị trí 302,623, cỡ 85 x 62, nền #ECEEF1 (ngoài hệ thống), bo góc 14, xếp dọc, cách nhau 4 (xs), lề trên/phải/dưới/trái 10 (ngoài hệ thống)/0/8 (sm)/0, căn MIN/CENTER
-            - Instance "Icon", vị trí 333,633, cỡ 24 x 24, CHÚ Ý: ghi đè màu nền của component gốc
-              - Text "glyph", vị trí 333,633, cỡ 24 x 24, chữ "gesture", kiểu ngoài hệ thống (24/24, đậm 400), màu #12141A (ngoài hệ thống)
-            - Text "Chalk", vị trí 330,661, cỡ 30 x 16, chữ "Chalk", kiểu labelSmall (11/16, đậm 500), màu #5F6675 (ngoài hệ thống)
-        - Frame "Pro row", vị trí 24,693, cỡ 363 x 62, xếp ngang, cách nhau 8 (sm), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
-          - Frame "Watercolor (locked)", vị trí 24,693, cỡ 85 x 62, nền #ECEEF1 (ngoài hệ thống), bo góc 14, xếp dọc, cách nhau 4 (xs), lề trên/phải/dưới/trái 10 (ngoài hệ thống)/0/8 (sm)/0, căn MIN/CENTER
-            - Frame "Glyphs", vị trí 47,703, cỡ 38 x 24, xếp ngang, cách nhau 2 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MAX
-              - Instance "Icon", vị trí 47,703, cỡ 24 x 24, CHÚ Ý: ghi đè màu nền của component gốc
-                - Text "glyph", vị trí 47,703, cỡ 24 x 24, chữ "water_drop", kiểu ngoài hệ thống (24/24, đậm 400), màu #5F6675 (ngoài hệ thống)
-              - Instance "Icon", vị trí 73,715, cỡ 12 x 12, CHÚ Ý: ghi đè màu nền của component gốc
-                - Text "glyph", vị trí 73,715, cỡ 12 x 12, chữ "lock", kiểu ngoài hệ thống (12/12, đậm 400), màu #5F6675 (ngoài hệ thống)
-            - Text "Watercolor", vị trí 37,731, cỡ 58 x 16, chữ "Watercolor", kiểu labelSmall (11/16, đậm 500), màu #5F6675 (ngoài hệ thống)
-          - Frame "Glow (locked)", vị trí 117,693, cỡ 85 x 62, nền #ECEEF1 (ngoài hệ thống), bo góc 14, xếp dọc, cách nhau 4 (xs), lề trên/phải/dưới/trái 10 (ngoài hệ thống)/0/8 (sm)/0, căn MIN/CENTER
-            - Frame "Glyphs", vị trí 140,703, cỡ 38 x 24, xếp ngang, cách nhau 2 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MAX
-              - Instance "Icon", vị trí 140,703, cỡ 24 x 24, CHÚ Ý: ghi đè màu nền của component gốc
-                - Text "glyph", vị trí 140,703, cỡ 24 x 24, chữ "flare", kiểu ngoài hệ thống (24/24, đậm 400), màu #5F6675 (ngoài hệ thống)
-              - Instance "Icon", vị trí 166,715, cỡ 12 x 12, CHÚ Ý: ghi đè màu nền của component gốc
-                - Text "glyph", vị trí 166,715, cỡ 12 x 12, chữ "lock", kiểu ngoài hệ thống (12/12, đậm 400), màu #5F6675 (ngoài hệ thống)
-            - Text "Glow", vị trí 146,731, cỡ 27 x 16, chữ "Glow", kiểu labelSmall (11/16, đậm 500), màu #5F6675 (ngoài hệ thống)
-          - Frame "Grain (locked)", vị trí 210,693, cỡ 85 x 62, nền #ECEEF1 (ngoài hệ thống), bo góc 14, xếp dọc, cách nhau 4 (xs), lề trên/phải/dưới/trái 10 (ngoài hệ thống)/0/8 (sm)/0, căn MIN/CENTER
-            - Frame "Glyphs", vị trí 233,703, cỡ 38 x 24, xếp ngang, cách nhau 2 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MAX
-              - Instance "Icon", vị trí 233,703, cỡ 24 x 24, CHÚ Ý: ghi đè màu nền của component gốc
-                - Text "glyph", vị trí 233,703, cỡ 24 x 24, chữ "texture", kiểu ngoài hệ thống (24/24, đậm 400), màu #5F6675 (ngoài hệ thống)
-              - Instance "Icon", vị trí 259,715, cỡ 12 x 12, CHÚ Ý: ghi đè màu nền của component gốc
-                - Text "glyph", vị trí 259,715, cỡ 12 x 12, chữ "lock", kiểu ngoài hệ thống (12/12, đậm 400), màu #5F6675 (ngoài hệ thống)
-            - Text "Grain", vị trí 238,731, cỡ 28 x 16, chữ "Grain", kiểu labelSmall (11/16, đậm 500), màu #5F6675 (ngoài hệ thống)
-          - Frame "Spray (locked)", vị trí 302,693, cỡ 85 x 62, nền #ECEEF1 (ngoài hệ thống), bo góc 14, xếp dọc, cách nhau 4 (xs), lề trên/phải/dưới/trái 10 (ngoài hệ thống)/0/8 (sm)/0, căn MIN/CENTER
-            - Frame "Glyphs", vị trí 326,703, cỡ 38 x 24, xếp ngang, cách nhau 2 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MAX
-              - Instance "Icon", vị trí 326,703, cỡ 24 x 24, CHÚ Ý: ghi đè màu nền của component gốc
-                - Text "glyph", vị trí 326,703, cỡ 24 x 24, chữ "format_paint", kiểu ngoài hệ thống (24/24, đậm 400), màu #5F6675 (ngoài hệ thống)
-              - Instance "Icon", vị trí 352,715, cỡ 12 x 12, CHÚ Ý: ghi đè màu nền của component gốc
-                - Text "glyph", vị trí 352,715, cỡ 12 x 12, chữ "lock", kiểu ngoài hệ thống (12/12, đậm 400), màu #5F6675 (ngoài hệ thống)
-            - Text "Spray", vị trí 329,731, cỡ 31 x 16, chữ "Spray", kiểu labelSmall (11/16, đậm 500), màu #5F6675 (ngoài hệ thống)
-      - Instance "Slider", vị trí 24,771, cỡ 363 x 48, xếp dọc, cách nhau 8 (sm), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
-        - Frame "Header", vị trí 24,771, cỡ 363 x 20, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
-          - Text "Label", vị trí 24,771, cỡ 29 x 20, chữ "Size", kiểu ngoài hệ thống (14/20, đậm 600), màu #12141A (ngoài hệ thống)
-          - Frame "spacer", vị trí 53,771, cỡ 305 x 1, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
-          - Text "Value", vị trí 358,771, cỡ 29 x 20, chữ "8 px", kiểu ngoài hệ thống (14/20, đậm 600), màu #5F6675 (ngoài hệ thống)
-        - Frame "Track", vị trí 24,799, cỡ 363 x 20
-          - Rectangle "Rectangle", vị trí 24,807, cỡ 363 x 4, nền #D9DDE2 (ngoài hệ thống), bo góc 2
-          - Rectangle "Rectangle", vị trí 24,807, cỡ 110 x 4, nền #3D6A00 (ngoài hệ thống), bo góc 2
-          - Ellipse "Thumb", vị trí 124,799, cỡ 20 x 20, nền #3D6A00 (ngoài hệ thống)
-      - Frame "Pressure from stylus", vị trí 24,835, cỡ 363 x 32, xếp ngang, cách nhau 12 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/CENTER
-        - Frame "Text", vị trí 24,839, cỡ 299 x 24, xếp dọc, cách nhau 2 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
-          - Text "Pressure from stylus", vị trí 24,839, cỡ 155 x 24, chữ "Pressure from stylus", kiểu bodyLarge (16/24, đậm 400), màu #12141A (ngoài hệ thống)
-        - Instance "Switch", vị trí 335,835, cỡ 52 x 32, nền #3D6A00 (ngoài hệ thống), bo góc 999
-          - Ellipse "Knob", vị trí 359,839, cỡ 24 x 24, nền #FFFFFF (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest)
+          - Text "Watch one ad to use all ", vị trí 72,491, cỡ 155 x 48, chữ "Watch one ad to unlock the 4 pro brushes for 24 hours.", kiểu bodySmall (12/16, đậm 400), màu #1C2C05 (ngoài hệ thống)
+        - Instance "Button", vị trí 239,480, cỡ 136 x 48, nền #3D6A00 (ngoài hệ thống), bo góc 14, xếp ngang, cách nhau 8 (sm), lề trên/phải/dưới/trái 12 (ngoài hệ thống)/24 (lg)/12 (ngoài hệ thống)/20 (ngoài hệ thống), căn CENTER/CENTER
+          - Instance "Leading icon", vị trí 259,494, cỡ 20 x 20
+            - Text "glyph", vị trí 259,494, cỡ 20 x 20, chữ "smart_display", kiểu ngoài hệ thống (20/20, đậm 400), màu #FFFFFF (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest)
+          - Text "Label", vị trí 287,494, cỡ 64 x 20, chữ "Watch ad", kiểu ngoài hệ thống (14/20, đậm 600), màu #FFFFFF (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest)
+      - Frame "Brushes", vị trí 24,565, cỡ 363 x 206, xếp dọc, cách nhau 8 (sm), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
+        - Frame "Row", vị trí 24,565, cỡ 363 x 66, xếp ngang, cách nhau 8 (sm), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
+          - Frame "Pencil", vị trí 24,565, cỡ 84 x 62, nền #ECEEF1 (ngoài hệ thống), bo góc 14, xếp dọc, cách nhau 4 (xs), lề trên/phải/dưới/trái 10 (ngoài hệ thống)/0/8 (sm)/0, căn MIN/CENTER
+            - Instance "Icon", vị trí 54,575, cỡ 24 x 24, CHÚ Ý: ghi đè màu nền của component gốc
+              - Text "glyph", vị trí 54,575, cỡ 24 x 24, chữ "edit", kiểu ngoài hệ thống (24/24, đậm 400), màu #12141A (ngoài hệ thống)
+            - Text "Pencil", vị trí 50,603, cỡ 32 x 16, chữ "Pencil", kiểu labelSmall (11/16, đậm 500), màu #5F6675 (ngoài hệ thống)
+          - Frame "Ink", vị trí 116,565, cỡ 88 x 66, nền #DDF5B8 (ngoài hệ thống), viền #3D6A00 (ngoài hệ thống), dày 2.0, bo góc 14, xếp dọc, cách nhau 4 (xs), lề trên/phải/dưới/trái 10 (ngoài hệ thống)/0/8 (sm)/0, căn MIN/CENTER
+            - Instance "Icon", vị trí 148,577, cỡ 24 x 24, CHÚ Ý: ghi đè màu nền của component gốc
+              - Text "glyph", vị trí 148,577, cỡ 24 x 24, chữ "ink_pen", kiểu ngoài hệ thống (24/24, đậm 400), màu #1C2C05 (ngoài hệ thống)
+            - Text "Ink", vị trí 152,605, cỡ 16 x 16, chữ "Ink", kiểu labelSmall (11/16, đậm 500), màu #1C2C05 (ngoài hệ thống)
+          - Frame "Marker", vị trí 212,565, cỡ 84 x 62, nền #ECEEF1 (ngoài hệ thống), bo góc 14, xếp dọc, cách nhau 4 (xs), lề trên/phải/dưới/trái 10 (ngoài hệ thống)/0/8 (sm)/0, căn MIN/CENTER
+            - Instance "Icon", vị trí 241,575, cỡ 24 x 24, CHÚ Ý: ghi đè màu nền của component gốc
+              - Text "glyph", vị trí 241,575, cỡ 24 x 24, chữ "ink_marker", kiểu ngoài hệ thống (24/24, đậm 400), màu #12141A (ngoài hệ thống)
+            - Text "Marker", vị trí 235,603, cỡ 37 x 16, chữ "Marker", kiểu labelSmall (11/16, đậm 500), màu #5F6675 (ngoài hệ thống)
+          - Frame "Airbrush", vị trí 303,565, cỡ 84 x 62, nền #ECEEF1 (ngoài hệ thống), bo góc 14, xếp dọc, cách nhau 4 (xs), lề trên/phải/dưới/trái 10 (ngoài hệ thống)/0/8 (sm)/0, căn MIN/CENTER
+            - Instance "Icon", vị trí 333,575, cỡ 24 x 24, CHÚ Ý: ghi đè màu nền của component gốc
+              - Text "glyph", vị trí 333,575, cỡ 24 x 24, chữ "blur_on", kiểu ngoài hệ thống (24/24, đậm 400), màu #12141A (ngoài hệ thống)
+            - Text "Airbrush", vị trí 323,603, cỡ 45 x 16, chữ "Airbrush", kiểu labelSmall (11/16, đậm 500), màu #5F6675 (ngoài hệ thống)
+        - Frame "Row", vị trí 24,639, cỡ 363 x 62, xếp ngang, cách nhau 8 (sm), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
+          - Frame "Soft", vị trí 24,639, cỡ 85 x 62, nền #ECEEF1 (ngoài hệ thống), bo góc 14, xếp dọc, cách nhau 4 (xs), lề trên/phải/dưới/trái 10 (ngoài hệ thống)/0/8 (sm)/0, căn MIN/CENTER
+            - Instance "Icon", vị trí 54,649, cỡ 24 x 24, CHÚ Ý: ghi đè màu nền của component gốc
+              - Text "glyph", vị trí 54,649, cỡ 24 x 24, chữ "brush", kiểu ngoài hệ thống (24/24, đậm 400), màu #12141A (ngoài hệ thống)
+            - Text "Soft", vị trí 55,677, cỡ 22 x 16, chữ "Soft", kiểu labelSmall (11/16, đậm 500), màu #5F6675 (ngoài hệ thống)
+          - Frame "Pixel", vị trí 117,639, cỡ 85 x 62, nền #ECEEF1 (ngoài hệ thống), bo góc 14, xếp dọc, cách nhau 4 (xs), lề trên/phải/dưới/trái 10 (ngoài hệ thống)/0/8 (sm)/0, căn MIN/CENTER
+            - Instance "Icon", vị trí 147,649, cỡ 24 x 24, CHÚ Ý: ghi đè màu nền của component gốc
+              - Text "glyph", vị trí 147,649, cỡ 24 x 24, chữ "grid_on", kiểu ngoài hệ thống (24/24, đậm 400), màu #12141A (ngoài hệ thống)
+            - Text "Pixel", vị trí 147,677, cỡ 25 x 16, chữ "Pixel", kiểu labelSmall (11/16, đậm 500), màu #5F6675 (ngoài hệ thống)
+          - Frame "Calligraphy", vị trí 210,639, cỡ 85 x 62, nền #ECEEF1 (ngoài hệ thống), bo góc 14, xếp dọc, cách nhau 4 (xs), lề trên/phải/dưới/trái 10 (ngoài hệ thống)/0/8 (sm)/0, căn MIN/CENTER
+            - Instance "Icon", vị trí 240,649, cỡ 24 x 24, CHÚ Ý: ghi đè màu nền của component gốc
+              - Text "glyph", vị trí 240,649, cỡ 24 x 24, chữ "history_edu", kiểu ngoài hệ thống (24/24, đậm 400), màu #12141A (ngoài hệ thống)
+            - Text "Calligraphy", vị trí 222,677, cỡ 60 x 16, chữ "Calligraphy", kiểu labelSmall (11/16, đậm 500), màu #5F6675 (ngoài hệ thống)
+          - Frame "Chalk", vị trí 302,639, cỡ 85 x 62, nền #ECEEF1 (ngoài hệ thống), bo góc 14, xếp dọc, cách nhau 4 (xs), lề trên/phải/dưới/trái 10 (ngoài hệ thống)/0/8 (sm)/0, căn MIN/CENTER
+            - Instance "Icon", vị trí 333,649, cỡ 24 x 24, CHÚ Ý: ghi đè màu nền của component gốc
+              - Text "glyph", vị trí 333,649, cỡ 24 x 24, chữ "gesture", kiểu ngoài hệ thống (24/24, đậm 400), màu #12141A (ngoài hệ thống)
+            - Text "Chalk", vị trí 330,677, cỡ 30 x 16, chữ "Chalk", kiểu labelSmall (11/16, đậm 500), màu #5F6675 (ngoài hệ thống)
+        - Frame "Pro row", vị trí 24,709, cỡ 363 x 62, xếp ngang, cách nhau 8 (sm), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
+          - Frame "Watercolor (locked)", vị trí 24,709, cỡ 85 x 62, nền #ECEEF1 (ngoài hệ thống), bo góc 14, xếp dọc, cách nhau 4 (xs), lề trên/phải/dưới/trái 10 (ngoài hệ thống)/0/8 (sm)/0, căn MIN/CENTER
+            - Frame "Glyphs", vị trí 47,719, cỡ 38 x 24, xếp ngang, cách nhau 2 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MAX
+              - Instance "Icon", vị trí 47,719, cỡ 24 x 24, CHÚ Ý: ghi đè màu nền của component gốc
+                - Text "glyph", vị trí 47,719, cỡ 24 x 24, chữ "water_drop", kiểu ngoài hệ thống (24/24, đậm 400), màu #5F6675 (ngoài hệ thống)
+              - Instance "Icon", vị trí 73,731, cỡ 12 x 12, CHÚ Ý: ghi đè màu nền của component gốc
+                - Text "glyph", vị trí 73,731, cỡ 12 x 12, chữ "lock", kiểu ngoài hệ thống (12/12, đậm 400), màu #5F6675 (ngoài hệ thống)
+            - Text "Watercolor", vị trí 37,747, cỡ 58 x 16, chữ "Watercolor", kiểu labelSmall (11/16, đậm 500), màu #5F6675 (ngoài hệ thống)
+          - Frame "Glow (locked)", vị trí 117,709, cỡ 85 x 62, nền #ECEEF1 (ngoài hệ thống), bo góc 14, xếp dọc, cách nhau 4 (xs), lề trên/phải/dưới/trái 10 (ngoài hệ thống)/0/8 (sm)/0, căn MIN/CENTER
+            - Frame "Glyphs", vị trí 140,719, cỡ 38 x 24, xếp ngang, cách nhau 2 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MAX
+              - Instance "Icon", vị trí 140,719, cỡ 24 x 24, CHÚ Ý: ghi đè màu nền của component gốc
+                - Text "glyph", vị trí 140,719, cỡ 24 x 24, chữ "flare", kiểu ngoài hệ thống (24/24, đậm 400), màu #5F6675 (ngoài hệ thống)
+              - Instance "Icon", vị trí 166,731, cỡ 12 x 12, CHÚ Ý: ghi đè màu nền của component gốc
+                - Text "glyph", vị trí 166,731, cỡ 12 x 12, chữ "lock", kiểu ngoài hệ thống (12/12, đậm 400), màu #5F6675 (ngoài hệ thống)
+            - Text "Glow", vị trí 146,747, cỡ 27 x 16, chữ "Glow", kiểu labelSmall (11/16, đậm 500), màu #5F6675 (ngoài hệ thống)
+          - Frame "Grain (locked)", vị trí 210,709, cỡ 85 x 62, nền #ECEEF1 (ngoài hệ thống), bo góc 14, xếp dọc, cách nhau 4 (xs), lề trên/phải/dưới/trái 10 (ngoài hệ thống)/0/8 (sm)/0, căn MIN/CENTER
+            - Frame "Glyphs", vị trí 233,719, cỡ 38 x 24, xếp ngang, cách nhau 2 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MAX
+              - Instance "Icon", vị trí 233,719, cỡ 24 x 24, CHÚ Ý: ghi đè màu nền của component gốc
+                - Text "glyph", vị trí 233,719, cỡ 24 x 24, chữ "texture", kiểu ngoài hệ thống (24/24, đậm 400), màu #5F6675 (ngoài hệ thống)
+              - Instance "Icon", vị trí 259,731, cỡ 12 x 12, CHÚ Ý: ghi đè màu nền của component gốc
+                - Text "glyph", vị trí 259,731, cỡ 12 x 12, chữ "lock", kiểu ngoài hệ thống (12/12, đậm 400), màu #5F6675 (ngoài hệ thống)
+            - Text "Grain", vị trí 238,747, cỡ 28 x 16, chữ "Grain", kiểu labelSmall (11/16, đậm 500), màu #5F6675 (ngoài hệ thống)
+          - Frame "Spray (locked)", vị trí 302,709, cỡ 85 x 62, nền #ECEEF1 (ngoài hệ thống), bo góc 14, xếp dọc, cách nhau 4 (xs), lề trên/phải/dưới/trái 10 (ngoài hệ thống)/0/8 (sm)/0, căn MIN/CENTER
+            - Frame "Glyphs", vị trí 326,719, cỡ 38 x 24, xếp ngang, cách nhau 2 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MAX
+              - Instance "Icon", vị trí 326,719, cỡ 24 x 24, CHÚ Ý: ghi đè màu nền của component gốc
+                - Text "glyph", vị trí 326,719, cỡ 24 x 24, chữ "format_paint", kiểu ngoài hệ thống (24/24, đậm 400), màu #5F6675 (ngoài hệ thống)
+              - Instance "Icon", vị trí 352,731, cỡ 12 x 12, CHÚ Ý: ghi đè màu nền của component gốc
+                - Text "glyph", vị trí 352,731, cỡ 12 x 12, chữ "lock", kiểu ngoài hệ thống (12/12, đậm 400), màu #5F6675 (ngoài hệ thống)
+            - Text "Spray", vị trí 329,747, cỡ 31 x 16, chữ "Spray", kiểu labelSmall (11/16, đậm 500), màu #5F6675 (ngoài hệ thống)
+      - Instance "Slider", vị trí 24,787, cỡ 363 x 48, xếp dọc, cách nhau 8 (sm), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
+        - Frame "Header", vị trí 24,787, cỡ 363 x 20, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
+          - Text "Label", vị trí 24,787, cỡ 29 x 20, chữ "Size", kiểu ngoài hệ thống (14/20, đậm 600), màu #12141A (ngoài hệ thống)
+          - Frame "spacer", vị trí 53,787, cỡ 305 x 1, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
+          - Text "Value", vị trí 358,787, cỡ 29 x 20, chữ "8 px", kiểu ngoài hệ thống (14/20, đậm 600), màu #5F6675 (ngoài hệ thống)
+        - Frame "Track", vị trí 24,815, cỡ 363 x 20
+          - Rectangle "Rectangle", vị trí 24,823, cỡ 363 x 4, nền #D9DDE2 (ngoài hệ thống), bo góc 2
+          - Rectangle "Rectangle", vị trí 24,823, cỡ 110 x 4, nền #3D6A00 (ngoài hệ thống), bo góc 2
+          - Ellipse "Thumb", vị trí 124,815, cỡ 20 x 20, nền #3D6A00 (ngoài hệ thống)
+      - Frame "Pressure from stylus", vị trí 24,851, cỡ 363 x 32, xếp ngang, cách nhau 12 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/CENTER
+        - Frame "Text", vị trí 24,855, cỡ 299 x 24, xếp dọc, cách nhau 2 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
+          - Text "Pressure from stylus", vị trí 24,855, cỡ 155 x 24, chữ "Pressure from stylus", kiểu bodyLarge (16/24, đậm 400), màu #12141A (ngoài hệ thống)
+        - Instance "Switch", vị trí 335,851, cỡ 52 x 32, nền #3D6A00 (ngoài hệ thống), bo góc 999
+          - Ellipse "Knob", vị trí 359,855, cỡ 24 x 24, nền #FFFFFF (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest)
 
 ## 4. Code tham khảo
 

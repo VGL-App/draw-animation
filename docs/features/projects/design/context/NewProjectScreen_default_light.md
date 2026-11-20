@@ -110,32 +110,32 @@ Toạ độ và cỡ tính theo dp, gốc là góc trên trái của khung. Th�
           - Text "Label", vị trí 221,442, cỡ 16 x 16, chữ "24", kiểu labelMedium (12/16, đậm 500), màu #12141A (ngoài hệ thống)
         - Instance "Chip", vị trí 257,436, cỡ 40 x 28, nền #E3E6EA (ngoài hệ thống), bo góc 8, xếp ngang, cách nhau 6 (ngoài hệ thống), lề trên/phải/dưới/trái 6 (ngoài hệ thống)/12 (ngoài hệ thống)/6 (ngoài hệ thống)/12 (ngoài hệ thống), căn MIN/CENTER
           - Text "Label", vị trí 269,442, cỡ 16 x 16, chữ "30", kiểu labelMedium (12/16, đậm 500), màu #12141A (ngoài hệ thống)
-    - Frame "Background", vị trí 16,488, cỡ 379 x 78, xếp dọc, cách nhau 10 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
-      - Text "Background", vị trí 16,488, cỡ 81 x 20, chữ "Background", kiểu titleSmall, labelLarge (14/20, đậm 500), màu #12141A (ngoài hệ thống)
-      - Frame "Backgrounds", vị trí 16,518, cỡ 244 x 48, xếp ngang, cách nhau 12 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/CENTER
-        - Instance "ColorSwatch", vị trí 16,524, cỡ 36 x 36, CHÚ Ý: ghi đè màu nền của component gốc
-          - Ellipse "Color", vị trí 20,528, cỡ 28 x 28, nền #FFFFFF (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest), viền #D2D6DC (ngoài hệ thống), dày 1.0
-          - Ellipse "Ring", vị trí 16,524, cỡ 36 x 36, viền #12141A (ngoài hệ thống), dày 2.0
-        - Instance "ColorSwatch", vị trí 64,524, cỡ 36 x 36, CHÚ Ý: ghi đè màu nền của component gốc
-          - Ellipse "Color", vị trí 66,526, cỡ 32 x 32, nền #E3E6EA (ngoài hệ thống), viền #D2D6DC (ngoài hệ thống), dày 1.0
-        - Instance "ColorSwatch", vị trí 112,524, cỡ 36 x 36, CHÚ Ý: ghi đè màu nền của component gốc
-          - Ellipse "Color", vị trí 114,526, cỡ 32 x 32, nền #2F6FE0 (ngoài hệ thống), viền #D2D6DC (ngoài hệ thống), dày 1.0
-        - Instance "IconButton", vị trí 160,518, cỡ 48 x 48, nền #E3E6EA (ngoài hệ thống), bo góc 999, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn CENTER/CENTER
-          - Instance "Glyph", vị trí 172,530, cỡ 24 x 24
-            - Text "glyph", vị trí 172,530, cỡ 24 x 24, chữ "image", kiểu ngoài hệ thống (24/24, đậm 400), màu #12141A (ngoài hệ thống)
-        - Text "Photo", vị trí 220,532, cỡ 40 x 20, chữ "Photo", kiểu ngoài hệ thống (14/20, đậm 600), màu #5F6675 (ngoài hệ thống)
-    - Instance "new_project_native (NativeAdMedium)", vị trí 16,590, cỡ 379 x 250, nền #ECEEF1 (ngoài hệ thống), viền #D2D6DC (ngoài hệ thống), dày 1.0, bo góc 14, xếp dọc, cách nhau 8 (sm), lề trên/phải/dưới/trái 12 (ngoài hệ thống)/12 (ngoài hệ thống)/12 (ngoài hệ thống)/12 (ngoài hệ thống), căn MIN/MIN
-      - Frame "Header", vị trí 29,603, cỡ 353 x 36, xếp ngang, cách nhau 10 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/CENTER
-        - Rectangle "Ad icon", vị trí 29,603, cỡ 36 x 36, nền #D9DDE2 (ngoài hệ thống), bo góc 8
-        - Frame "Text", vị trí 75,603, cỡ 307 x 36, xếp dọc, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
-          - Frame "Headline row", vị trí 75,603, cỡ 176 x 20, xếp ngang, cách nhau 6 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/CENTER
-            - Frame "Ad badge", vị trí 75,603, cỡ 27 x 20, nền #D9DDE2 (ngoài hệ thống), bo góc 4, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 2 (ngoài hệ thống)/6 (ngoài hệ thống)/2 (ngoài hệ thống)/6 (ngoài hệ thống), căn MIN/MIN
-              - Text "Ad", vị trí 81,605, cỡ 15 x 16, chữ "Ad", kiểu labelSmall (11/16, đậm 500), màu #5F6675 (ngoài hệ thống)
-            - Text "Headline", vị trí 108,603, cỡ 143 x 20, chữ "Sponsored app name", kiểu titleSmall, labelLarge (14/20, đậm 500), màu #12141A (ngoài hệ thống)
-          - Text "Advertiser", vị trí 75,623, cỡ 59 x 16, chữ "Advertiser", kiểu bodySmall (12/16, đậm 400), màu #5F6675 (ngoài hệ thống)
-      - Rectangle "Ad media", vị trí 29,647, cỡ 353 x 136, nền #D9DDE2 (ngoài hệ thống), bo góc 8
-      - Frame "Ad CTA", vị trí 29,791, cỡ 353 x 36, viền #2F6FE0 (ngoài hệ thống), dày 1.0, bo góc 6, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/14 (ngoài hệ thống)/0/14 (ngoài hệ thống), căn CENTER/CENTER
-        - Text "Install", vị trí 185,799, cỡ 41 x 20, chữ "Install", kiểu ngoài hệ thống (14/20, đậm 600), màu #2F6FE0 (ngoài hệ thống)
+    - Instance "new_project_native (NativeAdMedium)", vị trí 16,488, cỡ 379 x 250, nền #ECEEF1 (ngoài hệ thống), viền #D2D6DC (ngoài hệ thống), dày 1.0, bo góc 14, xếp dọc, cách nhau 8 (sm), lề trên/phải/dưới/trái 12 (ngoài hệ thống)/12 (ngoài hệ thống)/12 (ngoài hệ thống)/12 (ngoài hệ thống), căn MIN/MIN
+      - Frame "Header", vị trí 29,501, cỡ 353 x 36, xếp ngang, cách nhau 10 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/CENTER
+        - Rectangle "Ad icon", vị trí 29,501, cỡ 36 x 36, nền #D9DDE2 (ngoài hệ thống), bo góc 8
+        - Frame "Text", vị trí 75,501, cỡ 307 x 36, xếp dọc, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
+          - Frame "Headline row", vị trí 75,501, cỡ 176 x 20, xếp ngang, cách nhau 6 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/CENTER
+            - Frame "Ad badge", vị trí 75,501, cỡ 27 x 20, nền #D9DDE2 (ngoài hệ thống), bo góc 4, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 2 (ngoài hệ thống)/6 (ngoài hệ thống)/2 (ngoài hệ thống)/6 (ngoài hệ thống), căn MIN/MIN
+              - Text "Ad", vị trí 81,503, cỡ 15 x 16, chữ "Ad", kiểu labelSmall (11/16, đậm 500), màu #5F6675 (ngoài hệ thống)
+            - Text "Headline", vị trí 108,501, cỡ 143 x 20, chữ "Sponsored app name", kiểu titleSmall, labelLarge (14/20, đậm 500), màu #12141A (ngoài hệ thống)
+          - Text "Advertiser", vị trí 75,521, cỡ 59 x 16, chữ "Advertiser", kiểu bodySmall (12/16, đậm 400), màu #5F6675 (ngoài hệ thống)
+      - Rectangle "Ad media", vị trí 29,545, cỡ 353 x 136, nền #D9DDE2 (ngoài hệ thống), bo góc 8
+      - Frame "Ad CTA", vị trí 29,689, cỡ 353 x 36, viền #2F6FE0 (ngoài hệ thống), dày 1.0, bo góc 6, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/14 (ngoài hệ thống)/0/14 (ngoài hệ thống), căn CENTER/CENTER
+        - Text "Install", vị trí 185,697, cỡ 41 x 20, chữ "Install", kiểu ngoài hệ thống (14/20, đậm 600), màu #2F6FE0 (ngoài hệ thống)
+    - Frame "Background", vị trí 16,762, cỡ 379 x 78, xếp dọc, cách nhau 10 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
+      - Text "Background", vị trí 16,762, cỡ 81 x 20, chữ "Background", kiểu titleSmall, labelLarge (14/20, đậm 500), màu #12141A (ngoài hệ thống)
+      - Frame "Backgrounds", vị trí 16,792, cỡ 244 x 48, xếp ngang, cách nhau 12 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/CENTER
+        - Instance "ColorSwatch", vị trí 16,798, cỡ 36 x 36, CHÚ Ý: ghi đè màu nền của component gốc
+          - Ellipse "Color", vị trí 20,802, cỡ 28 x 28, nền #FFFFFF (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest), viền #D2D6DC (ngoài hệ thống), dày 1.0
+          - Ellipse "Ring", vị trí 16,798, cỡ 36 x 36, viền #12141A (ngoài hệ thống), dày 2.0
+        - Instance "ColorSwatch", vị trí 64,798, cỡ 36 x 36, CHÚ Ý: ghi đè màu nền của component gốc
+          - Ellipse "Color", vị trí 66,800, cỡ 32 x 32, nền #E3E6EA (ngoài hệ thống), viền #D2D6DC (ngoài hệ thống), dày 1.0
+        - Instance "ColorSwatch", vị trí 112,798, cỡ 36 x 36, CHÚ Ý: ghi đè màu nền của component gốc
+          - Ellipse "Color", vị trí 114,800, cỡ 32 x 32, nền #2F6FE0 (ngoài hệ thống), viền #D2D6DC (ngoài hệ thống), dày 1.0
+        - Instance "IconButton", vị trí 160,792, cỡ 48 x 48, nền #E3E6EA (ngoài hệ thống), bo góc 999, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn CENTER/CENTER
+          - Instance "Glyph", vị trí 172,804, cỡ 24 x 24
+            - Text "glyph", vị trí 172,804, cỡ 24 x 24, chữ "image", kiểu ngoài hệ thống (24/24, đậm 400), màu #12141A (ngoài hệ thống)
+        - Text "Photo", vị trí 220,806, cỡ 40 x 20, chữ "Photo", kiểu ngoài hệ thống (14/20, đậm 600), màu #5F6675 (ngoài hệ thống)
     - Frame "spacer", vị trí 16,864, cỡ 1 x 1, xếp dọc, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
   - Frame "Footer", vị trí 0,795, cỡ 411 x 96, xếp dọc, cách nhau 0, lề trên/phải/dưới/trái 24 (lg)/16 (md)/24 (lg)/16 (md), căn MIN/MIN
     - Instance "Button", vị trí 16,819, cỡ 379 x 48, nền #3D6A00 (ngoài hệ thống), bo góc 14, xếp ngang, cách nhau 8 (sm), lề trên/phải/dưới/trái 12 (ngoài hệ thống)/24 (lg)/12 (ngoài hệ thống)/20 (ngoài hệ thống), căn CENTER/CENTER
