@@ -102,16 +102,16 @@ Tên gói giữ nguyên. Tên trên store và tên dưới icon đổi được 
 
 | Bài học | Bằng chứng | Cải tiến | Cách đo |
 | --- | --- | --- | --- |
-| Quảng cáo chen vào lúc vẽ bị phạt nặng nhất | CEM bật QC khi đang kéo nét; FlipaClip "3 QC trong chưa tới 5 phút"; Banix "8 QC trước khi vẽ được khung đầu" (Play §3). Đo trên máy: Banix 11 QC trước màn chính (Banix); Banix, CEM đặt native thu gọn trên màn vẽ (APK) | Không có vị trí quảng cáo nào trên màn vẽ, không quảng cáo chen vào giữa nét vẽ hay lúc phát. Quảng cáo `resume` khi quay lại app vẫn hiện ở mọi màn (Q4) | 0 vị trí QC đặt trên màn vẽ; số QC từ lúc mở app tới nét vẽ đầu tiên ≤ 1 |
-| Quảng cáo sát nút gây bấm nhầm | Banix đặt QC sát nút, che khung hình (Play §3). Đo trên máy: trang 4 hướng dẫn Banix dời nút "Tiếp theo" lên giữa và đặt nút CTA quảng cáo cùng cỡ, cùng màu đúng chỗ cũ; native ở màn ngôn ngữ đổi quảng cáo đúng lúc nút Apply hiện, cách nút 16 dp; khóa `CTR_CLICK_*` trong APK (Banix, APK) | Native chỉ ở danh sách dự án, bài học, màn chờ xuất; luôn chừa khoảng cách với nút | Rà ảnh thiết kế; không có vị trí QC trên màn vẽ và dòng thời gian |
-| Mở khoá từng món bằng QC làm người dùng bực | FlipaClip mỗi layer một QC, có khi xem 3 lần (Play §3, §4 điểm 4) | Một lượt rewarded mở cho cả dự án | Số lượt xem QC để mở layer 6 đến 10 trong một dự án = 1 |
+| Quảng cáo chen vào lúc vẽ bị phạt nặng nhất | CEM bật QC khi đang kéo nét; FlipaClip "3 QC trong chưa tới 5 phút"; Banix "8 QC trước khi vẽ được khung đầu" (Play §3). Đo trên máy: Banix 11 QC trước màn chính (Banix); Banix, CEM đặt native thu gọn trên màn vẽ (APK) | Không quảng cáo nào hiện lên chen vào giữa nét vẽ hay lúc phát. Màn vẽ có đúng một vị trí: dải native gọn cố định ngay dưới thanh tiêu đề (định dạng mới, mục 9.1, Q17), cao khoảng 56 dp, cách hàng nút của thanh tiêu đề và cách canvas mỗi bên ít nhất 16 dp; khi vị trí bật thì giữ chỗ cả lúc đang nạp hay nạp lỗi để canvas không nhảy. Khoảng cách 16 dp tới canvas để nét vẽ không bắt đầu trên quảng cáo. Quảng cáo `resume` khi quay lại app vẫn hiện ở mọi màn (Q4) | Màn vẽ có 1 vị trí quảng cáo (dải trên), 0 vị trí trong canvas, dòng thời gian và các bảng công cụ; canvas không đổi chỗ khi quảng cáo nạp hay lỗi; trước nét vẽ đầu tiên của lần mở đầu: 0 quảng cáo toàn màn hình, tối đa 3 vị trí native (`native_onboarding`, `projects_empty_native`, `editor_top_native`) |
+| Quảng cáo sát nút gây bấm nhầm | Banix đặt QC sát nút, che khung hình (Play §3). Đo trên máy: trang 4 hướng dẫn Banix dời nút "Tiếp theo" lên giữa và đặt nút CTA quảng cáo cùng cỡ, cùng màu đúng chỗ cũ; native ở màn ngôn ngữ đổi quảng cáo đúng lúc nút Apply hiện, cách nút 16 dp; khóa `CTR_CLICK_*` trong APK (Banix, APK) | Màn vẽ chỉ có dải trên (`editor_top_native`); native, MREC chỉ ở các màn liệt kê ở mục 9.1; native medium và MREC trong nội dung cách nút của app ít nhất 24 dp (thanh đáy và ô native trong lưới theo khoảng cách của `:core:ads` và của lưới); vị trí cạnh nút giữ chỗ khi chưa có quảng cáo (`keepSpaceWhenEmpty`) hoặc nút ghim đáy, để nút không dịch chỗ | Rà ảnh thiết kế; không có vị trí QC trong canvas, dòng thời gian và các bảng công cụ |
+| Mở khoá từng món bằng QC làm người dùng bực | FlipaClip mỗi layer một QC, có khi xem 3 lần (Play §3, §4 điểm 4) | Một lượt rewarded mở trọn một phạm vi: layer 6 đến 10 cho cả dự án; gói cọ nâng cao, gói âm thanh trong 24 giờ; tùy chọn xuất cho lần xuất đó | Mỗi lần mở khóa cần đúng 1 lượt xem; số lượt xem để mở layer 6 đến 10 trong một dự án = 1 |
 | Khoá tính năng cốt lõi | CEM khoá sau 4 khung; FlipaClip khoá nhập nhạc (Play §3) | Không giới hạn khung; 5 layer miễn phí; nhập nhạc miễn phí | Dự án 200 khung × 5 layer không gặp màn khoá nào |
 | Mất bài | Review mất bài của FlipArtify được 213 người đánh dấu hữu ích; FlipaClip mất bài khi cài lại (Play §3, §4 điểm 5) | Tự lưu, khôi phục sau crash, sao lưu dự án ra một file | Tắt app đột ngột giữa lúc vẽ: mở lại mất tối đa 30 giây công |
 | Chậm, crash khi nhiều khung | Play §4 điểm 6 | Khung lưu trên bộ nhớ máy, RAM chỉ giữ các khung quanh đầu phát | 200 khung × 5 layer phát mượt ở 12 khung/giây trên máy tầm trung; độ trễ nét vẽ đo được ở tuần 1 |
 | Tô màu tràn qua khe hở, để lại viền trắng | Play §4 điểm 7. Đo trên máy: FlipaClip tô vào vùng hở thì đổ màu cả nền (FC) | Tô màu tự đóng khe hở, tô lấn dưới nét | Bộ ảnh thử có khe 1, 2, 4 px: không tràn; không còn viền trắng |
 | Thao tác khung rườm rà | Play §4 điểm 8. Đo trên máy: FlipaClip và ZenByte đều không có chọn nhiều khung (FC, ZB) | Chọn nhiều khung, chép và dán theo dải, giữ khung | Nhân bản 10 khung liền nhau trong ≤ 3 thao tác |
-| Rào cản trước nét vẽ đầu tiên | FlipaClip 10 thao tác và một màn trả phí không đóng bằng back; Banix 11 QC và màn VIP; ZenByte chỉ 4 thao tác (FC, Banix, ZB) | Không có màn trả phí hay onboarding nhiều trang trước màn vẽ; hướng dẫn trên màn vẽ bỏ qua được | ≤ 4 thao tác từ lần mở đầu tới nét vẽ đầu tiên |
-| Lời mời nâng cấp nhẹ nhàng giữ được việc đang làm | ZenByte: ở khung 150, một thẻ nhỏ trên canvas báo giới hạn và có nút "Nâng cấp", không chặn, không làm tối nền, tự ẩn sau vài giây (ZB). FlipaClip đẩy màn trả phí toàn màn hình (FC) | Khi chạm giới hạn layer, mời rewarded bằng thẻ nhỏ trên màn vẽ, không mở màn toàn màn hình | Không có màn toàn màn hình nào tự mở trên màn vẽ |
+| Rào cản trước nét vẽ đầu tiên | FlipaClip 10 thao tác và một màn trả phí không đóng bằng back; Banix 11 QC và màn VIP; ZenByte chỉ 4 thao tác (FC, Banix, ZB) | Không có màn trả phí trước màn vẽ. Onboarding 4 trang bắt buộc (Q19), chỉ ở lần mở đầu; hướng dẫn trên màn vẽ bỏ qua được | ≤ 7 thao tác từ lần mở đầu tới nét vẽ đầu tiên (4 lần Next, New animation, Create, nét vẽ) |
+| Lời mời nâng cấp nhẹ nhàng giữ được việc đang làm | ZenByte: ở khung 150, một thẻ nhỏ trên canvas báo giới hạn và có nút "Nâng cấp", không chặn, không làm tối nền, tự ẩn sau vài giây (ZB). FlipaClip đẩy màn trả phí toàn màn hình (FC) | Khi chạm giới hạn layer, mời rewarded bằng thẻ nhỏ trên màn vẽ, không mở màn toàn màn hình | Không có lời mời toàn màn hình hay màn toàn màn hình nào do app tự mở trên màn vẽ; thẻ nhỏ chỉ mở hộp thoại rewarded khi người dùng chạm (quảng cáo `resume` khi quay lại app theo Q4 không tính) |
 | Bài học mở thẳng vào màn vẽ giữ người mới | ZenByte: 115 bài trong 6 nhóm, bài mở thẳng vào màn vẽ với khung dựng sẵn, nét dẫn màu đỏ, biểu đồ nhịp và âm thanh đặt sẵn; bộ truyện nhiều tập; nút "Thử bài học miễn phí" ở màn dự án trống (ZB). Stickman có bản đồ bài học kiểu Duolingo (APK) | Bài học là một dự án dựng sẵn mở trong màn vẽ, có lớp dẫn; không tính vào số dự án | Tỉ lệ người mới hoàn thành bài đầu tiên trong ngày đầu (sự kiện `lesson_complete`) |
 | Canvas nhỏ vì nhiều hàng điều khiển | ZenByte có 4 hàng điều khiển dưới canvas (ZB). Ở màn dọc, canvas 16:9 rộng hết 411 dp chỉ cao khoảng 26% chiều cao màn, nên với dự án 16:9 hàng điều khiển không phải nguyên nhân chính; với dự án 9:16, các hàng điều khiển xếp dưới canvas mới là thứ lấy mất chiều cao | Thanh công cụ một bên, dòng thời gian thu gọn được (khuôn của FlipaClip, dòng thời gian 56 dp) | Canvas của dự án 9:16 chiếm ≥ 50% chiều cao màn ở khung 411 × 891 |
 | Rewarded không đóng được làm người dùng kẹt | Rewarded Pangle của FlipaClip không có nút đóng sau 60 giây rồi tự mở Play; interstitial Pangle của Banix chờ 42 đến 66 giây (FC, Banix) | Chỉ AdMob (Q7) | Không quảng cáo nào chờ quá 30 giây mới đóng được (đo trên staging) |
@@ -122,6 +122,7 @@ Tên gói giữ nguyên. Tên trên store và tên dưới icon đổi được 
 | --- | --- | --- | --- |
 | Danh sách dự án, tạo dự án (16:9, 9:16, 1:1, tối đa 1080p; 6 đến 30 khung/giây) | bắt buộc | Mọi app | `:feature:projects` |
 | Canvas: cọ (8 đến 10 loại, lực bút, chống rung), tẩy, màu, hút màu, tô màu | bắt buộc | FlipaClip, RoughAnimator | `:feature:editor`. Banix chỉ có một cọ |
+| Gói cọ nâng cao (thêm cọ ngoài 8 đến 10 cọ cơ bản), mở 24 giờ bằng rewarded | khác biệt | FlipaClip (cọ khóa, mở 4 giờ bằng QC) | Q15; cọ là code |
 | Không giới hạn khung | bắt buộc | FlipaClip, RoughAnimator | CEM khoá sau 4 khung |
 | Layer: 5 miễn phí, 6 đến 10 mở bằng rewarded | bắt buộc | FlipaClip 3 layer; Banix không có | |
 | Onion skin chỉnh số khung trước sau, màu, độ mờ | bắt buộc | FlipaClip, CEM, RoughAnimator | |
@@ -130,9 +131,10 @@ Tên gói giữ nguyên. Tên trên store và tên dưới icon đổi được 
 | Hoàn tác nhiều bước, kể cả xoá khung, xoá layer | bắt buộc | FlipaClip (từ 2026) | |
 | Nhập ảnh, video làm nền vẽ theo, qua Photo Picker | bắt buộc | FlipaClip, SMS | Không cần quyền |
 | Âm thanh: nhập nhạc miễn phí, hiệu ứng CC0, ghi âm giọng | bắt buộc | FlipaClip (nhập nhạc khoá), SMS | Ghi âm cần quyền `RECORD_AUDIO`: Q5 |
+| Gói hiệu ứng âm thanh thêm (ngoài bộ cơ bản), mở 24 giờ bằng rewarded | khác biệt | FlipaClip (gói âm thanh chỉ cho Plus) | Q15; nội dung CC0 trên R2 |
 | Xuất MP4, GIF; watermark bỏ bằng rewarded | bắt buộc | Mọi app | `:feature:export` |
 | Tự lưu, khôi phục sau crash | bắt buộc | | Chỉ lưu trên máy |
-| Quảng cáo công bằng (mục 9) | khác biệt | Stick Nodes | |
+| Quảng cáo không chen vào lúc vẽ: màn vẽ chỉ có một dải native cố định ở trên, không quảng cáo nào hiện lên giữa nét vẽ; trước nét vẽ đầu tiên của lần mở đầu chỉ có native, không có quảng cáo toàn màn hình (mục 9.1) | khác biệt | | Banix, CEM đặt native thu gọn trên màn vẽ (theo APK) |
 | Sao lưu dự án ra file và khôi phục (bộ chọn file hệ thống, chọn được Google Drive) | khác biệt | SMS (qua Drive) | Không cần backend |
 | Tô màu đóng khe hở | khác biệt | Chưa app miễn phí nào làm tốt | |
 | Camera ảo: lia, phóng, xoay cả cảnh | khác biệt | Stick Nodes | Có trong bản đầu (Q3) |
@@ -142,13 +144,14 @@ Tên gói giữ nguyên. Tên trên store và tên dưới icon đổi được 
 | Khẩu hình, khung xương người que, nội suy chuyển động, làm mờ, 60 khung/giây | sau | Stick Nodes (khung xương, nội suy) | Play §5 tầng 3 |
 | Cộng đồng, thi đấu; AI dựng video; tài khoản, đám mây; nhân vật của bên khác; từ "kids"; xuất chạy nền | không làm | | Play §5 |
 
-**Phạm vi bản đầu:** toàn bộ nhóm `bắt buộc` và nhóm `khác biệt`. Lịch có thể dài hơn 8 đến 9 tuần khoảng một tuần vì camera ảo, và thêm thời gian làm nội dung cho 15 đến 20 bài học (Q12).
+**Phạm vi bản đầu:** toàn bộ nhóm `bắt buộc` và nhóm `khác biệt`. Lịch có thể dài hơn 8 đến 9 tuần khoảng một tuần vì camera ảo, và thêm thời gian làm nội dung cho 15 đến 20 bài học (Q12), gói cọ nâng cao và gói âm thanh (Q15).
 
 **Module dự kiến:**
 
 | Module | Vai trò |
 | --- | --- |
 | `:core:animation` (core mới) | Mô hình dự án, khung, layer; lưu khung trên bộ nhớ máy; tự lưu; đọc ghi file sao lưu. Dùng chung cho `projects`, `editor`, `export`, nên phải là core (ADR-0001) |
+| `:feature:onboarding` | 4 trang onboarding ở lần mở đầu, thẻ native dưới pager (Q19) |
 | `:feature:projects` | Danh sách dự án, tạo, đổi tên, xoá, nhân bản, khôi phục từ file |
 | `:feature:editor` | Canvas, công cụ, layer, onion skin, dòng thời gian, âm thanh, phát thử |
 | `:feature:export` | Xuất MP4, GIF, PNG; màn chờ xuất; lưu vào thư viện máy, chia sẻ |
@@ -158,31 +161,35 @@ Tên gói giữ nguyên. Tên trên store và tên dưới icon đổi được 
 
 ## 6. Luồng sử dụng
 
-Đối chiếu với khảo sát: FlipaClip mất 10 thao tác và một màn trả phí, ZenByte 4 thao tác, Banix hơn 10 thao tác và 11 quảng cáo (mục 2). Frameloop theo cách của ZenByte.
+Đối chiếu với khảo sát: FlipaClip mất 10 thao tác và một màn trả phí, ZenByte 4 thao tác, Banix hơn 10 thao tác và 11 quảng cáo (mục 2). Frameloop học cách vào thẳng màn vẽ của ZenByte, nhưng theo Q19 có thêm 4 trang onboarding bắt buộc ở lần mở đầu.
 
-- **Mở đầu, lần đầu:** Loading > hộp thoại đồng ý quảng cáo > Danh sách dự án (trống, có nút "Tạo dự án" và thẻ "Học bài đầu tiên") > Tạo dự án (chọn khung, tốc độ; có giá trị mặc định) > Màn vẽ (hướng dẫn trên màn vẽ, bỏ qua được). **3 đến 4 bước tới nét vẽ đầu tiên**, không có quảng cáo toàn màn hình (open app chỉ từ lần mở thứ 3), không có màn trả phí.
-- **Mở lại:** Loading > (open app từ lần mở thứ 3, tối đa một lần mỗi phiên) > Danh sách dự án > chạm dự án > Màn vẽ.
+- **Mở đầu, lần đầu:** Loading > hộp thoại đồng ý quảng cáo > Onboarding 4 trang bắt buộc, không có Skip (thẻ native dưới nội dung, Q19) > Danh sách dự án (trống, có nút "Tạo dự án" và thẻ "Học bài đầu tiên") > Tạo dự án (chọn khung, tốc độ; có giá trị mặc định) > Màn vẽ (hướng dẫn trên màn vẽ, bỏ qua được). **7 thao tác tới nét vẽ đầu tiên** (4 lần Next qua onboarding, New animation, Create, nét vẽ; không tính chạm ở hộp thoại đồng ý quảng cáo và chạm bỏ qua tour). Onboarding chỉ đánh dấu xong khi bấm nút ở trang cuối; tắt app giữa chừng thì lần mở sau hiện lại từ trang 1, khi đó không còn quảng cáo vì không phải lần mở đầu. Nút Back về trang trước; ở trang 1 thì thoát app. Lần mở đầu không có quảng cáo toàn màn hình (open app tắt ở lần mở đầu sau khi cài; interstitial khi tạo dự án chỉ từ dự án thứ 2), không có màn trả phí.
+- **Mở lại:** Loading > (open app) > Danh sách dự án > chạm dự án > Màn vẽ > (rời màn vẽ: interstitial theo `ads_interval`).
 - **Luồng chính:** Màn vẽ: vẽ > thêm khung > onion skin > phát thử > lặp lại. Mọi công cụ nằm trong màn vẽ (thanh công cụ, bảng layer, dòng thời gian, bảng âm thanh).
-- **Xuất:** Màn vẽ > Xuất > chọn định dạng, chất lượng (rewarded nếu bỏ watermark, PNG, nền trong) > Màn chờ xuất (native) > Xong: lưu vào thư viện, chia sẻ > (interstitial sau khi file đã lưu) > quay lại.
-- **Bài học:** Danh sách dự án > Bài học > chọn bài > dự án mẫu mở trong màn vẽ, có chỉ dẫn từng bước.
+- **Xuất:** Màn vẽ > Xuất > (MREC ngay dưới thẻ tóm tắt) > chọn định dạng, chất lượng (rewarded nếu bỏ watermark, PNG, nền trong) > Màn chờ xuất (MREC) > Xong (native medium): lưu vào thư viện, chia sẻ > (interstitial khi rời màn, sau khi file đã lưu) > quay lại.
+- **Bài học:** Danh sách dự án > Bài học > chọn bài > (interstitial theo `ads_interval`) > dự án mẫu mở trong màn vẽ, có chỉ dẫn từng bước > Hoàn thành bài học (native medium, nhóm B) > "Bài tiếp" (interstitial theo `ads_interval`, nhóm B). Trước nét vẽ đầu tiên không có interstitial lúc vào bài (mục 9.1).
+- **Cài đặt:** Danh sách dự án > nút cài đặt trên thanh trên > Cài đặt.
 - **Sao lưu:** Danh sách dự án > menu dự án > Sao lưu ra file > bộ chọn file hệ thống. Khôi phục: Danh sách dự án > Nhập từ file.
 
 ## 7. Danh sách màn hình
 
 | Màn hình | Tên frame | Trạng thái cần dựng | Feature |
 | --- | --- | --- | --- |
+| Onboarding | `OnboardingScreen_<trạng thái>_<light\|dark>` | page-1, page-2, page-3, page-4 | onboarding |
 | Danh sách dự án | `ProjectsScreen_<trạng thái>_<light\|dark>` | empty, list, menu, restoring, restore_error | projects |
 | Tạo dự án | `NewProjectScreen_...` | default | projects |
-| Màn vẽ | `EditorScreen_...` | drawing, tour, tool_brush, tool_fill, tool_select, tool_text, layers, onion_settings, timeline_multiselect, playing, sound, layer_locked (mời rewarded) | editor |
+| Màn vẽ | `EditorScreen_...` | drawing, tour, tool_brush, tool_fill, tool_select, tool_text, layers, onion_settings, timeline_multiselect, playing, sound, layer_locked, brush_locked, sound_locked (mời rewarded) | editor |
 | Xuất | `ExportScreen_...` | options, exporting, done, error | export |
 | Bài học | `LessonsScreen_...` | list, loading, error | lessons |
 | Chỉ dẫn bài học trên màn vẽ | `EditorScreen_lesson_...` | step | editor |
+| Hoàn thành bài học | `LessonDoneScreen_...` | default | lessons |
+| Cài đặt | `SettingsScreen_...` | default | app |
 
 Hỗ trợ điện thoại màn hình gập theo mặc định của mẫu: thêm frame `_unfolded` (673 × 841) cho Màn vẽ và Danh sách dự án, vì bố cục đổi khi rộng (bảng layer và dòng thời gian nằm cạnh canvas). Máy tính bảng: Q6.
 
 ## 8. Điểm nổi bật
 
-- Vẽ thoải mái: không quảng cáo nào chen vào lúc bạn đang vẽ hay xem lại.
+- Vẽ thoải mái: không quảng cáo nào bật lên giữa lúc bạn đang vẽ hay xem lại.
 - Không giới hạn khung, 5 layer miễn phí, nhập nhạc của bạn miễn phí.
 - Không bao giờ mất bài: tự lưu liên tục, sao lưu cả dự án ra một file.
 - Tô màu không tràn, kể cả khi nét vẽ còn hở.
@@ -193,25 +200,48 @@ Hỗ trợ điện thoại màn hình gập theo mặc định của mẫu: thê
 
 ### 9.1 Vị trí quảng cáo
 
-App mẫu: FlipaClip dày (open, sau thao tác, rewarded từng layer); Banix rất dày, sát nút; Stick Nodes một lần lúc mở (Play §3). AI đề xuất theo Play §7, ánh xạ vào `AdPlacement` của `:core:ads` (bộ PARTNER của AdsKit, ADR-0045):
+App mẫu: FlipaClip dày (open, sau thao tác, rewarded từng layer); Banix rất dày, sát nút; Stick Nodes một lần lúc mở (Play §3). Ngày 2026-11-20 anh Nhật yêu cầu tối đa hóa doanh thu quảng cáo (Q15): dựng sẵn mọi chỗ có điểm ngắt tự nhiên, mọi vị trí mặc định tắt và bật bằng Remote Config (`is_show_<mã vị trí>`; ba vị trí toàn app dùng khóa riêng: `open_app` theo `show_open_ads_first_open`, `show_open_ads`, `open_ad_type`; `resume`, `resume_inter` theo `show_resum_ads`, `resume_ad_type`; `native_combo` theo `is_show_native_after_inter`); nhóm A bật khi phát hành, nhóm B bật dần theo ARPDAU so với tỷ lệ giữ chân D1, D7. Định dạng và hành vi theo `:core:ads` (bộ PARTNER, ADR-0045) và bảng "Luôn giữ" của `docs/ops/ads-guide.md`.
 
-| Vị trí | Định dạng | Màn | Quy tắc đề xuất |
-| --- | --- | --- | --- |
-| `open_app` | App open | Loading | Từ lần mở thứ 3, tối đa một lần mỗi phiên |
-| `resume`, `resume_inter` | App open, interstitial | Quay lại app | Hiện như mọi màn, kể cả màn vẽ (Q4); chỉ khi quay lại app, không chen vào giữa nét vẽ |
-| `projects_native` | Native medium | Danh sách dự án | Cuối danh sách hoặc dưới cùng, cách xa nút |
-| `lessons_native` | Native small | Bài học | |
-| `editor_rw_layer` | Rewarded | Màn vẽ, khi thêm layer thứ 6 | Mở layer 6 đến 10 cho cả dự án |
-| `export_rw_extra` | Rewarded | Xuất | Bỏ watermark, chuỗi PNG, nền trong: mở cho lần xuất đó của dự án |
-| `export_native` | Native medium | Màn chờ xuất | |
-| `export_interstitial` | Interstitial | Sau khi xuất xong | Sau khi file đã lưu; theo `ads_interval` |
-| (không bao giờ) | | Vị trí đặt trên màn vẽ, chen vào lúc đang phát, đè canvas hay dòng thời gian | |
+| Vị trí | Định dạng | Màn | Quy tắc | Nhóm |
+| --- | --- | --- | --- | --- |
+| `open_app` | App open | Loading | Mỗi lần mở app (`show_open_ads`); lần đầu sau khi cài tắt (`show_open_ads_first_open`) | A |
+| `resume`, `resume_inter` | App open, interstitial | Quay lại app | Mọi màn, kể cả màn vẽ (Q4); chỉ khi quay lại app | A |
+| `native_combo` | Native toàn màn hình | Sau mỗi interstitial của feature (không sau inter lúc mở app hay quay lại app) | Đếm ngược `time_close_native` | A |
+| `native_onboarding` | Native ở bước của luồng (`NativeStepAd`, thẻ ngoài pager) | Onboarding, 4 trang | Chỉ lần mở đầu (`is_show_native_onboarding`, `firstOpenOnly`); đổi quảng cáo mỗi trang; khung cao theo `NativeStepAdDefaults.height()` (khoảng 250 dp, cao thêm khi chữ lớn); nút Next ghim cố định, đứng cùng chỗ ở mọi trang, cách thẻ ít nhất 24 dp ở mọi cỡ chữ; sang trang không chờ quảng cáo (quảng cáo của trang sau hiện khi nạp xong) (Q19) | A |
+| `projects_empty_native` | Native medium | Danh sách dự án, trống | Dưới hai nút, cách ít nhất 24 dp; mọi lúc danh sách trống, kể cả sau khi xóa hết dự án (Q18) | A |
+| `projects_bottom` | Thanh đáy native nhỏ | Danh sách dự án | Trên thanh điều hướng | A |
+| `restore_mrec` | Banner MREC | Hộp thoại khôi phục dự án (chỉ lúc đang khôi phục, không ở hộp thoại lỗi) | Dưới thanh tiến độ, cách nút của hộp thoại ít nhất 24 dp; hộp thoại rộng 348 dp, lề trong 24 dp, không dùng chiều rộng mặc định của hệ thống (`usePlatformDefaultWidth = false`), có screenshot test ở khung 360 dp; màn Projects khai `InContentAds` gồm `projects_empty_native`, `projects_grid`, `restore_mrec` (MC-13) | A |
+| `projects_grid` | Native trong lưới | Danh sách dự án | Một ô sau mỗi 6 dự án | A |
+| `create_inter` | Interstitial | Tạo dự án, khi bấm Create | Từ dự án thứ 2; theo `ads_interval` | A |
+| `new_project_native` | Native medium | Tạo dự án | Giữa các nhóm tùy chọn; nút Create ghim đáy, cách ít nhất 24 dp; `keepSpaceWhenEmpty` | B |
+| `editor_exit_inter` | Interstitial | Rời màn vẽ | Sau khi đã tự lưu; theo `ads_interval` | A |
+| `editor_top_native` | Native banner gọn, một tầng, cao khoảng 56 dp (định dạng mới, xem dưới bảng) | Màn vẽ, ngay dưới thanh tiêu đề, cả bố cục màn gập | Cách hàng nút của thanh tiêu đề và canvas mỗi bên ít nhất 16 dp; khi vị trí bật thì giữ chỗ cả lúc nạp hay lỗi; mọi trạng thái của màn vẽ, kể cả lúc phát; lớp mờ của tour không phủ lên dải; nạp lại theo `time_reload_editor_top_native`, mặc định 120 giây, khai theo `docs/ops/remote-config.md` (Q17) | A |
+| `editor_rw_layer` | Rewarded | Màn vẽ, thêm layer thứ 6 | Mở layer 6 đến 10 cho cả dự án | A |
+| `editor_rw_brushes` | Rewarded | Màn vẽ, chọn cọ nâng cao | Mở gói cọ nâng cao 24 giờ; 8 đến 10 cọ cơ bản luôn miễn phí | A |
+| `editor_rw_sounds` | Rewarded | Màn vẽ, bảng âm thanh | Mở gói hiệu ứng âm thanh 24 giờ; nhập nhạc riêng, ghi âm, bộ hiệu ứng cơ bản luôn miễn phí | A |
+| `export_rw_extra` | Rewarded | Xuất | Bỏ watermark, chuỗi PNG, nền trong: mở cho lần xuất đó của dự án | A |
+| `export_options_mrec` | Banner MREC | Xuất, tùy chọn | Ngay dưới thẻ tóm tắt dự án, trên danh sách định dạng, cách thẻ định dạng ít nhất 24 dp (Q18); khi vị trí bật, app bọc `AdSlot` trong khung cố định 250 dp để danh sách không nhảy khi MREC co về 0 lúc nạp lỗi (vị trí tắt, chưa đồng ý hay chỗ hẹp hơn 300 dp thì khung về 0); không dùng thanh đáy vì sẽ sát nút Export ghim đáy, không chen giữa các thẻ định dạng (bảng "Luôn giữ") | A |
+| `export_wait_mrec` | Banner MREC | Xuất, đang chờ | Màn chờ có chỗ trống cố định 300 × 250 và không có nút nào gần (chỉ Hủy ở trên), nên dùng MREC thay native medium; so eCPM với native medium sau khi phát hành | A |
+| `export_done_native` | Native medium | Xuất xong | Dưới ảnh xem trước; các nút ghim đáy, cách ít nhất 24 dp | A |
+| `export_interstitial` | Interstitial | Rời màn Xuất xong | Sau khi file đã lưu; theo `ads_interval` | A |
+| `lessons_grid` | Native trong lưới | Bài học | Một ô sau mỗi 4 thẻ | A |
+| `lessons_bottom` | Thanh đáy native nhỏ | Bài học | Trên thanh điều hướng | A |
+| `lesson_start_inter` | Interstitial | Vào bài học | Theo `ads_interval` | A |
+| `lesson_done_native` | Native medium | Hoàn thành bài học (màn mới) | Dưới kết quả | B |
+| `lesson_next_inter` | Interstitial | Bấm "Bài tiếp" | Theo `ads_interval` | B |
+| `settings_bottom` | Thanh đáy native nhỏ | Cài đặt | | B |
 
-Gói âm thanh, gói cọ mở bằng rewarded (Play §7) để bản sau, khi có nội dung thêm.
+**Định dạng mới cho `editor_top_native` (ngoại lệ có chủ đích):** `:core:ads` chưa có native cao dưới 106 dp (native nhỏ là thẻ hai tầng, D-02). Theo Q17, app tự làm định dạng native banner gọn một tầng trong `:core:ads` của app. Việc này lệch ba luật hiện có: MC-02 (định dạng mới đề xuất về dự án mẫu), `ads-guide.md` (không làm định dạng mới trong app) và `docs/ops/to-app.md` mục 2 (`:core:ads` là của dự án mẫu, app không sửa). Vì vậy: (1) plan làm định dạng này là plan rủi ro cao, kèm một ADR của app (dải 1001 trở lên) ghi ngoại lệ; (2) mọi lần chạy `template-sync.sh` cho app này đặt `hold=core/ads` cho tới khi dự án mẫu nhận định dạng, để bản đồng bộ không đè phần app tự làm; (3) chạy ổn trên bản phát hành thì mở issue `from-app` (`docs/ops/from-app.md`). Trong lúc giữ, app không nhận bản sửa nào của mẫu cho `:core:ads`, nên ADR ghi mốc xem lại sau mỗi đợt đồng bộ. Hình thức theo chính sách native của AdMob và bảng "Luôn giữ": chỉ icon, không có ảnh chính (khung media của AdMob tối thiểu 120 × 120 dp); nhãn "Ad" luôn thấy; chừa góc trên phải cho AdChoices, CTA không đè lên; CTA viền, khác nút xanh chanh của app; dải cao cố định khoảng 56 dp ở mọi cỡ chữ, chữ dài cắt bằng "…", nên thước đo canvas ở mục 4 đúng ở mọi cỡ chữ; plan có test nhãn "Ad" và chữ CTA không bị cắt ở cỡ chữ lớn (đo bằng `TextLayoutResult`). Khi vị trí tắt hay chưa có đồng ý quảng cáo, màn vẽ dùng bố cục không có dải; thiết kế giữ cả hai bố cục.
+
+`ads_interval` đặt 30 giây trên Remote Config (Q16; mặc định của PARTNER là 45 giây). Khóa này là khoảng cách giữa hai interstitial của feature; app open, `resume_inter` và rewarded không bị nó chặn.
+
+**Trước nét vẽ đầu tiên (app tự làm, `:core:ads` không có luật này):** tới khi người dùng vẽ nét đầu tiên ở bất kỳ dự án hay bài học nào, app chỉ hiện `native_onboarding` (Q19), `projects_empty_native` trên màn trống (Q18) và `editor_top_native` khi đã vào màn vẽ, không hiện vị trí quảng cáo nào khác (thanh đáy, ô lưới, native medium, MREC, interstitial như `create_inter`, `lesson_start_inter`; rewarded chỉ khi người dùng tự chọn). Từ lần mở thứ hai, `open_app` vẫn hiện dù người dùng chưa vẽ nét nào; thước đo ở mục 4 chỉ tính lần mở đầu. Vị trí toàn app `open_app` đã tắt ở lần mở đầu; `resume` vẫn chạy theo Q4 nếu người dùng rời app rồi quay lại. Các điều kiện "từ dự án thứ 2" và "mở 24 giờ" cũng do app tự làm (đếm dự án, lưu thời điểm mở khóa).
+
+Không đặt vị trí quảng cáo ở: canvas, dòng thời gian, các bảng công cụ của màn vẽ (cọ, tô, chữ, layer, âm thanh, onion skin), menu của dự án; ngoài dải trên (`editor_top_native`), không quảng cáo nào hiện lên trong lúc vẽ hay phát. Rewarded mà người dùng tự chọn (thêm layer thứ 6, chọn cọ nâng cao, mở gói âm thanh) được mở từ màn vẽ: đó là hộp thoại mời sau một thao tác, không phải vị trí hiển thị sẵn. Không làm quảng cáo giống nút của app hay đặt sát nút để tăng lượt bấm (bảng "Luôn giữ"). Nhóm C (đã xét, không làm): hộp thoại "Thoát?" có native medium.
 
 ### 9.2 Sự kiện phân tích đề xuất
 
-`project_create`, `project_open`, `frame_add` (gom theo phiên, không ghi mỗi lần), `playback_start`, `layer_unlock_rewarded`, `export_start`, `export_success` (định dạng, số khung, thời lượng), `export_fail`, `backup_export`, `backup_restore`, `lesson_start`, `lesson_complete`. Không ghi nội dung tranh, âm thanh hay chữ người dùng nhập.
+`project_create`, `project_open`, `frame_add` (gom theo phiên, không ghi mỗi lần), `playback_start`, `layer_unlock_rewarded`, `brush_pack_unlock_rewarded`, `sound_pack_unlock_rewarded`, `export_option_unlock_rewarded`, `export_start`, `export_success` (định dạng, số khung, thời lượng), `export_fail`, `backup_export`, `backup_restore`, `lesson_start`, `lesson_complete`. Không ghi nội dung tranh, âm thanh hay chữ người dùng nhập.
 
 ### 9.3 Trẻ em và chính sách gia đình
 
@@ -233,17 +263,17 @@ Tranh, dự án, âm thanh chỉ lưu trên máy. Không tài khoản. Không c�
 | Paper & Ink | Sáng, ấm, như sổ phác thảo; tiêu đề chữ có chân | Nền giấy #F6F1E8, mực xanh #2340C8, cam đất #E0673A | Fraunces, DM Sans | Material Symbols Rounded | [Direction/Paper & Ink](https://www.figma.com/design/uDdqi9ojRvIy4689FvCh5O?node-id=3-2) |
 | Loop Pop | Nhiều màu, vui nhưng không trẻ con; bo tròn lớn, chữ đậm | Tím #6B4EFF, vàng #FFB800, nền trắng | Bricolage Grotesque, Plus Jakarta Sans | Material Symbols Rounded | [Direction/Loop Pop](https://www.figma.com/design/uDdqi9ojRvIy4689FvCh5O?node-id=3-309) |
 
-Mỗi hướng có bảng phong cách (biến màu Light và Dark, chữ, bo góc, khoảng cách, icon), 7 component và hai màn `ProjectsScreen_list` và `EditorScreen_drawing` ở khung 411 × 891, cùng một bố cục để so phong cách. So với màn tương ứng của FlipaClip (ảnh khảo sát `10-home.png`, `16-first-strokes.png` trong `captures/com.vblast.flipaclip/preview/` của thư mục làm việc `~/AndroidStudioProjects/app-research/draw-animation/`; ảnh app mẫu không đưa vào repo hay file Figma, nên người duyệt mở hai ảnh đó cạnh trang Figma): nút tạo hoạt hình lớn ở đầu màn dự án thay cho nút + giữa thanh đáy; thanh công cụ dọc bên trái và tùy chọn cọ bên phải để canvas 9:16 chiếm khoảng 57% chiều cao màn; dải khung hiện 8 khung kèm onion skin, số khung, tốc độ khung; không có quảng cáo trên màn vẽ.
+Mỗi hướng có bảng phong cách (biến màu Light và Dark, chữ, bo góc, khoảng cách, icon), 7 component và hai màn `ProjectsScreen_list` và `EditorScreen_drawing` ở khung 411 × 891, cùng một bố cục để so phong cách. So với màn tương ứng của FlipaClip (ảnh khảo sát `10-home.png`, `16-first-strokes.png` trong `captures/com.vblast.flipaclip/preview/` của thư mục làm việc `~/AndroidStudioProjects/app-research/draw-animation/`; ảnh app mẫu không đưa vào repo hay file Figma, nên người duyệt mở hai ảnh đó cạnh trang Figma): nút tạo hoạt hình lớn ở đầu màn dự án thay cho nút + giữa thanh đáy; thanh công cụ dọc bên trái và tùy chọn cọ bên phải để canvas 9:16 chiếm khoảng 57% chiều cao màn; dải khung hiện 8 khung kèm onion skin, số khung, tốc độ khung; màn vẽ ban đầu không có quảng cáo; sau Q17 có một dải native gọn dưới thanh tiêu đề, canvas vẫn chiếm khoảng 57% chiều cao màn ở cỡ chữ mặc định.
 
 Dev chọn: **Studio Night**, ngày 2026-11-20 (anh Nhật).
 
 ## 11. Tài sản mượn tạm dự kiến
 
-Không có. Hiệu ứng âm thanh lấy từ nguồn CC0 ngay từ đầu. Bài học do nhóm tự làm (AI soạn kịch bản, người vẽ hoặc duyệt). Cọ là code, không phải ảnh.
+Không có. Hiệu ứng âm thanh lấy từ nguồn CC0 ngay từ đầu, cả bộ cơ bản lẫn các gói mở bằng rewarded (đặt trên R2). Bài học do nhóm tự làm (AI soạn kịch bản, người vẽ hoặc duyệt). Cọ là code, không phải ảnh.
 
 ## 12. Câu hỏi còn mở
 
-Mọi câu đã có trả lời của anh Nhật ngày 2026-11-19, ghi ở cột cuối, kể cả Q11 đến Q14 sau khảo sát.
+Mọi câu đã có trả lời của anh Nhật, ghi ở cột cuối: Q1 đến Q14 ngày 2026-11-19, Q15 đến Q19 ngày 2026-11-20.
 
 | # | Câu hỏi | Phương án AI đề xuất | Dev trả lời |
 | --- | --- | --- | --- |
@@ -266,3 +296,8 @@ Câu hỏi mới sau khảo sát trên máy:
 | Q12 | Số bài học bản đầu | 6 đến 10 bài, mỗi bài là dự án dựng sẵn mở trong màn vẽ (khung có sẵn, lớp nét dẫn, biểu đồ nhịp), theo cách ZenByte. Bộ truyện nhiều tập để bản sau || **15 đến 20 bài, chia nhóm** |
 | Q13 | Layer miễn phí: ZenByte cho không giới hạn, FlipaClip 3 | Giữ 5 miễn phí, 6 đến 10 bằng một rewarded cho cả dự án; nâng lên nếu số liệu cho thấy người dùng chạm giới hạn nhiều mà ít xem quảng cáo || Như đề xuất |
 | Q14 | Q10 (bản Pro) có xem lại không? ZenByte bán Pro trọn đời 140.000 ₫, FlipaClip và Banix bán thuê bao | Giữ "chưa trong bản đầu"; ghi lại mức giá trọn đời làm mốc khi bàn bản Pro || Giữ: chưa làm |
+| Q15 | Tối đa hóa doanh thu quảng cáo: thêm vị trí ở đâu? (anh Nhật hỏi 2026-11-20) | Nhóm A (bật khi phát hành) và nhóm B (dựng sẵn, bật dần) ở mục 9.1; không đặt trên màn vẽ (Q17 đổi: thêm dải trên); không làm hộp thoại thoát có quảng cáo | **A + B**; thêm màn Hoàn thành bài học và màn Cài đặt vào mục 7 |
+| Q16 | `ads_interval` (khoảng cách tối thiểu giữa hai interstitial của feature; mặc định PARTNER 45 giây) | 90 giây | **30 giây**, chỉnh được từ xa |
+| Q17 | Thêm một native nhỏ trên màn vẽ? (anh Nhật đề nghị 2026-11-20). AI nêu rủi ro: đảo định vị đã duyệt, nét vẽ bắt đầu trên quảng cáo thành lượt bấm không hợp lệ | Dải trên, ngay dưới thanh tiêu đề, giữ chỗ cố định, cách canvas 16 dp | **Dải trên**. Sau rà soát (native nhỏ của mẫu cao tối thiểu 106 dp): **app tự làm native banner gọn khoảng 56 dp, chạy ổn rồi mới mở issue đưa về dự án mẫu**; là ngoại lệ với MC-02 và `to-app.md`, cách giữ ở đoạn dưới bảng 9.1 |
+| Q18 | Thêm quảng cáo ở màn Projects trống, hộp thoại khôi phục, và đưa quảng cáo màn Xuất lên trên (anh Nhật đề nghị 2026-11-20) | Native medium dưới hai nút trên màn trống; MREC trong hộp thoại khôi phục; MREC ngay dưới thẻ tóm tắt ở màn Xuất | **Như đề xuất** |
+| Q19 | Thêm 4 màn onboarding có quảng cáo native (anh Nhật đề nghị 2026-11-20). AI nêu: thêm bước trước nét vẽ đầu tiên, trái bài học từ FlipaClip, Banix | Chỉ ở lần mở đầu; Skip ở mọi trang; native 250 dp (`NativeStepAd`) cách nút 24 dp; thước đo "0 quảng cáo toàn màn hình, tối đa 2 native trước nét vẽ đầu tiên" | **Thêm onboarding, bắt buộc qua đủ 4 trang, không có Skip**; thước đo mục 4 thành "≤ 7 thao tác tới nét vẽ đầu tiên" |
