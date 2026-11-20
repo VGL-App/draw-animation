@@ -1,0 +1,333 @@
+# QUY TẮC NỀN TẢNG
+
+Trang này do `scripts/foundation.py` sinh từ mục "Việc AI phải tuân thủ" của các ADR, không sửa tay. Muốn đổi một quy tắc thì sửa hoặc thay ADR, rồi chạy lại script.
+
+AI đọc trang này trước mọi task. Chỉ mở ADR đầy đủ (bối cảnh, phương án, hệ quả) khi task đụng vào vùng của ADR đó hoặc định đổi quy tắc của nó: lý do nằm ở đó.
+
+ADR có `origin: template` đến từ dự án mẫu: trong app, không sửa; muốn khác thì viết ADR riêng của app (đánh số từ 1001) ghi rõ thay quy tắc nào và vì sao, và đề xuất về dự án mẫu nếu có ích chung (`docs/ops/from-app.md`).
+
+## Quy tắc từ dự án mẫu
+
+### [ADR-0001](adr/0001-kotlin-compose-feature-modules.md): Dùng Kotlin, Jetpack Compose và chia module theo feature
+
+- code của feature nằm trong module của feature đó
+- cần dùng chung thì đề xuất đưa vào core, không import chéo giữa các feature
+
+### [ADR-0002](adr/0002-merge-to-main-after-quality-gate.md): Merge thẳng vào nhánh chính, chỉ sau khi qua cổng chất lượng
+
+- không bao giờ tìm cách qua cổng chất lượng bằng cách sửa, xóa test hay hạ tiêu chí kiểm tra
+
+### [ADR-0003](adr/0003-feature-flags-remote-config.md): Dùng cờ tính năng qua Firebase Remote Config
+
+- mỗi feature mới có cờ riêng khai báo trong `:core:config`, tên theo dạng `feature_<ten>_enabled`
+- không đọc Remote Config trực tiếp từ module feature
+
+### [ADR-0005](adr/0005-no-child-audience.md): Không nhắm tới trẻ em
+
+- khi sinh spec hoặc nội dung, không định hướng giao diện, hình ảnh, nội dung chữ theo hướng dành cho trẻ em
+- gặp yêu cầu có dấu hiệu này thì đặt câu hỏi
+
+### [ADR-0006](adr/0006-no-backend-immutable-r2-assets.md): Không có backend, file tĩnh trên R2 chỉ thêm mới
+
+- không viết code hoặc script ghi đè, xóa file trên R2
+- mọi đường dẫn R2 lấy từ `:core:assets`, không viết cứng trong feature
+
+### [ADR-0007](adr/0007-separate-staging-production.md): Tách hai môi trường staging và production cho mọi dịch vụ bên ngoài
+
+- không viết cứng giá trị cấu hình môi trường trong code
+- không bao giờ đọc, sửa hoặc tạo cấu hình production
+- mọi thao tác trong phiên tự chạy chỉ trên môi trường staging
+
+### [ADR-0008](adr/0008-design-system-source-of-truth.md): Hệ thống thiết kế lấy code làm gốc, Claude Design đồng bộ từ code
+
+- chỉ dùng màu, chữ, khoảng cách, thành phần từ `:core:designsystem`
+- không viết cứng mã màu hay cỡ chữ trong feature
+
+### [ADR-0010](adr/0010-soft-quality-gate-github-free.md): Cổng chất lượng mềm trên GitHub Free, merge chỉ qua script kiểm tra
+
+- chỉ merge bằng `scripts/merge-if-green.sh`
+- không sửa script này, các workflow trong `.github/` hay nội dung kiểm tra của cổng chất lượng, trừ khi đó chính là plan rủi ro cao đã được duyệt chéo
+- thấy nhãn `main-broken` thì dừng phiên, trừ trường hợp phiên tự revert commit merge của chính phiên theo ADR-0025
+
+### [ADR-0012](adr/0012-firebase-wiring.md): Nối Firebase vào các module core, bản staging build bằng file cấu hình giả khi không có file thật
+
+- không gọi Firebase từ module feature
+- không sửa hay xóa file `google-services.json` giả, trừ khi đổi `applicationId` theo plan đã duyệt
+- không tạo, đọc hay chép file `google-services.json` thật vào bất kỳ đâu
+
+### [ADR-0015](adr/0015-r2-assets-module.md): Module `:core:assets` tải file tĩnh từ R2 một lần, giữ trên máy, đường dẫn bắt buộc có phiên bản
+
+- feature chỉ dùng `RemoteAssets`, không gọi HTTP hay viết địa chỉ R2
+- mỗi thay đổi nội dung file là một đường dẫn mới
+- không viết code hay script ghi đè, xóa file trên R2
+
+### [ADR-0018](adr/0018-loading-waits-for-remote-config.md): Màn hình loading chờ tải Remote Config khi mở app, các màn hình khác vẫn không chờ
+
+- chỉ màn hình loading dùng `RemoteConfigRefresher`. Màn hình khác muốn chờ Remote Config cần spec và ADR riêng
+
+### [ADR-0019](adr/0019-app-logging-and-device-test-diagnostics.md): App ghi log hành vi qua :core:logging; CI giữ lại chi tiết lỗi và log khi test trên emulator đỏ
+
+- ghi log theo mục Quyết định, không ghi dữ liệu cá nhân
+- không gọi `android.util.Log` trong feature
+- khi test emulator đỏ, đọc bước "Chi tiết test trên emulator" trước khi sửa
+
+### [ADR-0020](adr/0020-design-handoff-and-conformance.md): Thiết kế trên Claude Design hoặc Figma, bàn giao bằng ảnh khung chuẩn trong repo, đối chiếu bằng ảnh so sánh
+
+- chỉ dùng gói trong `design/`
+- đặt tên screenshot test đúng tên ảnh trong `screens/`
+- ảnh `_unfolded` có screenshot test ở khung `w673dp-h841dp-xxhdpi`
+- chạy `scripts/design-compare.sh` và đưa `design/review/` vào PR khi feature có thiết kế
+- không đổi giao diện để giảm tỷ lệ khác biệt bằng cách viết cứng giá trị
+
+### [ADR-0021](adr/0021-clone-reference-apps.md): App mới có thể bắt đầu bằng việc AI khảo sát các app mẫu trên Play, đề xuất app tốt hơn, rồi thiết kế trên Figma cùng dev
+
+- làm theo `docs/CLAUDE.md`, mục Khi khảo sát app mẫu và mục Khi thiết kế trên Figma
+- chỉ điều khiển máy qua `scripts/app-explore/ax.sh`
+- không vượt bộ chặn
+- không tự chuyển trạng thái bản đề xuất hay thiết kế
+- ghi mọi tài sản mượn vào `docs/borrowed-assets.md` trong cùng PR với file mượn
+
+### [ADR-0024](adr/0024-network-required.md): App chỉ dùng được khi có Internet; mất mạng thì app chặn bằng một popup chung có nút thử lại
+
+- không làm chế độ ngoại tuyến trong feature
+- feature không tự đọc trạng thái mạng của hệ thống, mất mạng do `:app` xử lý bằng popup chung
+- lỗi máy chủ trả về vẫn báo trong `UiState` kèm thử lại
+- spec mới không ghi tiêu chí "dùng được khi không có mạng"
+
+### [ADR-0025](adr/0025-main-self-healing.md): Nhánh chính tự hồi phục khi đỏ: chạy lại test hỏng một lần, tự đóng issue khi chạy lại xanh, merge bản revert được kiểm bằng nội dung
+
+- `main-guard` chạy lại `check.sh` một lần khi chỉ có test thất bại và ghi issue `flaky` nếu lần chạy lại xanh
+- khi `main-broken` mở, chỉ merge PR mà `scripts/is-exact-revert.sh` xác nhận là bản revert đúng của commit gây lỗi
+- không sửa hay cập nhật nhánh `revert/` trước khi merge
+- phiên chỉ revert commit merge của chính phiên, theo `docs/auto-run.md` mục Khi nhánh chính đỏ vì task của phiên
+- AI vẫn không đóng, sửa hay bình luận để gỡ issue `main-broken`
+- chép issue `flaky` đang mở vào báo cáo phiên
+- các quy tắc khác của ADR-0010 vẫn áp dụng
+
+### [ADR-0027](adr/0027-appsflyer.md): Dùng AppsFlyer trong :core:analytics cho doanh thu quảng cáo và phễu quảng cáo, khóa dev đưa vào lúc build, staging không gửi
+
+- chỉ gọi SDK AppsFlyer trong `:core:analytics`
+- không viết khóa dev AppsFlyer vào code, tài liệu, tham số build hay file trong repo
+- không gửi `af_revenue`, doanh thu quảng cáo chỉ qua `af_ad_revenue` bằng hàm ghi sự kiện thường
+- build không có khóa thì không khởi động AppsFlyer
+- không thêm sự kiện AppsFlyer ngoài `ads-business-rules.md` mục 8.3 và spec đã duyệt
+- mỗi sự kiện AppsFlyer đi qua công tắc từ xa của nó
+- không gửi dữ liệu cá nhân hay chữ người dùng nhập sang AppsFlyer
+
+### [ADR-0029](adr/0029-lech-pham-vi-lam-tiep-va-merge.md): Phiên tự chạy sửa tiếp phần ngoài plan cần cho task, merge rồi báo sau, thay vì dừng task
+
+- phần ngoài mục 3.2 cần để thay đổi của plan chạy đúng thì sửa tiếp và merge, không dừng task, không giới hạn số file hay module
+- vẫn dừng khi phải sửa file trong mục "Không được làm" của `CLAUDE.md`, khi phần ngoài plan thêm thư viện, quyền hay chạm điểm chặn 1 tới 6, 8, 9 của `risk-scoring.md` mà plan chưa nêu, hay khi gặp điều kiện dừng 3, 4, 6, 7, 8, 9
+- test cũ đỏ chỉ vì dữ liệu chưa có phần plan thêm thì cập nhật dữ liệu đó và vẫn kiểm dữ liệu mới
+- test cũ đỏ vì hành vi cũ bị hỏng thì sửa code, không sửa test
+- không xóa test hay câu khẳng định, không nới phép so sánh, không thêm `@Ignore`
+- ảnh chuẩn screenshot ngoài mục 3.2 lệch thì dừng
+- điều kiện dừng riêng ở mục 7 của plan vẫn áp dụng
+- ở bước 3 chạy test JVM của mọi module với `--continue` khi test viết trước đã biên dịch được
+- mỗi phần ngoài mục 3.2 ghi vào nhật ký plan, mô tả PR (mục "Ngoài mục 3.2" kèm `git diff --stat`) và một dòng `- [ ]` ở mục Cần người kiểm tra của báo cáo phiên
+- rà soát độc lập xét riêng phần đó, vi phạm là mức chặn
+- ở bước 6 phải sửa điểm nên sửa có test viết trước, giới hạn 3 lần sửa mỗi điểm và 2 vòng rà soát lại mỗi task
+
+### [ADR-0030](adr/0030-dong-bo-du-an-mau-ve-app.md): Đưa thay đổi của dự án mẫu về app theo từng đợt, bằng PR đồng bộ dựng từ diff của dự án mẫu
+
+- không chép tay code hay tài liệu của dự án mẫu về phần dùng chung của app, dùng `scripts/template-sync.sh` theo `docs/ops/to-app.md`
+- không sửa `base=` hay `hold=` của `docs/template-sync.txt` ngoài PR đồng bộ
+- trước khi đồng bộ, đưa cải tiến chung của app chưa về dự án mẫu qua `from-app.md`
+- xung đột ở phần của dự án mẫu thì lấy bản mẫu, trừ phần app chưa đưa về và giá trị riêng của app ở mục 6 của `to-app.md`
+- phần app cũng sửa thì gộp tay, giữ phần riêng của app
+- mô tả PR đồng bộ liệt kê cách gộp từng file xung đột
+- phần giữ lại vì lớn thì đưa vào bằng một task có plan
+
+### [ADR-0031](adr/0031-test-cu-mau-thuan-voi-plan.md): Test có sẵn kiểm hành vi mà plan đổi được tìm từ lúc soạn plan, và phiên tự viết lại câu khẳng định khi plan đã duyệt rõ điều mới
+
+- plan sửa hay xóa code Kotlin ngoài thư mục test có mục 3.5 "Hành vi đã có bị đổi", liệt kê test có sẵn kiểm hành vi plan đổi (bắt đầu từ `scripts/existing-tests.py <plan>`) và câu khẳng định giữ nguyên hay câu mới viết sẵn, chỗ chưa quyết thì đặt câu hỏi ở mục 8
+- trong phiên, câu khẳng định của test JVM có sẵn đỏ vì trái trực tiếp điều plan đã duyệt nói rõ thì viết lại khi đủ sáu điều: có câu của plan nói điều mới, có câu ý định và câu mới kiểm đúng ý định đó, không nới (không bớt câu, không đổi bằng thành khoảng hay chứa, không tăng sai số, không bỏ đối chứng, không `@Ignore`), có đối chứng đỏ khi ý định bị phá, không phải ảnh chuẩn hay test viết trước của plan hay câu kiểm tiêu chí của spec hay luật nghiệp vụ mà plan không đổi, tối đa 3 câu mỗi task
+- thiếu một điều thì dừng như cũ
+- mỗi câu viết lại ghi vào nhật ký plan, mục "Test cũ viết lại (ADR-0031)" của mô tả PR và một dòng `- [ ]` ở mục Cần người kiểm tra
+- rà soát độc lập xét riêng từng câu, vi phạm là mức chặn
+
+### [ADR-0032](adr/0032-lech-nho-tu-lam-roi-bao.md): Phiên tự chạy tự làm các lệch nhỏ đã liệt kê và tự bỏ qua loại task mà môi trường không làm được, rồi báo người sau
+
+- chỉ tự làm các lệch nhỏ L1 tới L10 của quyết định 1 mà không cần plan phiên bản mới
+- ngân sách kịch bản nâng tới tổng theo công thức làm tròn lên hàng trăm, không quá trần tính từ `timeout-minutes` của `device-session.yml`, trong PR của task làm tổng vượt
+- `need` chỉ đổi thành `wait` khi có bằng chứng emulator đã có thiết bị nhờ task đã merge
+- mốc dời chỗ chỉ khi mọi dòng `-` của plan (khối chỉ có dòng `+`: dòng ngữ cảnh trên, dưới hay tiêu đề mục) có nguyên văn ở chỗ mới, đặt các dòng `+` không đổi chữ, không thì dừng theo điều kiện 3
+- test viết trước qua ngay chỉ được làm tiếp khi test chặt lại hay một đột biến làm nó thất bại, không thì dừng theo điều kiện 8
+- không dùng `@Suppress`, lint baseline hay sửa `.editorconfig` thay cho L5
+- tệp sinh ra chỉ của `scripts/foundation.py`, `scripts/status.py`
+- mã kế tiếp đã có người dùng thì lấy mã sau và sửa mọi chỗ dẫn trong cùng PR
+- lỗi khớp dòng `bo-qua-loai` của bảng tra lỗi thì bỏ qua mọi task còn lại mà lệnh `scripts/plan-check.py --touches` của dòng đó trả mã 0, làm tiếp các task khác, không kết thúc phiên, soạn danh sách chạy nháp cho task bị bỏ qua
+- không tự thêm quyền, thư viện, SDK, quảng cáo, sự kiện phân tích, không chạm production, không đổi spec, thiết kế hay câu trả lời của người, không làm yếu test, không đẩy lại lệnh bị từ chối dưới dạng khác
+- mỗi quyết định tự làm ghi vào mục "Quyết định AI đã tự làm" của báo cáo (task, loại, quyết định, lý do, cách hoàn tác), và mục Cần người kiểm tra luôn có dòng `- [ ] Quyết định AI đã tự làm: <N>`
+- rà soát độc lập xét mỗi lệch L1 tới L7, L10, lệch ngoài danh sách là mức chặn
+
+### [ADR-0033](adr/0033-lech-nho-l11-l12.md): Thêm hai lệch nhỏ phiên tự làm rồi báo, L11 sửa phần dựng của test chỉ đỏ vì máy thiếu cấu hình chung và L12 sửa điểm nên sửa chỉ về chú thích hay định dạng
+
+- danh sách lệch nhỏ của ADR-0032 có thêm L11 và L12, theo mọi quy tắc khác của ADR-0032
+- L11 chỉ sửa phần dựng của chính test đang đỏ cho nó tự đặt cấu hình chung mà máy chạy thiếu hay đặt khác (ví dụ git toàn cục, nhánh mặc định, `JAVA_HOME`, `ANDROID_HOME`, `TMPDIR`, múi giờ, ngôn ngữ; danh sách không đóng), khi tái hiện được lỗi bằng cách bỏ hay đổi cấu hình đó, câu khẳng định và giá trị mong đợi không đổi, không bỏ bước của test, với test của task đột biến bỏ code mới vẫn làm test thất bại, với test có sẵn lỗi tái hiện được trên nhánh chính sạch
+- L11 không sửa phần dùng chung của `scripts/tests/run.sh`, `scripts/tests/app.sh` hay bộ chạy test
+- L11 không sửa câu khẳng định, không sửa code đang được kiểm, không thêm cấu hình vào workflow CI hay script dựng môi trường thay cho sửa test
+- L12 sửa điểm nên sửa không cần test viết trước chỉ khi `git diff -w` của phần sửa chỉ có chú thích hay khoảng trắng và chỗ xuống dòng, trong file của mục 3.2 hay phần ngoài mục 3.2 được phép theo ADR-0029, và `scripts/check.sh` vẫn qua
+- L12 không đổi chữ hiển thị, nội dung log, tên trong code hay dòng code chạy
+- mỗi lệch L11, L12 ghi vào mục "Quyết định AI đã tự làm" của báo cáo
+- rà soát độc lập xét L11 kèm lệnh tái hiện như L1 tới L7 và L10, xét L12 ở vòng rà soát lại của điểm nên sửa kèm `git diff -w`, lệch không đủ điều kiện là mức chặn
+
+### [ADR-0035](adr/0035-diem-chan-khong-tai-hien.md): Điểm chặn của rà soát độc lập nói code chạy sai mà test chạy thật không tái hiện được thì phiên ghi "không tái hiện" và đi tiếp, có người kiểm sau
+
+- - Chỉ ghi "không tái hiện" cho điểm chặn nói code của task chạy sai, khi đủ bốn điều: - test mới chạy code, khẳng định đúng điều và ngưỡng mà điểm chặn nêu
+- - test qua mà không sửa code của task
+- - đột biến theo hướng điểm chặn làm test thất bại, ghi vào nhật ký plan
+- - test nằm trong file được phép và vào commit của task. - Không áp dụng cho điểm chặn về lệch plan, file ngoài phạm vi, test bị đổi hay xóa, ADR-0031, cấu hình production, bí mật, mã quảng cáo thật, thiết kế hay hiểu spec khác nhau. - Test và lần đột biến đi qua vòng rà soát lại, tính vào giới hạn 2 vòng. Rà soát lại không đồng ý thì điểm là Chặn như cũ. - Mỗi điểm chỉ ghi "không tái hiện" một lần. - Ghi vào mục "Quyết định AI đã tự làm", thêm một dòng `- [ ]` ở "Cần người kiểm tra", và ghi trong mô tả PR
+
+### [ADR-0039](adr/0039-main-guard-tin-lan-kiem-cua-pr.md): main-guard không chạy lại cổng chất lượng cho commit có nội dung đã được pr-check kiểm đầy đủ, chỉ chạy test của script khi phần khác chỉ là tài liệu
+
+- `main-guard.yml` chỉ bỏ qua `check.sh` qua `scripts/main-guard-verified.sh`, bằng một bước bên trong job `guard`, không bằng `if:` ở cấp job
+- script không chắc thì chọn `full`
+- commit đổi một file mà job `guard` gọi hay dựa vào, lần chạy tay và lần chạy lại luôn dùng `full`
+- đổi tên bước cổng chất lượng hay tên job `build-and-test` của `pr-check.yml`, hay thêm file trong `docs/` mà Gradle đọc, thì sửa `main-guard-verified.sh` và test của nó cùng PR
+
+### [ADR-0041](adr/0041-merge-khong-cap-nhat-khi-main-chi-doi-tai-lieu.md): merge-if-green.sh merge PR code mà không cập nhật nhánh khi nhánh chính chỉ đổi tài liệu từ điểm tách, và PR nháp không chạy pr-check
+
+- `merge-if-green.sh` chỉ merge nhánh chậm hơn nhánh chính mà không cập nhật khi PR đã chạy bước cổng chất lượng `check.sh` xanh, nhánh chính từ điểm tách chỉ đổi file trong `docs/**` hay `**/*.md` không phải file Gradle đọc, không file nào đổi ở cả hai bên và GitHub báo không xung đột
+- thiếu một điều hay không đọc được thì cập nhật nhánh như cũ
+- PR chỉ tài liệu luôn cập nhật nhánh trước khi merge
+- `merge-if-green.sh` quyết "chỉ tài liệu" và "PR đã chạy check.sh" chỉ qua `scripts/main-guard-verified.sh`, không viết lại quy tắc
+- đổi `paths-ignore` của `main-guard.yml` hay quy tắc tài liệu của `main-guard-verified.sh` thì sửa cả hai và test cùng PR
+- `pr-check.yml` khai báo đủ `opened`, `synchronize`, `reopened`, `ready_for_review` và chỉ bỏ PR nháp bằng `if:` cấp job
+- muốn CI cho PR nháp thì chuyển PR sang sẵn sàng, không bỏ điều kiện nháp
+
+### [ADR-0042](adr/0042-runner-tu-host-cho-job-nang.md): Job nặng không đọc bí mật chạy được trên runner tự host chạy một lần, chọn bằng biến HEAVY_RUNNER của repo private; xóa biến thì quay về runner của GitHub
+
+- chỉ job chạy `scripts/check.sh`, Gradle hay emulator mà không đọc `secrets.` mới khai báo `runs-on: ${{ vars.HEAVY_RUNNER || 'ubuntu-latest' }}`
+- job có `secrets.` và job nhẹ giữ `runs-on: ubuntu-latest`
+- job nặng gọi `scripts/runner-check.sh` ở bước ngay sau `actions/checkout`, với `if: runner.environment == 'self-hosted'`, trước `setup-java`, `setup-gradle` và mọi bước build
+- bước đứng trước bước kiểm runner không ghi vào `~/.gradle`, và trong thư mục làm việc chỉ ghi `build.log` trên đường lỗi
+- không coi `runner-check.sh` là hàng rào an toàn, nó chỉ bắt cấu hình nhầm
+- bước dùng `sudo` trong job nặng có `if: runner.environment == 'github-hosted'`
+- không đặt `clean: false` cho `actions/checkout` của job nặng
+- `wait-run.sh` mã 7 (`CHỜ RUNNER`) không phải lỗi của code: không sửa code, không chạy lại, ghi "Cần người kiểm tra"
+- không cài, đăng ký hay đổi cấu hình runner, không đặt hay xóa biến `HEAVY_RUNNER` trong phiên
+- không đề xuất đặt `HEAVY_RUNNER` cho repo công khai
+
+### [ADR-0043](adr/0043-test-emulator-sau-merge.md): Test trên emulator chạy một lần cho mỗi commit đổi code app của nhánh chính, trong job ui-test của main-guard, không chạy ở PR
+
+- test emulator chạy ở job `ui-test` của `main-guard.yml` sau job `guard`, không chạy ở `pr-check.yml`
+- `merge-if-green.sh` không đòi hay chờ `ui-test`
+- chỉ kết luận `red` của `scripts/ui-test-verdict.sh` mở `main-broken`
+- `infra` chỉ cho danh sách trắng PB của script và thiết bị hỏng, app dừng luôn là `red`
+- `find-breaking-commit.sh --check ui-test` không đổ lỗi cho commit có annotation `EMULATOR HẠ TẦNG (`, không chờ commit có `ui-test` bị hủy hay hết giờ
+- issue `main-broken` của emulator có dòng `<!-- check:ui-test -->`, và mỗi job chỉ bình luận, chỉ tự đóng issue của chính nó
+- emulator đỏ vì hạ tầng sau merge thì chạy lại riêng job đỏ theo `docs/ops/failure-playbook.md`, không mở `main-broken`, không đẩy commit rỗng lên nhánh chính
+- thêm đường dẫn code app hay script mà job `ui-test` gọi thì sửa danh sách của `scripts/ui-test-needed.sh` và test của nó cùng PR
+
+### [ADR-0044](adr/0044-tai-lieu-quy-tac-chi-noi-hien-tai.md): Tài liệu quy tắc chỉ nói quy tắc hiện tại; lịch sử nằm ở những chỗ dành riêng và không sang app
+
+- tài liệu quy tắc viết quy tắc ở thì hiện tại, lý do cần thiết viết thành một vế câu, không kể lại cách làm cũ
+- không ghi mã bài học, mã ticket hay mã phiên (`L-` hay `T-` cộng ba chữ số, `RUN-` cộng tám chữ số) trong tài liệu quy tắc, các mã đó chỉ ghi ở chỗ dành cho lịch sử của mục 1 của ADR-0044
+- chữ giữ chỗ, mã `PB-NN` của bảng tra lỗi và mã luật quảng cáo hai chữ số vẫn được dùng
+- PR áp dụng bài học sửa quy tắc theo cách này và ghi mã bài học trong mô tả PR
+- ADR mới sửa một phần ADR chưa `superseded` thì hợp nhất, chép lại quy tắc còn đúng và cho ADR cũ `superseded`
+- tài liệu quy tắc không dẫn tới hay nhắc mã ADR `superseded`
+- không thêm dòng vào `scripts/tests/history-refs-allow.txt`
+- PR dọn tài liệu giữ đủ mọi quy tắc của bản cũ, không nới quy tắc nào, và ghi trong mô tả PR các mã đã gỡ khỏi mỗi quy tắc
+
+### [ADR-0045](adr/0045-quang-cao.md): Quảng cáo theo luật nghiệp vụ một bộ (quyết định của người phụ trách sản phẩm, rồi JBase, rồi AdsKit PARTNER), qua một lớp trung gian `:core:ads`, AdMob và AppLovin MAX
+
+- hành vi quảng cáo theo `docs/ops/ads-business-rules.md`, không theo trí nhớ về AdsKit hay JBase
+- phân xử nghiệp vụ quảng cáo theo thứ tự quyết định của người phụ trách sản phẩm trong spec `ads`, rồi JBase, rồi luật PARTNER đang có
+- không theo JBase ở chỗ trái luật, chính sách hay là lỗi, ghi lý do
+- dẫn chứng JBase bằng đường dẫn và dòng, hoặc lớp và hằng số của bytecode, không theo trí nhớ
+- ghi mỗi luật đổi theo JBase vào `ads-business-rules.md` kèm mã ADR và nguồn JBase
+- ghi mỗi điểm lệch PARTNER vào `ads-business-rules.md` mục 12 kèm mã ADR
+- không chép code hay khóa của AdsKit hay JBase
+- luật thuần của quảng cáo tách thành hàm có unit test với đồng hồ giả, đo thời gian bằng đồng hồ đơn điệu
+- feature chỉ dùng composable và hàm của `:core:ads` và `PrivacyOptionsButton`
+- không gọi `AdsController` hay SDK quảng cáo từ feature
+- feature chỉ gọi quảng cáo toàn màn hình ở hành động của người dùng
+- quảng cáo lúc mở app và khi quay lại app do `:core:ads` và vỏ app làm theo `docs/ops/ads-business-rules.md`
+- khởi tạo SDK quảng cáo theo luật đồng ý của `docs/ops/ads-business-rules.md`, mục 1
+- SDK MAX và APS chỉ nằm trong `:core:ads`
+- MAX và APS khởi tạo sau cổng đồng ý của `:core:ads`, không bao giờ trước, không viết cứng trạng thái đồng ý
+- mọi luồng của MAX đi qua cùng cổng hiện toàn màn hình và cùng mốc `ads_interval` với AdMob
+- native không đi qua MAX
+- adapter của MAX ghi phiên bản cụ thể trong `gradle/libs.versions.toml`, không dùng `+`
+- không tách ticket APS khi chưa có tài khoản Amazon Publisher Services
+- không viết mã quảng cáo thật vào code, tài liệu hay tham số build trong repo
+- khóa SDK MAX, mã đơn vị MAX và mã APS không vào repo, tài liệu hay resource của module
+- không tự thêm vị trí, định dạng hay sự kiện ngoài spec đã duyệt
+- vị trí mới mặc định tắt
+- vị trí mới khai báo theo mô hình chung (mã, định dạng, nhóm giãn cách) với khóa suy ra theo mẫu, không thêm cờ, hàm hay composable mang tên tính năng của một app vào `:core:ads`
+- khóa Remote Config quảng cáo dùng đúng tên trong bảng khóa của `ads-business-rules.md`, khóa mới cùng kiểu đặt tên và ghi rõ là tên do ta đặt
+- giá trị mặc định của khóa quảng cáo theo bảng khóa của `docs/ops/ads-business-rules.md`, mục 10, chỉ đổi khi người phụ trách sản phẩm quyết
+- không ghi `ad_impression` từ app, doanh thu theo vị trí ghi bằng `ad_impression_placement`
+- quảng cáo trong màn hình không gửi yêu cầu và không làm mới khi quảng cáo toàn màn hình vẽ trong app đang hiện
+- thanh đáy chừa chỗ đúng chiều cao của khe từ lúc khe đang tải, nạp lỗi thì co về 0
+- `banner_mrec` là một định dạng của danh sách đóng, chỉ dùng khi spec của app khai báo
+- cổng không hiện quảng cáo bật thì mọi định dạng như công tắc tổng tắt và hành động có điều kiện làm thẳng
+- giữ các quy tắc ở mục 11 của ADR-0045 kể cả khi spec yêu cầu khác, gặp yêu cầu như vậy thì ghi thành câu hỏi
+- code lệch luật của `ads-business-rules.md` chỉ sửa bằng ticket có plan đã duyệt, không sửa ngoài phạm vi plan
+
+### [ADR-0046](adr/0046-remote-config.md): Khóa Remote Config phẳng, có kiểu, khai báo một chỗ trong code, sinh bảng khóa và file mẫu; staging có giá trị cục bộ
+
+- đặt tên khóa theo quy ước của ADR-0046, khóa quảng cáo theo ADR-0045, mục 6
+- không dùng khối JSON làm cấu hình
+- khai báo khóa mới kèm kiểu, mặc định an toàn và mô tả ở module sở hữu, rồi sinh lại bảng khóa trong cùng PR
+- không đổi tên hay đổi kiểu một khóa đã phát hành
+- không đổi giá trị trên Firebase (việc của người)
+
+### [ADR-0047](adr/0047-bo-build-va-kiem-tra-code.md): Dự án mẫu build bằng Gradle 9.3.1 và AGP 9.1.0 với Kotlin dựng sẵn, và kiểm code bằng một cổng chất lượng `scripts/check.sh` mà AI và CI chạy như nhau
+
+- chạy `scripts/check.sh` trước khi đẩy code
+- chạy `./gradlew ktlintFormat` khi ktlint báo lỗi, không tắt quy tắc
+- không cập nhật ảnh chuẩn screenshot ngoài plan
+- không áp dụng plugin `org.jetbrains.kotlin.android`
+- trong `build-logic`, cấu hình module Android qua thuộc tính của `CommonExtension` của AGP 9
+- không đặt `android.newDsl=false`, plugin cần DSL cũ thì nâng plugin đó
+- giữ `compileSdk = "<số>"` trên một dòng của `gradle/libs.versions.toml`
+- nâng Gradle thì thêm giới hạn Java của bản đó vào `scripts/java-check.sh` kèm test
+
+### [ADR-0048](adr/0048-duyet-plan-va-danh-sach-chay-mot-lan.md): Đường làm nhanh giữ, thêm bước gộp nhánh chính; plan và danh sách chạy của một đợt được duyệt một lần trong một PR, không cần họp; AI chỉ ghi trạng thái duyệt theo lời đồng ý rõ ràng của dev, ở một quy tắc chung
+
+- đường làm nhanh chỉ cho code app, chỉ khi dev ngồi cùng suốt task tới khi `main-guard` xanh, plan không chạm điểm chặn nào kể cả điểm 7, không thêm quyền, thư viện hay SDK, mức rủi ro Thấp và tiêu chí E dưới 2, ticket cỡ S hoặc M khi dev đồng ý, kịch bản có trong spec `confirmed` hoặc dev ngồi cùng là người xác nhận spec của feature
+- không bắt đầu khi có phiên tự chạy đang chạy hay issue `main-broken`, `env-broken` đang mở
+- vẫn ghi yêu cầu, ticket, plan đủ mục theo mẫu với `lane: quick`, chạy `scripts/plan-check.py` khi plan còn `draft` và sửa hết lỗi
+- dev nào ngồi cùng cũng duyệt được plan làm nhanh, ghi khi người duyệt không phải `owner` của ticket
+- vẫn viết test trước, chạy `scripts/check.sh`, rà soát độc lập bằng agent con ngữ cảnh mới theo bước 6 của `docs/auto-run.md`, lời giao có dòng `Task: T-NNN`
+- chờ CI và merge chỉ bằng `scripts/merge-if-green.sh`, chờ `main-guard`
+- một PR cho cả task trên nhánh `claude/quick-T-NNN-<tu-khoa>`, mô tả ghi "Đường làm nhanh (ADR-0048)" và những gì đường thường ghi vào báo cáo phiên
+- nhật ký, plan `done`, ticket `on-staging` ghi trong lần đẩy cuối trước CI
+- trước khi merge gộp nhánh chính vào nhánh làm nhanh rồi chạy `scripts/plan-check.py` và `scripts/run-check.py` cho các danh sách chạy chưa chạy và báo dev lỗi mới
+- hỏi dev trước mọi lệch mà phiên tự chạy được tự làm rồi báo, ghi vào nhật ký
+- dừng hay bỏ task thì đóng PR làm nhanh và đưa yêu cầu, ticket `stopped`, plan có nhật ký lần dừng lên nhánh chính bằng PR tài liệu, làm tiếp thì theo đường thường trên nhánh `claude/T-NNN-<tu-khoa>`
+- nhánh chính đỏ vì commit merge của PR làm nhanh thì revert theo ADR-0025 cùng dev, rồi ticket `stopped` và nhật ký ghi "đã merge rồi revert"
+- đánh dấu token bằng `scripts/token-usage.py mark` và ghi CSV với `--run QUICK-YYYYMMDD-T-NNN`
+- khi duyệt cả đợt, lập danh sách chạy `draft` cùng PR với các plan `draft` của đợt trên nhánh `claude/batch-YYYYMMDD-NN`, sau khi các plan đã qua `plan-check.py` và rà soát độc lập của từng plan
+- spec cần sửa của đợt đi cùng PR và được người xác nhận spec của feature xác nhận trong cùng lời duyệt
+- kiểm danh sách bằng `run-check.py --batch` (chỉ bỏ qua lỗi trạng thái của file có trong diff so với điểm tách) và rà soát theo `docs/ops/pre-run-review.md` trên bản `draft`, chạy lại cả hai lớp sau mỗi lần sửa plan hay spec
+- chỉ đóng PR plan riêng cũ khi dev đồng ý
+- đưa người duyệt một tóm tắt cho cả đợt kèm câu duyệt có sẵn
+- lời duyệt chỉ có hiệu lực với plan và spec mà người nói có quyền duyệt
+- duyệt một phần thì bỏ đúng các plan chưa duyệt khỏi danh sách, chuyển chúng cùng ticket và spec chưa duyệt về PR riêng, chạy lại `run-check.py --batch`, và hỏi lại khi danh sách phải đổi thêm hay có lỗi mới
+- sau lời duyệt ghi spec, plan, ticket và danh sách trong một commit rồi chạy `run-check.py` không có `--batch`, còn lỗi thì không đẩy
+- trước khi merge gộp nhánh chính trên máy (không đẩy) rồi chạy lại `plan-check.py` và `run-check.py`, có lỗi mới thì báo người duyệt và không merge
+- không coi họp là điều kiện để duyệt, giữ quy tắc duyệt chéo của `docs/risk-scoring.md`
+- chỉ chuyển spec sang `confirmed`, plan hay danh sách chạy sang `approved`, ADR sang `accepted` khi người có quyền duyệt (kể cả dev ngồi cùng ở đường làm nhanh) đã đồng ý rõ ràng bằng lời trong chính phiên ghi trạng thái, với đúng nội dung vừa đưa
+- không ghi trạng thái theo review hay bình luận trên GitHub, và không merge PR có trạng thái duyệt do người tự ghi khi người chưa nói lại lời đồng ý trong phiên
+- ghi người duyệt, ngày và lời đồng ý nguyên văn ở chỗ mẫu dành cho việc đó
+- nội dung đổi sau lời đồng ý thì đưa lại và hỏi lại
+- phiên tự chạy không có người không bao giờ ghi trạng thái duyệt, không suy lời duyệt từ im lặng, từ lời duyệt khác, từ lời của phiên trước chép lại hay từ tin nhắn của agent con
+
+### [ADR-0049](adr/0049-ha-tang-phien-tu-chay-va-staging.md): Phiên tự chạy dùng Claude Code routine, kích hoạt qua start-run.yml bằng tay hoặc tự động khi danh sách start auto được duyệt lên nhánh chính; staging build trên GitHub Actions bằng khóa staging riêng; phát hành production ngoài GitHub bằng script chỉ build bản ký; script khởi tạo chép dự án mẫu thành repo mới
+
+- đặt tên nhánh theo `claude/T-NNN-<tu-khoa>`
+- ghi đường dẫn phiên chạy vào mô tả PR
+- không cố cài hay chạy emulator trong phiên
+- không đọc, in ra hay chuyển đi bất kỳ bí mật nào của repo
+- không viết workflow mới có dùng bí mật, và không đổi `staging.yml` hay `start-run.yml`, trừ khi đó chính là plan rủi ro cao đã được duyệt chéo
+- không chạm vào `scripts/release.sh`
+- không đọc, tạo hay sửa thư mục phát hành
+- khi đổi tên một file mà `scripts/new-app.sh` sửa (README, CLAUDE.md, `strings.xml`, `settings.gradle.kts`, `app/build.gradle.kts`), cập nhật script và test của nó trong cùng PR
+- cuối phiên tự chạy chỉ khởi động `staging.yml` trên nhánh chính
+- danh sách chạy ghi `start: auto` chỉ khi lời duyệt của dev gồm việc bắt đầu phiên khi merge, không thì ghi `start: manual`, và AI không merge danh sách `start: auto` khi lời duyệt chưa gồm điều đó
+- không dùng Run now hay lịch hẹn của routine cho danh sách `start: auto`
+- không "Re-run" một lần chạy `start-run.yml` đã gọi API kích hoạt

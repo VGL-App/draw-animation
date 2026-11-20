@@ -1,0 +1,94 @@
+# THANG ĐIỂM RỦI RO VÀ ĐIỀU KIỆN DỪNG
+
+Mỗi plan được AI chấm điểm rủi ro trước khi đưa người duyệt. Điểm rủi ro quyết định ai phải duyệt plan và mức độ thận trọng trong phiên tự chạy. Thang điểm này được điều chỉnh qua các buổi retro; lý do của mỗi lần điều chỉnh ghi trong mô tả PR, tra lại bằng git log (ADR-0044).
+
+## 1. Điểm chặn: tự động xếp rủi ro cao
+
+Plan chạm tới **bất kỳ** điểm nào dưới đây được xếp rủi ro **Cao**, không cần tính điểm:
+
+1. Quảng cáo: thêm, bớt hoặc di chuyển vị trí quảng cáo; đổi định dạng, tần suất; nâng cấp SDK quảng cáo hoặc adapter mediation.
+2. SDK bên thứ ba mới, hoặc nâng cấp phiên bản chính (major) của SDK hiện có.
+3. Quyền truy cập mới trong `AndroidManifest.xml`.
+4. Thu thập dữ liệu: thêm hoặc sửa sự kiện phân tích, thuộc tính người dùng, dữ liệu gửi ra khỏi máy.
+5. Hộp thoại xin đồng ý của người dùng, hoặc thứ tự khởi tạo các SDK.
+6. Liên kết ra ngoài app, quảng bá chéo sang app khác.
+7. Module core dùng chung (`:core:*`), cấu hình build, CI hoặc quy trình phiên tự chạy.
+8. Cách đặt tên hoặc đường dẫn file trên R2.
+9. Lược đồ dữ liệu cục bộ (bảng Room, khóa DataStore) cần chuyển đổi dữ liệu cũ.
+
+## 2. Năm tiêu chí tính điểm
+
+Với plan không chạm điểm chặn, AI chấm từng tiêu chí từ 0 đến 3 và ghi lý do ngắn.
+
+| Tiêu chí | 0 | 1 | 2 | 3 |
+| --- | --- | --- | --- | --- |
+| **A. Phạm vi thay đổi** | Một file, không đổi giao diện công khai của lớp nào | Vài file trong một module feature | Nhiều phần trong một module, có đổi giao diện công khai | Nhiều module |
+| **B. Độ rõ của yêu cầu** | Spec đã xác nhận, đủ tiêu chí chấp nhận, có thiết kế đã duyệt | Spec rõ, thiếu vài chi tiết nhỏ AI phải tự quyết | Còn câu hỏi mở ảnh hưởng tới cách làm | Yêu cầu mơ hồ hoặc mâu thuẫn |
+| **C. Khả năng kiểm chứng tự động** | Mọi tiêu chí chấp nhận đều có test tự động | Phần lớn có test, phần còn lại kiểm tra bằng mắt dễ dàng | Phụ thuộc nhiều vào kiểm tra thủ công trên máy thật | Khó kiểm chứng: thời gian, thông báo, vòng đời ứng dụng, phụ thuộc thiết bị |
+| **D. Ảnh hưởng chéo** | Không chạm file nào ngoài module của feature | Dùng thành phần dùng chung nhưng không sửa | Sửa file mà task khác trong sprint cũng sửa | Thay đổi hành vi mà feature khác đang dựa vào |
+| **E. Độ mới của kỹ thuật** | Lặp lại đúng mẫu đã có trong dự án | Biến thể nhỏ của mẫu đã có | Kỹ thuật chưa có trong dự án nhưng phổ biến | Kỹ thuật mới, ít tài liệu, hoặc API Android mới |
+
+## 3. Quy đổi và quyền duyệt
+
+| Tổng điểm | Mức | Ai duyệt | Ghi chú |
+| --- | --- | --- | --- |
+| 0 đến 4 | **Thấp** | Chủ feature tự duyệt | Nêu ngắn khi duyệt |
+| 5 đến 8 | **Trung bình** | Chủ feature duyệt | Nêu trong tóm tắt duyệt, dev còn lại được quyền yêu cầu duyệt chéo |
+| 9 trở lên, hoặc chạm điểm chặn | **Cao** | Bắt buộc dev còn lại duyệt chéo | Cân nhắc tách thành task nhỏ hơn trước khi duyệt |
+
+Đường làm nhanh có người theo dõi (ADR-0048) chỉ nhận plan mức Thấp không chạm điểm chặn; dev nào ngồi cùng cũng duyệt được, ngay trong phiên.
+
+Ở mọi mức, người có quyền duyệt tự ghi trạng thái, hoặc AI ghi theo lời đồng ý rõ ràng trong phiên của người đó (ADR-0048, phần C), là đủ; review hay bình luận trên GitHub không đủ để AI ghi trạng thái. Họp không bắt buộc. Quy tắc duyệt chéo ở trên giữ nguyên.
+
+Ngoại lệ khi nhóm chỉ có một dev: người đó vừa duyệt vừa duyệt chéo plan rủi ro cao, ghi rõ lý do ở mục 9 của plan. Phiên tự chạy không coi đây là lý do bỏ qua task. Khi nhóm có dev thứ hai, quy tắc duyệt chéo áp dụng lại đầy đủ.
+
+Thêm hai quy tắc:
+
+- Tiêu chí **B** đạt 3 điểm thì plan không được duyệt, dù tổng điểm thấp. Phải làm rõ yêu cầu trước.
+- Plan rủi ro cao chạm tới quảng cáo, dữ liệu hoặc hộp thoại đồng ý cần người phụ trách sản phẩm biết trước khi duyệt, vì đây là quyết định kinh doanh và tuân thủ.
+
+## 4. Điều kiện dừng trong phiên tự chạy
+
+Trong lúc thực hiện plan đã duyệt, AI **phải dừng** task, không tự xoay xở, khi gặp một trong các tình huống sau:
+
+1. Cần sửa file trong mục "Không được làm" của `CLAUDE.md` (`.github/`, `scripts/check.sh`, `scripts/merge-if-green.sh`, `scripts/release.sh`, `build-logic/`, `gradle/libs.versions.toml`, cấu hình production) mà plan chưa nêu. File khác ngoài danh sách của plan thì không dừng: sửa tiếp theo ADR-0029 (dưới).
+2. Cần thêm thư viện, quyền truy cập hoặc chạm điểm chặn 1 tới 6, 8, 9 ở mục 1 mà plan chưa nêu. Điểm chặn 7 (module core, cấu hình build, quy trình) không làm dừng với phần ngoài mục 3.2 theo ADR-0029, trừ file của điều kiện 1. Để ít gặp điều kiện này, quyền và thư viện được quyết lúc lập plan (`docs/CLAUDE.md`, mục Khi viết plan; mục 3.3 của mẫu plan; `scripts/plan-check.py`, quy tắc 8).
+3. Phát hiện spec, thiết kế hoặc ADR mâu thuẫn với plan hoặc với nhau.
+4. Test vẫn thất bại sau 3 lần sửa liên tiếp cho cùng một lỗi.
+5. Muốn làm cho test qua bằng cách xóa test hay câu khẳng định, nới phép so sánh, thêm `@Ignore`, đổi điều test cũ kiểm về hành vi đã có, hạ tiêu chí kiểm tra, hoặc bỏ qua quy tắc lint. Cập nhật dữ liệu của test cũ chỉ vì dữ liệu đó chưa có phần plan thêm thì không phải dừng (ADR-0029, quyết định 2); viết lại câu khẳng định cũ trái điều plan đã duyệt nói rõ, đủ sáu điều của ADR-0031, cũng không phải dừng (dưới); bỏ test mà mục 3.5 của plan đã duyệt ghi bỏ vì hàm hay hành vi nó kiểm không còn, hay viết lại dưới tên mới theo câu mới viết sẵn ở mục 3.5, là làm theo plan, không phải dừng.
+6. Phần việc thực tế lớn hơn rõ rệt so với ước lượng trong ticket.
+7. Bất kỳ thao tác nào chạm tới cấu hình production: mã quảng cáo thật, project Firebase production, bucket R2 production, khóa ký ứng dụng.
+8. Cần thay đổi điều mà test viết trước đang kiểm tra để code qua được.
+9. Phiên rà soát độc lập và phiên viết code hiểu spec khác nhau.
+
+**Không phải dừng: phần ngoài mục 3.2 cần cho task (ADR-0029).** AI sửa tiếp một file hay test không có trong danh sách file của plan, rồi merge như mọi task, khi phần sửa cần để thay đổi của plan chạy đúng và các test sẵn có vẫn qua: nối chỗ gọi, cập nhật dữ liệu của test cũ theo dòng enum, khóa hay tham số mà plan thêm, sửa ví dụ trong chú thích. Không giới hạn số file, số dòng hay module. Vẫn dừng khi gặp điều kiện 1 (file "Không được làm"), 2, 3, 4, 6, 7, 8 hay 9.
+
+- Test cũ đỏ chỉ vì dữ liệu của nó chưa có phần plan thêm: cập nhật dữ liệu, test vẫn kiểm phần mới như phần cũ.
+- Test cũ đỏ vì hành vi cũ bị hỏng: sửa code, không sửa test. Không thể vừa đúng plan vừa giữ hành vi đó thì dừng theo điều kiện 3.
+- Ảnh chuẩn screenshot ngoài mục 3.2 lệch: dừng, vì `CLAUDE.md` chỉ cho cập nhật ảnh chuẩn khi plan cho phép.
+- Điều kiện dừng riêng ở mục 7 của plan vẫn áp dụng.
+- Ghi vào nhật ký plan (file, vì sao cần, loại), mô tả PR (mục "Ngoài mục 3.2", kèm `git diff --stat origin/main...HEAD -- <các file đó>`) và báo cáo phiên (một dòng `- [ ]` ở mục Cần người kiểm tra). Rà soát độc lập xét riêng phần này; vi phạm ADR-0029 là mức chặn (`auto-run.md`, bước 6).
+
+**Không phải dừng: câu khẳng định cũ trái điều plan đã duyệt nói rõ (ADR-0031).** Một câu khẳng định của test JVM có sẵn đỏ vì trái trực tiếp một câu của plan đã duyệt (mục 3.1, 3.5, câu trả lời ở mục 8) hay spec: AI viết lại câu đó, không dừng, khi đủ sáu điều của ADR-0031, quyết định 2:
+
+- có câu của plan nói điều mới;
+- ý định của test viết thành một câu, và câu mới kiểm đúng ý định đó;
+- không nới: không bớt câu, không đổi bằng thành khoảng hay chứa, không tăng sai số, không bỏ đối chứng, không `@Ignore`;
+- có đối chứng đỏ khi ý định bị phá;
+- không phải ảnh chuẩn, test viết trước của plan, hay câu kiểm tiêu chí của spec hoặc luật nghiệp vụ mà plan không đổi;
+- tối đa 3 câu mỗi task.
+
+Thiếu một điều thì dừng theo điều kiện 3 hay 5. Ghi lại và báo sau như phần ngoài mục 3.2; rà soát độc lập xét riêng từng câu, vi phạm là mức chặn.
+
+**Không phải dừng: lệch nhỏ đã liệt kê (ADR-0032).** L1 ngân sách kịch bản; L2 `need` thành `wait` khi emulator đã có thiết bị; L3 mốc tài liệu và mã dời chỗ (mọi dòng `-` của plan có nguyên văn ở chỗ mới); L4 test viết trước khác kỳ vọng của plan; L5 chi tiết do ktlint, lint hay trình biên dịch buộc; L6 tệp sinh bằng `scripts/foundation.py`, `scripts/status.py`; L7 dòng Áp dụng đã ghi; L8 bỏ qua loại task theo dòng `bo-qua-loai` của bảng tra lỗi; L9 điểm nên sửa (ADR-0029); L10 mã kế tiếp đã có người dùng; L11 phần dựng của test chỉ đỏ vì máy thiếu cấu hình chung; L12 điểm nên sửa chỉ về chú thích hay định dạng. Ranh giới của từng mục ở ADR-0032, quyết định 1, và ADR-0033. Ghi vào mục Quyết định AI đã tự làm của báo cáo. Không bao giờ là lý do để vượt điều kiện 1, 2, 3, 5, 7, 8 hay 9.
+
+**Không phải dừng: chuyển sang phương án dự phòng đã duyệt.** Plan có mục 3.4 (Phương án dự phòng) đã được duyệt cùng plan. Khi phương án chính gặp đúng điều kiện chuyển ghi trong mục đó, hoặc gặp điều kiện 4 ở trên, AI chuyển sang phương án dự phòng thay vì dừng: chỉ chạm file của mục 3.2 (cộng phần ngoài mục 3.2 theo ADR-0029, như với phương án chính), giữ nguyên test viết trước và tiêu chí chấp nhận, đếm lại giới hạn 3 lần sửa từ đầu, ghi vào nhật ký lúc chuyển và lý do. Chỉ chuyển một lần; phương án dự phòng cũng không qua thì dừng như bình thường. Phương án dự phòng không bao giờ là lý do để vượt điều kiện 1, 2, 3, 5, 7, 8 hay 9.
+
+Khi dừng, AI làm ba việc:
+
+- Không merge, giữ nguyên nhánh của task để dev xem.
+- Chuyển sang task tiếp theo trong danh sách chạy, trừ khi task đó phụ thuộc task vừa dừng.
+- Ghi vào mục Nhật ký thực hiện của plan: dừng ở đâu, vì sao, đã thử những gì, đề xuất hướng xử lý.
+- Chuyển trạng thái plan và ticket sang `stopped`, trừ khi task dừng vì lệnh bị môi trường từ chối: plan và ticket giữ `approved` (`auto-run.md`, mục Tiếp tục task đã dừng).
+
+Khi bắt đầu làm việc lại, nhóm trả lời câu hỏi "vì sao plan chưa đủ tốt" và ghi bài học vào plan sửa lại. Nếu bài học mang tính chung, ghi vào sổ bài học [lessons.md](lessons.md); retro quyết định cập nhật thang điểm này, `CLAUDE.md` hay tài liệu khác (auto-run.md, mục 6), để lần sau AI tự tránh.

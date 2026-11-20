@@ -1,0 +1,155 @@
+# Fires the env-canary routine every morning: it checks the cloud environment of the auto-run routine on the
+# main branch with scripts/env-canary.sh, and opens or closes the env-broken issue (docs/ops/staging-and-runs.md,
+# section 2.4). An environment problem then shows up during the working day, not in the next overnight session.
+# Secrets (added by people, never read or printed by AI):
+#   ENV_CANARY_FIRE_URL    fire URL of the env-canary routine's API trigger
+#   ENV_CANARY_FIRE_TOKEN  bearer token of that trigger; it can only start that one routine
+# Not fired while an auto-run session is running: the canary would compete with it for the same usage limit.
+# A second job, setup-check, checks the staging setup, R2 files and DNS on the GitHub runner (see below). A manual
+# run with setup_only runs only that job, without firing the routine (no Claude usage).
+# Changing this file is a high-risk plan; cross-review required.
+name: env-canary
+
+on:
+  schedule:
+    # 01:00 UTC is 08:00 in Vietnam: the result is there when the team starts work.
+    - cron: "0 1 * * *"
+  workflow_dispatch:
+    inputs:
+      setup_only:
+        description: Chỉ kiểm thiết lập (job setup-check), không kích hoạt routine env-canary
+        type: boolean
+        default: false
+
+concurrency:
+  group: env-canary
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+permissions:
+  contents: read
+
+jobs:
+  # Checks on a GitHub runner, every morning, what the cloud environment cannot see: the required files on R2,
+  # the DNS of the static file host through 1.1.1.1 and 8.8.8.8, the Firebase staging secret and the tester
+  # groups (scripts/setup-check.sh; app lessons L-002, L-011, L-012, L-027 of camera-pose), and the app's own checks
+  # of scripts/setup-check-app.sh when the app has one. A red result is checked once more after 90 seconds, so one
+  # passing R2 hiccup does not open the issue (L-113). Red opens an issue
+  # labelled setup-broken, or comments on the open one; green closes it. A separate label from env-broken,
+  # because scripts/env-canary.sh closes env-broken issues when the cloud environment is green.
+  # Runs even during an auto-run session: it costs no Claude usage.
+  setup-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          # No token in .git/config: an app's own checks may run third-party tools (L-113).
+          persist-credentials: false
+
+      - name: Kiểm tra thiết lập staging, file R2 và DNS
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GOOGLE_SERVICES: ${{ secrets.STAGING_GOOGLE_SERVICES_JSON }}
+          DISTRIBUTION_CREDENTIALS: ${{ secrets.STAGING_APP_DISTRIBUTION_CREDENTIALS }}
+          STAGING_TESTER_GROUPS: ${{ vars.STAGING_TESTER_GROUPS || 'team' }}
+        run: |
+          result=0
+          # No GitHub token next to the checks: this job writes issues, and an app's own checks may run third-party
+          # tools (L-113).
+          env -u GH_TOKEN -u GITHUB_TOKEN scripts/setup-check.sh --staging > "${RUNNER_TEMP}/setup-check.log" 2>&1 || result=$?
+          cat "${RUNNER_TEMP}/setup-check.log"
+          if [ "${result}" != "0" ]; then
+            echo "Kiểm tra đỏ; kiểm lại một lần sau 90 giây (lỗi tạm của R2 hay mạng)."
+            sleep 90
+            result=0
+            env -u GH_TOKEN -u GITHUB_TOKEN scripts/setup-check.sh --staging > "${RUNNER_TEMP}/setup-check.log" 2>&1 || result=$?
+            cat "${RUNNER_TEMP}/setup-check.log"
+          fi
+          label="setup-broken"
+          open_issues="$(gh api "repos/${GITHUB_REPOSITORY}/issues?state=open&labels=${label}&per_page=10" --jq '[.[].number] | join(" ")')"
+          commit="${GITHUB_SHA::7}"
+          if [ "${result}" = "0" ]; then
+            for number in ${open_issues}; do
+              gh api "repos/${GITHUB_REPOSITORY}/issues/${number}/comments" -X POST \
+                -f body="Kiểm tra thiết lập hằng ngày xanh lại trên \`${commit}\`. Đóng mục này." > /dev/null
+              gh api "repos/${GITHUB_REPOSITORY}/issues/${number}" -X PATCH -f state=closed > /dev/null
+            done
+            exit 0
+          fi
+          # Only the check lines go into the issue; the script never prints secret values.
+          lines="$( { grep -E '^(::error::|::warning::|ok   - )' "${RUNNER_TEMP}/setup-check.log" || true; } \
+            | sed 's/^::error::/LỖI - /; s/^::warning::/CHÚ Ý - /')"
+          run_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          # The backticks below are Markdown for the issue, inside a single-quoted format.
+          # shellcheck disable=SC2016
+          body="$(printf 'Kiểm tra thiết lập hằng ngày (`scripts/setup-check.sh --staging`) đỏ trên `%s`. Phiên tự chạy bắt đầu bằng `start-run.yml` sẽ bị từ chối cho tới khi sửa xong.\n\nNgười cần làm: sửa theo từng dòng LỖI (docs/ops/staging-and-runs.md, docs/ops/setup-new-app.md), rồi chạy lại workflow `env-canary`. Lần chạy xanh tự đóng mục này.\n\nLần chạy: %s\n\n```text\n%s\n```\n' \
+            "${commit}" "${run_url}" "${lines}")"
+          if [ -z "${open_issues}" ]; then
+            gh api "repos/${GITHUB_REPOSITORY}/issues" -X POST -f title="Thiết lập staging, file R2 hoặc DNS đang lỗi" \
+              -f body="${body}" -f "labels[]=${label}" > /dev/null
+          else
+            gh api "repos/${GITHUB_REPOSITORY}/issues/${open_issues%% *}/comments" -X POST -f body="${body}" > /dev/null
+          fi
+          echo "::error::Thiết lập staging, file R2 hoặc DNS đang lỗi; đã ghi vào issue ${label}."
+          exit 1
+
+  fire:
+    if: ${{ !inputs.setup_only }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Bỏ qua khi phiên tự chạy đang chạy
+        id: running
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          running=""
+          for branch in $(gh api "repos/${GITHUB_REPOSITORY}/branches?per_page=100" --paginate \
+            --jq '.[].name | select(test("^claude/RUN-[0-9]{8}-[0-9]{2}-report$"))'); do
+            run_id="${branch#claude/}"
+            run_id="${run_id%-report}"
+            status="$( { gh api "repos/${GITHUB_REPOSITORY}/contents/docs/runs/${run_id}.md?ref=${branch}" \
+              -H "Accept: application/vnd.github.raw" 2>/dev/null || true; } \
+              | sed -n '/^---$/,/^---$/s/^status:[[:space:]]*\([a-z]*\).*/\1/p' | head -n 1)"
+            if [ "${status}" = "running" ]; then running="${run_id}"; fi
+          done
+          if [ -n "${running}" ]; then
+            echo "Phiên ${running} đang chạy, hôm nay không kiểm tra môi trường." >> "${GITHUB_STEP_SUMMARY}"
+          fi
+          echo "skip=$([ -n "${running}" ] && echo yes || echo no)" >> "${GITHUB_OUTPUT}"
+
+      - name: Kích hoạt routine env-canary
+        if: steps.running.outputs.skip == 'no'
+        env:
+          FIRE_URL: ${{ secrets.ENV_CANARY_FIRE_URL }}
+          FIRE_TOKEN: ${{ secrets.ENV_CANARY_FIRE_TOKEN }}
+        run: |
+          if [ -z "${FIRE_URL}" ] || [ -z "${FIRE_TOKEN}" ]; then
+            echo "::error::Thiếu bí mật ENV_CANARY_FIRE_URL hoặc ENV_CANARY_FIRE_TOKEN. Xem docs/ops/staging-and-runs.md, mục 2.4."
+            exit 1
+          fi
+          payload="$(jq -n '{text: "Kiểm tra môi trường hằng ngày."}')"
+          # The token goes through a header file, so it never appears in the command line.
+          umask 077
+          printf 'Authorization: Bearer %s\n' "${FIRE_TOKEN}" > "${RUNNER_TEMP}/auth-header"
+          status="$(curl -sS -o response.json -w '%{http_code}' -X POST "${FIRE_URL}" \
+            -H @"${RUNNER_TEMP}/auth-header" \
+            -H 'anthropic-version: 2023-06-01' \
+            -H 'anthropic-beta: experimental-cc-routine-2026-04-01' \
+            -H 'Content-Type: application/json' \
+            -d "${payload}")" || status="000"
+          rm -f "${RUNNER_TEMP}/auth-header"
+          if [ "${status}" != "200" ]; then
+            message="$(jq -r '.error.message // empty' response.json 2>/dev/null || true)"
+            echo "::error::Không kích hoạt được routine env-canary (HTTP ${status}). ${message}"
+            exit 1
+          fi
+          session_url="$(jq -r '.claude_code_session_url // empty' response.json)"
+          echo "Kiểm tra môi trường đã bắt đầu: ${session_url:-API không trả về đường dẫn}" >> "${GITHUB_STEP_SUMMARY}"

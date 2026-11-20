@@ -1,0 +1,950 @@
+package com.vgl.draw.animation.core.ads
+
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.compositeOver
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.assertCountEquals
+import androidx.compose.ui.test.click
+import androidx.compose.ui.test.getUnclippedBoundsInRoot
+import androidx.compose.ui.test.junit4.AndroidComposeTestRule
+import androidx.compose.ui.test.junit4.StateRestorationTester
+import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onAllNodesWithTag
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpRect
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.dp
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.google.android.gms.ads.nativead.MediaView
+import com.google.android.gms.ads.nativead.NativeAdView
+import com.vgl.draw.animation.core.designsystem.theme.Spacing
+import kotlin.math.abs
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNotSame
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
+import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
+import org.robolectric.annotation.GraphicsMode
+
+/** A fake collapsible ad: headline, advertiser, "Install", a fake icon and media (plan T-012, section 4). */
+private fun collapsibleTestAd(headline: String = "Headline of the ad") = FakeLoadedNativeAd(
+    NativeAdAssets(
+        headline = headline,
+        advertiser = "Advertiser",
+        body = null,
+        callToAction = "Install",
+        icon = ImageBitmap(40, 40),
+        hasMedia = true,
+    ),
+)
+
+/**
+ * The collapsible layer of the bottom bar (KB-4, D-03, CL-01 to CL-04; plans T-030, T-065): opens 299 dp high at
+ * 411 dp (media area plus bottom slot) with a 27 dp collapse button in the top start corner, hides on a tap, and opens again `time_expand_collap_ad` seconds after the
+ * tap, counted from the tap whatever the refresh does. Sizes from design/context/, 1 dp tolerance. Timing tests stop
+ * the clock of Compose and read the monotonic clock from it, so both move together.
+ */
+@RunWith(AndroidJUnit4::class)
+@GraphicsMode(GraphicsMode.Mode.NATIVE)
+@Config(qualifiers = "w411dp-h891dp-xxhdpi")
+class CollapsibleNativeAdTest {
+    @get:Rule
+    val composeRule = createComposeRule()
+
+    private val feed = FakeNativeFeed()
+    private var collapsedReports = 0
+    private var reexpandReports = 0
+
+    /** Each value the host reports through `onShowingChange` (plan T-090). */
+    private val showingReports = mutableListOf<Boolean>()
+    private var attempt by mutableIntStateOf(0)
+
+    /** Whether the window has room for the layer (KB-4 added 2026-11-16), passed to the host. */
+    private var hasRoom by mutableStateOf(true)
+    private lateinit var state: CollapsibleAdState
+
+    private val context: Context get() = ApplicationProvider.getApplicationContext()
+    private val badge: String get() = context.getString(R.string.ads_native_badge)
+
+    private val clock = MonotonicClock { composeRule.mainClock.currentTime }
+
+    @Composable
+    private fun Host(expandAfterSeconds: Long, renderAd: (@Composable (LoadedNativeAd, () -> Unit) -> Unit)? = null) {
+        AdsTestTheme(darkTheme = false) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
+                key(attempt) {
+                    state = rememberCollapsibleAdState()
+                    val states = remember { feed.states() }
+                    val modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = Spacing.md, end = Spacing.md, bottom = Spacing.md)
+                        .testTag(HOST)
+                    if (renderAd == null) {
+                        CollapsibleNativeAdLayerHost(
+                            states = states,
+                            expandAfterSeconds = expandAfterSeconds,
+                            clock = clock,
+                            state = state,
+                            onCollapsed = { collapsedReports++ },
+                            onReexpanded = { reexpandReports++ },
+                            modifier = modifier,
+                            hasRoom = hasRoom,
+                            onShowingChange = { showingReports += it },
+                        )
+                    } else {
+                        CollapsibleNativeAdLayerHost(
+                            states = states,
+                            expandAfterSeconds = expandAfterSeconds,
+                            clock = clock,
+                            state = state,
+                            onCollapsed = { collapsedReports++ },
+                            onReexpanded = { reexpandReports++ },
+                            modifier = modifier,
+                            hasRoom = hasRoom,
+                            onShowingChange = { showingReports += it },
+                            renderAd = renderAd,
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    /** The host with an ad shown; [expandAfterSeconds] 0 never opens it again, so no timer runs. */
+    private fun setHost(expandAfterSeconds: Long = 0, ad: FakeLoadedNativeAd? = collapsibleTestAd()) {
+        composeRule.setContent { Host(expandAfterSeconds) }
+        composeRule.waitForIdle()
+        if (ad != null) update { feed.load(ad) }
+    }
+
+    /** Same, with the clock of Compose stopped: the test moves it ([advanceTo], [frame]). */
+    private fun setTimedHost(expandAfterSeconds: Long, ad: FakeLoadedNativeAd = collapsibleTestAd()) {
+        composeRule.mainClock.autoAdvance = false
+        composeRule.setContent { Host(expandAfterSeconds) }
+        frame()
+        feed.load(ad)
+        frame()
+    }
+
+    private fun frame() {
+        composeRule.mainClock.advanceTimeByFrame()
+        composeRule.waitForIdle()
+    }
+
+    private fun advanceTo(timeMillis: Long) {
+        val step = timeMillis - composeRule.mainClock.currentTime
+        if (step > 0) composeRule.mainClock.advanceTimeBy(step, ignoreFrameDuration = true)
+        composeRule.waitForIdle()
+    }
+
+    private fun update(change: () -> Unit) {
+        composeRule.runOnIdle(change)
+        composeRule.waitForIdle()
+    }
+
+    private fun node(tag: String) = composeRule.onNodeWithTag(tag, useUnmergedTree = true)
+
+    private fun bounds(tag: String) = node(tag).getUnclippedBoundsInRoot()
+
+    private fun assertAbsent(tag: String) =
+        composeRule.onAllNodesWithTag(tag, useUnmergedTree = true).assertCountEquals(0)
+
+    private fun assertShown() = composeRule.onAllNodesWithTag(AD, useUnmergedTree = true).assertCountEquals(1)
+
+    private fun assertHeight(tag: String, expected: Float) {
+        val b = bounds(tag)
+        assertEquals("height of $tag", expected, (b.bottom - b.top).value, TOLERANCE)
+    }
+
+    private fun collapse() {
+        node(COLLAPSE).performClick()
+        composeRule.waitForIdle()
+    }
+
+    /** Collapses with the clock stopped; returns the mark the state took. */
+    private fun collapseTimed(): Long {
+        node(COLLAPSE).performClick()
+        // One frame delivers the tap, the next one draws the collapsed state.
+        frame()
+        frame()
+        return checkNotNull(state.collapsedAtMillis) { "no mark after collapsing" }
+    }
+
+    // Size and parts of the open layer (KB-4, design/context/AdGalleryScreen_collapsible-expanded_light.md).
+
+    @Test
+    fun firstShown_isExpanded299dp() {
+        setHost()
+        node(MEDIA).assertExists()
+        node(COLLAPSE).assertExists()
+        assertHeight(AD, 299f)
+        composeRule.onNodeWithText(badge, useUnmergedTree = true).assertExists()
+        composeRule.onNodeWithContentDescription("Collapse ad", useUnmergedTree = true).assertExists()
+    }
+
+    @Test
+    fun collapseButton_drawn27dp_inTopStartCorner4dp_touchAtLeast48dp() {
+        setHost()
+        val ad = bounds(AD)
+        val button = bounds(COLLAPSE)
+        assertEquals("button width", 27f, (button.right - button.left).value, TOLERANCE)
+        assertEquals("button height", 27f, (button.bottom - button.top).value, TOLERANCE)
+        assertEquals("gap to the top", 4f, (button.top - ad.top).value, TOLERANCE)
+        assertEquals("gap to the start", 4f, (button.left - ad.left).value, TOLERANCE)
+        val centerY = (button.top + button.bottom) / 2
+        val centerX = (button.left + button.right) / 2
+
+        // The touch area is widened to 48 dp around the 27 dp button, 10.5 dp on each side: 5 dp outside still
+        // collapses. Not to the left or above: the button is only 4 dp from those edges of the layer.
+        tapAt(button.right + 5.dp, centerY)
+        assertEquals("5 dp right of the button", 1, collapsedReports)
+
+        update { attempt++ }
+        update { feed.load(collapsibleTestAd()) }
+        tapAt(centerX, button.bottom + 5.dp)
+        assertEquals("5 dp below the button", 2, collapsedReports)
+
+        // Control: 12 dp right of the button is outside the 48 dp area.
+        update { attempt++ }
+        update { feed.load(collapsibleTestAd()) }
+        tapAt(button.right + 12.dp, centerY)
+        assertEquals("12 dp right of the button", 2, collapsedReports)
+        assertShown()
+    }
+
+    @Test
+    fun layer_leavesAdChoicesTopEndCornerFree() {
+        setHost()
+        val ad = bounds(AD)
+        // The SDK pins AdChoices in the top end corner of this layer (ADCHOICES_TOP_RIGHT): nothing to tap there.
+        val corner = with(composeRule.density) { DpRect(ad.right - 24.dp, ad.top, ad.right, ad.top + 24.dp).toRect() }
+        val clickable = composeRule
+            .onAllNodes(SemanticsMatcher.keyIsDefined(SemanticsActions.OnClick), useUnmergedTree = true)
+            .fetchSemanticsNodes()
+        assertTrue("the collapse button is clickable", clickable.isNotEmpty())
+        clickable.forEach { clickableNode ->
+            assertFalse(
+                "a clickable node ${clickableNode.boundsInRoot} overlaps the AdChoices corner $corner",
+                clickableNode.boundsInRoot.overlaps(corner),
+            )
+        }
+    }
+
+    /** The part under the media is the small native (design T-064, "Content (as small slot)"). */
+    @Test
+    fun layer_contentIsSmallNative() {
+        setHost()
+        val icon = bounds(NativeAdTestTags.ICON)
+        assertEquals(44f, (icon.right - icon.left).value, TOLERANCE)
+        assertEquals(44f, (icon.bottom - icon.top).value, TOLERANCE)
+        assertHeight(NativeAdTestTags.CTA, 44f)
+        val cta = bounds(NativeAdTestTags.CTA)
+        val ad = bounds(AD)
+        val ctaWidth = (cta.right - cta.left).value
+        // Plan T-109: the call to action spans the layer less its two 12 dp margins (two tiers, design T-108).
+        assertEquals("CTA width", (ad.right - ad.left).value - 24f, ctaWidth, 0.5f)
+        assertEquals("CTA start to the layer start", 12f, (cta.left - ad.left).value, 0.5f)
+        assertEquals("CTA end to the layer end", 12f, (ad.right - cta.right).value, 0.5f)
+
+        val results = mutableListOf<TextLayoutResult>()
+        composeRule.onNodeWithText("Headline of the ad", useUnmergedTree = true)
+            .fetchSemanticsNode().config[SemanticsActions.GetTextLayoutResult].action?.invoke(results)
+        assertEquals(16f, results.single().layoutInput.style.fontSize.value, 0.01f)
+    }
+
+    @Test
+    fun media_fillsRemainingHeight() {
+        setHost()
+        val media = bounds(MEDIA)
+        assertTrue("media is ${media.right - media.left} wide", (media.right - media.left).value >= 120f)
+        // The total of 299 dp at 411 dp (collapsibleTotalHeight) less the 106 dp content and the 12 dp top margin of
+        // the media = 181 dp (plan T-109).
+        assertHeight(MEDIA, 181f)
+    }
+
+    /**
+     * KB-4, KB-32 (question 66, plan T-109): the layer is the interpolated total, its media area what the 106 dp
+     * content leaves: 193 + 106 = 299 dp at 411 dp, MediaView 181 dp.
+     */
+    @Test
+    fun expanded_heightIsMediaAreaPlusSlot() {
+        setHost()
+        assertEquals(299f, bounds(AD).let { (it.bottom - it.top).value }, 0.5f)
+        assertEquals(181f, bounds(MEDIA).let { (it.bottom - it.top).value }, 0.5f)
+        assertEquals(106f, bounds(CONTENT).let { (it.bottom - it.top).value }, 0.5f)
+    }
+
+    /** The same on a 360 dp screen: 165 + 106 = 271 dp. */
+    @Test
+    @Config(qualifiers = "w360dp-h640dp-xxhdpi")
+    fun expanded_heightIsMediaAreaPlusSlot_360() {
+        setHost()
+        assertEquals(271f, bounds(AD).let { (it.bottom - it.top).value }, 0.5f)
+        assertEquals(106f, bounds(CONTENT).let { (it.bottom - it.top).value }, 0.5f)
+    }
+
+    /** KB-4 criterion 1: the collapse button drawn 27 dp, 4 dp from the start and the top, 48 dp to touch. */
+    @Test
+    fun collapseButton_27dpTopStart_touch48dp() {
+        setHost()
+        val ad = bounds(AD)
+        val button = bounds(COLLAPSE)
+        assertEquals("button width", 27f, (button.right - button.left).value, 0.5f)
+        assertEquals("button height", 27f, (button.bottom - button.top).value, 0.5f)
+        assertEquals("gap to the start", 4f, (button.left - ad.left).value, 0.5f)
+        assertEquals("gap to the top", 4f, (button.top - ad.top).value, 0.5f)
+        val touch = node(COLLAPSE).fetchSemanticsNode().touchBoundsInRoot
+        val touchWidth = with(composeRule.density) { touch.width.toDp().value }
+        val touchHeight = with(composeRule.density) { touch.height.toDp().value }
+        assertTrue("touch area $touchWidth x $touchHeight dp", touchWidth >= 48f - 0.5f && touchHeight >= 48f - 0.5f)
+        val corner = with(composeRule.density) { DpRect(ad.right - 24.dp, ad.top, ad.right, ad.top + 24.dp).toRect() }
+        composeRule
+            .onAllNodes(SemanticsMatcher.keyIsDefined(SemanticsActions.OnClick), useUnmergedTree = true)
+            .fetchSemanticsNodes()
+            .forEach {
+                assertFalse("clickable ${it.boundsInRoot} in the top end corner", it.boundsInRoot.overlaps(corner))
+            }
+    }
+
+    @Test
+    fun collapseButton_colorsBlack40AndWhite() {
+        var scheme: ColorScheme? = null
+        composeRule.setContent {
+            AdsTestTheme(darkTheme = false) { scheme = MaterialTheme.colorScheme }
+            Host(expandAfterSeconds = 0)
+        }
+        composeRule.waitForIdle()
+        update { feed.load(collapsibleTestAd()) }
+        val colors = checkNotNull(scheme)
+        val bitmap = windowBitmap()
+        val button = windowBounds(COLLAPSE)
+        // In the circle, away from the 20 dp icon: the 40% scrim over the media.
+        val background = bitmap.getPixel((button.center.x - px(11.dp)).toInt(), button.center.y.toInt())
+        val expected = colors.scrim.copy(alpha = 0.4f).compositeOver(colors.surfaceContainer)
+        assertColor("button background", expected, background)
+        // The chevron's stroke: the pixel of the icon most unlike the background is white.
+        val icon = Rect(
+            button.center.x - px(10.dp),
+            button.center.y - px(10.dp),
+            button.center.x + px(10.dp),
+            button.center.y + px(10.dp),
+        )
+        assertColor("chevron", Color.White, farthestPixel(bitmap, icon, background))
+    }
+
+    // Collapse (KB-4, criterion 2).
+
+    @Test
+    fun tapCollapse_hidesLayer_keepsAd() {
+        val ad = collapsibleTestAd()
+        setHost(ad = ad)
+        // Control: the layer is shown first.
+        assertShown()
+
+        collapse()
+
+        assertAbsent(AD)
+        assertAbsent(MEDIA)
+        assertAbsent(COLLAPSE)
+        assertEquals("the ad is kept to open again", 0, ad.destroyCount)
+        assertTrue(state.collapsed)
+    }
+
+    @Test
+    fun tapCollapse_reportsOnce() {
+        setHost()
+        collapse()
+        assertEquals(1, collapsedReports)
+    }
+
+    @Test
+    fun stateHolder_collapseSetsMark_expandClearsIt() {
+        val holder = CollapsibleAdState(collapsed = false)
+        assertFalse(holder.collapsed)
+        assertNull(holder.collapsedAtMillis)
+        holder.collapse(1_000)
+        holder.collapse(5_000)
+        assertTrue(holder.collapsed)
+        assertEquals("the first tap sets the mark", 1_000L, holder.collapsedAtMillis)
+
+        holder.expand()
+        assertFalse(holder.collapsed)
+        assertNull(holder.collapsedAtMillis)
+    }
+
+    // First ad, loading, no ad (CL-01, D-04).
+
+    @Test
+    fun loading_drawsNothing_slotVisible() {
+        composeRule.setContent {
+            AdsTestTheme(darkTheme = false) {
+                BottomAdBarLayout(
+                    reservation = BottomAdBarDefaults.nativeReservation(),
+                    slot = { NativeAdCard(sampleNativeAdAssets, NativeAdSize.SMALL, it.testTag(SLOT)) },
+                    layer = {
+                        CollapsibleNativeAdLayerHost(
+                            states = remember { feed.states() },
+                            expandAfterSeconds = 30,
+                            clock = clock,
+                            state = rememberCollapsibleAdState(),
+                            onCollapsed = {},
+                            onReexpanded = {},
+                            modifier = it,
+                        )
+                    },
+                ) {}
+            }
+        }
+        composeRule.waitForIdle()
+        assertAbsent(AD)
+        assertAbsent(NativeAdTestTags.PLACEHOLDER)
+        node(SLOT).assertExists()
+
+        // Control: the ad arrives and the layer opens over the slot.
+        update { feed.load(collapsibleTestAd()) }
+        assertShown()
+        node(SLOT).assertExists()
+
+        // KB-4 criterion 2, KB-17: a tap on the collapse button hides the layer and shows the slot below, as high
+        // as the bottom slot (106 dp on every width at font scale 1.0, plan T-109).
+        collapse()
+        assertAbsent(AD)
+        assertEquals(106f, bounds(SLOT).let { (it.bottom - it.top).value }, 0.5f)
+    }
+
+    @Test
+    fun unavailable_drawsNothing() {
+        setHost()
+        // Control: the host has the layer's height while an ad is shown.
+        assertHeight(HOST, 299f)
+
+        update { feed.state.value = NativeAdState.Unavailable }
+        assertAbsent(AD)
+        assertHeight(HOST, 0f)
+    }
+
+    @Test
+    fun firstAdAfterCollapse_staysCollapsed() {
+        setHost()
+        collapse()
+        // The layer reloads (no ad for a while), then a first ad of the new load comes.
+        update { feed.state.value = NativeAdState.Loading }
+        assertAbsent(AD)
+        update { feed.load(collapsibleTestAd("Second ad")) }
+        assertAbsent(AD)
+        assertTrue(state.collapsed)
+    }
+
+    @Test
+    fun collapsibleFormat_loadsAsMedium() {
+        assertEquals(NativeAdSize.MEDIUM, AdFormat.NATIVE_COLLAPSIBLE.nativeLoadSize())
+    }
+
+    @Test
+    fun leavingComposition_destroysHeldAd_evenWhenCollapsed() {
+        val ad = collapsibleTestAd()
+        setHost(ad = ad)
+        collapse()
+        assertEquals(0, ad.destroyCount)
+
+        update { attempt++ }
+
+        assertEquals("the held ad is destroyed with the layer (L-061)", 1, ad.destroyCount)
+    }
+
+    // Refresh does not change the state (CL-02, CL-04, L-A12).
+
+    @Test
+    fun collapsed_refreshSwap_staysCollapsed() {
+        setHost()
+        collapse()
+        update { feed.load(collapsibleTestAd("Second ad")) }
+        assertAbsent(AD)
+        assertTrue(state.collapsed)
+    }
+
+    @Test
+    fun expanded_refreshSwap_staysExpanded_rebinds() {
+        setHost()
+        update { feed.load(collapsibleTestAd("Second ad")) }
+        assertShown()
+        composeRule.onNodeWithText("Second ad", useUnmergedTree = true).assertExists()
+        assertAbsent(NativeAdTestTags.PLACEHOLDER)
+        assertFalse(state.collapsed)
+    }
+
+    // Opens again (CL-03).
+
+    @Test
+    fun collapsed_reexpandsAfterRemoteSeconds() {
+        setTimedHost(expandAfterSeconds = 30)
+        val mark = collapseTimed()
+        assertAbsent(AD)
+
+        advanceTo(mark + 29_999)
+        assertTrue("still collapsed 1 ms before 30 s", state.collapsed)
+        assertEquals(0, reexpandReports)
+
+        advanceTo(mark + 30_000)
+        assertFalse("open at 30 s", state.collapsed)
+        assertEquals(1, reexpandReports)
+        frame()
+        assertShown()
+    }
+
+    @Test
+    fun collapsed_reexpandsAfterDefaultSeconds() {
+        // CL-03, KB-32: 10 s when the team did not set time_expand_collap_ad (ADR-0045).
+        setTimedHost(expandAfterSeconds = AdsSettings.TIME_EXPAND_COLLAP_AD.default)
+        val mark = collapseTimed()
+        assertAbsent(AD)
+
+        advanceTo(mark + 9_999)
+        assertTrue("still collapsed 1 ms before 10 s", state.collapsed)
+        assertEquals(0, reexpandReports)
+
+        advanceTo(mark + 10_000)
+        assertFalse("open at 10 s", state.collapsed)
+        assertEquals(1, reexpandReports)
+    }
+
+    @Test
+    fun collapsed_zeroSeconds_neverReexpands() {
+        setTimedHost(expandAfterSeconds = 0)
+        val mark = collapseTimed()
+
+        advanceTo(mark + 10 * 60_000)
+        frame()
+
+        assertAbsent(AD)
+        assertTrue(state.collapsed)
+        assertEquals(0, reexpandReports)
+    }
+
+    @Test
+    fun reexpandDue_withoutAd_waitsForAd() {
+        setTimedHost(expandAfterSeconds = 30)
+        val mark = collapseTimed()
+        feed.state.value = NativeAdState.Loading
+        frame()
+
+        advanceTo(mark + 40_000)
+        frame()
+        assertAbsent(AD)
+        assertTrue("still collapsed while there is no ad", state.collapsed)
+
+        feed.load(collapsibleTestAd("Late ad"))
+        frame()
+        frame()
+        assertShown()
+        composeRule.onNodeWithText("Late ad", useUnmergedTree = true).assertExists()
+    }
+
+    @Test
+    fun refreshSwap_doesNotResetReexpandTimer() {
+        setTimedHost(expandAfterSeconds = 30)
+        val mark = collapseTimed()
+
+        advanceTo(mark + 20_000)
+        feed.load(collapsibleTestAd("Second ad"))
+        frame()
+        assertAbsent(AD)
+
+        advanceTo(mark + 30_000)
+        assertFalse("open 30 s after the tap", state.collapsed)
+        frame()
+        assertShown()
+        composeRule.onNodeWithText("Second ad", useUnmergedTree = true).assertExists()
+    }
+
+    @Test
+    fun collapsed_survivesStateRestoration_timerKeepsMark() {
+        val restoration = StateRestorationTester(composeRule)
+        composeRule.mainClock.autoAdvance = false
+        restoration.setContent { Host(expandAfterSeconds = 30) }
+        frame()
+        feed.load(collapsibleTestAd())
+        frame()
+        val mark = collapseTimed()
+
+        advanceTo(mark + 10_000)
+        restoration.emulateSavedInstanceStateRestore()
+        frame()
+        feed.load(collapsibleTestAd())
+        frame()
+        assertTrue("collapsed after restoring", state.collapsed)
+        assertEquals("the mark is kept", mark, state.collapsedAtMillis)
+        assertAbsent(AD)
+
+        advanceTo(mark + 29_999)
+        assertTrue("still collapsed before 30 s from the tap", state.collapsed)
+        advanceTo(mark + 30_000)
+        assertFalse("open 30 s from the tap, not from the restoration", state.collapsed)
+        frame()
+        assertShown()
+    }
+
+    // A window with no room for the layer (KB-4 added 2026-11-16; questions 1 and 2 of the ticket).
+
+    /** No room: nothing collected (no ad taken from the stock, no request), nothing drawn; with room it opens. */
+    @Test
+    fun noRoom_collectsNothing_drawsNothing() {
+        hasRoom = false
+        composeRule.setContent { Host(expandAfterSeconds = 0) }
+        composeRule.waitForIdle()
+        update { feed.load(collapsibleTestAd()) }
+        assertAbsent(AD)
+        assertEquals("collections without room", 0, feed.collections)
+
+        // Control: room again, the layer collects and opens at its ad.
+        update { hasRoom = true }
+        update { feed.load(collapsibleTestAd()) }
+        assertEquals("collections with room", 1, feed.collections)
+        assertShown()
+    }
+
+    /**
+     * KB-4 criterion 4, CL-05 (plan T-109): on a 411 x 520 dp window the layer has room at font scale 1.0 but not at
+     * 2.0, where the small native leaves less than 132 dp of media area in half the window. With the default `hasRoom`
+     * at 2.0 nothing is collected and nothing drawn; control at 1.0 in the same test: one collection, the layer drawn
+     * at its ad.
+     */
+    @Test
+    @Config(qualifiers = "w411dp-h520dp-xxhdpi")
+    fun largeText_noRoom_collectsNothing() {
+        var fontScale by mutableStateOf(2f)
+        composeRule.setContent {
+            WithFontScale(fontScale) {
+                AdsTestTheme(darkTheme = false) {
+                    CollapsibleNativeAdLayerHost(
+                        states = remember { feed.states() },
+                        expandAfterSeconds = 0,
+                        clock = clock,
+                        state = rememberCollapsibleAdState(),
+                        onCollapsed = {},
+                        onReexpanded = {},
+                        modifier = Modifier.fillMaxWidth().testTag(HOST),
+                    )
+                }
+            }
+        }
+        composeRule.waitForIdle()
+        update { feed.load(collapsibleTestAd()) }
+        assertAbsent(AD)
+        assertEquals("collections at font scale 2.0", 0, feed.collections)
+
+        update { fontScale = 1f }
+        update { feed.load(collapsibleTestAd()) }
+        assertEquals("collections at font scale 1.0", 1, feed.collections)
+        assertShown()
+    }
+
+    /**
+     * The window loses its room while the layer is open (no rebuilt activity): the layer goes and its ad is destroyed,
+     * the state stays open (not collapsed, no mark, no report); with room again it opens at a new ad.
+     */
+    @Test
+    fun roomLostWhileOpen_layerGoes_stateKept_roomBackOpens() {
+        val first = collapsibleTestAd()
+        setHost(ad = first)
+        assertShown()
+
+        update { hasRoom = false }
+        assertAbsent(AD)
+        assertEquals("the held ad is destroyed", 1, first.destroyCount)
+        assertFalse("not collapsed", state.collapsed)
+        assertNull("no mark", state.collapsedAtMillis)
+        assertEquals("no collapse reported", 0, collapsedReports)
+
+        update { hasRoom = true }
+        update { feed.load(collapsibleTestAd("Second ad")) }
+        assertEquals("collected again", 2, feed.collections)
+        assertShown()
+        composeRule.onNodeWithText("Second ad", useUnmergedTree = true).assertExists()
+    }
+
+    /** The activity is rebuilt (rotation) into a window with no room: the open state is kept, nothing collected. */
+    @Test
+    fun restoredWithoutRoom_staysOpenState_opensWhenRoom() {
+        val restoration = StateRestorationTester(composeRule)
+        restoration.setContent { Host(expandAfterSeconds = 0) }
+        composeRule.waitForIdle()
+        update { feed.load(collapsibleTestAd()) }
+        assertShown()
+        assertEquals(1, feed.collections)
+
+        composeRule.runOnIdle { hasRoom = false }
+        restoration.emulateSavedInstanceStateRestore()
+        composeRule.waitForIdle()
+        assertAbsent(AD)
+        assertEquals("nothing collected after restoring without room", 1, feed.collections)
+        assertFalse("still the open state", state.collapsed)
+
+        update { hasRoom = true }
+        update { feed.load(collapsibleTestAd()) }
+        assertShown()
+    }
+
+    /** CL-03 with no room: due while there is no room, it waits; with room again it opens at once with an ad. */
+    @Test
+    fun noRoom_dueReexpand_waitsForRoom() {
+        setTimedHost(expandAfterSeconds = 30)
+        val mark = collapseTimed()
+        hasRoom = false
+        frame()
+
+        advanceTo(mark + 40_000)
+        frame()
+        assertTrue("still collapsed without room", state.collapsed)
+        assertEquals("no re-expand without room", 0, reexpandReports)
+        assertEquals("the mark is kept", mark, state.collapsedAtMillis)
+
+        hasRoom = true
+        // One frame composes the layer again, the next one starts its collection (which starts at Loading).
+        frame()
+        frame()
+        feed.load(collapsibleTestAd())
+        frame()
+        frame()
+        assertFalse("open once there is room and an ad", state.collapsed)
+        assertEquals(1, reexpandReports)
+        assertShown()
+    }
+
+    /** CL-03: room back before the time is due, it waits the rest counted from the tap, not from the room. */
+    @Test
+    fun noRoom_thenRoomBeforeDue_waitsRestFromTap() {
+        setTimedHost(expandAfterSeconds = 30)
+        val mark = collapseTimed()
+        hasRoom = false
+        frame()
+        advanceTo(mark + 10_000)
+
+        hasRoom = true
+        // One frame composes the layer again, the next one starts its collection (which starts at Loading).
+        frame()
+        frame()
+        feed.load(collapsibleTestAd())
+        frame()
+        // Control: the room gate stopped the collection, so the layer collected again.
+        assertEquals("collected again with room", 2, feed.collections)
+
+        advanceTo(mark + 29_999)
+        assertTrue("still collapsed before 30 s from the tap", state.collapsed)
+        advanceTo(mark + 30_000)
+        assertFalse("open 30 s from the tap", state.collapsed)
+        frame()
+        assertShown()
+    }
+
+    // Whether the layer shows its ad, for the bottom slot that gives way to it (D-07, plan T-090).
+
+    @Test
+    fun collapsibleShowing_table() {
+        val loaded = NativeAdState.Loaded(collapsibleTestAd())
+        assertTrue(collapsibleShowing(allowed = true, hasRoom = true, state = loaded, collapsed = false))
+        assertFalse("collapsed", collapsibleShowing(allowed = true, hasRoom = true, state = loaded, collapsed = true))
+        assertFalse(
+            "no ad unit",
+            collapsibleShowing(allowed = false, hasRoom = true, state = loaded, collapsed = false),
+        )
+        assertFalse("no room", collapsibleShowing(allowed = true, hasRoom = false, state = loaded, collapsed = false))
+        listOf(NativeAdState.Loading, NativeAdState.Unavailable).forEach { state ->
+            assertFalse("$state", collapsibleShowing(allowed = true, hasRoom = true, state = state, collapsed = false))
+        }
+    }
+
+    /**
+     * The host reports each change of whether it shows its ad: open at its ad, collapsed, open again (CL-03), room
+     * lost while open, room back with an ad, and gone from the composition; nothing while it first loads.
+     */
+    @Test
+    fun host_reportsShowing_openCollapseReexpandDispose() {
+        composeRule.mainClock.autoAdvance = false
+        composeRule.setContent { Host(expandAfterSeconds = 30) }
+        frame()
+        assertEquals("nothing while loading", emptyList<Boolean>(), showingReports)
+        feed.load(collapsibleTestAd())
+        frame()
+        frame()
+        assertEquals(listOf(true), showingReports)
+
+        val mark = collapseTimed()
+        assertEquals(listOf(true, false), showingReports)
+
+        advanceTo(mark + 30_000)
+        frame()
+        assertEquals(listOf(true, false, true), showingReports)
+
+        hasRoom = false
+        frame()
+        frame()
+        assertEquals(listOf(true, false, true, false), showingReports)
+
+        hasRoom = true
+        // One frame composes the layer again, the next one starts its collection (which starts at Loading).
+        frame()
+        frame()
+        feed.load(collapsibleTestAd("Second ad"))
+        frame()
+        frame()
+        assertEquals(listOf(true, false, true, false, true), showingReports)
+
+        // A new host takes its place: the old one leaves the composition, the new one loads and reports nothing.
+        attempt++
+        frame()
+        frame()
+        assertEquals(listOf(true, false, true, false, true, false), showingReports)
+    }
+
+    /** The log line of a layer with no room (ADR-0019). */
+    @Test
+    fun noRoomLog_text() {
+        assertEquals(
+            "Collapsible sample_native_small not shown: window 891x411 dp has no room",
+            collapsibleNoRoomLog(AdPlacement.SAMPLE_NATIVE_SMALL, DpSize(891.dp, 411.dp)),
+        )
+    }
+
+    @Test
+    fun reexpand_rebindsHeldAdOnce() {
+        val ad = collapsibleTestAd()
+        val bindsPerView = mutableMapOf<NativeAdView, Int>()
+        composeRule.setContent {
+            Host(expandAfterSeconds = 0) { held, onCollapse ->
+                NativeAdViewHost(bind = { bindsPerView[it] = (bindsPerView[it] ?: 0) + 1 }) { binder ->
+                    CollapsibleNativeAdLayout(held.assets, onCollapse, binder, showAdChoicesMarker = false)
+                }
+            }
+        }
+        composeRule.waitForIdle()
+        update { feed.load(ad) }
+        val first = bindsPerView.keys.single()
+        collapse()
+
+        update { state.expand() }
+
+        val views = bindsPerView.keys.toList()
+        assertEquals("a new NativeAdView after opening again", 2, views.size)
+        val second = views.last()
+        assertNotSame(first, second)
+        assertEquals("the new view is bound once", 1, bindsPerView[second])
+        assertTrue(second.mediaView is MediaView)
+        assertNotNull(second.headlineView)
+        assertNotNull(second.iconView)
+        assertNotNull(second.advertiserView)
+        assertNotNull(second.callToActionView)
+        assertEquals("the held ad is shown again, not destroyed", 0, ad.destroyCount)
+        assertEquals("no new load", 1, feed.collections)
+    }
+
+    @Test
+    @Config(qualifiers = "w360dp-h640dp-xxhdpi")
+    fun layer_smallScreen_fitsOnScreen() {
+        setHost()
+        // 0.5 dp, not the 1 dp of the class: the former layer was 272 dp.
+        assertEquals(271f, bounds(AD).let { (it.bottom - it.top).value }, 0.5f)
+        val screen = Rect(0f, 0f, 360f, 640f)
+        listOf(COLLAPSE, NativeAdTestTags.CTA).forEach { tag ->
+            val b = bounds(tag)
+            val inside = b.left.value >= screen.left - TOLERANCE &&
+                b.right.value <= screen.right + TOLERANCE &&
+                b.top.value >= screen.top - TOLERANCE &&
+                b.bottom.value <= screen.bottom + TOLERANCE
+            assertTrue("$tag at $b is not inside the 360 x 640 dp screen", inside)
+        }
+    }
+
+    private fun tapAt(x: Dp, y: Dp) {
+        val point = with(composeRule.density) { Offset(x.toPx(), y.toPx()) }
+        composeRule.onRoot().performTouchInput { click(point) }
+        composeRule.waitForIdle()
+    }
+
+    private fun windowBitmap(): Bitmap {
+        val view = (composeRule as AndroidComposeTestRule<*, *>).activity.window.decorView
+        val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+        view.draw(Canvas(bitmap))
+        return bitmap
+    }
+
+    private fun windowBounds(tag: String): Rect = node(tag).fetchSemanticsNode().boundsInWindow
+
+    private fun px(dp: Dp): Float = with(composeRule.density) { dp.toPx() }
+
+    /** The pixel of [area] most unlike [background]: a pixel inside the icon's stroke. */
+    private fun farthestPixel(bitmap: Bitmap, area: Rect, background: Int): Int {
+        var best = background
+        var bestDistance = -1
+        for (y in area.top.toInt() until area.bottom.toInt()) {
+            for (x in area.left.toInt() until area.right.toInt()) {
+                val pixel = bitmap.getPixel(x, y)
+                val distance = channels(pixel).zip(channels(background)).sumOf { (a, b) -> abs(a - b) }
+                if (distance > bestDistance) {
+                    bestDistance = distance
+                    best = pixel
+                }
+            }
+        }
+        return best
+    }
+
+    private fun assertColor(what: String, expected: Color, actual: Int) {
+        val want = channels(expected.toArgb())
+        val got = channels(actual)
+        assertTrue(
+            "$what: expected ${want.joinToString()} got ${got.joinToString()}",
+            want.zip(got).all { (a, b) -> abs(a - b) <= COLOR_TOLERANCE },
+        )
+    }
+
+    private fun channels(argb: Int): List<Int> = listOf((argb shr 16) and 0xFF, (argb shr 8) and 0xFF, argb and 0xFF)
+
+    private companion object {
+        const val AD = "collapsible_ad"
+        const val MEDIA = "collapsible_ad_media"
+        const val COLLAPSE = "collapsible_ad_collapse"
+        const val CONTENT = "collapsible_ad_content"
+        const val HOST = "host"
+        const val SLOT = "slot"
+        const val TOLERANCE = 1f
+        const val COLOR_TOLERANCE = 8
+    }
+}

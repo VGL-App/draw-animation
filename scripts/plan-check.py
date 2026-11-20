@@ -1,0 +1,574 @@
+#!/usr/bin/env python3
+"""Checks a plan before people review it and again right before an auto-run session starts its task.
+
+Usage: scripts/plan-check.py <plan.md> [<plan.md> ...]
+Exit 0: no error (warnings may be printed). Exit 1: at least one error.
+
+Usage: scripts/plan-check.py --touches <path prefix> <plan.md>
+Exit 0: a row of the file table of section 3.2 (Tạo, Sửa, Ghi lại, Xóa) names a path under the prefix; exit 1: none
+does (prose of section 3.2 and tables of other sections do not count). A directory row (path ending in "/") counts,
+unlike in run-check.py: skipping a task that may touch the prefix is the safe side. Exit 2: wrong arguments, an empty
+prefix or no such plan. An auto-run session uses it to skip the remaining tasks a known environment error blocks
+(docs/ops/failure-playbook.md, kind bo-qua-loai; ADR-0032, L8).
+
+Finds, from the plan alone, the mistakes that otherwise stop a task in the middle of the night
+(RUN-20261016-02 stopped on a test that read a file the plan changed, L-020):
+  1. The file list (section 3.2) matches the repository: files to change exist, files to create do not,
+     except files that a plan this ticket depends on creates.
+  2. Every script, workflow, build file or test that names a changed file is in the file list too,
+     or the plan mentions it (to say why it is not affected). In a git checkout only tracked files are searched,
+     so untracked copies of the repository (.claude/worktrees/) raise no false errors. An error for a draft plan; only
+     a warning for an approved one, whose readers were checked at review time (L-078).
+  3. Protected paths need a high-risk plan (risk-scoring.md, section 1; CLAUDE.md); scripts/release.sh is never allowed.
+  4. A plan that runs scripts/design-compare.sh writes a screenshot for every design image of its feature,
+     except the images it declares as drawn by another ticket, on a line
+     'Ảnh thiết kế của ticket khác (T-NNN): `Name`, ...'. Each declared image must exist and the line names a ticket.
+  5. An approved plan has its reviewers and date.
+  6. The plan has a token estimate (token_estimate, docs/ops/token-usage.md); a missing one is only a warning.
+  7. A plan whose criterion E (novelty of the technique, risk-scoring.md) scores 2 or more has a trial-run
+     section 4.1 that names scripts/check.sh (L-042). An error for a draft plan; only a warning for a plan
+     reviewed before this rule, so a session does not skip it.
+  8. Permissions and libraries are decided while planning, not found during the session (risk-scoring.md,
+     section 4, condition 2). Section 3.3 has the lines 'Quyền truy cập:' and 'Thư viện và SDK:'. A permission the
+     plan names that no manifest has yet must be on the 'Quyền truy cập:' line with the spec part that allows it,
+     with 'permission' in blocking_points and a high risk level. A library (group:name) or catalog alias (libs.x)
+     the version catalog does not have needs gradle/libs.versions.toml in the file list and 'sdk' in
+     blocking_points. Errors for a draft plan, warnings for an approved one, like rule 7.
+  9. What scripts/check.sh refuses shows up in the plan, not during the session (L-050; table in docs/auto-run.md,
+     step 5): every captureRoboImage call the plan writes passes the literal path "src/test/screenshots/<Name>.png"
+     right after the parenthesis, on the same line; a reference image the plan's tests write is in the file list or
+     already in the repository (CI fails on a missing one); no image of the file list sits under src/test outside
+     src/test/screenshots/. Errors for a draft plan, warnings for an approved one, like rule 7.
+ 10. The ticket's status follows the plan's (L-050): a warning when they disagree, fixed by scripts/status.py --sync.
+ 11. Every "Kiểm tra thủ công" row of section 4 says where it runs (L-085): '(emulator: <scenario file>)',
+     '(máy thật: <reason>)' or '(người: <reason>)'. An emulator row names scenario files that are in the file list
+     or in the repository, and a file in the repository passes `scripts/device-scenario.py check`. Errors for a draft
+     plan, warnings for an approved one, like rule 7 (camera-pose T-052: its device-session ran every scenario file
+     without a runner failure, so the rule moved back to the template as an error).
+ 12. A command of the plan does not use $TMPDIR or ${TMPDIR} without a default (L-088): a cloud session does not set
+     TMPDIR, so "$TMPDIR/x" writes /x at the root of the disk. ${TMPDIR:-/tmp} passes. An error for a draft plan,
+     a warning for an approved one, like rule 7.
+ 13. A draft plan that changes or deletes Kotlin code (outside test source sets) has section 3.5, "Hành vi đã có bị
+     đổi": the existing tests that check behaviour the plan changes, found with scripts/existing-tests.py, and for
+     each one whether its assertions stay true or how they change (ADR-0031, L-106: T-041 stopped on such a test).
+     Approved plans are left alone: they were reviewed before the rule.
+ 14. A draft or approved plan an auto-run session works (lane empty, ticket not auto_run: false) keeps
+     docs/lessons.md, its own plan file and its ticket out of section 3.2: the session writes the lesson status, the
+     plan log and the statuses through the report pull request (docs/auto-run.md, steps 7 and 10, section 4), not
+     the task pull request. Only a warning; done and stopped plans are left alone.
+PLAN_CHECK_ROOT overrides the repository root (tests). Messages are in Vietnamese for the team.
+"""
+
+import importlib.util
+import os
+import re
+import subprocess
+import sys
+from pathlib import Path
+
+ROOT = Path(os.environ.get("PLAN_CHECK_ROOT", Path(__file__).resolve().parent.parent))
+OPERATIONS = {"tạo": "create", "sửa": "change", "ghi lại": "change", "xóa": "delete", "xoá": "delete"}
+# Places that read files by name. Docs are left out: a doc naming a file does not break when the file changes.
+READER_DIRS = ["scripts", ".github", "build-logic"]
+READER_GLOBS = ["**/build.gradle.kts", "**/src/test/**/*", "**/src/androidTest/**/*"]
+SKIP_DIRS = {"build", "bin", ".gradle", ".git", "node_modules"}
+# Files searched by name as well as by path: data and config files that scripts open by name.
+NAME_SEARCH_SUFFIXES = {".json", ".yml", ".yaml", ".toml", ".properties", ".py", ".sh", ".txt", ".md"}
+GENERIC_NAMES = {"README.md", "CLAUDE.md", "build.gradle.kts", "settings.gradle.kts", "gradle.properties"}
+HIGH_RISK_PREFIXES = [".github/", "scripts/check.sh", "scripts/merge-if-green.sh", "build-logic/",
+                      "gradle/libs.versions.toml", "core/"]
+NEVER = ["scripts/release.sh"]
+SELF = "scripts/plan-check.py"
+# Words of the plan template's section 9 that a reviewer replaces (docs/templates/plan.md).
+DECISION_PLACEHOLDERS = ["Duyệt / Dừng", "<tên>", "<tên, nếu rủi ro cao>"]
+# A plan smaller than its feature names the design images another ticket draws (rule 4).
+OTHER_TICKET_IMAGES = re.compile(r"Ảnh thiết kế của ticket khác([^:\n]*):([^\n]*)")
+# Score of criterion E in the risk table of section 5 (rule 7).
+NOVELTY_SCORE = re.compile(r"^\|\s*E\.[^|]*\|\s*(\d)", re.M)
+TRIAL_RUN_HEADING = "4.1. Chạy thử"
+# Rule 13: section 3.5 of a plan that changes Kotlin code.
+CHANGED_BEHAVIOUR_HEADING = re.compile(r"^### 3\.5\.", re.M)
+TEST_SOURCE_SET = re.compile(r"/src/(test|androidTest)[A-Za-z]*/")
+# Rule 8: permissions and libraries.
+# Permissions are named as android.permission.X, or by a bare name from this list of common Android permissions.
+KNOWN_PERMISSIONS = {
+    "ACCESS_BACKGROUND_LOCATION", "ACCESS_COARSE_LOCATION", "ACCESS_FINE_LOCATION", "ACCESS_MEDIA_LOCATION",
+    "ACCESS_NETWORK_STATE", "ACCESS_WIFI_STATE", "ACTIVITY_RECOGNITION", "AD_ID", "BLUETOOTH", "BLUETOOTH_CONNECT",
+    "BLUETOOTH_SCAN", "BODY_SENSORS", "CALL_PHONE", "CAMERA", "FOREGROUND_SERVICE", "GET_ACCOUNTS", "INTERNET",
+    "MANAGE_EXTERNAL_STORAGE", "NEARBY_WIFI_DEVICES", "POST_NOTIFICATIONS", "QUERY_ALL_PACKAGES", "READ_CALENDAR",
+    "READ_CONTACTS", "READ_EXTERNAL_STORAGE", "READ_MEDIA_AUDIO", "READ_MEDIA_IMAGES", "READ_MEDIA_VIDEO",
+    "READ_MEDIA_VISUAL_USER_SELECTED", "READ_PHONE_STATE", "RECEIVE_BOOT_COMPLETED", "RECORD_AUDIO",
+    "REQUEST_INSTALL_PACKAGES", "SCHEDULE_EXACT_ALARM", "SEND_SMS", "SYSTEM_ALERT_WINDOW", "USE_EXACT_ALARM",
+    "VIBRATE", "WAKE_LOCK", "WRITE_CALENDAR", "WRITE_CONTACTS", "WRITE_EXTERNAL_STORAGE",
+}
+PERMISSION = re.compile(r"android\.permission\.([A-Z_]+)|\b([A-Z][A-Z_]+[A-Z])\b")
+COORDINATE = re.compile(r"`([a-z][\w.-]*\.[\w.-]+):([\w.-]+)(?::[\w.-]+)?`")
+ALIAS = re.compile(r"\blibs\.([a-zA-Z][\w.]*[a-zA-Z0-9])")
+CATALOG = "gradle/libs.versions.toml"
+# Rule 9: scripts/check.sh accepts only captureRoboImage("src/test/screenshots/<Name>.png") on one line.
+CAPTURE_CALL = re.compile(r"captureRoboImage\(([^)\n]{0,200})")
+CAPTURE_PATH = re.compile(r'^"src/test/screenshots/([^"]+)"')
+# A plan may write a placeholder instead of an argument or a name: "...", "<Tên>.png".
+ELLIPSIS = {"...", "…"}
+PLACEHOLDER = re.compile(r"\.\.\.|…|<[^>]*>")
+# Rule 10: ticket statuses that lag behind an approved plan, and ticket statuses a stopped plan leaves alone.
+# Keep in step with sync_target() of scripts/status.py.
+BEHIND_APPROVED_PLAN = {"backlog", "ready", "planned", "stopped"}
+AFTER_STOPPED_PLAN = {"stopped", "cancelled", "on-staging", "accepted", "released"}
+
+
+def front_matter(text):
+    match = re.match(r"^---\n(.*?)\n---\n", text, re.S)
+    fields = {}
+    for line in (match.group(1).splitlines() if match else []):
+        if ":" in line:
+            key, value = line.split(":", 1)
+            fields[key.strip()] = value.split("#", 1)[0].strip()
+    return fields
+
+
+def current_decision(text, version):
+    """Section 9 of the plan, or only the block of the current version when it has "Phiên bản <n>:" blocks."""
+    match = re.search(r"^## 9\..*?$(.*?)(?=^## |\Z)", text, re.S | re.M)
+    body = match.group(1) if match else ""
+    blocks = re.split(r"^Phiên bản (\d+):\s*$", body, flags=re.M)
+    if len(blocks) > 1:
+        by_version = dict(zip(blocks[1::2], blocks[2::2]))
+        return by_version.get(version, blocks[-1])
+    return body
+
+
+def section(text, heading):
+    match = re.search(rf"^### {re.escape(heading)}.*?$(.*?)(?=^##)", text, re.S | re.M)
+    return match.group(1) if match else ""
+
+
+def file_list(text):
+    """(operation, path) for every path in the table of section 3.2."""
+    rows = []
+    for line in section(text, "3.2").splitlines():
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if len(cells) < 2 or cells[0].lower() not in OPERATIONS:
+            continue
+        operation = OPERATIONS[cells[0].lower()]
+        previous = None
+        for path in re.findall(r"`([^`]+)`", cells[1]):
+            # "`dir/A.png`, `B.png`": B.png lives in the folder of A.png.
+            if "/" not in path and previous:
+                path = previous.rsplit("/", 1)[0] + "/" + path
+            rows.append((operation, path))
+            previous = path
+    return rows
+
+
+def unknown_operations(text):
+    found = []
+    for line in section(text, "3.2").splitlines():
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if len(cells) >= 3 and "`" in cells[1] and cells[0].lower() not in OPERATIONS:
+            found.append(cells[0])
+    return found
+
+
+def plans_of_dependencies(fields):
+    """Plans of the tickets this plan's ticket depends on."""
+    ticket = fields.get("ticket", "")
+    plans = []
+    for ticket_file in ROOT.glob(f"docs/features/*/tickets/{ticket}-*.md"):
+        depends = re.findall(r"T-\d+", front_matter(ticket_file.read_text()).get("depends_on", ""))
+        for dependency in depends:
+            plans += list(ROOT.glob(f"docs/features/*/plans/{dependency}-*.md"))
+    return plans
+
+
+def tracked_files():
+    """Files git tracks under ROOT, or None when ROOT is not a git checkout.
+
+    Only these are searched for readers: untracked folders such as .claude/worktrees/ hold whole copies of the
+    repository, whose scripts and tests would otherwise be reported as readers of the changed file.
+    """
+    try:
+        result = subprocess.run(["git", "-C", str(ROOT), "ls-files", "-z", "--cached"],
+                                capture_output=True, check=True)
+        top = subprocess.run(["git", "-C", str(ROOT), "rev-parse", "--show-toplevel"],
+                             capture_output=True, text=True, check=True).stdout.strip()
+    except (OSError, subprocess.CalledProcessError):
+        return None
+    if Path(top).resolve() != ROOT.resolve():
+        return None
+    return {ROOT / name for name in result.stdout.decode().split("\0") if name}
+
+
+def is_reader(relative):
+    parts = relative.split("/")
+    return (parts[0] in READER_DIRS or parts[-1] == "build.gradle.kts"
+            or "/src/test/" in f"/{relative}" or "/src/androidTest/" in f"/{relative}")
+
+
+def mention_pattern(name, root_file=False):
+    """A mention of a file name as a whole word: 'new-app.md' does not match inside 'setup-new-app.md'.
+
+    A file at the repository root ('CLAUDE.md') also does not match after a slash, since 'docs/CLAUDE.md'
+    is another file. A base name of a nested file may follow a slash ('design-system/tokens.json').
+    """
+    before = r"[\w.\-/]" if root_file else r"[\w.\-]"
+    return re.compile(rf"(?<!{before}){re.escape(name)}(?![\w\-])")
+
+
+def reader_files():
+    files = set()
+    tracked = tracked_files()
+    if tracked is not None:
+        files.update(p for p in tracked if is_reader(p.relative_to(ROOT).as_posix()) and p.is_file())
+    else:
+        for folder in READER_DIRS:
+            files.update(p for p in (ROOT / folder).rglob("*") if p.is_file())
+        for pattern in READER_GLOBS:
+            files.update(p for p in ROOT.glob(pattern) if p.is_file())
+    for path in sorted(files):
+        relative = path.relative_to(ROOT)
+        if SKIP_DIRS.intersection(relative.parts) or path.stat().st_size > 1_000_000:
+            continue
+        try:
+            yield relative.as_posix(), path.read_text()
+        except (UnicodeDecodeError, OSError):
+            continue
+
+
+def manifest_permissions():
+    found = set()
+    for manifest in ROOT.glob("**/src/main/AndroidManifest.xml"):
+        if SKIP_DIRS.isdisjoint(manifest.relative_to(ROOT).parts) and ".claude" not in manifest.parts:
+            found.update(re.findall(r"android\.permission\.([A-Z_]+)", manifest.read_text()))
+    return found
+
+
+def catalog():
+    """(group:name coordinates, accessor aliases) of the version catalog."""
+    path = ROOT / CATALOG
+    text = path.read_text() if path.is_file() else ""
+    coordinates, aliases = set(), set()
+    for table, body in re.findall(r"^\[(\w+)\]\s*$(.*?)(?=^\[|\Z)", text, re.S | re.M):
+        for alias, value in re.findall(r"^([\w-]+)\s*=\s*(.+)$", body, re.M):
+            accessor = alias.replace("-", ".").replace("_", ".")
+            aliases.add({"libraries": "", "plugins": "plugins.", "bundles": "bundles."}.get(table, "x.") + accessor)
+            group = re.search(r'group\s*=\s*"([^"]+)"', value)
+            name = re.search(r'name\s*=\s*"([^"]+)"', value)
+            module = re.search(r'module\s*=\s*"([^"]+)"', value)
+            if group and name:
+                coordinates.add(f"{group.group(1)}:{name.group(1)}")
+            elif module:
+                coordinates.add(module.group(1))
+    return coordinates, aliases
+
+
+def permission_and_library_problems(text, fields, listed):
+    problems = []
+    decisions = section(text, "3.3")
+    permission_line = re.search(r"Quyền truy cập:\**\s*(.*)", decisions)
+    library_line = re.search(r"Thư viện và SDK:\**\s*(.*)", decisions)
+    if not permission_line or not library_line:
+        problems.append("mục 3.3 thiếu dòng 'Quyền truy cập:' hoặc 'Thư viện và SDK:'. Quyền và thư viện phải được "
+                        "quyết lúc lập plan, không để phiên gặp rồi dừng (risk-scoring.md, mục 4, điều kiện 2).")
+    blocking = fields.get("blocking_points", "")
+    high = fields.get("risk_level") == "high"
+    named = {full or bare for full, bare in PERMISSION.findall(text) if full or bare in KNOWN_PERMISSIONS}
+    line = permission_line.group(1) if permission_line else ""
+    # 'Quyền truy cập: `X` (spec KB-6); không thêm: `Y`': names before 'không thêm' are added, after it are not.
+    added_part = re.split(r"không thêm", line, maxsplit=1, flags=re.I)[0]
+    added = sorted(p for p in named - manifest_permissions() if p in added_part)
+    for permission in sorted(named - manifest_permissions()):
+        if permission not in line:
+            problems.append(f"plan nhắc quyền {permission} mà manifest chưa có, nhưng dòng 'Quyền truy cập:' của mục 3.3 "
+                            "không ghi quyền này là thêm (kèm phần spec cho phép) hay không thêm.")
+    if added and not re.search(r"spec|KB-\d+", added_part):
+        problems.append(f"dòng 'Quyền truy cập:' thêm {', '.join(added)} nhưng không ghi phần spec cho phép (KB-n "
+                        "hoặc mục của spec). Spec chưa có quyền này thì sửa spec trước khi duyệt plan.")
+    if added and ("permission" not in blocking or not high):
+        problems.append(f"plan thêm quyền ({', '.join(added)}) nhưng blocking_points thiếu 'permission' "
+                        "hoặc risk_level không phải high (risk-scoring.md, mục 1, điểm 3).")
+    coordinates, aliases = catalog()
+    unknown = sorted({f"{g}:{n}" for g, n in COORDINATE.findall(text)} - coordinates)
+    unknown += sorted({f"libs.{a}" for a in ALIAS.findall(text)
+                       if a not in aliases and not a.startswith("versions") and a != "versions.toml"})
+    if unknown and CATALOG not in listed:
+        problems.append(f"plan dùng thư viện chưa có trong {CATALOG} ({', '.join(unknown[:4])}) nhưng không sửa file này "
+                        "ở mục 3.2. Thêm thư viện phải được quyết lúc lập plan (risk-scoring.md, mục 1, điểm 2).")
+    if (unknown or CATALOG in listed) and "sdk" not in blocking:
+        problems.append("plan thêm thư viện nhưng blocking_points thiếu 'sdk' (risk-scoring.md, mục 1, điểm 2).")
+    return problems
+
+
+def check_sh_problems(text, listed):
+    """Patterns of the plan that scripts/check.sh refuses (rule 9)."""
+    problems = []
+    names = set()
+    for argument in sorted({a.strip() for a in CAPTURE_CALL.findall(text)}):
+        if argument in ELLIPSIS:
+            continue
+        match = CAPTURE_PATH.match(argument)
+        name = match.group(1) if match else ""
+        if not match or not (name.endswith(".png") or PLACEHOLDER.search(name)):
+            problems.append(f"plan ghi captureRoboImage({argument}): scripts/check.sh từ chối lệnh captureRoboImage "
+                            "không ghi đường dẫn \"src/test/screenshots/<Tên>.png\" ngay sau dấu mở ngoặc, trên cùng "
+                            "dòng (docs/auto-run.md, bước 5).")
+        elif not PLACEHOLDER.search(name):
+            names.add(name)
+    for name in sorted(names):
+        in_list = any(path.endswith(f"/src/test/screenshots/{name}") for path in listed)
+        in_repo = any(SKIP_DIRS.isdisjoint(p.relative_to(ROOT).parts) and ".claude" not in p.parts
+                      for p in ROOT.glob(f"**/src/test/screenshots/{name}"))
+        if not in_list and not in_repo:
+            problems.append(f"test của plan chụp ảnh chuẩn {name}, nhưng mục 3.2 không có <module>/src/test/screenshots/"
+                            f"{name} và repo chưa có ảnh này. Trên CI, scripts/check.sh báo lỗi khi thiếu ảnh chuẩn "
+                            "(docs/auto-run.md, bước 5).")
+    for path in sorted(listed):
+        if path.endswith(".png") and re.search(r"(^|/)src/test[A-Za-z]*/", path) and "src/test/screenshots/" not in path:
+            problems.append(f"{path}: ảnh chuẩn screenshot phải nằm trong <module>/src/test/screenshots/; "
+                            "scripts/check.sh chỉ tìm ảnh ở đó.")
+    return problems
+
+
+def scenario_runner():
+    """The module of scripts/device-scenario.py (its name has a hyphen, so it is loaded by path)."""
+    path = Path(__file__).resolve().parent / "device-scenario.py"
+    spec = importlib.util.spec_from_file_location("device_scenario", path)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules["device_scenario"] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+# Rule 12: $TMPDIR or ${TMPDIR} with no default; ${TMPDIR:-/tmp} and $TMPDIR_X do not match.
+BARE_TMPDIR = re.compile(r"\$(?:TMPDIR(?!\w)|\{TMPDIR\})")
+
+MANUAL_PLACE = re.compile(r"\((emulator|máy thật|người):([^)]*)\)", re.I)
+
+
+def manual_test_problems(text, listed):
+    """Rule 11: where each manual test row of section 4 runs, and the scenario files of the emulator rows."""
+    match = re.search(r"^## 4\..*?$(.*?)(?=^## |\Z)", text, re.S | re.M)
+    problems = []
+    for line in (match.group(1) if match else "").splitlines():
+        if not line.lstrip().startswith("|"):
+            continue
+        for cell in (c.strip() for c in line.strip().strip("|").split("|")):
+            if not cell.lower().startswith("kiểm tra thủ công"):
+                continue
+            place = MANUAL_PLACE.search(cell)
+            if not place:
+                problems.append(f"quy tắc 11: dòng kiểm tra thủ công '{cell[:60]}' không ghi nơi chạy. Ghi "
+                                "'(emulator: <tệp kịch bản>)', '(máy thật: <lý do>)' hay '(người: <lý do>)' "
+                                "(docs/templates/plan.md, mục 4; L-085).")
+                continue
+            kind, detail = place.group(1).lower(), place.group(2).replace("`", "").strip()
+            if kind != "emulator":
+                if not detail:
+                    problems.append(f"quy tắc 11: dòng kiểm tra thủ công '{cell[:60]}' ghi ({kind}:) nhưng thiếu lý do.")
+                continue
+            files = [f.strip() for f in detail.split(",") if f.strip()]
+            if not files:
+                problems.append(f"quy tắc 11: dòng kiểm tra thủ công '{cell[:60]}' ghi (emulator:) nhưng thiếu tệp kịch bản.")
+            for name in files:
+                if name not in listed and not (ROOT / name).is_file():
+                    problems.append(f"quy tắc 11: tệp kịch bản {name} không có trong mục 3.2 hay repo.")
+                elif (ROOT / name).is_file():
+                    for message in scenario_runner().check_files([str(ROOT / name)], ROOT):
+                        problems.append(f"quy tắc 11: {message.replace(str(ROOT) + '/', '')}")
+    return problems
+
+
+def ticket_status_problems(fields):
+    """Rule 10: the ticket's status follows the plan's (scripts/status.py --sync)."""
+    ticket_id = fields.get("ticket", "")
+    tickets = sorted(ROOT.glob(f"docs/features/*/tickets/{ticket_id}-*.md")) if ticket_id else []
+    if not tickets:
+        return []
+    plan_status = fields.get("status", "")
+    ticket_status = front_matter(tickets[0].read_text()).get("status", "")
+    if plan_status == "approved" and ticket_status in BEHIND_APPROVED_PLAN:
+        return [f"plan approved nhưng ticket {ticket_id} còn '{ticket_status}'. Chạy scripts/status.py --sync."]
+    if plan_status == "stopped" and ticket_status not in AFTER_STOPPED_PLAN:
+        return [f"plan stopped nhưng ticket {ticket_id} còn '{ticket_status}'. Chạy scripts/status.py --sync."]
+    if plan_status == "draft" and ticket_status == "approved":
+        return [f"ticket {ticket_id} đã approved khi plan còn draft. Ticket chỉ chuyển approved khi plan được duyệt "
+                "(L-050)."]
+    return []
+
+
+def report_file_problems(plan_path, fields, listed):
+    """Rule 14: session records listed in section 3.2 of a plan that an auto-run session works."""
+    if fields.get("lane") or fields.get("status") not in ("draft", "approved"):
+        return []
+    ticket_id = fields.get("ticket", "")
+    tickets = sorted(ROOT.glob(f"docs/features/*/tickets/{ticket_id}-*.md")) if ticket_id else []
+    if tickets and front_matter(tickets[0].read_text()).get("auto_run", "").lower() == "false":
+        return []
+    try:
+        own_plan = plan_path.resolve().relative_to(ROOT.resolve()).as_posix()
+    except ValueError:
+        own_plan = None
+    records = {"docs/lessons.md", own_plan, *(t.relative_to(ROOT).as_posix() for t in tickets)}
+    return [f"quy tắc 14: mục 3.2 có {path}. Phiên tự chạy ghi bài học, nhật ký plan và trạng thái plan, ticket qua "
+            "PR báo cáo, không qua PR của task (docs/auto-run.md, bước 7, bước 10 và mục 4): bỏ dòng này khỏi mục 3.2. "
+            "Task làm có người thì ghi auto_run: false vào ticket; đường làm nhanh thì lane: quick ở plan."
+            for path in sorted(p for p in listed if p in records)]
+
+
+def other_ticket_images(text):
+    """Design image names a plan leaves to other tickets, and the declaration lines that name no ticket."""
+    names, without_ticket = set(), []
+    for match in OTHER_TICKET_IMAGES.finditer(text):
+        if not re.search(r"T-\d+", match.group(0)):
+            without_ticket.append(match.group(0).strip())
+        names.update(name.removesuffix(".png") for name in re.findall(r"`([^`]+)`", match.group(2)))
+    return names, without_ticket
+
+
+def check(plan_path):
+    errors, warnings = [], []
+    text = plan_path.read_text()
+    fields = front_matter(text)
+    rows = file_list(text)
+    listed = {path.rstrip("/") for _, path in rows}
+    risk = fields.get("risk_level", "")
+
+    if not rows:
+        errors.append("mục 3.2 không có file nào, hoặc bảng không đúng mẫu (Thao tác | Đường dẫn | Nội dung).")
+    for operation in unknown_operations(text):
+        errors.append(f"thao tác '{operation}' trong mục 3.2 không hợp lệ; dùng Tạo, Sửa, Ghi lại hoặc Xóa.")
+
+    created_by_dependencies = set()
+    for dependency in plans_of_dependencies(fields):
+        created_by_dependencies.update(p for op, p in file_list(dependency.read_text()) if op == "create")
+
+    for operation, path in rows:
+        target = ROOT / path
+        if path.endswith("/"):
+            continue
+        if operation in ("change", "delete") and not target.exists():
+            if path in created_by_dependencies:
+                continue
+            errors.append(f"{path}: plan sửa hoặc xóa, nhưng file chưa có trên nhánh chính.")
+        if operation == "create" and target.exists():
+            # Usually a generated file (design/review/) that the task overwrites; worth a look, not a stop.
+            warnings.append(f"{path}: plan ghi Tạo, nhưng file đã có; task sẽ ghi đè. Nên ghi là Ghi lại.")
+
+    for _, path in rows:
+        if any(path.startswith(p) for p in NEVER):
+            errors.append(f"{path}: không plan nào được chạm vào file này (CLAUDE.md, mục Không được làm).")
+        elif any(path.startswith(p) for p in HIGH_RISK_PREFIXES) and risk != "high":
+            errors.append(f"{path}: chạm điểm chặn của risk-scoring.md, mục 1, nhưng risk_level là '{risk}'.")
+
+    changed = [path for operation, path in rows if operation != "create" and not path.endswith("/")]
+    needles = {}
+    for path in changed:
+        names = [path]
+        name = path.rsplit("/", 1)[-1]
+        if Path(name).suffix in NAME_SEARCH_SUFFIXES and name not in GENERIC_NAMES:
+            names.append(name)
+        needles[path] = [mention_pattern(n, root_file=(n == path and "/" not in path)) for n in names]
+    # A reader is an error while the plan is written; for an approved plan it is a warning, like rule 7: a file that
+    # appeared after the review (a new script naming a shared file in a comment) cannot be added to an approved plan,
+    # and the session skips plans with errors, so it would skip every approved plan of the list (L-078).
+    readers_out = errors if fields.get("status") != "approved" else warnings
+    for reader, content in reader_files():
+        if reader in listed or reader in text or reader == SELF:
+            continue
+        for path, names in needles.items():
+            if reader != path and any(pattern.search(content) for pattern in names):
+                readers_out.append(
+                    f"{reader} nhắc tới {path} mà plan sửa, nhưng không có trong mục 3.2. "
+                    f"Thêm vào danh sách file, hoặc ghi trong plan vì sao {reader} không bị ảnh hưởng (L-020).")
+
+    if "design-compare.sh" in text:
+        feature = plan_path.resolve().parent.parent.name
+        images = sorted((ROOT / "docs" / "features" / feature / "design" / "screens").glob("*.png"))
+        others, without_ticket = other_ticket_images(text)
+        for line in without_ticket:
+            errors.append(f"dòng '{line}' không ghi mã ticket vẽ các ảnh đó, ví dụ (T-014).")
+        for name in sorted(others - {image.stem for image in images}):
+            errors.append(f"ảnh thiết kế của ticket khác {name} không có trong docs/features/{feature}/design/screens/.")
+        for image in images:
+            if image.stem in others:
+                continue
+            expected = f"feature/{feature}/src/test/screenshots/{image.name}"
+            if expected not in listed:
+                errors.append(f"ảnh thiết kế {image.name} không có ảnh chuẩn screenshot {expected} trong mục 3.2. "
+                              "Ảnh do ticket khác vẽ thì khai báo: 'Ảnh thiết kế của ticket khác (T-NNN): `Tên`'.")
+
+    if fields.get("status") == "approved":
+        for key in ("reviewer", "approved_at"):
+            if not fields.get(key):
+                errors.append(f"plan approved nhưng thiếu {key}.")
+        if risk == "high" and not fields.get("cross_reviewer"):
+            errors.append("plan rủi ro cao approved nhưng thiếu cross_reviewer.")
+        decision = current_decision(text, fields.get("version", ""))
+        if any(placeholder in decision for placeholder in DECISION_PLACEHOLDERS):
+            errors.append("plan approved nhưng mục 9 (Quyết định duyệt) của phiên bản hiện tại còn chữ mẫu (L-023).")
+    if not re.fullmatch(r"[\d.]+\s*[kKmM]?", fields.get("token_estimate", "")):
+        warnings.append("thiếu token_estimate hoặc sai dạng (ví dụ 20M); xem scripts/token-usage.py estimate. "
+                        "Chỉ để lập kế hoạch, không chặn task.")
+    novelty = NOVELTY_SCORE.search(text)
+    status = fields.get("status")
+    if (novelty and int(novelty.group(1)) >= 2 and status in ("draft", "approved")
+            and "scripts/check.sh" not in section(text, TRIAL_RUN_HEADING)):
+        message = (f"tiêu chí E là {novelty.group(1)} nhưng mục {TRIAL_RUN_HEADING} không có hoặc không ghi lần chạy thử "
+                   "bằng scripts/check.sh (L-042).")
+        (errors if status == "draft" else warnings).append(message)
+    if status in ("draft", "approved"):
+        for message in permission_and_library_problems(text, fields, listed) + check_sh_problems(text, listed):
+            (errors if status == "draft" else warnings).append(message)
+    if status in ("draft", "approved") and BARE_TMPDIR.search(text):
+        (errors if status == "draft" else warnings).append(
+            "quy tắc 12: plan ghi $TMPDIR không có giá trị mặc định. Trên cloud TMPDIR không được đặt, tệp sẽ "
+            "ghi vào gốc ổ đĩa. Ghi ${TMPDIR:-/tmp} (L-088).")
+    changes_code = any(operation != "create" and path.endswith(".kt") and not TEST_SOURCE_SET.search("/" + path)
+                       for operation, path in rows)
+    if status == "draft" and changes_code and not CHANGED_BEHAVIOUR_HEADING.search(text):
+        errors.append("quy tắc 13: plan sửa code Kotlin nhưng thiếu mục 3.5 (Hành vi đã có bị đổi). Chạy "
+                      "scripts/existing-tests.py <plan>, ghi test có sẵn kiểm hành vi plan đổi và câu nào đổi, "
+                      "hoặc ghi \"Không có\" (ADR-0031, L-106).")
+    warnings += ticket_status_problems(fields)
+    warnings += report_file_problems(plan_path, fields, listed)
+    (errors if status == "draft" else warnings).extend(manual_test_problems(text, listed))
+    if "## 4. Kiểm thử" not in text:
+        warnings.append("không thấy mục 4. Kiểm thử.")
+    return errors, warnings
+
+
+def touches(argv):
+    if len(argv) != 4 or not argv[2] or not Path(argv[3]).is_file():
+        print("Cách dùng: scripts/plan-check.py --touches <tiền tố đường dẫn> <plan.md> (plan phải có).", file=sys.stderr)
+        return 2
+    prefix = argv[2]
+    rows = file_list(Path(argv[3]).read_text(encoding="utf-8"))
+    return 0 if any(path.startswith(prefix) for _, path in rows) else 1
+
+
+def main(argv):
+    if len(argv) > 1 and argv[1] == "--touches":
+        return touches(argv)
+    if len(argv) < 2:
+        print("Cách dùng: scripts/plan-check.py <plan.md> [<plan.md> ...]", file=sys.stderr)
+        return 2
+    failed = False
+    for argument in argv[1:]:
+        plan = Path(argument)
+        if not plan.is_file():
+            print(f"{argument}: LỖI: không có file này.")
+            failed = True
+            continue
+        errors, warnings = check(plan)
+        for message in errors:
+            print(f"{argument}: LỖI: {message}")
+        for message in warnings:
+            print(f"{argument}: CHÚ Ý: {message}")
+        if not errors:
+            print(f"{argument}: qua.")
+        failed = failed or bool(errors)
+    return 1 if failed else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))

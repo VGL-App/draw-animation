@@ -1,0 +1,299 @@
+package com.vgl.draw.animation.core.ads
+
+import com.vgl.draw.animation.core.logging.AppLogger
+import kotlin.coroutines.cancellation.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
+
+private const val TAG = "Ads"
+
+/**
+ * P-02: how many ads a pool of this format holds, counting the ones in use; null for a format with no pool.
+ * Exhaustive on purpose, with no `else`: a new [AdFormat] decides here.
+ */
+internal fun AdFormat.poolCapacity(): Int? = when (this) {
+    AdFormat.NATIVE_IN_COLLECTION -> 5
+    AdFormat.NATIVE_MEDIUM -> 3
+    AdFormat.NATIVE_STEP -> 3
+    AdFormat.BANNER,
+    AdFormat.INTERSTITIAL,
+    AdFormat.NATIVE_SMALL,
+    AdFormat.NATIVE_COLLAPSIBLE,
+    AdFormat.NATIVE_FULL_SCREEN,
+    AdFormat.APP_OPEN,
+    AdFormat.REWARDED,
+    AdFormat.BANNER_COLLAPSIBLE,
+    AdFormat.BANNER_MREC,
+    -> null
+}
+
+/** The formats whose ads come from a [NativeAdPool] (P-02). */
+internal val AdFormat.usesPool: Boolean get() = poolCapacity() != null
+
+/**
+ * One pool per (format, ad unit) (plan T-028, question 1): placements of one format with the same ad unit share it,
+ * and the placement of an ad is set when it is claimed (P-04).
+ */
+internal data class NativePoolKey(val format: AdFormat, val unitId: String)
+
+/** The placement a loaded ad is shown for; empty until its show (PL-03). Full-screen ads and pools use it. */
+internal class PlacementCell {
+    @Volatile var value: AdPlacement? = null
+}
+
+/** One ad a pool loaded, with the cell its metrics read the placement from (P-04). */
+internal class PoolLoad(val ad: LoadedNativeAd, val holder: PlacementCell)
+
+/** What a cell of a pool takes its ad from ([pooledCellStates]). */
+internal interface PooledNativeAds {
+    /** An ad for [holder], or null; never one in use. */
+    fun claim(holder: AdPlacement): LoadedNativeAd?
+
+    /** The cell left the screen with [ad]. */
+    fun release(ad: LoadedNativeAd)
+
+    /** No ad can come for now (P-05): the cell hides, or keeps a static placeholder, and keeps trying. */
+    val exhausted: Boolean
+}
+
+/**
+ * The native pool of one (format, ad unit) (docs/ops/ads-business-rules.md, P-01 to P-07; plan T-028):
+ *
+ * - P-01: loads one ad per request; [claim] hands out the free ads in turn (round robin), never one in use.
+ * - P-02, P-03: refills one request at a time up to [capacity], counting the ads in use.
+ * - P-01a: [release] destroys an ad the SDK recorded an impression of, and refills; puts any other one back at the end.
+ * - O-04: a free ad is destroyed from 55 minutes after its load, by [claim] and by [refill]; so is a free ad whose
+ *   impression the SDK reported after it was given back (P-01a).
+ * - P-04: the placement of an ad is set in its [PlacementCell] when it is claimed.
+ * - P-05: [exhausted] when no free ad, no request in flight, and nothing can be sent now ([canLoadNow]: in
+ *   background, covered by a full-screen ad (KB-27), SDK not ready or gate closed).
+ * - P-08 (close of the ticket): [close] destroys the free ads, cancels the load in flight (a late ad is destroyed),
+ *   drops the retry; an ad in use given back after it is destroyed. [reopen] opens it again.
+ * - O-05, S-15, L-072: every send goes through [sendNext], which asks [sendGate] (foreground and not covered, then
+ *   the consent gate); a closed gate sends nothing, counts no failure and plans no retry. A failed load retries after
+ *   [AdRetryPolicy.nativeDelayMillis] (holding an ad when the pool holds one), or when [retryResets] moves (S-24).
+ *   The failures in a row count from 1 again when an ad loads, on [reopen], when [failureResets] moves (the process
+ *   back in foreground, Internet back), and when a failure comes with the pool empty after one holding an ad, or the
+ *   other way round (plan T-103, question 3). Not when a new screen starts a cell: the pool outlives screens
+ *   (question 1).
+ * - S-11: [claim] gives nothing while [canShowNow] is false.
+ *
+ * Main thread only ([scope] runs on the main thread).
+ */
+internal class NativeAdPool(
+    val key: NativePoolKey,
+    private val capacity: Int,
+    private val load: suspend () -> PoolLoad?,
+    private val sendGate: suspend () -> Boolean,
+    /**
+     * SDK ready, foreground and not covered by a full-screen ad (the in-screen window, KB-27), and the consent gate
+     * open: a request could be sent now (P-05).
+     */
+    private val canLoadNow: () -> Boolean,
+    /** Consent given: a loaded ad may go on screen (S-11). */
+    private val canShowNow: () -> Boolean,
+    private val retryResets: StateFlow<Int>,
+    private val clock: MonotonicClock,
+    private val scope: CoroutineScope,
+    private val logger: AppLogger,
+    /** Format code and number of the pool, never the ad unit (ADR-0019). */
+    private val logKey: String,
+    /** Moves when the failures in a row count from 1 again: process back in foreground, Internet back (O-05). */
+    private val failureResets: StateFlow<Int> = MutableStateFlow(0),
+) : PooledNativeAds {
+    private class Entry(val ad: LoadedNativeAd, val holder: PlacementCell, val loadedAtMillis: Long)
+
+    private val free = ArrayDeque<Entry>()
+    private val inUse = mutableMapOf<LoadedNativeAd, Entry>()
+
+    /** The send in progress: waiting for the gate, loading, or waiting for its retry. */
+    private var job: Job? = null
+
+    /** A request was handed to the SDK and has no result yet. */
+    private var requestSent = false
+    private var waitingRetry = false
+    private val retryCount = NativeRetryCount(failureResets)
+
+    /** The pool held an ad at its last failure; null before the first one. */
+    private var lastFailureHeld: Boolean? = null
+    private var closed = false
+
+    /** Moves at every close, so a send of an earlier opening changes nothing. */
+    private var session = 0L
+
+    /**
+     * The pool holds a free ad now. Unlike [exhausted], a request in flight does not count: a grid puts a cell that
+     * left back only for an ad that is there (P-06).
+     */
+    val hasFreeAd: Boolean get() = free.isNotEmpty()
+
+    /** A send is in progress (gate, load or retry wait). */
+    val isLoading: Boolean get() = job != null
+
+    override val exhausted: Boolean
+        get() {
+            if (free.isNotEmpty()) return false
+            if (closed) return true
+            if (requestSent || inUse.size >= capacity) return false
+            return waitingRetry || !canLoadNow()
+        }
+
+    override fun claim(holder: AdPlacement): LoadedNativeAd? {
+        if (!canShowNow()) return null
+        pruneExpired()
+        val entry = free.removeFirstOrNull()
+        if (entry == null) {
+            refill()
+            return null
+        }
+        inUse[entry.ad] = entry
+        entry.holder.value = holder
+        logger.info(TAG, "Pool $logKey claimed by ${holder.key}")
+        refill()
+        return entry.ad
+    }
+
+    override fun release(ad: LoadedNativeAd) {
+        val entry = inUse.remove(ad) ?: return
+        when {
+            closed -> {
+                ad.destroy()
+                logger.info(TAG, "Pool $logKey released: destroyed (closed)")
+            }
+            ad.impressionRecorded -> {
+                ad.destroy()
+                logger.info(TAG, "Pool $logKey released: destroyed (impression)")
+                refill()
+            }
+            else -> {
+                free.addLast(entry)
+                logger.info(TAG, "Pool $logKey released: back")
+            }
+        }
+    }
+
+    /** Drops the expired free ads, then sends the next request when the pool is open, idle and not full. */
+    fun refill() {
+        pruneExpired()
+        if (closed || job != null || free.size + inUse.size >= capacity) return
+        val opening = session
+        // Kept in job before it starts: a send that ends without suspending still clears it.
+        val started = scope.launch(start = CoroutineStart.LAZY) { sendNext(opening) }
+        job = started
+        started.start()
+    }
+
+    /**
+     * The free ads a claim could hand out now: none while consent is withdrawn (S-11, like [claim]), else the free ads
+     * with no impression and under 55 minutes old (P-01a, O-04). A request in flight is not an ad yet. Never loads or
+     * drops anything (no [pruneExpired], no [refill], no log): the next-step read of a flow calls it every 200 ms.
+     */
+    fun claimableAdCount(): Int {
+        if (!canShowNow()) return 0
+        val now = clock.nowMillis()
+        return free.count { !it.ad.impressionRecorded && now - it.loadedAtMillis < NativeAdPolicy.MAX_AGE_MILLIS }
+    }
+
+    /** Has a free ad, waits for a retry, is closed or cannot send now: the preload group may move on (S-22). */
+    fun settled(): Boolean = free.isNotEmpty() || waitingRetry || closed || !canLoadNow()
+
+    /** Consent withdrawn or every placement of the pool switched off (L-061). */
+    fun close() {
+        if (closed) return
+        closed = true
+        session++
+        job?.cancel()
+        job = null
+        requestSent = false
+        waitingRetry = false
+        free.forEach { it.ad.destroy() }
+        free.clear()
+        logger.info(TAG, "Pool $logKey closed")
+    }
+
+    /** Consent and a placement of the pool are back. */
+    fun reopen() {
+        if (!closed) return
+        closed = false
+        retryCount.clear()
+        logger.info(TAG, "Pool $logKey reopened")
+    }
+
+    /** The one send of the pool (L-072): gate, load, then the next refill or the retry wait. */
+    private suspend fun sendNext(opening: Long) {
+        if (!sendGate()) {
+            if (session == opening) {
+                job = null
+                logger.info(TAG, "Pool $logKey request blocked")
+            }
+            return
+        }
+        requestSent = true
+        val result = try {
+            load()
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            // Never the message of the error: it may hold anything (O-09).
+            logger.info(TAG, "Pool $logKey failed: 0 (${e.javaClass.simpleName})")
+            null
+        } finally {
+            if (session == opening) requestSent = false
+        }
+        if (session != opening) {
+            result?.ad?.destroy()
+            return
+        }
+        if (result != null) {
+            retryCount.onLoaded()
+            free.addLast(Entry(result.ad, result.holder, clock.nowMillis()))
+            logger.info(TAG, "Pool $logKey loaded (free ${free.size}/$capacity)")
+            job = null
+            refill()
+            return
+        }
+        val holdsAd = free.size + inUse.size > 0
+        // Each rule of O-05 starts its own sequence: from empty to holding an ad, or back.
+        if (lastFailureHeld != null && lastFailureHeld != holdsAd) retryCount.clear()
+        lastFailureHeld = holdsAd
+        val failures = retryCount.onFailure()
+        waitingRetry = true
+        val generation = retryResets.value
+        val wait = AdRetryPolicy.nativeDelayMillis(failures, holdsAd = holdsAd)
+        logger.info(TAG, "Pool $logKey failed, retry in $wait ms (failures $failures)")
+        withTimeoutOrNull(wait) { retryResets.first { it != generation } }
+        if (session != opening) return
+        waitingRetry = false
+        job = null
+        refill()
+    }
+
+    /**
+     * Drops the free ads that may not be shown any more: 55 minutes old (O-04), or with an impression the SDK reported
+     * after the cell gave the ad back (P-01a). The caller refills.
+     */
+    private fun pruneExpired() {
+        val now = clock.nowMillis()
+        val impressed = free.filter { it.ad.impressionRecorded }
+        val expired = free.filter {
+            !it.ad.impressionRecorded &&
+                now - it.loadedAtMillis >= NativeAdPolicy.MAX_AGE_MILLIS
+        }
+        if (impressed.isEmpty() && expired.isEmpty()) return
+        free.removeAll(impressed + expired)
+        impressed.forEach {
+            it.ad.destroy()
+            logger.info(TAG, "Pool $logKey destroyed (impression after release)")
+        }
+        expired.forEach {
+            it.ad.destroy()
+            logger.info(TAG, "Pool $logKey expired")
+        }
+    }
+}

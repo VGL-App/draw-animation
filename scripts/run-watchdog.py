@@ -1,0 +1,383 @@
+#!/usr/bin/env python3
+"""Tells people when an auto-run session has gone quiet, so someone can continue it (L-109).
+
+A session opened with `claude --cloud` is not continued by resume-run.yml (L-044): when it stops in the middle
+(an API error, the quota, the process restarting), the run file stays "running" and nobody knows until they look.
+A session once waited 2 hours 30 minutes that way. .github/workflows/run-watchdog.yml runs this script every
+30 minutes while its schedule is on (the workflow turns itself off when idle, scripts/schedule-idle.py); it only
+opens, updates and closes issues labelled session-stalled, and never starts a session.
+
+Usage: scripts/run-watchdog.py
+A run is quiet when its run file on its report branch is "running" and none of its branches (the report branch,
+claude/T-NNN-... and claude/fix-T-NNN-... of its tickets, as in scripts/resume-check.py) got a commit for
+WATCHDOG_STALL_MINUTES (60). While a workflow run of the repository is queued or in progress and started after the
+last commit on one of the session's branches (or on main, by push or by hand: device-session, staging), the
+session may be waiting for it, so the issue waits until WATCHDOG_HARD_MINUTES (90). A quiet run gets one open
+issue "session-stalled: RUN-..." whose body has the prompt to paste (docs/ops/staging-and-runs.md, 2.7); the body
+is refreshed on later runs. When a job of the repository has waited for a self-hosted runner for
+WATCHDOG_RUNNER_QUEUE_MINUTES (75, the wait of scripts/wait-run.sh code 7) with nothing of its run going, the body
+names it first: a person fixes the runner before pasting the prompt (ADR-0042). Those jobs are read only when an
+issue is about to be opened or updated. The issue is closed when the run has a new commit or is no longer
+"running". A run file left "running" on an old report branch keeps its issue open until a person sets it to
+"finished".
+
+scripts/runners-app.conf, only in an app whose runner model is not ADR-0042 (an ADR of the app), may set that wait
+(RUNNER_QUEUE_MINUTES; WATCHDOG_RUNNER_QUEUE_MINUTES still wins), the labels of the jobs watched (RUNNER_LABELS) and
+the runner page the issue names (RUNNER_DOC), read as scripts/wait-run.sh reads it. RUNNERS_APP_CONF (tests) names
+another file.
+
+Exit 0 when the check ran, 1 when GitHub could not be read (any error but a 404 on a file, a branch or the
+label) or scripts/runners-app.conf is wrong: then no issue is changed. Prints what it did, and the issue body, on stdout.
+Uses only `gh api` (REST); GITHUB_REPOSITORY or the origin remote gives the repository.
+WATCHDOG_STALL_MINUTES, WATCHDOG_HARD_MINUTES, WATCHDOG_RUNNER_QUEUE_MINUTES and WATCHDOG_NOW (ISO time, tests)
+override the defaults.
+Messages are in Vietnamese for the team; comments are in English.
+"""
+
+import json
+import os
+import re
+import subprocess
+import sys
+import tempfile
+from datetime import datetime, timedelta, timezone
+
+STALL_MINUTES = int(os.environ.get("WATCHDOG_STALL_MINUTES", "60"))
+HARD_MINUTES = int(os.environ.get("WATCHDOG_HARD_MINUTES", "90"))
+GITHUB_LABEL = re.compile(r"^(ubuntu|windows|macos)-")
+RUNNERS_CONF_KEYS = {
+    "RUNNER_QUEUE_MINUTES": r"[1-9][0-9]*",
+    "RUNNER_LABELS": r"[A-Za-z0-9._-]+(,[A-Za-z0-9._-]+)*",
+    "RUNNER_DOC": r"[A-Za-z0-9_][A-Za-z0-9._/-]*",
+    "RUNNER_TESTS": r"skip",
+    "RUNNER_ADR": r"ADR-[0-9]{4}",
+}
+LABEL = "session-stalled"
+REPORT_BRANCH = re.compile(r"^claude/(RUN-\d{8}-\d{2})-report$")
+TITLE = re.compile(r"^session-stalled: (RUN-\d{8}-\d{2})\b")
+
+
+class NotFound(LookupError):
+    """GitHub answered 404."""
+
+
+def api(path, raw=False, method="GET", body=None):
+    command = ["gh", "api", f"repos/{REPO}/{path}"]
+    if method != "GET":
+        command += ["-X", method]
+    if raw:
+        command += ["-H", "Accept: application/vnd.github.raw"]
+    handle = None
+    if body is not None:
+        handle = tempfile.NamedTemporaryFile("w", suffix=".json", delete=False)
+        json.dump(body, handle)
+        handle.close()
+        command += ["--input", handle.name]
+    try:
+        result = subprocess.run(command, capture_output=True, text=True)
+    finally:
+        if handle:
+            os.unlink(handle.name)
+    if result.returncode != 0:
+        if "HTTP 404" in result.stderr:
+            raise NotFound(f"{method} {path}")
+        raise LookupError(f"{method} {path}: {result.stderr.strip()[:200]}")
+    return result.stdout if raw else json.loads(result.stdout or "null")
+
+
+def api_all(path):
+    """Every item of a list endpoint, page by page (the path ends in "per_page=100")."""
+    items = []
+    for page in range(1, 51):
+        batch = api(f"{path}&page={page}") or []
+        items.extend(batch)
+        if len(batch) < 100:
+            break
+    return items
+
+
+def repository():
+    if os.environ.get("GITHUB_REPOSITORY"):
+        return os.environ["GITHUB_REPOSITORY"]
+    url = subprocess.run(["git", "config", "--get", "remote.origin.url"], capture_output=True, text=True).stdout
+    return re.sub(r"^(git@github\.com:|https://github\.com/)|\.git\s*$", "", url.strip())
+
+
+def moment(text):
+    """ISO time, or the started_at form of a run file: '2026-10-17 16:19 UTC'."""
+    try:
+        value = datetime.fromisoformat(re.sub(r"\s*(UTC|Z)$", "+00:00", (text or "").strip()))
+    except ValueError:
+        return None
+    return value if value.tzinfo else value.replace(tzinfo=timezone.utc)
+
+
+def front_matter(text):
+    match = re.match(r"^---\n(.*?)\n---\n", text or "", re.S)
+    fields = {}
+    for line in (match.group(1).splitlines() if match else []):
+        if ":" in line:
+            key, value = line.split(":", 1)
+            fields[key.strip()] = value.split("#", 1)[0].strip()
+    return fields
+
+
+def last_commit(branch):
+    try:
+        return moment(api(f"commits/{branch}")["commit"]["committer"]["date"])
+    except NotFound:
+        return None
+    except (KeyError, TypeError):
+        return None
+
+
+def runners_conf():
+    """The values of scripts/runners-app.conf, {} when there is no file: lines KEY=value, '#' comments and blank
+    lines, only the keys of RUNNERS_CONF_KEYS, each once, with plain values. Read, never run. ValueError says what is
+    wrong."""
+    path = os.environ.get("RUNNERS_APP_CONF") or os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                                              "runners-app.conf")
+    values = {}
+    if not os.path.isfile(path):
+        return values
+    with open(path, encoding="utf-8") as handle:
+        lines = handle.read().split("\n")
+    for number, line in enumerate(lines, 1):
+        line = line.removesuffix("\r")
+        if re.fullmatch(r"[ \t]*(#.*)?", line):
+            continue
+        match = re.fullmatch(r"([A-Z_]+)=(.*)", line)
+        if not match:
+            raise ValueError(f"{path}: dòng {number} không có dạng KHÓA=giá trị")
+        key, value = match.groups()
+        if key not in RUNNERS_CONF_KEYS:
+            raise ValueError(f"{path}: dòng {number}: khóa lạ {key} (chỉ nhận {', '.join(RUNNERS_CONF_KEYS)})")
+        if not re.fullmatch(RUNNERS_CONF_KEYS[key], value, re.ASCII):
+            raise ValueError(f"{path}: dòng {number}: giá trị của {key} sai dạng "
+                             "(xem docs/ops/self-hosted-runner.md, mục 10)")
+        if key in values:
+            raise ValueError(f"{path}: dòng {number}: {key} ghi hai lần")
+        values[key] = value
+    return values
+
+
+def watched(labels):
+    """Whether a job with these labels waits for a runner this script watches: one of RUNNER_LABELS when the app
+    sets them, else any label of no GitHub runner."""
+    if RUNNER_LABELS:
+        return any(str(label) in RUNNER_LABELS for label in labels)
+    return any(not GITHUB_LABEL.match(str(label)) for label in labels)
+
+
+def busy_workflows(since, own):
+    """Names of workflow runs queued or in progress that the session may be waiting for: created after `since`
+    (5 minutes of slack), on one of its branches `own` or on main by push or by hand; never this watchdog."""
+    names = []
+    for status in ("in_progress", "queued"):
+        runs = (api(f"actions/runs?status={status}&per_page=100") or {}).get("workflow_runs", [])
+        for run in runs:
+            created = moment(run.get("created_at"))
+            branch = run.get("head_branch")
+            ours = branch in own or (branch == "main" and run.get("event") in ("push", "workflow_dispatch"))
+            if created and created >= since - timedelta(minutes=5) and ours and run.get("name") != "run-watchdog":
+                names.append(run.get("name") or "?")
+    return sorted(set(names))
+
+
+def runner_waits(now):
+    """(job name, Actions run id, since) of every job that waits for a self-hosted runner as scripts/wait-run.sh
+    code 7 sees it: queued, no runner, a label watched (watched()), no job of its run in progress, and waiting since
+    the latest finished job of the run (else since it was created) for RUNNER_QUEUE_MINUTES or more. Every run of the
+    repository counts, not only the session's: the runner machine is shared. An answer of another shape is a failed
+    read."""
+    waits = []
+    for status in ("queued", "in_progress"):
+        path = f"actions/runs?status={status}&per_page=100"
+        runs = api(path)
+        if not isinstance(runs, dict) or not isinstance(runs.get("workflow_runs"), list):
+            raise LookupError(path)
+        for run in runs["workflow_runs"]:
+            jobs_path = f"actions/runs/{run.get('id')}/jobs?per_page=50"
+            jobs = api(jobs_path)
+            if not isinstance(jobs, dict) or not isinstance(jobs.get("jobs"), list):
+                raise LookupError(jobs_path)
+            jobs = jobs["jobs"]
+            if any(job.get("status") == "in_progress" for job in jobs):
+                continue
+            done = [moment(job.get("completed_at")) for job in jobs if job.get("status") == "completed"]
+            done = [d for d in done if d]
+            for job in jobs:
+                if job.get("status") != "queued" or job.get("runner_name"):
+                    continue
+                if not watched(job.get("labels") or []):
+                    continue
+                since = max(done) if done else moment(job.get("created_at"))
+                if since and now - since >= timedelta(minutes=RUNNER_QUEUE_MINUTES):
+                    waits.append((job.get("name") or "?", run.get("id"), since))
+    return waits
+
+
+def body_for(run_id, run_file, latest, quiet, note, waits=()):
+    # The prompt of docs/ops/staging-and-runs.md, section 2.7, plus its "phiên tiếp tục" line ("Khi phiên bị ngắt").
+    resume = (
+        "Bạn đang chạy một phiên tự chạy của repo này, mở bằng claude --cloud, không qua routine hay start-run.yml. "
+        "Đọc CLAUDE.md, docs/CLAUDE.md và docs/auto-run.md, rồi làm đúng quy trình trong docs/auto-run.md.\n\n"
+        f"Danh sách chạy: {run_file}. Danh sách không có trạng thái approved thì không làm task nào, "
+        "kết thúc phiên và báo lý do.\n\n"
+        "Nhánh: không làm việc trên nhánh mặc định của phiên này. Tạo nhánh báo cáo và nhánh riêng cho từng task "
+        "đúng như docs/auto-run.md. Làm nhánh báo cáo trong một worktree riêng "
+        f"(git worktree add ../report claude/{run_id}-report), để không đổi nhánh dưới bản build của task.\n\n"
+        "Ghi vào mục Kiểm tra đầu phiên: phiên mở bằng claude --cloud để dùng cloud session credits.\n\n"
+        "Đây là phiên tiếp tục: nhánh báo cáo đã có, danh sách chạy đang running. "
+        "Làm theo docs/auto-run.md, mục 4, Tiếp tục phiên sau khi hết hạn mức."
+    )
+    last = latest.strftime("%Y-%m-%d %H:%M UTC") if latest else "không rõ"
+    lines = [
+        f"Phiên `{run_id}` vẫn `running` trên nhánh `claude/{run_id}-report`, nhưng không có commit nào "
+        f"trong {quiet} phút (commit gần nhất: {last}).",
+        "",
+    ]
+    if waits:
+        for name, number, since in waits:
+            lines.append(f"**Job chờ runner tự host:** job `{name}` (lần chạy {number}) chờ runner tự host từ "
+                         f"{since.strftime('%Y-%m-%d %H:%M UTC')}, quá {RUNNER_QUEUE_MINUTES} phút, "
+                         "không còn job nào của lần chạy đó đang chạy.")
+        check = (f"máy runner tự host của repo trước ({RUNNER_DOC})" if RUNNER_DOC else
+                 "máy runner hay biến `HEAVY_RUNNER` trước (docs/ops/self-hosted-runner.md, mục 8)")
+        lines += [
+            "",
+            f"Phiên dừng vì máy runner, không vì code (`scripts/wait-run.sh` mã 7): người phụ trách hạ tầng xem {check}. "
+            "Job còn chờ thì chưa dán đoạn dưới: phiên mới cũng dừng ở đó. Job đã chạy thì phiên routine được "
+            "`resume-run.yml` tự tiếp tục; phiên `claude --cloud` thì dán đoạn dưới.",
+            "",
+        ]
+    lines += [
+        "Người làm: xem phiên còn chạy không (claude.ai/code hoặc terminal đã mở `claude --cloud`). "
+        "Phiên mở bằng routine (`start-run.yml`) thì `resume-run.yml` tự tiếp tục sau 90 phút không có commit: "
+        "không mở thêm phiên tay, kẻo hai phiên cùng chạy. Phiên `claude --cloud` đã dừng thì mở lại bằng "
+        "`claude --cloud` và dán đoạn dưới (docs/ops/staging-and-runs.md, mục 2.7, Khi phiên bị ngắt); "
+        "phiên mới đẩy nhánh báo cáo ngay ở bước đầu (giờ tiếp tục), nên `resume-run.yml` không kích hoạt thêm.",
+        "",
+        "```text",
+        resume,
+        "```",
+        "",
+        "Issue này tự đóng khi phiên có commit mới hoặc danh sách chạy không còn `running` "
+        "(scripts/run-watchdog.py).",
+    ]
+    if note:
+        lines += ["", note]
+    return "\n".join(lines)
+
+
+def ensure_label():
+    try:
+        api(f"labels/{LABEL}")
+    except NotFound:
+        try:
+            api("labels", method="POST", body={"name": LABEL, "color": "d93f0b",
+                                               "description": "Phiên tự chạy không có commit mới (scripts/run-watchdog.py)"})
+        except LookupError:
+            pass  # created meanwhile, or no right to create: the issue is still opened with the name
+
+
+def main():
+    now = moment(os.environ["WATCHDOG_NOW"]) if os.environ.get("WATCHDOG_NOW") else datetime.now(timezone.utc)
+    branches = [b["name"] for b in api_all("branches?per_page=100")]
+    open_issues = {}
+    for issue in api(f"issues?state=open&labels={LABEL}&per_page=100") or []:
+        match = TITLE.match(issue.get("title", ""))
+        if match and "pull_request" not in issue:
+            open_issues[match.group(1)] = issue["number"]
+    running = set()
+    waits = None  # read once, only when an issue is about to be opened or updated
+    # Everything is read first and written after, so a read that fails changes no issue.
+    writes = []
+    for branch in sorted(branches):
+        match = REPORT_BRANCH.match(branch)
+        if not match:
+            continue
+        run_id = match.group(1)
+        run_file = f"docs/runs/{run_id}.md"
+        try:
+            text = api(f"contents/{run_file}?ref={branch}", raw=True)
+        except NotFound:
+            continue
+        fields = front_matter(text)
+        if fields.get("status") != "running":
+            continue
+        running.add(run_id)
+        # scripts/merge-if-green.sh reads the run table and the branch name with the same two patterns:
+        # change all three together.
+        tickets = set(re.findall(r"^\|\s*\d+\s*\|\s*(T-\d+)\s*\|", text, re.M))
+        own = [branch] + [b for b in branches
+                          if (m := re.match(r"^claude/(?:fix-)?(T-\d+)-", b)) and m.group(1) in tickets]
+        dates = [d for d in (last_commit(b) for b in own) if d]
+        latest = max(dates) if dates else moment(fields.get("started_at"))
+        quiet = int((now - latest).total_seconds() // 60) if latest else HARD_MINUTES
+        number = open_issues.get(run_id)
+        if quiet < STALL_MINUTES:
+            print(f"{run_id}: đang chạy, commit gần nhất {quiet} phút trước.")
+            if number:
+                writes.append(lambda n=number, q=quiet, r=run_id: close(n, f"Phiên `{r}` có commit lại ({q} phút trước). Đóng."))
+            continue
+        busy = busy_workflows(latest, set(own)) if latest else []
+        if busy and quiet < HARD_MINUTES:
+            print(f"{run_id}: {quiet} phút không có commit, nhưng đang có workflow chạy ({', '.join(busy)}): "
+                  f"có thể phiên đang chờ; báo khi tới {HARD_MINUTES} phút.")
+            continue
+        note = ""
+        started = moment(fields.get("started_at"))
+        if started and now - started > timedelta(hours=24):
+            note = "Phiên bắt đầu hơn 24 giờ trước: `resume-run.yml` không tự tiếp tục; người quyết định."
+        if waits is None:
+            waits = runner_waits(now)
+        body = body_for(run_id, run_file, latest, quiet, note, waits)
+        writes.append(lambda n=number, b=body, q=quiet, r=run_id: report(n, b, q, r))
+    for run_id, number in sorted(open_issues.items()):
+        if run_id not in running:
+            writes.append(lambda n=number, r=run_id: close(n, f"Danh sách chạy `{r}` không còn `running`. Đóng."))
+    try:
+        for write in writes:
+            write()
+    except LookupError as error:
+        print(f"Ghi issue lỗi ({error}). Lần chạy sau thử lại.", file=sys.stderr)
+        return 1
+    return 0
+
+
+def report(number, body, quiet, run_id):
+    if number:
+        api(f"issues/{number}", method="PATCH", body={"body": body})
+        print(f"{run_id}: {quiet} phút không có commit. Cập nhật issue #{number}.")
+    else:
+        ensure_label()
+        api("issues", method="POST", body={"title": f"session-stalled: {run_id} không có commit {quiet} phút",
+                                           "body": body, "labels": [LABEL]})
+        print(f"{run_id}: {quiet} phút không có commit. Mở issue {LABEL}.")
+    print(body)
+
+
+def close(number, message):
+    # Closed first: a close that fails leaves no comment behind, so a retry every 30 minutes adds none.
+    api(f"issues/{number}", method="PATCH", body={"state": "closed"})
+    api(f"issues/{number}/comments", method="POST", body={"body": message})
+    print(f"Đóng issue #{number}: {message}")
+
+
+if __name__ == "__main__":
+    REPO = repository()
+    try:
+        RUNNERS = runners_conf()
+    except (OSError, UnicodeDecodeError, ValueError) as error:
+        print(f"LỖI: {error}. Không đổi issue nào.", file=sys.stderr)
+        sys.exit(1)
+    RUNNER_QUEUE_MINUTES = int(os.environ.get("WATCHDOG_RUNNER_QUEUE_MINUTES")
+                               or RUNNERS.get("RUNNER_QUEUE_MINUTES", "75"))
+    RUNNER_LABELS = set(RUNNERS["RUNNER_LABELS"].split(",")) if "RUNNER_LABELS" in RUNNERS else set()
+    RUNNER_DOC = RUNNERS.get("RUNNER_DOC", "")
+    try:
+        sys.exit(main())
+    except (LookupError, json.JSONDecodeError) as error:
+        print(f"Không đọc được GitHub ({error}). Không đổi issue nào.", file=sys.stderr)
+        sys.exit(1)

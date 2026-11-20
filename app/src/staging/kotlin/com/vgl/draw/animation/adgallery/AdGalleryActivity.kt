@@ -1,0 +1,53 @@
+package com.vgl.draw.animation.adgallery
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.material3.Surface
+import androidx.compose.ui.Modifier
+import com.vgl.draw.animation.core.ads.AdsController
+import com.vgl.draw.animation.core.ads.AdsHost
+import com.vgl.draw.animation.core.ads.FullScreenAdHost
+import com.vgl.draw.animation.core.designsystem.theme.AppTheme
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+
+/**
+ * The staging ad gallery (plan T-014), opened from its own launcher icon "Ad gallery"; declared only in the staging
+ * manifest. It asks for consent like MainActivity, since testers may open it first. It does not report foreground and
+ * background to the ads controller: ads sessions and per-session limits follow MainActivity only.
+ */
+@AndroidEntryPoint
+class AdGalleryActivity : ComponentActivity() {
+    @Inject
+    lateinit var ads: AdsController
+
+    private val viewModel: AdGalleryViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        // Shows the consent form when required; the ads SDK starts only after it (ADR-0045).
+        ads.gatherConsent(this)
+        setContent {
+            // Provides the ads controller and reports the block of resume ads (G-04).
+            AdsHost(ads) {
+                AppTheme {
+                    Surface(modifier = Modifier.fillMaxSize()) {
+                        AdGalleryRoute(
+                            viewModel = viewModel,
+                            onExit = ::finish,
+                            modifier = Modifier.safeDrawingPadding(),
+                        )
+                    }
+                    // Native full-screen ads open as a dialog over the gallery, as in MainActivity (ADR-0045).
+                    FullScreenAdHost()
+                }
+            }
+        }
+    }
+}

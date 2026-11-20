@@ -1,0 +1,109 @@
+---
+feature: network
+status: approved             # draft | approved
+spec: features/network/spec.md
+tool: figma
+link: https://www.figma.com/design/jDs7KImtrNL3ABPYnDhDgJ (App Template: Design System, section "Network" trên trang "Screens / Ads")
+designer: AI (Figma MCP), Nhật duyệt
+approved_by: Nhật
+approved_at: 2026-10-21
+---
+
+# THIẾT KẾ: POPUP MẤT MẠNG
+
+<!--
+Quy trình: docs/ops/design-workflow.md. Quyết định: ADR-0020, ADR-0024.
+Ảnh và số liệu sinh bằng scripts/figma-export.py từ section "Network" (node 7:240). Component `Dialog/NetworkLost` và
+`Button/Primary` ở trang "Components / Dialogs" của cùng file.
+-->
+
+## 1. Các màn hình và trạng thái
+
+| Màn hình (composable) | Trạng thái | Ảnh trong `screens/`, số liệu trong `context/` | Kịch bản |
+| --- | --- | --- | --- |
+| `NetworkLostScreen` (popup đè lên màn hình mẫu) | Mất mạng | `NetworkLostScreen_default_light` | KB-1, KB-2 |
+| `NetworkLostScreen` | Mất mạng, chế độ tối | `NetworkLostScreen_default_dark` | KB-1, KB-2 |
+
+Tên frame có hậu tố `Screen` theo quy tắc của `figma-export.py` (ADR-0020). Screenshot test dựng popup đè lên `SampleScreen` để có cùng ảnh; tên composable của popup do plan quyết.
+
+## 2. Bảng chữ
+
+| Màn hình, trạng thái | Vị trí | Chữ | Kiểu chữ |
+| --- | --- | --- | --- |
+| Popup | Tiêu đề | Không có kết nối mạng | `headlineSmall` |
+| Popup | Nội dung | Ứng dụng cần Internet để hoạt động. Kiểm tra Wi-Fi hoặc dữ liệu di động rồi thử lại. | `bodyMedium` |
+| Popup | Nút | Thử lại | `labelLarge` đậm 600 (`PrimaryButton`) |
+
+Bản tiếng Anh tương ứng (spec, câu hỏi 3): "No internet connection", "This app needs the Internet to work. Check Wi-Fi or mobile data, then try again.", "Try again".
+
+Ảnh trong `screens/` và screenshot test cùng tên dùng chữ tiếng Việt (test đặt ngôn ngữ `vi`); máy để ngôn ngữ khác tiếng Việt hiện bản tiếng Anh, và dòng báo vẫn chưa có mạng là "Still no connection. Please try again in a moment.".
+
+## 3. Ánh xạ sang hệ thống thiết kế
+
+| Phần tử trên thiết kế | Thành phần trong code | Màu (vai trò) | Kiểu chữ | Khoảng cách |
+| --- | --- | --- | --- | --- |
+| Lớp phủ | lớp phủ mặc định của `Dialog` | đen 32% (scrim của Material) | | |
+| Hộp thoại | `Dialog` với bề mặt riêng | `surfaceContainerHigh` | | rộng 312 dp, lề 24 dp, cách nhau 16 dp, bo 28 dp (`shapes.extraLarge`) |
+| Icon mất wifi | icon vector, Material Symbols Rounded "wifi_off" (Apache 2.0) | nền `secondary` | | 24 dp |
+| Tiêu đề, nội dung | `Text` | `onSurface`, `onSurfaceVariant` | `headlineSmall`, `bodyMedium` | căn giữa |
+| Nút "Thử lại" | `PrimaryButton` | `primary`, `onPrimary` | `labelLarge` đậm 600 | rộng hết hộp thoại |
+
+- **Giá trị "ngoài hệ thống" trong `context/`:** lề 24 dp và rộng 312 dp của hộp thoại (theo Material 3), màu lớp phủ. Plan quyết: hằng số của composable popup.
+- **Thành phần mới cần thêm vào hệ thống thiết kế:** không có; popup nằm ở `:app` hoặc module core do plan chọn (ADR-0024).
+
+## 4. Luồng thao tác
+
+Mất Internet thì popup hiện đè lên màn hình hiện tại, chặn thao tác. Bấm "Thử lại" thì kiểm lại kết nối. Có mạng thì popup tự đóng, màn hình bên dưới giữ nguyên trạng thái.
+
+## 5. Vị trí quảng cáo
+
+Không có.
+
+## 6. Chuyển sang Compose
+
+- **Phải giống bản mẫu:** bố cục hộp thoại, chữ, vai trò màu và kiểu chữ.
+- **Được phép khác:** lớp phủ và bóng theo mặc định của `Dialog` trong Compose, chênh lệch nhỏ theo lưới 4 dp.
+
+## 7. Tiêu chí khi duyệt
+
+- [x] Dùng đúng màu, chữ, khoảng cách, thành phần của hệ thống thiết kế.
+- [x] Đủ các trạng thái trong mục 1, kể cả chế độ tối.
+- [x] Chữ đúng bảng chữ, không bị cắt hay tràn.
+- [x] Bố cục giống bản mẫu (kiểm khi code, T-017: mục 8).
+- [x] Vùng chạm đủ lớn (ít nhất 48 dp), chữ dễ đọc.
+- [x] Dùng được ở màn hình thấp (360 x 640) (kiểm khi code, T-017: ảnh `NetworkLostScreen_stillOffline_small.png`, test `NetworkDialogTest.smallScreen_cardFitsAndRetryVisible`).
+- [x] Không có quảng cáo.
+- [x] Không thiết kế để thu hút chủ yếu trẻ em.
+
+## 7a. Thay đổi sau khi duyệt
+
+- 2026-10-23: icon mất wifi đổi sang Material Symbols Rounded "wifi_off" theo quyết định của anh Nhật ở câu hỏi 3 của plan T-017 (code dùng cùng icon); ảnh `screens/` và `context/` xuất lại bằng `scripts/figma-export.py`.
+
+- 2026-11-14: khe native nhỏ ở đáy màn hình mẫu vẽ lại theo thiết kế quảng cáo T-064 (cao 126 dp ở màn 411 dp, mép dưới cách đáy 16 dp; `docs/features/ads/design/README.md`, mục 1), anh Nhật duyệt trong phiên: "Duyệt."; ảnh `screens/` và `context/` xuất lại bằng `scripts/figma-export.py`. Hộp thoại không đổi.
+
+- 2026-11-17: khe native nhỏ ở đáy vẽ lại theo thiết kế quảng cáo T-108 (hai tầng, cao 106 dp ở mọi bề rộng, mép dưới cách đáy 16 dp; `docs/features/ads/design/README.md`, mục 1), anh Nhật duyệt trong phiên: "Duyệt thiết kế T-108"; ảnh `screens/` và `context/` xuất lại bằng `scripts/figma-export.py`. Hộp thoại không đổi.
+
+## 8. Kết quả đối chiếu
+
+T-017, 2026-10-23: `scripts/design-compare/DesignCompare.java` so ảnh thiết kế với ảnh chuẩn của `:app` (`app/src/test/screenshots/`), kết quả ở `review/`.
+
+| Màn hình | Điểm ảnh khác | Nhận xét |
+| --- | --- | --- |
+| `NetworkLostScreen_default_light` | 1.8% | Hộp thoại trùng vị trí và cỡ (rộng 312 dp, căn giữa), icon, chữ, nút giống bản mẫu. Phần khác chủ yếu: thẻ quảng cáo native ở đáy màn hình mẫu trống vì test không có `AdsController` (đã biết trong plan); nút "Tap" lệch vài điểm ảnh theo chiều dọc |
+| `NetworkLostScreen_default_dark` | 2.5% | Như bản sáng |
+
+Rà soát độc lập xem hai ảnh `*_compare.png` theo mục 7 và ghi thêm nhận xét nếu có.
+
+T-064, 2026-11-14: so lại với cùng ảnh chuẩn của `:app` sau khi vẽ lại khe đáy; ảnh so sánh ở `review/`. Code chưa đổi (T-065).
+
+| Màn hình | Điểm ảnh khác | Nhận xét |
+| --- | --- | --- |
+| `NetworkLostScreen_default_light` | 2.0% | Hộp thoại không đổi; phần khác ở khe đáy (thiết kế 126 dp có quảng cáo, ảnh chuẩn trống) và nút "Tap" như trên |
+| `NetworkLostScreen_default_dark` | 2.9% | Như bản sáng |
+
+T-108, 2026-11-17: so lại với cùng ảnh chuẩn của `:app` sau khi vẽ lại khe đáy theo thẻ JBase vẽ ra; ảnh so sánh ở `review/`. Code chưa đổi (T-109).
+
+| Màn hình | Điểm ảnh khác | Nhận xét |
+| --- | --- | --- |
+| `NetworkLostScreen_default_light` | 1.9% | Hộp thoại không đổi; phần khác ở khe đáy (thiết kế 106 dp hai tầng có quảng cáo, ảnh chuẩn trống) và nút "Tap" như trên |
+| `NetworkLostScreen_default_dark` | 6.1% | Như bản sáng; khối CTA ngang hết thẻ của bản tối khác nền nhiều hơn nên tỷ lệ cao hơn |

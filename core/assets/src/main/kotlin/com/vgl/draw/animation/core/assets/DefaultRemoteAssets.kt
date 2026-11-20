@@ -1,0 +1,60 @@
+package com.vgl.draw.animation.core.assets
+
+import com.vgl.draw.animation.core.network.NetworkFailureReporter
+import java.io.File
+import java.io.IOException
+import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
+
+/**
+ * Keeps each file in [cacheDir] under its own path. A file is written to a temporary name first and renamed
+ * when complete, so an interrupted download never leaves a partial file that looks ready.
+ * A download that fails because of the network is reported to [networkFailures], so the network dialog shows at once
+ * (spec network, KB-3); a file the server lacks or another error is the feature's own error to show.
+ */
+internal class DefaultRemoteAssets(
+    private val config: AssetsConfig,
+    private val cacheDir: File,
+    private val downloader: AssetDownloader,
+    private val ioDispatcher: CoroutineDispatcher,
+    private val onDownloadFailed: (AssetPath, IOException) -> Unit = { _, _ -> },
+    private val networkFailures: NetworkFailureReporter? = null,
+) : RemoteAssets {
+    private val locks = ConcurrentHashMap<AssetPath, Mutex>()
+
+    override suspend fun load(path: AssetPath): AssetResult = withContext(ioDispatcher) {
+        val file = File(cacheDir, path.value)
+        if (file.isFile) return@withContext AssetResult.Ready(file)
+        // One download per path at a time; whoever waited finds the file already there.
+        locks.getOrPut(path) { Mutex() }.withLock {
+            if (file.isFile) return@withLock AssetResult.Ready(file)
+            val temp = File(cacheDir, "$TEMP_DIR/${UUID.randomUUID()}")
+            try {
+                temp.parentFile?.mkdirs()
+                downloader.download(config.urlOf(path), temp)
+                file.parentFile?.mkdirs()
+                if (!temp.renameTo(file)) throw IOException("Could not move ${path.value} into the cache")
+                AssetResult.Ready(file)
+            } catch (e: IOException) {
+                onDownloadFailed(path, e)
+                val reason = e.toFailureReason()
+                if (reason == AssetFailureReason.NETWORK) networkFailures?.reportNetworkFailure(SOURCE)
+                AssetResult.Unavailable(reason)
+            } finally {
+                temp.delete()
+            }
+        }
+    }
+
+    private companion object {
+        // Starts with a dot, which no AssetPath segment does, so it never clashes with a cached file.
+        const val TEMP_DIR = ".download"
+
+        // Label of this module in the network log; never a path.
+        const val SOURCE = "assets"
+    }
+}

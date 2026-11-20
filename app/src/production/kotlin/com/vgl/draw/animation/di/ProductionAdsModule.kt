@@ -1,0 +1,31 @@
+package com.vgl.draw.animation.di
+
+import com.vgl.draw.animation.BuildConfig
+import com.vgl.draw.animation.core.ads.AdUnitIds
+import com.vgl.draw.animation.core.ads.AdsDebugOptions
+import com.vgl.draw.animation.core.ads.ConfiguredAdUnitIds
+import com.vgl.draw.animation.core.ads.ConsentDebugOptions
+import com.vgl.draw.animation.core.ads.ConsentShortcutConfig
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+
+/** Production uses the real ad units given when the release is built (ADR-0049, ADR-0045). */
+@Module
+@InstallIn(SingletonComponent::class)
+object ProductionAdsModule {
+    @Provides
+    fun adUnitIds(): AdUnitIds = ConfiguredAdUnitIds(BuildConfig.AD_UNITS)
+
+    @Provides
+    fun consentDebugOptions(): ConsentDebugOptions = ConsentDebugOptions.NONE
+
+    /** The consent shortcut is off in production builds (S-12). */
+    @Provides
+    fun consentShortcutConfig(): ConsentShortcutConfig = ConsentShortcutConfig.OFF
+
+    /** No test device and no per-network log in production builds (plan T-058, KB-28). */
+    @Provides
+    fun adsDebugOptions(): AdsDebugOptions = AdsDebugOptions.NONE
+}
