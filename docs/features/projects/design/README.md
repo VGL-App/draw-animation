@@ -192,11 +192,11 @@ Vai trò màu theo `tokens.json` (tên vai trò Material 3); giá trị Studio N
 
 ## 4. Luồng thao tác
 
-`OnboardingScreen` > `ProjectsScreen` (trống) > "New animation" > `NewProjectScreen` > "Create" > `EditorScreen`. "Try a free lesson" > `LessonsScreen`. Chạm thẻ dự án > `EditorScreen`; nhấn giữ thẻ > menu dự án (bottom sheet: Open, Rename, Duplicate, Back up to a file, Delete). Nút tải lên trên thanh trên > bộ chọn file hệ thống > hộp thoại khôi phục (`restoring`) > danh sách, hoặc hộp thoại lỗi (`restore-error`). Nút cài đặt > `SettingsScreen`. Thanh điều hướng: Projects, Lessons.
+`OnboardingScreen` > `ProjectsScreen` (trống) > "New animation" > `NewProjectScreen` > "Create" > `EditorScreen`. "Try a free lesson" > `LessonsScreen`. Chạm thẻ dự án > `EditorScreen`; nhấn giữ thẻ > menu dự án (bottom sheet: Open, Rename, Duplicate, Back up to a file, Delete). Nút tải lên trên thanh trên > bộ chọn file hệ thống > hộp thoại khôi phục (`restoring`; Cancel dừng khôi phục, về danh sách, không tạo dự án dở) > danh sách, hoặc hộp thoại lỗi (`restore-error`). Hộp thoại khôi phục dùng `Dialog` tự dựng (rộng 348 dp, có MREC), không dùng `AlertDialog`; ở khung 360 × 640 nội dung hộp thoại cuộn được. Nút cài đặt > `SettingsScreen`. Thanh điều hướng: Projects, Lessons.
 
 ## 5. Vị trí quảng cáo
 
-`projects_empty_native` native medium dưới hai nút ở màn trống (cách 24 dp); `projects_bottom` thanh đáy native nhỏ trên thanh điều hướng; `projects_grid` ô native trong lưới sau mỗi 6 dự án (không có trên ảnh vì các frame có ít dự án); `restore_mrec` MREC trong hộp thoại khôi phục, cách nút 24 dp, hộp thoại rộng 348 dp; `new_project_native` native medium trong phần cuộn của `NewProjectScreen`, nút Create ghim đáy cách 24 dp; `create_inter` interstitial khi bấm Create từ dự án thứ 2. Màn Projects khai `InContentAds` (MC-13). Trước nét vẽ đầu tiên chỉ có `projects_empty_native` trên màn này (bản đề xuất mục 9.1).
+`projects_empty_native` native medium dưới hai nút ở màn trống (cách 24 dp); `projects_bottom` thanh đáy native nhỏ trên thanh điều hướng; `projects_grid` ô native trong lưới sau mỗi 6 dự án (không có trên ảnh vì các frame có ít dự án); `restore_mrec` MREC trong hộp thoại khôi phục, cách nút 24 dp, hộp thoại rộng 348 dp; `new_project_native` native medium trong phần cuộn của `NewProjectScreen`, giữa nhóm Frame rate và nhóm Background, cách mỗi nhóm 24 dp, `keepSpaceWhenEmpty` (nút Create ghim đáy, ở xa thẻ); `create_inter` interstitial khi bấm Create từ dự án thứ 2. Màn Projects khai `InContentAds` (MC-13). Trước nét vẽ đầu tiên chỉ có `projects_empty_native` trên màn này (bản đề xuất mục 9.1).
 
 ## 6. Chuyển sang Compose
 
