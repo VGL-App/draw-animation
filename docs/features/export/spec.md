@@ -1,13 +1,13 @@
 ---
 feature: export
-status: draft
+status: confirmed
 owner: Nhật
 product_owner: Nhật
 requests:
   - requests/2026-11-21-ban-dau.md
 design: design/README.md
 created: 2026-11-21
-confirmed:
+confirmed: 2026-11-21
 ---
 
 # SPEC: XUẤT HOẠT HÌNH
@@ -297,3 +297,4 @@ Không có.
 | 2026-11-21 | AI | Ghi các frame thiết kế bổ sung, sửa theo câu trả lời (chờ anh Nhật duyệt) ở mục 4 và các tiêu chí liên quan |
 | 2026-11-21 | AI | Watermark đổi sang chữ trắng trên viên thuốc nền đen mờ, theo lời anh Nhật trong phiên (dễ thấy trên nền trắng) |
 | 2026-11-21 | AI | Thiết kế bổ sung đã được anh Nhật duyệt trong phiên (chọn "Duyệt") |
+| 2026-11-21 | AI | Chuyển `confirmed` theo lời anh Nhật (người phụ trách sản phẩm) trong phiên: "xác nhận 6 spec" |
