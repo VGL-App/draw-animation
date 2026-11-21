@@ -18,7 +18,7 @@ private val CircleSize = 132.dp
 private val TileSize = 88.dp
 private val TileCornerRadius = 26.dp
 private val MarkWidth = 56.dp
-private val MarkHeight = 52.dp
+private val MarkHeight = 56.dp
 
 /**
  * Brand logo: the brand mark on a primary tile, inside a primaryContainer circle.

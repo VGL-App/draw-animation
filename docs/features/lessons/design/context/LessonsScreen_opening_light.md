@@ -6,7 +6,7 @@ Sinh bởi `scripts/figma-export.py`. Không sửa tay; thiết kế đổi thì
 
 - Link: https://www.figma.com/design/uDdqi9ojRvIy4689FvCh5O/?node-id=33-7857
 - Frame: `33:7857`, giao diện sáng
-- Ngày lấy: 2026-11-21
+- Ngày lấy: 2026-11-22
 
 ## 2. Giá trị dùng
 
@@ -30,130 +30,130 @@ nào trùng; plan quyết định làm tròn về token gần nhất hay thêm t
 | kiểu chữ | 12/16, đậm 500 | labelMedium |
 | kiểu chữ | 14/14, đậm 400 | ngoài hệ thống |
 | kiểu chữ | 14/20, đậm 400 | bodyMedium |
-| kiểu chữ | 14/20, đậm 500 | titleSmall, labelLarge |
-| kiểu chữ | 14/20, đậm 600 | ngoài hệ thống |
+| kiểu chữ | 14/20, đậm 500 | titleSmall |
+| kiểu chữ | 14/20, đậm 600 | labelLarge |
 | kiểu chữ | 16/16, đậm 400 | ngoài hệ thống |
-| kiểu chữ | 22/28, đậm 500 | ngoài hệ thống |
+| kiểu chữ | 22/28, đậm 500 | titleLarge |
 | kiểu chữ | 24/24, đậm 400 | ngoài hệ thống |
-| kiểu chữ | 24/32, đậm 700 | ngoài hệ thống |
-| màu chữ | #12141A | ngoài hệ thống |
-| màu chữ | #1C2C05 | ngoài hệ thống |
-| màu chữ | #2F6FE0 | ngoài hệ thống |
-| màu chữ | #3D6A00 | ngoài hệ thống |
-| màu chữ | #5F6675 | ngoài hệ thống |
-| màu chữ | #FFFFFF | onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest |
+| kiểu chữ | 24/32, đậm 700 | headlineSmall |
+| màu chữ | #12141A | onBackground, onSurface |
+| màu chữ | #1C2C05 | onPrimaryContainer |
+| màu chữ | #2F6FE0 | secondary |
+| màu chữ | #3D6A00 | primary, surfaceTint |
+| màu chữ | #5F6675 | onSurfaceVariant |
+| màu chữ | #FFFFFF | onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest, canvas |
 | màu nền | #000000 | ngoài hệ thống |
-| màu nền | #1A1C22 | ngoài hệ thống |
-| màu nền | #2F6FE0 | ngoài hệ thống |
-| màu nền | #3D6A00 | ngoài hệ thống |
-| màu nền | #D9DDE2 | ngoài hệ thống |
-| màu nền | #DDF5B8 | ngoài hệ thống |
-| màu nền | #E3E6EA | ngoài hệ thống |
-| màu nền | #ECEEF1 | ngoài hệ thống |
-| màu nền | #F1F2F5 | ngoài hệ thống |
-| màu nền | #F7F8FA | ngoài hệ thống |
-| màu nền | #FFFFFF | onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest |
+| màu nền | #1A1C22 | onCanvas |
+| màu nền | #2F6FE0 | secondary |
+| màu nền | #3D6A00 | primary, surfaceTint |
+| màu nền | #D9DDE2 | surfaceContainerHighest |
+| màu nền | #DDF5B8 | primaryContainer |
+| màu nền | #E3E6EA | surfaceVariant, surfaceContainerHigh |
+| màu nền | #ECEEF1 | surfaceContainer |
+| màu nền | #F1F2F5 | surfaceContainerLow |
+| màu nền | #F7F8FA | background, surface, surfaceBright |
+| màu nền | #FFFFFF | onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest, canvas |
 | độ mờ của lớp | 0.55 | - |
 
 ## 3. Cấu trúc và số liệu
 
 Toạ độ và cỡ tính theo dp, gốc là góc trên trái của khung. Thứ tự từ trên xuống như trong Figma.
 
-- Frame "LessonsScreen_opening_light", vị trí 0,0, cỡ 411 x 891, nền #F7F8FA (ngoài hệ thống), xếp dọc, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
+- Frame "LessonsScreen_opening_light", vị trí 0,0, cỡ 411 x 891, nền #F7F8FA (background, surface, surfaceBright), xếp dọc, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
   - Instance "StatusBar", vị trí 0,0, cỡ 411 x 28, xếp ngang, cách nhau 4 (xs), lề trên/phải/dưới/trái 0/20 (ngoài hệ thống)/0/20 (ngoài hệ thống), căn MIN/CENTER
-    - Text "9:41", vị trí 20,4, cỡ 30 x 20, chữ "9:41", kiểu ngoài hệ thống (14/20, đậm 600), màu #12141A (ngoài hệ thống)
+    - Text "9:41", vị trí 20,4, cỡ 30 x 20, chữ "9:41", kiểu labelLarge (14/20, đậm 600), màu #12141A (onBackground, onSurface)
     - Frame "spacer", vị trí 54,14, cỡ 277 x 1, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
     - Instance "Icon", vị trí 335,6, cỡ 16 x 16
-      - Text "glyph", vị trí 335,6, cỡ 16 x 16, chữ "signal_cellular_alt", kiểu ngoài hệ thống (16/16, đậm 400), màu #12141A (ngoài hệ thống)
+      - Text "glyph", vị trí 335,6, cỡ 16 x 16, chữ "signal_cellular_alt", kiểu ngoài hệ thống (16/16, đậm 400), màu #12141A (onBackground, onSurface)
     - Instance "Icon", vị trí 355,6, cỡ 16 x 16
-      - Text "glyph", vị trí 355,6, cỡ 16 x 16, chữ "wifi", kiểu ngoài hệ thống (16/16, đậm 400), màu #12141A (ngoài hệ thống)
+      - Text "glyph", vị trí 355,6, cỡ 16 x 16, chữ "wifi", kiểu ngoài hệ thống (16/16, đậm 400), màu #12141A (onBackground, onSurface)
     - Instance "Icon", vị trí 375,6, cỡ 16 x 16
-      - Text "glyph", vị trí 375,6, cỡ 16 x 16, chữ "battery_full", kiểu ngoài hệ thống (16/16, đậm 400), màu #12141A (ngoài hệ thống)
+      - Text "glyph", vị trí 375,6, cỡ 16 x 16, chữ "battery_full", kiểu ngoài hệ thống (16/16, đậm 400), màu #12141A (onBackground, onSurface)
   - Frame "TopBar", vị trí 0,28, cỡ 411 x 64, xếp ngang, cách nhau 4 (xs), lề trên/phải/dưới/trái 0/8 (sm)/0/20 (ngoài hệ thống), căn MIN/CENTER
-    - Text "Lessons", vị trí 20,44, cỡ 95 x 32, chữ "Lessons", kiểu ngoài hệ thống (24/32, đậm 700), màu #12141A (ngoài hệ thống)
+    - Text "Lessons", vị trí 20,44, cỡ 95 x 32, chữ "Lessons", kiểu headlineSmall (24/32, đậm 700), màu #12141A (onBackground, onSurface)
     - Frame "spacer", vị trí 119,60, cỡ 284 x 1, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
   - Frame "Filters", vị trí 0,92, cỡ 411 x 36, xếp ngang, cách nhau 8 (sm), lề trên/phải/dưới/trái 0/16 (md)/8 (sm)/16 (md), căn MIN/MIN
-    - Instance "Chip", vị trí 16,92, cỡ 39 x 28, nền #DDF5B8 (ngoài hệ thống), bo góc 8, xếp ngang, cách nhau 6 (ngoài hệ thống), lề trên/phải/dưới/trái 6 (ngoài hệ thống)/12 (ngoài hệ thống)/6 (ngoài hệ thống)/12 (ngoài hệ thống), căn MIN/CENTER
-      - Text "Label", vị trí 28,98, cỡ 15 x 16, chữ "All", kiểu labelMedium (12/16, đậm 500), màu #1C2C05 (ngoài hệ thống)
-    - Instance "Chip", vị trí 63,92, cỡ 62 x 28, nền #E3E6EA (ngoài hệ thống), bo góc 8, xếp ngang, cách nhau 6 (ngoài hệ thống), lề trên/phải/dưới/trái 6 (ngoài hệ thống)/12 (ngoài hệ thống)/6 (ngoài hệ thống)/12 (ngoài hệ thống), căn MIN/CENTER
-      - Text "Label", vị trí 75,98, cỡ 38 x 16, chữ "Basics", kiểu labelMedium (12/16, đậm 500), màu #12141A (ngoài hệ thống)
-    - Instance "Chip", vị trí 133,92, cỡ 64 x 28, nền #E3E6EA (ngoài hệ thống), bo góc 8, xếp ngang, cách nhau 6 (ngoài hệ thống), lề trên/phải/dưới/trái 6 (ngoài hệ thống)/12 (ngoài hệ thống)/6 (ngoài hệ thống)/12 (ngoài hệ thống), căn MIN/CENTER
-      - Text "Label", vị trí 145,98, cỡ 40 x 16, chữ "Motion", kiểu labelMedium (12/16, đậm 500), màu #12141A (ngoài hệ thống)
-    - Instance "Chip", vị trí 205,92, cỡ 88 x 28, nền #E3E6EA (ngoài hệ thống), bo góc 8, xếp ngang, cách nhau 6 (ngoài hệ thống), lề trên/phải/dưới/trái 6 (ngoài hệ thống)/12 (ngoài hệ thống)/6 (ngoài hệ thống)/12 (ngoài hệ thống), căn MIN/CENTER
-      - Text "Label", vị trí 217,98, cỡ 64 x 16, chữ "Characters", kiểu labelMedium (12/16, đậm 500), màu #12141A (ngoài hệ thống)
-    - Instance "Chip", vị trí 301,92, cỡ 65 x 28, nền #E3E6EA (ngoài hệ thống), bo góc 8, xếp ngang, cách nhau 6 (ngoài hệ thống), lề trên/phải/dưới/trái 6 (ngoài hệ thống)/12 (ngoài hệ thống)/6 (ngoài hệ thống)/12 (ngoài hệ thống), căn MIN/CENTER
-      - Text "Label", vị trí 313,98, cỡ 41 x 16, chữ "Effects", kiểu labelMedium (12/16, đậm 500), màu #12141A (ngoài hệ thống)
+    - Instance "Chip", vị trí 16,92, cỡ 39 x 28, nền #DDF5B8 (primaryContainer), bo góc 8, xếp ngang, cách nhau 6 (ngoài hệ thống), lề trên/phải/dưới/trái 6 (ngoài hệ thống)/12 (ngoài hệ thống)/6 (ngoài hệ thống)/12 (ngoài hệ thống), căn MIN/CENTER
+      - Text "Label", vị trí 28,98, cỡ 15 x 16, chữ "All", kiểu labelMedium (12/16, đậm 500), màu #1C2C05 (onPrimaryContainer)
+    - Instance "Chip", vị trí 63,92, cỡ 62 x 28, nền #E3E6EA (surfaceVariant, surfaceContainerHigh), bo góc 8, xếp ngang, cách nhau 6 (ngoài hệ thống), lề trên/phải/dưới/trái 6 (ngoài hệ thống)/12 (ngoài hệ thống)/6 (ngoài hệ thống)/12 (ngoài hệ thống), căn MIN/CENTER
+      - Text "Label", vị trí 75,98, cỡ 38 x 16, chữ "Basics", kiểu labelMedium (12/16, đậm 500), màu #12141A (onBackground, onSurface)
+    - Instance "Chip", vị trí 133,92, cỡ 64 x 28, nền #E3E6EA (surfaceVariant, surfaceContainerHigh), bo góc 8, xếp ngang, cách nhau 6 (ngoài hệ thống), lề trên/phải/dưới/trái 6 (ngoài hệ thống)/12 (ngoài hệ thống)/6 (ngoài hệ thống)/12 (ngoài hệ thống), căn MIN/CENTER
+      - Text "Label", vị trí 145,98, cỡ 40 x 16, chữ "Motion", kiểu labelMedium (12/16, đậm 500), màu #12141A (onBackground, onSurface)
+    - Instance "Chip", vị trí 205,92, cỡ 88 x 28, nền #E3E6EA (surfaceVariant, surfaceContainerHigh), bo góc 8, xếp ngang, cách nhau 6 (ngoài hệ thống), lề trên/phải/dưới/trái 6 (ngoài hệ thống)/12 (ngoài hệ thống)/6 (ngoài hệ thống)/12 (ngoài hệ thống), căn MIN/CENTER
+      - Text "Label", vị trí 217,98, cỡ 64 x 16, chữ "Characters", kiểu labelMedium (12/16, đậm 500), màu #12141A (onBackground, onSurface)
+    - Instance "Chip", vị trí 301,92, cỡ 65 x 28, nền #E3E6EA (surfaceVariant, surfaceContainerHigh), bo góc 8, xếp ngang, cách nhau 6 (ngoài hệ thống), lề trên/phải/dưới/trái 6 (ngoài hệ thống)/12 (ngoài hệ thống)/6 (ngoài hệ thống)/12 (ngoài hệ thống), căn MIN/CENTER
+      - Text "Label", vị trí 313,98, cỡ 41 x 16, chữ "Effects", kiểu labelMedium (12/16, đậm 500), màu #12141A (onBackground, onSurface)
   - Frame "Content", vị trí 0,128, cỡ 411 x 603, xếp dọc, cách nhau 12 (ngoài hệ thống), lề trên/phải/dưới/trái 8 (sm)/16 (md)/0/16 (md), căn MIN/MIN
     - Frame "SectionHeader", vị trí 16,136, cỡ 379 x 28, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/CENTER
-      - Text "Basics", vị trí 16,136, cỡ 69 x 28, chữ "Basics", kiểu ngoài hệ thống (22/28, đậm 500), màu #12141A (ngoài hệ thống)
+      - Text "Basics", vị trí 16,136, cỡ 69 x 28, chữ "Basics", kiểu titleLarge (22/28, đậm 500), màu #12141A (onBackground, onSurface)
       - Frame "spacer", vị trí 85,150, cỡ 273 x 1, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
-      - Text "1 of 5", vị trí 358,140, cỡ 37 x 20, chữ "1 of 5", kiểu ngoài hệ thống (14/20, đậm 600), màu #5F6675 (ngoài hệ thống)
+      - Text "1 of 5", vị trí 358,140, cỡ 37 x 20, chữ "1 of 5", kiểu labelLarge (14/20, đậm 600), màu #5F6675 (onSurfaceVariant)
     - Frame "Basics row", vị trí 16,176, cỡ 379 x 194, xếp ngang, cách nhau 12 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
-      - Instance "LessonCard", vị trí 16,176, cỡ 184 x 184, nền #ECEEF1 (ngoài hệ thống), bo góc 14, xếp dọc, cách nhau 6 (ngoài hệ thống), lề trên/phải/dưới/trái 8 (sm)/8 (sm)/12 (ngoài hệ thống)/8 (sm), căn MIN/MIN
-        - Frame "Thumbnail", vị trí 24,184, cỡ 168 x 94, nền #FFFFFF (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest), bo góc 8
-          - Rectangle "ground", vị trí 41,257, cỡ 134 x 2, nền #1A1C22 (ngoài hệ thống)
-          - Ellipse "ball", vị trí 74,237, cỡ 21 x 21, nền #2F6FE0 (ngoài hệ thống)
-          - Frame "Done badge", vị trí 32,192, cỡ 58 x 20, nền #3D6A00 (ngoài hệ thống), bo góc 999, xếp ngang, cách nhau 2 (ngoài hệ thống), lề trên/phải/dưới/trái 2 (ngoài hệ thống)/8 (sm)/2 (ngoài hệ thống)/6 (ngoài hệ thống), căn MIN/CENTER
+      - Instance "LessonCard", vị trí 16,176, cỡ 184 x 184, nền #ECEEF1 (surfaceContainer), bo góc 14, xếp dọc, cách nhau 6 (ngoài hệ thống), lề trên/phải/dưới/trái 8 (sm)/8 (sm)/12 (ngoài hệ thống)/8 (sm), căn MIN/MIN
+        - Frame "Thumbnail", vị trí 24,184, cỡ 168 x 94, nền #FFFFFF (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest, canvas), bo góc 8
+          - Rectangle "ground", vị trí 41,257, cỡ 134 x 2, nền #1A1C22 (onCanvas)
+          - Ellipse "ball", vị trí 74,237, cỡ 21 x 21, nền #2F6FE0 (secondary)
+          - Frame "Done badge", vị trí 32,192, cỡ 58 x 20, nền #3D6A00 (primary, surfaceTint), bo góc 999, xếp ngang, cách nhau 2 (ngoài hệ thống), lề trên/phải/dưới/trái 2 (ngoài hệ thống)/8 (sm)/2 (ngoài hệ thống)/6 (ngoài hệ thống), căn MIN/CENTER
             - Instance "Icon", vị trí 38,195, cỡ 14 x 14
-              - Text "glyph", vị trí 38,195, cỡ 14 x 14, chữ "check", kiểu ngoài hệ thống (14/14, đậm 400), màu #FFFFFF (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest)
-            - Text "Done", vị trí 54,194, cỡ 28 x 16, chữ "Done", kiểu labelSmall (11/16, đậm 500), màu #FFFFFF (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest)
-        - Text "Level", vị trí 24,284, cỡ 49 x 16, chữ "Basics · 1", kiểu labelSmall (11/16, đậm 500), màu #3D6A00 (ngoài hệ thống)
-        - Text "Title", vị trí 24,306, cỡ 91 x 20, chữ "Bouncing ball", kiểu titleSmall, labelLarge (14/20, đậm 500), màu #12141A (ngoài hệ thống)
-        - Text "Meta", vị trí 24,332, cỡ 97 x 16, chữ "5 min · 12 frames", kiểu bodySmall (12/16, đậm 400), màu #5F6675 (ngoài hệ thống)
-      - Instance "LessonCard", vị trí 212,176, cỡ 184 x 194, nền #ECEEF1 (ngoài hệ thống), bo góc 14, xếp dọc, cách nhau 6 (ngoài hệ thống), lề trên/phải/dưới/trái 8 (sm)/8 (sm)/12 (ngoài hệ thống)/8 (sm), căn MIN/MIN
-        - Frame "Thumbnail", vị trí 220,184, cỡ 168 x 94, nền #FFFFFF (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest), bo góc 8
-          - Rectangle "ground", vị trí 236,257, cỡ 134 x 2, nền #1A1C22 (ngoài hệ thống)
-          - Ellipse "ball", vị trí 270,237, cỡ 21 x 21, nền #2F6FE0 (ngoài hệ thống)
-        - Text "Level", vị trí 220,284, cỡ 50 x 16, chữ "Basics · 2", kiểu labelSmall (11/16, đậm 500), màu #3D6A00 (ngoài hệ thống)
-        - Text "Title", vị trí 220,306, cỡ 130 x 20, chữ "Squash and stretch", kiểu titleSmall, labelLarge (14/20, đậm 500), màu #12141A (ngoài hệ thống)
-        - Text "Meta", vị trí 220,332, cỡ 97 x 16, chữ "6 min · 16 frames", kiểu bodySmall (12/16, đậm 400), màu #5F6675 (ngoài hệ thống)
-        - Instance "Progress", vị trí 220,354, cỡ 168 x 4, nền #E3E6EA (ngoài hệ thống), bo góc 999
-          - Rectangle "Value", vị trí 220,354, cỡ 100 x 4, nền #3D6A00 (ngoài hệ thống), bo góc 4
+              - Text "glyph", vị trí 38,195, cỡ 14 x 14, chữ "check", kiểu ngoài hệ thống (14/14, đậm 400), màu #FFFFFF (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest, canvas)
+            - Text "Done", vị trí 54,194, cỡ 28 x 16, chữ "Done", kiểu labelSmall (11/16, đậm 500), màu #FFFFFF (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest, canvas)
+        - Text "Level", vị trí 24,284, cỡ 49 x 16, chữ "Basics · 1", kiểu labelSmall (11/16, đậm 500), màu #3D6A00 (primary, surfaceTint)
+        - Text "Title", vị trí 24,306, cỡ 91 x 20, chữ "Bouncing ball", kiểu titleSmall (14/20, đậm 500), màu #12141A (onBackground, onSurface)
+        - Text "Meta", vị trí 24,332, cỡ 97 x 16, chữ "5 min · 12 frames", kiểu bodySmall (12/16, đậm 400), màu #5F6675 (onSurfaceVariant)
+      - Instance "LessonCard", vị trí 212,176, cỡ 184 x 194, nền #ECEEF1 (surfaceContainer), bo góc 14, xếp dọc, cách nhau 6 (ngoài hệ thống), lề trên/phải/dưới/trái 8 (sm)/8 (sm)/12 (ngoài hệ thống)/8 (sm), căn MIN/MIN
+        - Frame "Thumbnail", vị trí 220,184, cỡ 168 x 94, nền #FFFFFF (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest, canvas), bo góc 8
+          - Rectangle "ground", vị trí 236,257, cỡ 134 x 2, nền #1A1C22 (onCanvas)
+          - Ellipse "ball", vị trí 270,237, cỡ 21 x 21, nền #2F6FE0 (secondary)
+        - Text "Level", vị trí 220,284, cỡ 50 x 16, chữ "Basics · 2", kiểu labelSmall (11/16, đậm 500), màu #3D6A00 (primary, surfaceTint)
+        - Text "Title", vị trí 220,306, cỡ 130 x 20, chữ "Squash and stretch", kiểu titleSmall (14/20, đậm 500), màu #12141A (onBackground, onSurface)
+        - Text "Meta", vị trí 220,332, cỡ 97 x 16, chữ "6 min · 16 frames", kiểu bodySmall (12/16, đậm 400), màu #5F6675 (onSurfaceVariant)
+        - Instance "Progress", vị trí 220,354, cỡ 168 x 4, nền #E3E6EA (surfaceVariant, surfaceContainerHigh), bo góc 999
+          - Rectangle "Value", vị trí 220,354, cỡ 100 x 4, nền #3D6A00 (primary, surfaceTint), bo góc 4
     - Frame "SectionHeader", vị trí 16,382, cỡ 379 x 28, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/CENTER
-      - Text "Motion", vị trí 16,382, cỡ 76 x 28, chữ "Motion", kiểu ngoài hệ thống (22/28, đậm 500), màu #12141A (ngoài hệ thống)
+      - Text "Motion", vị trí 16,382, cỡ 76 x 28, chữ "Motion", kiểu titleLarge (22/28, đậm 500), màu #12141A (onBackground, onSurface)
       - Frame "spacer", vị trí 92,396, cỡ 263 x 1, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
-      - Text "0 of 4", vị trí 355,386, cỡ 40 x 20, chữ "0 of 4", kiểu ngoài hệ thống (14/20, đậm 600), màu #5F6675 (ngoài hệ thống)
+      - Text "0 of 4", vị trí 355,386, cỡ 40 x 20, chữ "0 of 4", kiểu labelLarge (14/20, đậm 600), màu #5F6675 (onSurfaceVariant)
     - Frame "Motion row", vị trí 16,422, cỡ 379 x 184, xếp ngang, cách nhau 12 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
-      - Instance "LessonCard", vị trí 16,422, cỡ 184 x 184, nền #ECEEF1 (ngoài hệ thống), bo góc 14, xếp dọc, cách nhau 6 (ngoài hệ thống), lề trên/phải/dưới/trái 8 (sm)/8 (sm)/12 (ngoài hệ thống)/8 (sm), căn MIN/MIN
-        - Frame "Thumbnail", vị trí 24,430, cỡ 168 x 94, nền #FFFFFF (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest), bo góc 8
-          - Rectangle "ground", vị trí 41,503, cỡ 134 x 2, nền #1A1C22 (ngoài hệ thống)
-          - Ellipse "ball", vị trí 74,483, cỡ 21 x 21, nền #2F6FE0 (ngoài hệ thống)
-        - Text "Level", vị trí 24,530, cỡ 51 x 16, chữ "Motion · 1", kiểu labelSmall (11/16, đậm 500), màu #3D6A00 (ngoài hệ thống)
-        - Text "Title", vị trí 24,552, cỡ 111 x 20, chữ "Stick figure walk", kiểu titleSmall, labelLarge (14/20, đậm 500), màu #12141A (ngoài hệ thống)
-        - Text "Meta", vị trí 24,578, cỡ 99 x 16, chữ "8 min · 24 frames", kiểu bodySmall (12/16, đậm 400), màu #5F6675 (ngoài hệ thống)
-      - Instance "LessonCard", vị trí 212,422, cỡ 184 x 184, nền #ECEEF1 (ngoài hệ thống), bo góc 14, xếp dọc, cách nhau 6 (ngoài hệ thống), lề trên/phải/dưới/trái 8 (sm)/8 (sm)/12 (ngoài hệ thống)/8 (sm), căn MIN/MIN
-        - Frame "Thumbnail", vị trí 220,430, cỡ 168 x 94, nền #FFFFFF (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest), bo góc 8
-          - Rectangle "ground", vị trí 236,503, cỡ 134 x 2, nền #1A1C22 (ngoài hệ thống)
-          - Ellipse "ball", vị trí 270,483, cỡ 21 x 21, nền #2F6FE0 (ngoài hệ thống)
-        - Text "Level", vị trí 220,530, cỡ 53 x 16, chữ "Motion · 2", kiểu labelSmall (11/16, đậm 500), màu #3D6A00 (ngoài hệ thống)
-        - Text "Title", vị trí 220,552, cỡ 93 x 20, chữ "Blink and look", kiểu titleSmall, labelLarge (14/20, đậm 500), màu #12141A (ngoài hệ thống)
-        - Text "Meta", vị trí 220,578, cỡ 98 x 16, chữ "4 min · 10 frames", kiểu bodySmall (12/16, đậm 400), màu #5F6675 (ngoài hệ thống)
-  - Instance "lessons_bottom (NativeAdBar)", vị trí 0,731, cỡ 411 x 72, nền #F1F2F5 (ngoài hệ thống), viền #D2D6DC (ngoài hệ thống), dày 1.0, xếp ngang, cách nhau 12 (ngoài hệ thống), lề trên/phải/dưới/trái 10 (ngoài hệ thống)/16 (md)/10 (ngoài hệ thống)/16 (md), căn MIN/CENTER
-    - Rectangle "Ad media", vị trí 16,744, cỡ 48 x 48, nền #D9DDE2 (ngoài hệ thống), bo góc 8
+      - Instance "LessonCard", vị trí 16,422, cỡ 184 x 184, nền #ECEEF1 (surfaceContainer), bo góc 14, xếp dọc, cách nhau 6 (ngoài hệ thống), lề trên/phải/dưới/trái 8 (sm)/8 (sm)/12 (ngoài hệ thống)/8 (sm), căn MIN/MIN
+        - Frame "Thumbnail", vị trí 24,430, cỡ 168 x 94, nền #FFFFFF (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest, canvas), bo góc 8
+          - Rectangle "ground", vị trí 41,503, cỡ 134 x 2, nền #1A1C22 (onCanvas)
+          - Ellipse "ball", vị trí 74,483, cỡ 21 x 21, nền #2F6FE0 (secondary)
+        - Text "Level", vị trí 24,530, cỡ 51 x 16, chữ "Motion · 1", kiểu labelSmall (11/16, đậm 500), màu #3D6A00 (primary, surfaceTint)
+        - Text "Title", vị trí 24,552, cỡ 111 x 20, chữ "Stick figure walk", kiểu titleSmall (14/20, đậm 500), màu #12141A (onBackground, onSurface)
+        - Text "Meta", vị trí 24,578, cỡ 99 x 16, chữ "8 min · 24 frames", kiểu bodySmall (12/16, đậm 400), màu #5F6675 (onSurfaceVariant)
+      - Instance "LessonCard", vị trí 212,422, cỡ 184 x 184, nền #ECEEF1 (surfaceContainer), bo góc 14, xếp dọc, cách nhau 6 (ngoài hệ thống), lề trên/phải/dưới/trái 8 (sm)/8 (sm)/12 (ngoài hệ thống)/8 (sm), căn MIN/MIN
+        - Frame "Thumbnail", vị trí 220,430, cỡ 168 x 94, nền #FFFFFF (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest, canvas), bo góc 8
+          - Rectangle "ground", vị trí 236,503, cỡ 134 x 2, nền #1A1C22 (onCanvas)
+          - Ellipse "ball", vị trí 270,483, cỡ 21 x 21, nền #2F6FE0 (secondary)
+        - Text "Level", vị trí 220,530, cỡ 53 x 16, chữ "Motion · 2", kiểu labelSmall (11/16, đậm 500), màu #3D6A00 (primary, surfaceTint)
+        - Text "Title", vị trí 220,552, cỡ 93 x 20, chữ "Blink and look", kiểu titleSmall (14/20, đậm 500), màu #12141A (onBackground, onSurface)
+        - Text "Meta", vị trí 220,578, cỡ 98 x 16, chữ "4 min · 10 frames", kiểu bodySmall (12/16, đậm 400), màu #5F6675 (onSurfaceVariant)
+  - Instance "lessons_bottom (NativeAdBar)", vị trí 0,731, cỡ 411 x 72, nền #F1F2F5 (surfaceContainerLow), viền #D2D6DC (outlineVariant), dày 1.0, xếp ngang, cách nhau 12 (ngoài hệ thống), lề trên/phải/dưới/trái 10 (ngoài hệ thống)/16 (md)/10 (ngoài hệ thống)/16 (md), căn MIN/CENTER
+    - Rectangle "Ad media", vị trí 16,744, cỡ 48 x 48, nền #D9DDE2 (surfaceContainerHighest), bo góc 8
     - Frame "Text", vị trí 76,748, cỡ 236 x 38, xếp dọc, cách nhau 2 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
       - Frame "Headline row", vị trí 76,748, cỡ 176 x 20, xếp ngang, cách nhau 6 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/CENTER
-        - Frame "Ad badge", vị trí 76,748, cỡ 27 x 20, nền #D9DDE2 (ngoài hệ thống), bo góc 4, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 2 (ngoài hệ thống)/6 (ngoài hệ thống)/2 (ngoài hệ thống)/6 (ngoài hệ thống), căn MIN/MIN
-          - Text "Ad", vị trí 82,750, cỡ 15 x 16, chữ "Ad", kiểu labelSmall (11/16, đậm 500), màu #5F6675 (ngoài hệ thống)
-        - Text "Headline", vị trí 109,748, cỡ 143 x 20, chữ "Sponsored app name", kiểu titleSmall, labelLarge (14/20, đậm 500), màu #12141A (ngoài hệ thống)
-      - Text "Body", vị trí 76,770, cỡ 236 x 16, chữ "Native ad, bottom bar", kiểu bodySmall (12/16, đậm 400), màu #5F6675 (ngoài hệ thống)
-    - Frame "Ad CTA", vị trí 324,750, cỡ 71 x 36, viền #2F6FE0 (ngoài hệ thống), dày 1.0, bo góc 6, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/14 (ngoài hệ thống)/0/14 (ngoài hệ thống), căn CENTER/CENTER
-      - Text "Install", vị trí 339,758, cỡ 41 x 20, chữ "Install", kiểu ngoài hệ thống (14/20, đậm 600), màu #2F6FE0 (ngoài hệ thống)
-  - Frame "BottomNav", vị trí 0,803, cỡ 411 x 88, nền #ECEEF1 (ngoài hệ thống), xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 4 (xs)/0/12 (ngoài hệ thống)/0, căn MIN/MIN
+        - Frame "Ad badge", vị trí 76,748, cỡ 27 x 20, nền #D9DDE2 (surfaceContainerHighest), bo góc 4, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 2 (ngoài hệ thống)/6 (ngoài hệ thống)/2 (ngoài hệ thống)/6 (ngoài hệ thống), căn MIN/MIN
+          - Text "Ad", vị trí 82,750, cỡ 15 x 16, chữ "Ad", kiểu labelSmall (11/16, đậm 500), màu #5F6675 (onSurfaceVariant)
+        - Text "Headline", vị trí 109,748, cỡ 143 x 20, chữ "Sponsored app name", kiểu titleSmall (14/20, đậm 500), màu #12141A (onBackground, onSurface)
+      - Text "Body", vị trí 76,770, cỡ 236 x 16, chữ "Native ad, bottom bar", kiểu bodySmall (12/16, đậm 400), màu #5F6675 (onSurfaceVariant)
+    - Frame "Ad CTA", vị trí 324,750, cỡ 71 x 36, viền #2F6FE0 (secondary), dày 1.0, bo góc 6, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/14 (ngoài hệ thống)/0/14 (ngoài hệ thống), căn CENTER/CENTER
+      - Text "Install", vị trí 339,758, cỡ 41 x 20, chữ "Install", kiểu labelLarge (14/20, đậm 600), màu #2F6FE0 (secondary)
+  - Frame "BottomNav", vị trí 0,803, cỡ 411 x 88, nền #ECEEF1 (surfaceContainer), xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 4 (xs)/0/12 (ngoài hệ thống)/0, căn MIN/MIN
     - Instance "NavItem", vị trí 0,807, cỡ 206 x 72, xếp dọc, cách nhau 4 (xs), lề trên/phải/dưới/trái 10 (ngoài hệ thống)/0/10 (ngoài hệ thống)/0, căn MIN/CENTER
       - Frame "Indicator", vị trí 71,817, cỡ 64 x 32, bo góc 999, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 4 (xs)/20 (ngoài hệ thống)/4 (xs)/20 (ngoài hệ thống), căn MIN/MIN
         - Instance "Glyph", vị trí 91,821, cỡ 24 x 24
-          - Text "glyph", vị trí 91,821, cỡ 24 x 24, chữ "animation", kiểu ngoài hệ thống (24/24, đậm 400), màu #12141A (ngoài hệ thống)
-      - Text "Label", vị trí 79,853, cỡ 47 x 16, chữ "Projects", kiểu labelMedium (12/16, đậm 500), màu #5F6675 (ngoài hệ thống)
+          - Text "glyph", vị trí 91,821, cỡ 24 x 24, chữ "animation", kiểu ngoài hệ thống (24/24, đậm 400), màu #12141A (onBackground, onSurface)
+      - Text "Label", vị trí 79,853, cỡ 47 x 16, chữ "Projects", kiểu labelMedium (12/16, đậm 500), màu #5F6675 (onSurfaceVariant)
     - Instance "NavItem", vị trí 206,807, cỡ 206 x 72, xếp dọc, cách nhau 4 (xs), lề trên/phải/dưới/trái 10 (ngoài hệ thống)/0/10 (ngoài hệ thống)/0, căn MIN/CENTER
-      - Frame "Indicator", vị trí 276,817, cỡ 64 x 32, nền #DDF5B8 (ngoài hệ thống), bo góc 999, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 4 (xs)/20 (ngoài hệ thống)/4 (xs)/20 (ngoài hệ thống), căn MIN/MIN
+      - Frame "Indicator", vị trí 276,817, cỡ 64 x 32, nền #DDF5B8 (primaryContainer), bo góc 999, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 4 (xs)/20 (ngoài hệ thống)/4 (xs)/20 (ngoài hệ thống), căn MIN/MIN
         - Instance "Glyph", vị trí 296,821, cỡ 24 x 24
-          - Text "glyph", vị trí 296,821, cỡ 24 x 24, chữ "school", kiểu ngoài hệ thống (24/24, đậm 400), màu #1C2C05 (ngoài hệ thống)
-      - Text "Label", vị trí 284,853, cỡ 48 x 16, chữ "Lessons", kiểu labelMedium (12/16, đậm 500), màu #12141A (ngoài hệ thống)
+          - Text "glyph", vị trí 296,821, cỡ 24 x 24, chữ "school", kiểu ngoài hệ thống (24/24, đậm 400), màu #1C2C05 (onPrimaryContainer)
+      - Text "Label", vị trí 284,853, cỡ 48 x 16, chữ "Lessons", kiểu labelMedium (12/16, đậm 500), màu #12141A (onBackground, onSurface)
   - Rectangle "Scrim", vị trí 0,0, cỡ 411 x 891, nền #000000 (ngoài hệ thống), độ mờ của lớp 0.55
-  - Instance "Dialog", vị trí 42,394, cỡ 328 x 104, nền #E3E6EA (ngoài hệ thống), bo góc 20, xếp dọc, cách nhau 16 (md), lề trên/phải/dưới/trái 24 (lg)/24 (lg)/16 (md)/24 (lg), căn MIN/MIN
-    - Text "Title", vị trí 66,418, cỡ 280 x 28, chữ "Opening lesson…", kiểu ngoài hệ thống (22/28, đậm 500), màu #12141A (ngoài hệ thống)
-    - Text "Body", vị trí 66,462, cỡ 280 x 20, chữ "Bouncing ball", kiểu bodyMedium (14/20, đậm 400), màu #5F6675 (ngoài hệ thống)
-  - Ellipse "Spinner", vị trí 306,418, cỡ 40 x 40, viền #3D6A00 (ngoài hệ thống), dày 4.0
+  - Instance "Dialog", vị trí 42,394, cỡ 328 x 104, nền #E3E6EA (surfaceVariant, surfaceContainerHigh), bo góc 20, xếp dọc, cách nhau 16 (md), lề trên/phải/dưới/trái 24 (lg)/24 (lg)/16 (md)/24 (lg), căn MIN/MIN
+    - Text "Title", vị trí 66,418, cỡ 280 x 28, chữ "Opening lesson…", kiểu titleLarge (22/28, đậm 500), màu #12141A (onBackground, onSurface)
+    - Text "Body", vị trí 66,462, cỡ 280 x 20, chữ "Bouncing ball", kiểu bodyMedium (14/20, đậm 400), màu #5F6675 (onSurfaceVariant)
+  - Ellipse "Spinner", vị trí 306,418, cỡ 40 x 40, viền #3D6A00 (primary, surfaceTint), dày 4.0
 
 ## 4. Code tham khảo
 

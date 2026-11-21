@@ -5,9 +5,13 @@ import androidx.compose.material3.Typography
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.TextStyle
+import com.vgl.draw.animation.core.designsystem.theme.AppColors
 import com.vgl.draw.animation.core.designsystem.theme.AppTypography
+import com.vgl.draw.animation.core.designsystem.theme.DarkAppColors
 import com.vgl.draw.animation.core.designsystem.theme.DarkColors
+import com.vgl.draw.animation.core.designsystem.theme.LightAppColors
 import com.vgl.draw.animation.core.designsystem.theme.LightColors
+import com.vgl.draw.animation.core.designsystem.theme.SpaceGroteskFamily
 import com.vgl.draw.animation.core.designsystem.theme.Spacing
 import java.io.File
 import org.junit.Assert.assertEquals
@@ -57,8 +61,8 @@ internal fun tokensJson(): String = buildString {
     appendLine("{")
     appendLine("  \"fontFamily\": \"Inter\",")
     appendLine("  \"color\": {")
-    appendLine("    \"light\": ${colors(LightColors)},")
-    appendLine("    \"dark\": ${colors(DarkColors)}")
+    appendLine("    \"light\": ${colors(LightColors, LightAppColors)},")
+    appendLine("    \"dark\": ${colors(DarkColors, DarkAppColors)}")
     appendLine("  },")
     val styles = typographyStyles(AppTypography)
     appendLine("  \"typography\": {")
@@ -72,7 +76,8 @@ internal fun tokensJson(): String = buildString {
     appendLine("}")
 }
 
-private fun colors(scheme: ColorScheme): String = colorRoles(scheme)
+// Material 3 roles first, then the app roles without a Material 3 slot (AppColors), so designers find both.
+private fun colors(scheme: ColorScheme, app: AppColors): String = (colorRoles(scheme) + appColorRoles(app))
     .joinToString(prefix = "{", postfix = "}", separator = ", ") { (name, color) -> "\"$name\": \"${hex(color)}\"" }
 
 internal fun colorRoles(scheme: ColorScheme): List<Pair<String, Color>> = listOf(
@@ -113,6 +118,13 @@ internal fun colorRoles(scheme: ColorScheme): List<Pair<String, Color>> = listOf
     "surfaceContainerHighest" to scheme.surfaceContainerHighest,
 )
 
+internal fun appColorRoles(app: AppColors): List<Pair<String, Color>> = listOf(
+    "canvas" to app.canvas,
+    "onCanvas" to app.onCanvas,
+    "onionPrevious" to app.onionPrevious,
+    "onionNext" to app.onionNext,
+)
+
 private fun hex(color: Color): String = "#%06X".format(color.toArgb() and 0xFFFFFF)
 
 private fun typographyStyles(type: Typography): List<Pair<String, TextStyle>> = listOf(
@@ -134,5 +146,6 @@ private fun typographyStyles(type: Typography): List<Pair<String, TextStyle>> = 
 )
 
 private fun textStyle(style: TextStyle): String =
-    "{\"fontSizeSp\": ${style.fontSize.value}, \"lineHeightSp\": ${style.lineHeight.value}, " +
+    "{\"fontFamily\": \"${if (style.fontFamily == SpaceGroteskFamily) "Space Grotesk" else "Inter"}\", " +
+        "\"fontSizeSp\": ${style.fontSize.value}, \"lineHeightSp\": ${style.lineHeight.value}, " +
         "\"fontWeight\": ${style.fontWeight?.weight}, \"letterSpacingSp\": ${style.letterSpacing.value}}"

@@ -15,8 +15,8 @@ approved_at: 2026-11-20
 Quy trình: docs/ops/design-workflow.md. Quyết định: ADR-0008, ADR-0020, ADR-0021.
 screens/ và context/ do scripts/figma-export.py sinh, không sửa tay. Thiết kế đổi thì chạy lại:
   scripts/figma-export.py "https://www.figma.com/design/uDdqi9ojRvIy4689FvCh5O/Frameloop?node-id=26-934" projects
-Màu và chữ trong context/ phần lớn ghi "ngoài hệ thống" vì :core:designsystem chưa đổi sang
-thương hiệu Studio Night; plan đổi thương hiệu (docs/ops/new-app.md, mục 3) đưa các giá trị đó vào tokens.json.
+Màu và chữ trong context/ đối chiếu với tokens.json của Studio Night (:core:designsystem đổi thương hiệu ngày
+2026-11-22). Giá trị còn ghi "ngoài hệ thống" là màu nội dung (tranh mẫu, ô màu, quảng cáo) hay giá trị riêng của màn.
 Phiên tự chạy chỉ đọc thư mục này, không mở được Figma.
 -->
 
