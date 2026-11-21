@@ -19,7 +19,7 @@ confirmed:
 - **Đo kết quả bằng gì:**
   - Từ lần mở đầu tới nét vẽ đầu tiên không quá 7 thao tác; phần của feature này là 2 thao tác ("New animation", "Create").
   - Số dự án được tạo và được mở lại mỗi ngày (sự kiện ở mục 6; lần mở lại do màn vẽ ghi, spec editor câu 5).
-  - Số lần sao lưu và khôi phục thành công (sự kiện ở mục 6); không đo tỉ lệ khôi phục thành công, vì sự kiện chỉ ghi lần thành công (câu hỏi 17).
+  - Số lần sao lưu và khôi phục thành công (sự kiện ở mục 6); không đo tỷ lệ khôi phục thành công, vì sự kiện chỉ ghi lần thành công (câu hỏi 17).
 
 ## 2. Phạm vi
 
@@ -74,10 +74,10 @@ Người dùng đã có dự án.
 Tiêu chí chấp nhận:
 
 - [ ] Khi có ít nhất một dự án thì màn hiện nút "New animation" ở đầu, tiêu đề "Your projects" với nhãn "Recent", và lưới thẻ dự án hai cột, đúng thiết kế màn danh sách.
-- [ ] Khi xem một thẻ thì thẻ có ảnh thu nhỏ của dự án, tên dự án và dòng "<số khung> frames · <tốc độ> fps" (ví dụ "48 frames · 12 fps").
+- [ ] Khi xem một thẻ thì thẻ có ảnh thu nhỏ của dự án (khung đầu tiên, gộp mọi layer đang hiện, trên nền của dự án; câu hỏi 20), tên dự án và dòng "<số khung> frames · <tốc độ> fps" (ví dụ "48 frames · 12 fps").
 - [ ] Khi danh sách có nhiều dự án thì dự án sửa gần nhất đứng đầu; dự án vừa tạo, vừa nhân bản hay vừa khôi phục đứng đầu.
 - [ ] Khi chạm một thẻ thì dự án đó mở trong màn vẽ.
-- [ ] Khi cờ của màn vẽ tắt mà người dùng dùng bất kỳ lối nào mở màn vẽ (chạm một thẻ, bấm "Open" trong menu dự án, bấm "Create") thì app hiện thông báo ngắn và ở lại màn đang đứng, không mở màn vẽ; bấm "Create" lúc đó không tạo dự án (spec editor câu 20).
+- [ ] Khi cờ của màn vẽ tắt mà người dùng dùng bất kỳ lối nào mở màn vẽ (chạm một thẻ, bấm "Open" trong menu dự án, bấm "Create") thì app hiện thông báo ngắn "Coming soon" và ở lại màn đang đứng, không mở màn vẽ; bấm "Create" lúc đó không tạo dự án (spec editor câu 20).
 - [ ] Khi từ màn vẽ quay về danh sách thì thẻ của dự án đó đứng đầu, ảnh thu nhỏ và số khung đúng với nội dung vừa vẽ.
 - [ ] Khi danh sách dài hơn màn thì cuộn được; thanh trên và thanh điều hướng giữ nguyên chỗ.
 - [ ] Khi tên dự án dài hơn bề rộng thẻ thì tên cắt bằng dấu "…" trên một dòng, không đè lên dòng số khung.
@@ -85,7 +85,8 @@ Tiêu chí chấp nhận:
 Trường hợp đặc biệt:
 
 - [ ] Khi có 100 dự án thì danh sách mở ra và cuộn không giật trên máy tầm trung.
-- [ ] Khi một dự án không đọc được (dữ liệu hỏng) thì các dự án khác vẫn hiện và mở được bình thường (cách hiện thẻ hỏng: câu hỏi 9).
+- [ ] Khi một dự án không đọc được (dữ liệu hỏng) thì các dự án khác vẫn hiện và mở được bình thường .
+- [ ] Khi một dự án không đọc được thì thẻ của nó vẫn hiện với tên (nếu đọc được) và ảnh thu nhỏ trống; chạm thẻ thì app báo không mở được; menu của thẻ chỉ còn "Delete"; app không tự xóa dự án (câu hỏi 9).
 
 ### KB-3. Tạo dự án mới
 
@@ -93,7 +94,7 @@ Người dùng bấm "New animation" ở danh sách.
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi màn Tạo dự án mở thì có tiêu đề "New animation", nút đóng, ô "Name", nhóm "Canvas" (9:16, 16:9, 1:1), nhóm "Size" (720p, 1080p), nhóm "Frame rate" (6, 8, 12 fps, 15, 24, 30), nhóm "Background" (trắng, xám đậm, xanh, "Photo") và nút "Create" ghim ở đáy, đúng thiết kế màn Tạo dự án.
+- [ ] Khi màn Tạo dự án mở thì có tiêu đề "New animation", nút đóng, ô "Name", nhóm "Canvas" (9:16, 16:9, 1:1), nhóm "Size" (720p, 1080p), nhóm "Frame rate" (6, 8, 12, 15, 24, 30 fps), nhóm "Background" (trắng, xám đậm, xanh, "Photo") và nút "Create" ghim ở đáy, đúng thiết kế màn Tạo dự án.
 - [ ] Khi màn mở thì mỗi nhóm đã có sẵn một lựa chọn: khung hình và tốc độ khung lấy theo "Default canvas" và "Default frame rate" của màn Cài đặt (chưa đổi thì 9:16 và 12 khung/giây); độ phân giải 1080p; nền trắng; tên "My animation <số>"; số là số dự án đã từng tạo cộng một, không giảm khi xóa (câu hỏi 4).
 - [ ] Khi bấm "Create" mà không đổi gì thì dự án được tạo với các giá trị mặc định trên và mở ngay trong màn vẽ. Từ danh sách trống tới màn vẽ là đúng 2 lần chạm.
 - [ ] Khi chọn một lựa chọn khác trong một nhóm thì lựa chọn đó sáng lên, lựa chọn cũ của nhóm tắt; mỗi nhóm luôn có đúng một lựa chọn.
@@ -128,7 +129,7 @@ Trường hợp đặc biệt:
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi bấm "Rename" thì hộp thoại đổi tên mở ra, ô nhập có sẵn tên hiện tại và bàn phím hiện lên.
+- [ ] Khi bấm "Rename" thì hộp thoại đổi tên mở ra với tiêu đề "Rename", nút "Save" và "Cancel", ô nhập có sẵn tên hiện tại và bàn phím hiện lên (câu hỏi 2).
 - [ ] Khi nhập tên mới và xác nhận thì thẻ hiện tên mới ngay; mở lại app vẫn giữ tên mới.
 - [ ] Khi hủy thì tên giữ nguyên.
 
@@ -153,7 +154,7 @@ Trường hợp đặc biệt:
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi bấm "Delete" thì app hỏi xác nhận bằng hộp thoại trước khi xóa; đã xóa thì không hoàn tác được (câu hỏi 7).
+- [ ] Khi bấm "Delete" thì app hỏi xác nhận bằng hộp thoại "Delete “<tên>”?", lời "This can't be undone.", nút "Delete" và "Cancel" trước khi xóa; đã xóa thì không hoàn tác được (câu hỏi 7).
 - [ ] Khi xác nhận thì thẻ biến mất khỏi danh sách và dữ liệu của dự án bị xóa khỏi máy; mở lại app không thấy lại dự án.
 - [ ] Khi hủy thì dự án giữ nguyên.
 - [ ] Khi xóa dự án cuối cùng thì màn về trạng thái trống (KB-1).
@@ -171,7 +172,7 @@ Tiêu chí chấp nhận:
 
 Trường hợp đặc biệt:
 
-- [ ] Khi ghi file thất bại (hết chỗ, mất quyền ghi vào nơi đã chọn) thì app báo sao lưu không thành công bằng lời dễ hiểu; dự án trên máy không bị ảnh hưởng.
+- [ ] Khi ghi file thất bại (hết chỗ, mất quyền ghi vào nơi đã chọn) thì app báo bằng thông báo ngắn "Couldn't save the backup. Try again." có nút "Retry" (câu hỏi 2); dự án trên máy không bị ảnh hưởng.
 - [ ] Khi dự án lớn thì có dấu hiệu đang ghi tới khi xong; người dùng vẫn ở danh sách.
 
 ### KB-9. Khôi phục một dự án từ file
@@ -182,6 +183,7 @@ Tiêu chí chấp nhận:
 
 - [ ] Khi bấm nút nhập file trên thanh trên thì bộ chọn file của hệ thống mở ra để chọn file; người dùng chọn được file trên máy hay trên Google Drive; app không hỏi quyền nào.
 - [ ] Khi chọn một file sao lưu hợp lệ thì hộp thoại đang khôi phục hiện ra với tiêu đề "Restoring “<tên dự án>”", lời "Keep the app open. This takes a few seconds.", thanh tiến độ, dòng "<số khung đã xong> of <tổng số khung> frames" và phần trăm, nút "Cancel", đúng thiết kế hộp thoại đang khôi phục.
+- [ ] Khi file chứa nhiều dự án (sao lưu tất cả từ Cài đặt) thì hộp thoại ghi số dự án thay cho tên một dự án, tiến độ tính trên tổng số khung của mọi dự án trong file; xong thì mọi dự án khôi phục đứng đầu danh sách (câu hỏi 19).
 - [ ] Khi khôi phục xong thì hộp thoại đóng, dự án mới đứng đầu danh sách và mở được trong màn vẽ, giống hệt dự án lúc sao lưu.
 - [ ] Khi bấm "Cancel" thì việc khôi phục dừng, hộp thoại đóng, về danh sách như trước khi khôi phục; không có dự án dở nào trong danh sách hay trên máy.
 - [ ] Khi đóng bộ chọn file mà không chọn thì không có gì xảy ra.
@@ -193,7 +195,7 @@ Trường hợp đặc biệt:
 - [ ] Khi hộp thoại đang khôi phục mở thì chạm ra ngoài hộp thoại không đóng nó; nút quay lại của máy làm như "Cancel" (câu hỏi 11).
 - [ ] Khi màn hình thấp 360 × 640 thì nội dung hộp thoại cuộn được, nút "Cancel" luôn tới được (câu hỏi 13).
 - [ ] Khi người dùng rời app trong lúc khôi phục rồi quay lại thì khôi phục vẫn tiếp tục, hoặc nếu app đã bị hệ thống đóng thì không còn dự án dở (câu hỏi 11).
-- [ ] Khi máy không đủ chỗ trống thì việc khôi phục dừng, không để lại dự án dở, và app báo lỗi (câu hỏi 12).
+- [ ] Khi máy không đủ chỗ trống thì việc khôi phục dừng, không để lại dự án dở, và hộp thoại lỗi ghi "Not enough space on your phone. Free up some space and try again." (câu hỏi 12).
 
 ### KB-10. File không khôi phục được
 
@@ -206,7 +208,7 @@ Tiêu chí chấp nhận:
 
 Trường hợp đặc biệt:
 
-- [ ] Khi file được tạo bởi một bản app mới hơn mà bản đang chạy không đọc được thì app báo lỗi, không tạo dự án dở (lời báo: câu hỏi 12).
+- [ ] Khi file được tạo bởi một bản app mới hơn mà bản đang chạy không đọc được thì app báo lỗi, không tạo dự án dở; hộp thoại lỗi ghi "This backup was made with a newer version of Frameloop. Update the app and try again." (câu hỏi 12).
 
 ### KB-11. Mở Cài đặt
 
@@ -234,6 +236,7 @@ Tiêu chí chấp nhận:
 ## 4. Giao diện
 
 - **Thiết kế:** [design/README.md](design/README.md), dựng trên Figma theo hướng Studio Night, có chế độ sáng và tối. Chữ theo bảng chữ của thiết kế (tiếng Anh, bản đề xuất Q9).
+- **Sửa thiết kế trước khi viết plan:** bỏ ô tỷ lệ 4:5 trên frame màn Tạo dự án (sáng, tối) và xuất lại ảnh, bảng số liệu (câu hỏi 1); không thì screenshot test cùng tên lệch ảnh thiết kế.
 - **Các màn hình:**
 
 | Màn hình | Trạng thái theo thiết kế | Mục đích | Kịch bản liên quan |
@@ -258,7 +261,7 @@ Chép từ bản đề xuất, mục 9.1. Mọi vị trí mặc định tắt, b
 | Vị trí | Định dạng | Màn hình | Khi nào hiển thị | Giới hạn tần suất | Khóa bật tắt |
 | --- | --- | --- | --- | --- | --- |
 | `projects_empty_native` | native medium | Danh sách dự án, trạng thái trống | Dưới hai nút "New animation" và "Try a free lesson", cách ít nhất 24 dp; mọi lúc danh sách trống, kể cả sau khi xóa hết dự án và trước nét vẽ đầu tiên. Nhóm A | Không | `is_show_projects_empty_native` |
-| `projects_bottom` | thanh đáy native nhỏ | Danh sách dự án | Trên thanh điều hướng (câu hỏi 14 về trạng thái trống). Nhóm A | Không | `is_show_projects_bottom` |
+| `projects_bottom` | thanh đáy native nhỏ | Danh sách dự án | Trên thanh điều hướng, chỉ ở trạng thái có dự án; trạng thái trống không có thanh đáy (câu hỏi 14). Nhóm A | Không | `is_show_projects_bottom` |
 | `projects_grid` | native ô lưới | Danh sách dự án, trạng thái có dự án | Một ô sau mỗi 6 dự án (sau dự án thứ 6, 12, ...); có cả ở bố cục điện thoại gập (câu hỏi 15). Nhóm A | Không | `is_show_projects_grid` |
 | `restore_mrec` | banner MREC | Hộp thoại đang khôi phục | Dưới thanh tiến độ, cách nút "Cancel" ít nhất 24 dp; hộp thoại rộng 348 dp, lề trong 24 dp; chỉ lúc đang khôi phục, không ở hộp thoại lỗi. Nhóm A | Không | `is_show_restore_mrec` |
 | `create_inter` | interstitial | Tạo dự án, khi bấm "Create" | Từ dự án thứ 2 (câu hỏi 16); bài học không tính. Nhóm A | Theo `ads_interval` (30 giây) | `is_show_create_inter` |
@@ -291,8 +294,8 @@ Chỉ các sự kiện của bản đề xuất mục 9.2 thuộc feature này; 
 | Tên sự kiện | Khi nào ghi | Tham số | Dùng để trả lời câu hỏi gì |
 | --- | --- | --- | --- |
 | `project_create` | Dự án được tạo xong ở màn Tạo dự án | `ratio` (9:16, 16:9, 1:1), `size` (720p, 1080p), `fps`, `background` (white, dark, blue, photo), `is_default` (người dùng không đổi lựa chọn nào) | Người dùng tạo bao nhiêu dự án, chọn khung và tốc độ nào, có giữ mặc định không |
-| `backup_export` | Sao lưu ghi file xong (chỉ khi thành công) | Đề xuất: `scope` (`all` từ Cài đặt, `project` từ menu dự án), `project_count` | Bao nhiêu người sao lưu, sao lưu tất cả hay một dự án |
-| `backup_restore` | Khôi phục xong (chỉ khi thành công) | Đề xuất: `scope` (`all` khi bấm "Restore from a file" ở Cài đặt, `project` khi bấm nút nhập file ở danh sách), `project_count` (số dự án đã khôi phục) | Bao nhiêu người khôi phục, từ đâu, bao nhiêu dự án |
+| `backup_export` | Sao lưu ghi file xong (chỉ khi thành công) | `scope` (`all` từ Cài đặt, `project` từ menu dự án), `project_count` | Bao nhiêu người sao lưu, sao lưu tất cả hay một dự án |
+| `backup_restore` | Khôi phục xong (chỉ khi thành công) | `scope` (`all` khi bấm "Restore from a file" ở Cài đặt, `project` khi bấm nút nhập file ở danh sách), `project_count` (số dự án đã khôi phục) | Bao nhiêu người khôi phục, từ đâu, bao nhiêu dự án |
 
 Hai sự kiện sao lưu và khôi phục dùng chung với spec `settings`, cùng tên và tham số. Lần mở một dự án (`project_open`) do màn vẽ ghi (spec editor, mục 6).
 
@@ -306,7 +309,7 @@ Không có.
 
 | Tên cờ | Mặc định | Ý nghĩa |
 | --- | --- | --- |
-| `feature_projects_enabled` | tắt | Bật để mở danh sách dự án và màn Tạo dự án cho người dùng. Bản staging bật sẵn |
+| `feature_projects_enabled` | tắt | Bật để mở danh sách dự án và màn Tạo dự án cho người dùng. Bản staging bật sẵn; bản production bật từ lần phát hành đầu và không tắt sau đó (câu hỏi 18) |
 
 ## 9. Câu hỏi còn mở
 
@@ -359,8 +362,8 @@ Không có.
     - Đề xuất của AI: tính theo số dự án đã từng tạo bằng màn Tạo dự án (không giảm khi xóa, không tính bài học, khôi phục hay nhân bản): lần bấm "Create" đầu tiên trong đời app không có interstitial, các lần sau theo `ads_interval` và luật trước nét vẽ đầu tiên.
     - Trả lời: Đồng ý đề xuất của AI.
 17. **Xác nhận danh sách sự kiện và tham số ở mục 6.** Bản đề xuất mục 9.2 là "đề xuất", chưa có câu trả lời riêng. Đổi tên, nhân bản, xóa dự án không có sự kiện nào trong 9.2. `backup_export`, `backup_restore` dùng chung cho sao lưu, khôi phục một dự án (feature này) và tất cả dự án (spec `settings`); câu này là chỗ trả lời chung cho hai spec (spec settings câu 1 trỏ về đây).
-    - Đề xuất của AI: dùng ba sự kiện `project_create`, `backup_export`, `backup_restore` với tham số ở mục 6; không thêm sự kiện cho đổi tên, nhân bản, xóa ở bản đầu. Theo đề xuất, `project_open` do màn vẽ ghi (spec editor câu 5, chờ trả lời), feature này không ghi. Hai sự kiện sao lưu và khôi phục có `scope` (`all`, `project`) và `project_count`, chỉ ghi khi thành công, vì 9.2 không có sự kiện lỗi.
-    - Phương án khác cho anh chọn: ghi cả lần lỗi và lần hủy bằng thêm tham số `result` (`success`, `fail`, `cancel`; `cancel` chỉ có ở khôi phục), có thể thêm `frame_count`. Phương án này đo được tỉ lệ khôi phục thành công (mục 1 của spec này và của spec settings) nhưng ghi cả lúc thất bại, ngoài những gì 9.2 nêu.
+    - Đề xuất của AI: dùng ba sự kiện `project_create`, `backup_export`, `backup_restore` với tham số ở mục 6; không thêm sự kiện cho đổi tên, nhân bản, xóa ở bản đầu. Theo đề xuất, `project_open` do màn vẽ ghi (spec editor câu 5), feature này không ghi. Hai sự kiện sao lưu và khôi phục có `scope` (`all`, `project`) và `project_count`, chỉ ghi khi thành công, vì 9.2 không có sự kiện lỗi.
+    - Phương án khác cho anh chọn: ghi cả lần lỗi và lần hủy bằng thêm tham số `result` (`success`, `fail`, `cancel`; `cancel` chỉ có ở khôi phục), có thể thêm `frame_count`. Phương án này đo được tỷ lệ khôi phục thành công (mục 1 của spec này và của spec settings) nhưng ghi cả lúc thất bại, ngoài những gì 9.2 nêu.
     - Trả lời: Chỉ ghi khi thành công, theo đề xuất của AI. Duyệt danh sách sự kiện và tham số ở mục 6.
 18. **Cờ `feature_projects_enabled` tắt thì app vào đâu?** Danh sách dự án là màn chính, mọi luồng (màn vẽ, bài học, cài đặt) đi qua nó.
     - Đề xuất của AI: cờ chỉ để giấu feature trong lúc làm; tắt thì app vào màn mẫu có sẵn từ dự án mẫu như hôm nay. Bản staging bật sẵn, bản production bật từ lần phát hành đầu và không tắt sau đó.

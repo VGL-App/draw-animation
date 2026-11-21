@@ -79,7 +79,7 @@ Tiêu chí chấp nhận:
 - [ ] Khi người dùng xem hết quảng cáo và được thưởng thì cả ba tùy chọn mở cho lần xuất này của dự án: nhãn "Ad" biến mất, lựa chọn vừa chạm được áp dụng (thẻ được chọn, hay watermark tắt), các tùy chọn còn lại chọn được không cần xem thêm.
 - [ ] Khi đã mở thì đổi qua lại giữa các định dạng, chất lượng, bật tắt watermark nhiều lần không cần xem thêm quảng cáo nào trong lần xuất đó.
 - [ ] Khi người dùng từ chối xem hay đóng quảng cáo trước khi được thưởng thì tùy chọn không mở, lựa chọn trước đó giữ nguyên, watermark vẫn bật.
-- [ ] Khi chưa có quảng cáo để xem thì app làm theo chính sách chung của quảng cáo có thưởng (`allow_after_2`, câu hỏi 14 và spec editor câu 4): tùy chọn chưa mở ở lần thử đầu và mở luôn sau 2 lần thử liên tiếp không có quảng cáo.
+- [ ] Khi chưa có quảng cáo để xem thì app làm theo chính sách chung của quảng cáo có thưởng (câu hỏi 14, spec editor câu 4): tùy chọn chưa mở ở lần thử đầu và mở luôn sau 2 lần thử liên tiếp không có quảng cáo.
 - [ ] Khi quảng cáo có thưởng của màn Xuất đang tắt từ xa thì ba tùy chọn chọn được ngay, không hỏi xem quảng cáo, không có nhãn "Ad".
 - [ ] Khi tùy chọn đã mở thì phạm vi "lần xuất đó" giữ trong suốt một lần mở màn Xuất của dự án: thử lại sau lỗi, hủy rồi xuất lại, dừng vì rời app (KB-7) đều không cần xem lại; rời màn Xuất thì hết, lần mở sau cần xem lại (câu hỏi 2).
 
@@ -87,7 +87,7 @@ Tiêu chí chấp nhận:
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi bấm nút xuất thì màn chuyển sang trạng thái đang xuất: tiêu đề "Exporting", ảnh khung đang làm, dòng "Making your video…", thanh tiến độ, "Frame <đã làm> of <tổng số>" bên trái, "<phần trăm>% · about <số> s left" bên phải, nút "Cancel".
+- [ ] Khi bấm nút xuất thì màn chuyển sang trạng thái đang xuất: tiêu đề "Exporting", ảnh khung đang làm, dòng "Making your video…" (GIF: "Making your GIF…"; chuỗi PNG: "Making your images…"; câu hỏi 6), thanh tiến độ, "Frame <đã làm> of <tổng số>" bên trái, "<phần trăm>% · about <số> s left" bên phải, nút "Cancel".
 - [ ] Khi xuất thì phần trăm bằng số khung đã làm chia tổng số khung, làm tròn xuống; ví dụ khung 30 của 48 hiện "62%". Thanh tiến độ và phần trăm không bao giờ lùi.
 - [ ] Khi bấm "Cancel" thì việc xuất dừng, không file nào được lưu vào thư viện, không để lại file dở, và màn quay về trạng thái chọn tùy chọn với lựa chọn cũ.
 - [ ] Khi bấm nút quay lại của hệ thống lúc đang xuất thì như bấm "Cancel": dừng ngay, không hỏi xác nhận (câu hỏi 4).
@@ -101,6 +101,7 @@ Tiêu chí chấp nhận:
 Tiêu chí chấp nhận:
 
 - [ ] Khi xuất xong thì file tự lưu vào thư viện máy, không cần bấm thêm; màn chuyển sang trạng thái xong: ảnh xem trước là ảnh tĩnh khung đầu (câu hỏi 10), dấu đã xong, "Saved to Gallery", dòng "<đường dẫn> · <dung lượng>" (ví dụ "Movies/Frameloop/Bouncing ball.mp4 · 2.4 MB"), nút "Share", "Open in Gallery", "Back to editor".
+- [ ] Khi xuất GIF thì file lưu ở "Pictures/Frameloop/"; khi xuất chuỗi PNG thì các ảnh "<tên dự án>_001.png"... lưu trong "Pictures/Frameloop/<tên dự án>/", dòng kết quả ghi thư mục và tổng dung lượng, "Share" chia sẻ mọi ảnh cùng lúc, "Open in Gallery" mở ảnh đầu tiên (câu hỏi 5).
 - [ ] Khi mở ứng dụng thư viện ảnh của máy sau khi xuất xong thì thấy file vừa xuất.
 - [ ] Khi bấm "Share" thì bảng chia sẻ của máy mở với file vừa xuất; đóng bảng chia sẻ thì vẫn ở màn xong, không có quảng cáo toàn màn hình.
 - [ ] Khi bấm "Open in Gallery" thì file vừa xuất mở trong ứng dụng xem ảnh, video của máy.
@@ -135,7 +136,7 @@ Tiêu chí chấp nhận:
 - [ ] Khi máy chạy Android 10 trở lên thì app không hỏi quyền nào để xuất và lưu.
 - [ ] Khi máy chạy Android 8 hay 9 và chưa cho quyền lưu thì app hỏi quyền khi người dùng bấm nút xuất, trước khi bắt đầu xuất (câu hỏi 8).
 - [ ] Khi người dùng cho quyền thì việc xuất bắt đầu ngay, không cần bấm lại.
-- [ ] Khi người dùng từ chối thì việc xuất không bắt đầu, màn giữ trạng thái chọn tùy chọn và có thông báo vì sao cần quyền; từ chối hẳn thì thông báo có nút mở trang cài đặt của app (câu hỏi 8).
+- [ ] Khi người dùng từ chối thì việc xuất không bắt đầu, màn giữ trạng thái chọn tùy chọn và có thông báo "Allow storage access to save your animation to the Gallery." với nút "Allow"; từ chối hẳn thì nút đổi thành "Open settings", mở trang cài đặt của app (câu hỏi 6, 8).
 
 ### KB-9. Màn hình thấp, máy gập, chế độ tối
 
@@ -205,10 +206,10 @@ Feature đọc mốc "nét vẽ đầu tiên" mà feature editor lưu trên máy
 
 | Tên sự kiện | Khi nào ghi | Tham số | Dùng để trả lời câu hỏi gì |
 | --- | --- | --- | --- |
-| `export_option_unlock_rewarded` | Khi người dùng được thưởng sau khi xem `export_rw_extra` | Đề xuất: `option` (tùy chọn đã chạm để mở: `no_watermark`, `png_sequence`, `transparent_gif`) | Tùy chọn nào đáng để người dùng xem quảng cáo |
-| `export_start` | Khi việc xuất bắt đầu (cả lần thử lại) | Đề xuất: `format`, `quality`, `watermark` | Định dạng, chất lượng nào được dùng nhiều |
+| `export_option_unlock_rewarded` | Khi người dùng được thưởng sau khi xem `export_rw_extra` | `option` (tùy chọn đã chạm để mở: `no_watermark`, `png_sequence`, `transparent_gif`) | Tùy chọn nào đáng để người dùng xem quảng cáo |
+| `export_start` | Khi việc xuất bắt đầu (cả lần thử lại) | `format`, `quality`, `watermark` | Định dạng, chất lượng nào được dùng nhiều |
 | `export_success` | Khi file đã lưu vào thư viện | `format`, số khung (`frame_count`), thời lượng (`duration_ms`) (bản đề xuất 9.2) | Bao nhiêu lần xuất thành công, hoạt hình dài bao nhiêu |
-| `export_fail` | Khi việc xuất chuyển sang trạng thái lỗi | Đề xuất: `format`, `reason` (`low_storage`, `other`) | Xuất lỗi bao nhiêu, vì đâu |
+| `export_fail` | Khi việc xuất chuyển sang trạng thái lỗi | `format`, `reason` (`low_storage`, `other`) | Xuất lỗi bao nhiêu, vì đâu |
 
 Không ghi tên dự án, nội dung tranh, âm thanh hay đường dẫn file.
 

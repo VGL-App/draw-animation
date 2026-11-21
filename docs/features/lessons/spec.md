@@ -16,7 +16,7 @@ confirmed:
 
 - **Người dùng được gì:** một thư viện 18 bài học chia 4 nhóm. Chạm một bài là vào ngay màn vẽ với một hoạt hình dựng sẵn và chỉ dẫn từng bước, làm xong được hoạt hình đầu tiên trong vài phút.
 - **Vì sao làm bây giờ:** người mới dễ bỏ app khi chưa biết vẽ gì. App mẫu ZenByte giữ người mới bằng bài học mở thẳng vào màn vẽ, nên bài học thuộc nhóm tính năng khác biệt của bản đầu (bản đề xuất mục 4, mục 5, Q12).
-- **Đo kết quả bằng gì:** tỉ lệ người mới hoàn thành bài đầu tiên trong ngày đầu (bản đề xuất mục 4), cùng số lần bắt đầu và hoàn thành mỗi bài.
+- **Đo kết quả bằng gì:** tỷ lệ người mới hoàn thành bài đầu tiên trong ngày đầu (bản đề xuất mục 4), cùng số lần bắt đầu và hoàn thành mỗi bài.
 
 ## 2. Phạm vi
 
@@ -53,10 +53,10 @@ Tiêu chí chấp nhận:
 
 - [ ] Khi chạm mục "Lessons" trên thanh điều hướng thì màn Bài học hiện, mục "Lessons" trên thanh điều hướng ở trạng thái đang chọn, tiêu đề "Lessons", đúng thiết kế.
 - [ ] Khi danh sách đã tải xong thì màn hiện hàng nút lọc ("All" đang chọn, rồi một nút mỗi nhóm theo thứ tự nhóm), rồi từng nhóm: tiêu đề nhóm, số đếm "<số bài đã xong> of <tổng số bài của nhóm>" ở bên phải tiêu đề (câu hỏi 2), và các thẻ bài xếp hai cột.
-- [ ] Khi danh sách có từ 15 đến 20 bài thì mọi bài đều có trong danh sách, mỗi bài đúng một lần, theo thứ tự nhóm rồi thứ tự trong nhóm.
+- [ ] Khi danh sách có 18 bài ở 4 nhóm thì mọi bài đều có trong danh sách, mỗi bài đúng một lần, theo thứ tự nhóm rồi thứ tự trong nhóm.
 - [ ] Khi một thẻ hiện thì thẻ có ảnh nhỏ của bài, dòng nhóm và số thứ tự trong nhóm (ví dụ "Basics · 1"), tên bài (ví dụ "Bouncing ball"), dòng thời lượng ước tính và số khung (ví dụ "5 min · 12 frames").
 - [ ] Khi một bài đã hoàn thành thì thẻ của bài có nhãn "Done" kèm dấu tích ở góc trên trái ảnh nhỏ.
-- [ ] Khi một bài đang làm dở (đã mở, chưa hoàn thành) thì thẻ của bài có thanh tiến độ dưới dòng thời lượng, phần đã đầy tỉ lệ với số bước đã qua trên tổng số bước (câu hỏi 7).
+- [ ] Khi một bài đang làm dở (đã mở, chưa hoàn thành) thì thẻ của bài có thanh tiến độ dưới dòng thời lượng, phần đã đầy tỷ lệ với số bước đã qua trên tổng số bước (câu hỏi 7).
 - [ ] Khi chạm một nút lọc nhóm thì nút đó ở trạng thái đang chọn và danh sách chỉ còn các bài của nhóm đó; chạm "All" thì hiện lại mọi nhóm.
 - [ ] Khi danh sách dài hơn màn hình thì danh sách cuộn được, hàng nút lọc cuộn ngang được khi không đủ chỗ, thanh điều hướng luôn ở đáy.
 - [ ] Khi bấm nút quay lại của hệ thống ở màn Bài học thì app về màn Danh sách dự án (mục đầu của thanh điều hướng).
@@ -127,8 +127,10 @@ Tiêu chí chấp nhận:
 
 Trường hợp đặc biệt:
 
+- [ ] Khi máy gập mở ra thì lưới bài học có 3 cột; màn Hoàn thành bài học giữ nội dung ở giữa, rộng tối đa 411 dp (câu hỏi 16).
 - [ ] Khi máy để màn hình thấp 360 × 640 thì phần nội dung (ảnh xem trước, lời chúc mừng, tóm tắt, quảng cáo nếu có) cuộn được, hai nút "Next lesson" và "Export my animation" luôn thấy đủ ở đáy, không bị che hay cắt.
 - [ ] Khi người dùng xoay máy ở màn Hoàn thành bài học thì màn giữ nguyên, sự kiện hoàn thành không bị ghi thêm.
+- [ ] Khi chạm thẻ một bài đã xong thì bài mở lại từ bước 1 với khung dựng sẵn ban đầu, hoạt hình lần trước không còn, nhãn "Done" giữ nguyên (câu hỏi 8).
 - [ ] Khi làm lại một bài đã xong và hoàn thành lần nữa thì bài vẫn mang nhãn "Done" (câu hỏi 8).
 
 ### KB-6. Sang bài tiếp
@@ -181,7 +183,7 @@ Tiêu chí chấp nhận:
 - [ ] Khi cờ bài học tắt thì thanh điều hướng không có mục "Lessons", màn dự án trống không có nút "Try a free lesson", và không đường nào mở được màn Bài học (câu hỏi 14).
 - [ ] Khi cờ tắt lúc người dùng đang ở màn Bài học hay đang làm bài thì người dùng làm tiếp được tới khi rời màn; lần mở sau không còn lối vào (câu hỏi 14).
 - [ ] Khi cờ bật lại thì bài đã xong và tiến độ bài dở trước đó vẫn còn.
-- [ ] Khi cờ của màn vẽ tắt thì chạm thẻ bài hay bấm "Next lesson" không mở được bài; app hiện thông báo ngắn "coming soon" và ở lại màn đang đứng (spec editor câu 20).
+- [ ] Khi cờ của màn vẽ tắt thì chạm thẻ bài hay bấm "Next lesson" không mở được bài; app hiện thông báo ngắn "Coming soon" và ở lại màn đang đứng (spec editor câu 20).
 
 ## 4. Giao diện
 
@@ -237,8 +239,8 @@ Chép từ bảng 9.1 của bản đề xuất. Mọi vị trí mặc định t�
 
 | Tên sự kiện | Khi nào ghi | Tham số | Dùng để trả lời câu hỏi gì |
 | --- | --- | --- | --- |
-| `lesson_start` | Khi bài đã mở trong màn vẽ (KB-3, KB-6) | Đề xuất: `lesson_id`, `group`, `resumed` (mở lại bài dở hay bắt đầu mới) | Bài nào được mở nhiều, người dùng vào bài từ đâu |
-| `lesson_complete` | Khi màn Hoàn thành bài học hiện (KB-5), một lần mỗi lần làm xong | Đề xuất: `lesson_id`, `group`, `duration_ms` (thời gian từ lần mở bài đầu tiên tới khi xong) | Tỉ lệ người mới hoàn thành bài đầu tiên trong ngày đầu; bài nào hay bị bỏ dở |
+| `lesson_start` | Khi bài đã mở trong màn vẽ (KB-3, KB-6) | `lesson_id`, `group`, `resumed` (mở lại bài dở hay bắt đầu mới) | Bài nào được mở nhiều, người dùng vào bài từ đâu |
+| `lesson_complete` | Khi màn Hoàn thành bài học hiện (KB-5), một lần mỗi lần làm xong | `lesson_id`, `group`, `duration_ms` (thời gian từ lần mở bài đầu tiên tới khi xong) | Tỷ lệ người mới hoàn thành bài đầu tiên trong ngày đầu; bài nào hay bị bỏ dở |
 
 Không ghi nội dung tranh hay chữ người dùng nhập (bản đề xuất 9.2).
 
@@ -251,8 +253,8 @@ Nội dung bài do nhóm tự làm (bản đề xuất mục 11: AI soạn kịc
 | Nhóm file | Dung lượng ước tính | Khi nào tải | Khi không tải được |
 | --- | --- | --- | --- |
 | Danh sách bài (nhóm, thứ tự, tên, thời lượng, số khung, số bước, đường dẫn nội dung từng bài), ví dụ `lessons/v1/index.json` | Vài KB | Lần đầu mở màn Bài học; lần sau dùng bản trên máy, kiểm bản mới ở nền | Trạng thái lỗi, "Try again" (KB-2) |
-| Ảnh nhỏ của từng bài, ví dụ `lessons/v1/<mã bài>/thumb.webp` | Khoảng 10 đến 30 KB mỗi ảnh, 15 đến 20 ảnh | Cùng lúc hiện danh sách | Thẻ hiện nền trống, vẫn chạm được |
-| Gói nội dung từng bài (khung dựng sẵn, nét dẫn, chữ của các bước, tốc độ khung, đoạn mẫu cho nút "Show me" theo spec editor câu 16), ví dụ `lessons/v1/<mã bài>/lesson.zip` | Đề xuất tối đa 2 MB mỗi bài, cả thư viện dưới 40 MB | Khi chạm thẻ bài lần đầu; lần sau dùng bản trên máy | Báo lỗi, cho thử lại, ở lại màn Bài học (KB-3) |
+| Ảnh nhỏ của từng bài, ví dụ `lessons/v1/<mã bài>/thumb.webp` | Khoảng 10 đến 30 KB mỗi ảnh, 18 ảnh | Cùng lúc hiện danh sách | Thẻ hiện nền trống, vẫn chạm được |
+| Gói nội dung từng bài (khung dựng sẵn, nét dẫn, chữ của các bước, tốc độ khung, đoạn mẫu cho nút "Show me" theo spec editor câu 16), ví dụ `lessons/v1/<mã bài>/lesson.zip` | Tối đa 2 MB mỗi bài, cả thư viện dưới 40 MB | Khi chạm thẻ bài lần đầu; lần sau dùng bản trên máy | Báo lỗi, cho thử lại, ở lại màn Bài học (KB-3) |
 
 R2 staging của app chưa có, tạm dùng tên miền staging ghi ở bản đề xuất mục 1. Thiếu file bắt buộc thì ghi vào `docs/ops/required-assets.txt` khi có nội dung (câu hỏi 4).
 
@@ -285,7 +287,7 @@ Khóa Remote Config khác (không phải cờ): `lessons_content_version`, thư 
    - Đề xuất của AI: hộp thoại nhỏ "Opening lesson…" có vòng chờ, không đóng được bằng chạm ngoài, nút quay lại hủy việc mở; tải lỗi thì hộp thoại đổi sang lời báo lỗi có "Try again" và "Cancel". Cần thêm vào thiết kế trước khi làm ticket.
    - Trả lời: Đồng ý đề xuất của AI.
 7. **Thanh tiến độ trên thẻ tính theo gì?** Thiết kế vẽ thanh đầy hết chiều rộng trên thẻ "Squash and stretch" dù bài chưa xong.
-   - Đề xuất của AI: tỉ lệ bước đã qua trên tổng số bước (ví dụ bước 3 của 6 thì đầy một nửa); ảnh thiết kế là số mẫu.
+   - Đề xuất của AI: tỷ lệ bước đã qua trên tổng số bước (ví dụ bước 3 của 6 thì đầy một nửa); ảnh thiết kế là số mẫu.
    - Trả lời: Đồng ý đề xuất của AI.
 8. **Chạm lại bài đang dở hay bài đã xong thì sao?**
    - Đề xuất của AI: bài dở mở lại đúng bước và các nét đã vẽ (KB-4). Bài đã xong mở lại từ bước 1 với khung dựng sẵn ban đầu (làm lại), nhãn "Done" giữ nguyên; hoạt hình lần trước không giữ. Không có nút "làm lại" riêng cho bài dở ở bản đầu.

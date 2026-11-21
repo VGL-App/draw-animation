@@ -64,7 +64,7 @@ Trường hợp đặc biệt:
 - [ ] Khi xoay máy hay gập, mở máy gập ở một trang thì vẫn ở đúng trang đó.
 - [ ] Khi đưa app ra nền rồi quay lại mà app chưa bị đóng thì vẫn ở đúng trang đó. Quảng cáo khi quay lại app có thể hiện như mọi màn (feature ads lo).
 - [ ] Khi không có mạng thì app hiện popup mất mạng chung; feature không có màn hay thông báo riêng cho việc mất mạng.
-- [ ] Khi app không nhớ được việc đã xong (ghi lên máy bị lỗi) thì app vẫn mở danh sách dự án, không dừng đột ngột (chi tiết ở câu hỏi 9).
+- [ ] Khi app không nhớ được việc đã xong (ghi lên máy bị lỗi) thì app vẫn mở danh sách dự án, không dừng đột ngột, không báo lỗi cho người dùng, ghi log lỗi; lần mở sau có thể hiện lại onboarding (câu hỏi 9).
 
 ### KB-2. Quay lại trang trước và thoát app
 

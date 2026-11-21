@@ -63,7 +63,8 @@ Tiêu chí chấp nhận:
 - [ ] Khi dự án có tỷ lệ 9:16 thì ở khung 411 × 891, canvas chiếm ít nhất 50% chiều cao màn (thiết kế: 288 × 512 dp, khoảng 57%), cả khi có dải quảng cáo lẫn khi không có.
 - [ ] Khi dự án có tỷ lệ 16:9 hay 1:1 thì canvas giữ đúng tỷ lệ, vừa trong vùng làm việc, không bị cắt.
 - [ ] Khi đo vùng chạm của mỗi mục ở cột tùy chọn bên phải (màu, cỡ cọ, độ mờ, layer) thì vùng chạm ít nhất 48 × 48 dp, dù biểu tượng nhìn thấy nhỏ hơn.
-- [ ] Khi máy có màn 360 × 640 thì mọi nút vẫn dùng được, không bị che hay cắt; canvas giữ đúng tỷ lệ; các bảng công cụ cuộn được khi nội dung dài hơn màn.
+- [ ] Khi máy có màn 360 × 640 thì mọi nút vẫn dùng được, không bị che hay cắt; thanh công cụ bên trái và các bảng công cụ cuộn được khi nội dung dài hơn màn; canvas thu nhỏ, giữ đúng tỷ lệ (câu hỏi 18).
+- [ ] Khi đo vùng chạm của mỗi nút ở thanh công cụ bên trái thì vùng chạm ít nhất 48 × 48 dp, dù hình nút là 44 dp như thiết kế (câu hỏi 21).
 - [ ] Khi máy đang ở chế độ sáng hay tối thì màn vẽ theo đúng bản sáng hay tối của thiết kế.
 - [ ] Khi cờ của feature Xuất tắt thì thanh tiêu đề không có nút "Export" (xem spec export KB-10).
 
@@ -80,10 +81,11 @@ Tiêu chí chấp nhận:
 - [ ] Khi vẽ bằng một ngón trên canvas thì nét theo cọ, cỡ, độ mờ, màu đang chọn hiện ngay trên khung và layer đang chọn.
 - [ ] Khi kéo hai ngón trên canvas thì canvas di chuyển, thu phóng, xoay; không có nét nào được vẽ.
 - [ ] Khi bật "Pressure from stylus" và vẽ bằng bút cảm ứng lực thì nét dày mỏng theo lực nhấn; tắt thì nét đều; công tắc này chỉnh riêng cọ đang chọn và thắng giá trị mặc định "Stylus pressure" của Cài đặt (câu hỏi 22).
+- [ ] Khi cọ đang chọn chưa được chỉnh riêng lực bút thì công tắc "Pressure from stylus" hiện theo giá trị "Stylus pressure" của Cài đặt (câu hỏi 22).
 - [ ] Khi tăng "Stabilizer" thì nét mượt hơn, bớt rung tay.
 - [ ] Khi chọn tẩy và vẽ thì phần nét dưới tẩy bị xóa trên layer đang chọn, các layer khác không đổi.
 - [ ] Khi chạm ô màu ở cột phải thì chọn được màu mới; khi dùng hút màu và chạm canvas thì màu tại điểm chạm thành màu đang chọn.
-- [ ] Khi vẽ nét đầu tiên lần đầu tiên trên máy (ở bất kỳ dự án hay bài học nào) thì app nhớ mốc "nét vẽ đầu tiên" trên máy.
+- [ ] Khi người dùng vẽ nét đầu tiên trên máy (ở bất kỳ dự án hay bài học nào) thì app nhớ mốc "nét vẽ đầu tiên" trên máy.
 
 ### KB-3. Mở gói cọ nâng cao
 
@@ -94,13 +96,14 @@ Tiêu chí chấp nhận:
 - [ ] Khi bấm "Watch ad" và xem hết quảng cáo thì cả 4 cọ mở trong 24 giờ kể từ lúc đó, cọ vừa chạm được chọn.
 - [ ] Khi đóng quảng cáo trước khi được thưởng thì cọ vẫn khóa, cọ đang dùng không đổi.
 - [ ] Khi hết 24 giờ thì 4 cọ khóa lại; nét đã vẽ bằng cọ nâng cao giữ nguyên.
+- [ ] Khi hết 24 giờ lúc đang chọn một cọ nâng cao thì người dùng vẽ tiếp được bằng cọ đó tới khi rời màn vẽ; lần mở sau cọ đang chọn về "Pencil" (câu hỏi 6).
 - [ ] Khi mở gói cọ nâng cao thì cần đúng 1 lượt xem; khi dùng 8 cọ cơ bản thì không cọ nào bị khóa, kể cả lúc gói chưa mở hay đã hết hạn.
 
 ### KB-4. Tô màu không tràn
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi chạm công cụ tô lần nữa thì bảng "Fill" mở với "Close gaps" (mặc định "Medium · 4 px"), dòng giải thích "Small gaps in your lines close automatically, so the color stays inside.", "Tolerance" (mặc định 20%), công tắc "Fill under lines".
+- [ ] Khi chạm công cụ tô lần nữa thì bảng "Fill" mở với "Close gaps" (các mức "Off", "Small · 2 px", "Medium · 4 px" là mặc định, "Large · 8 px"; câu hỏi 8), dòng giải thích "Small gaps in your lines close automatically, so the color stays inside.", "Tolerance" (mặc định 20%), công tắc "Fill under lines".
 - [ ] Khi tô vào một vùng có khe hở 1, 2 hay 4 px trên bộ ảnh thử, với "Close gaps" ở mức mặc định, thì màu không tràn ra ngoài vùng.
 - [ ] Khi bật "Fill under lines" thì màu lấn dưới nét, không còn viền trắng giữa nét và màu.
 - [ ] Khi tô vào vùng hở thật (khe lớn hơn mức đang chọn) thì màu tô theo vùng thật, có thể hoàn tác bằng một lần bấm hoàn tác.
@@ -181,7 +184,8 @@ Tiêu chí chấp nhận:
 
 - [ ] Khi chọn nhập ảnh hay video thì bộ chọn ảnh của hệ thống mở, không hỏi quyền nào.
 - [ ] Khi chọn một ảnh thì ảnh hiện làm nền để vẽ theo, dưới các layer vẽ.
-- [ ] Khi chọn một video thì video hiện làm nền theo từng khung của dự án.
+- [ ] Khi chọn một video thì video được chia theo tốc độ khung của dự án và hiện làm nền theo từng khung; video dài hơn 10 giây thì chỉ lấy 10 giây đầu (câu hỏi 12).
+- [ ] Khi có ảnh hay video để vẽ theo thì lớp này hiện mờ, có công tắc ẩn hiện, và không có trong file xuất (câu hỏi 12).
 - [ ] Khi đóng bộ chọn mà không chọn gì thì màn vẽ không đổi.
 
 Trường hợp đặc biệt:
@@ -210,6 +214,7 @@ Tiêu chí chấp nhận:
 - [ ] Khi chạm một gói có khóa thì trong bảng hiện thẻ mời "All effect packs", "Watch one ad to use every effect pack for 24 hours. Your music and voice stay free.", nút "Watch ad"; không có màn toàn màn hình nào tự mở.
 - [ ] Khi xem hết quảng cáo thì mọi gói hiệu ứng mở trong 24 giờ.
 - [ ] Khi đóng quảng cáo trước khi được thưởng thì các gói vẫn khóa.
+- [ ] Khi hết 24 giờ thì các hiệu ứng từ gói đã đặt vào dự án vẫn phát và có trong file xuất; chỉ không đặt thêm được hiệu ứng mới từ gói (câu hỏi 7).
 - [ ] Khi gói hiệu ứng chưa mở hay đã hết hạn thì nhập nhạc, ghi âm và bộ hiệu ứng cơ bản vẫn dùng được, không có dấu khóa.
 
 ### KB-15. Camera ảo
@@ -239,7 +244,7 @@ Tiêu chí chấp nhận:
 - [ ] Khi lần đầu vào một dự án thường (không phải bài học; câu hỏi 15) thì hướng dẫn 9 bước hiện: thẻ chỉ dẫn có số bước "1 / 9", tiêu đề, lời chỉ dẫn (ví dụ "Draw on the canvas", "Pick a brush on the left, then draw with one finger. Two fingers move and zoom."), nút "Skip tour" và "Next"; lớp tối phủ phần màn vẽ dưới dải quảng cáo, không phủ thanh tiêu đề và dải quảng cáo.
 - [ ] Khi bấm "Skip tour" ở bất kỳ bước nào thì hướng dẫn đóng ngay và không tự hiện lại.
 - [ ] Khi qua hết 9 bước thì hướng dẫn đóng và không tự hiện lại.
-- [ ] Khi người dùng muốn xem lại thì mở lại được hướng dẫn từ bước 1 bằng mục xem lại hướng dẫn trong menu của nút "thêm" (câu hỏi 15).
+- [ ] Khi chọn mục xem lại hướng dẫn trong menu của nút "thêm" thì hướng dẫn hiện lại từ bước 1 (câu hỏi 15).
 
 ### KB-18. Chỉ dẫn bài học trên màn vẽ
 
@@ -283,7 +288,7 @@ Tiêu chí chấp nhận:
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi cờ của feature tắt mà người dùng dùng bất kỳ lối nào mở màn vẽ (chạm một dự án, bấm "Open" trong menu dự án, bấm "Create", chạm một thẻ bài học hay bấm "Next lesson") thì app hiện thông báo ngắn "coming soon" và ở lại màn đang đứng, không mở màn vẽ, không tạo dự án (câu hỏi 20).
+- [ ] Khi cờ của feature tắt mà người dùng dùng bất kỳ lối nào mở màn vẽ (chạm một dự án, bấm "Open" trong menu dự án, bấm "Create", chạm một thẻ bài học hay bấm "Next lesson") thì app hiện thông báo ngắn "Coming soon" và ở lại màn đang đứng, không mở màn vẽ, không tạo dự án (câu hỏi 20).
 
 ## 4. Giao diện
 
@@ -340,6 +345,7 @@ Chép từ bản đề xuất mục 9.1. Mọi vị trí mặc định tắt, b�
 | Dự án: khung, layer, nền đã nhập, âm thanh (nhạc đã chọn, giọng ghi âm, hiệu ứng đã đặt), camera ảo, tốc độ khung, cài đặt onion skin | Tự lưu, mở lại, khôi phục sau khi app tắt đột ngột | Đến khi người dùng xóa dự án hay xóa dữ liệu app |
 | Dự án đã mở layer 6 đến 10 | Giữ quyền mở cho cả dự án | Cùng dự án |
 | Thời điểm mở gói cọ nâng cao, gói hiệu ứng âm thanh | Tính 24 giờ | Đến khi hết hạn |
+| Lực bút chỉnh riêng của từng cọ (bật, tắt, hay chưa chỉnh) | Công tắc ở bảng "Brush" thắng giá trị mặc định ở Cài đặt (câu hỏi 22) | Đến khi xóa dữ liệu app |
 | Mốc "nét vẽ đầu tiên" | Luật quảng cáo trước nét vẽ đầu tiên | Đến khi xóa dữ liệu app |
 | Đã xem hay bỏ qua hướng dẫn trên màn vẽ | Không tự hiện lại | Đến khi xóa dữ liệu app |
 | Bộ hiệu ứng âm thanh đã tải | Không tải lại mỗi lần | Đến khi xóa dữ liệu app |
@@ -348,9 +354,9 @@ Chép từ bản đề xuất mục 9.1. Mọi vị trí mặc định tắt, b�
 
 | Tên sự kiện | Khi nào ghi | Tham số | Dùng để trả lời câu hỏi gì |
 | --- | --- | --- | --- |
-| `project_open` | Khi màn vẽ mở một dự án (không tính bài học) | Đề xuất: `frame_count`, `layer_count` | Người dùng quay lại dự án bao nhiêu lần |
-| `frame_add` | Gom theo phiên, ghi một lần khi rời màn vẽ, không ghi mỗi lần thêm | Đề xuất: `count` (số khung thêm trong phiên) | Người dùng làm bao nhiêu khung mỗi phiên |
-| `playback_start` | Khi bấm phát | Đề xuất: `frame_count`, `fps` | Người dùng có phát thử không, dự án dài bao nhiêu |
+| `project_open` | Khi màn vẽ mở một dự án (không tính bài học) | `frame_count`, `layer_count` | Người dùng quay lại dự án bao nhiêu lần |
+| `frame_add` | Gom theo phiên, ghi một lần khi rời màn vẽ, không ghi mỗi lần thêm | `count` (số khung thêm trong phiên) | Người dùng làm bao nhiêu khung mỗi phiên |
+| `playback_start` | Khi bấm phát | `frame_count`, `fps` | Người dùng có phát thử không, dự án dài bao nhiêu |
 | `layer_unlock_rewarded` | Khi xem hết quảng cáo và mở layer 6 đến 10 | Không có | Bao nhiêu người chạm giới hạn layer và chịu xem quảng cáo |
 | `brush_pack_unlock_rewarded` | Khi xem hết quảng cáo và mở gói cọ | Không có | Gói cọ nâng cao có hấp dẫn không |
 | `sound_pack_unlock_rewarded` | Khi xem hết quảng cáo và mở gói hiệu ứng | Không có | Gói hiệu ứng có hấp dẫn không |
@@ -438,7 +444,7 @@ Tham số Remote Config của màn vẽ (không phải cờ): `time_reload_edito
     - Đề xuất của AI: thêm cờ phụ `feature_editor_camera_enabled` (mặc định tắt) để phát hành màn vẽ trước nếu camera ảo chưa xong.
     - Trả lời: Không thêm cờ phụ; camera ảo đi chung cờ `feature_editor_enabled` (khác đề xuất của AI).
 20. **Cờ `feature_editor_enabled` tắt thì sao?** Màn vẽ là lõi của app, không có màn cũ để thay.
-    - Đề xuất của AI: cờ chỉ để giữ màn vẽ khỏi bản phát hành khi chưa xong; khi tắt, chạm thẻ dự án, bấm "Create" (không tạo dự án), chạm thẻ bài học hay bấm "Next lesson" thì hiện thông báo ngắn "coming soon" và ở lại màn đang đứng. Bản staging bật sẵn.
+    - Đề xuất của AI: cờ chỉ để giữ màn vẽ khỏi bản phát hành khi chưa xong; khi tắt, chạm thẻ dự án, bấm "Create" (không tạo dự án), chạm thẻ bài học hay bấm "Next lesson" thì hiện thông báo ngắn "Coming soon" và ở lại màn đang đứng. Bản staging bật sẵn.
     - Trả lời: Đồng ý đề xuất của AI.
 21. **Vùng chạm của thanh công cụ trái:** thiết kế ghi nút 44 dp, cách nhau 4 dp; bảng tiêu chí duyệt của thiết kế đòi vùng chạm ít nhất 48 dp.
     - Đề xuất của AI: giữ hình nút 44 dp như thiết kế, vùng chạm mở rộng tới 48 dp (dùng khoảng cách giữa các nút), như tiêu chí 48 dp của cột phải ở KB-1.

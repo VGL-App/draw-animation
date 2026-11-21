@@ -47,7 +47,7 @@ Người dùng đang ở danh sách dự án, muốn xem cài đặt.
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi bấm nút cài đặt trên thanh trên của danh sách dự án thì màn Cài đặt mở, tiêu đề "Settings", có ba nhóm "Drawing", "Your projects", "About" với đủ các dòng và thứ tự như thiết kế.
+- [ ] Khi bấm nút cài đặt trên thanh trên của danh sách dự án thì màn Cài đặt mở, tiêu đề "Settings", có ba nhóm "Drawing", "Your projects", "About" với đủ các dòng và thứ tự như thiết kế (dòng "Ad privacy choices" chỉ hiện khi hộp thoại đó là bắt buộc, câu hỏi 10).
 - [ ] Khi bấm nút quay lại trên thanh trên hay nút quay lại của máy thì app về danh sách dự án.
 - [ ] Khi mỗi dòng bấm được thì vùng chạm của dòng cao ít nhất 48 dp.
 - [ ] Khi màn hiện ở khung thấp 360 × 640 dp thì nội dung cuộn được tới dòng "Version", không dòng nào bị thanh quảng cáo đáy che, chữ không chồng nhau hay bị cắt.
@@ -92,7 +92,7 @@ Người dùng vẽ bằng bút cảm ứng, muốn nét đậm nhạt theo lự
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi bấm dòng "Stylus pressure" lúc đang "On" thì dòng chuyển sang "Off", và trên màn vẽ, với cọ chưa chỉnh riêng lực bút trong bảng "Brush", nét vẽ bằng bút cảm ứng có độ dày đều, không theo lực nhấn (công tắc "Pressure from stylus" trong bảng "Brush" chỉnh riêng cọ đang chọn và thắng giá trị này: câu hỏi 7, spec editor câu 22).
+- [ ] Khi bấm dòng "Stylus pressure" lúc đang "On" thì dòng chuyển sang "Off", và trên màn vẽ, với cọ chưa chỉnh riêng lực bút trong bảng "Brush", nét vẽ bằng bút cảm ứng có độ dày đều, không theo lực nhấn. Công tắc "Pressure from stylus" trong bảng "Brush" chỉnh riêng cọ đang chọn và thắng giá trị này (câu hỏi 7, spec editor câu 22).
 - [ ] Khi bấm lại thì dòng về "On" và nét vẽ bằng bút cảm ứng lại theo lực nhấn ở các cọ có lực bút mà người dùng chưa chỉnh riêng lực bút.
 - [ ] Khi tắt app rồi mở lại thì lựa chọn vẫn còn.
 
@@ -100,7 +100,6 @@ Trường hợp đặc biệt:
 
 - [ ] Khi vẽ bằng ngón tay thì lựa chọn này không đổi gì.
 
-Chạm dòng để bật tắt, mặc định "On"; chỉ áp khi vẽ bằng bút cảm ứng (câu hỏi 7).
 
 ### KB-5. Sao lưu tất cả dự án ra một file
 
@@ -112,7 +111,7 @@ Tiêu chí chấp nhận:
 - [ ] Khi chọn chỗ lưu thì app ghi mọi dự án của người dùng (khung, layer, âm thanh, tên, tốc độ khung, khung hình) vào đúng một file, và báo sao lưu xong kèm số dự án.
 - [ ] Khi file sao lưu được khôi phục trên một máy khác (KB-6) thì mọi dự án hiện lại đủ khung, layer, âm thanh như lúc sao lưu.
 - [ ] Khi đang sao lưu thì người dùng thấy app đang làm việc và không bấm sao lưu lần nữa được: dòng "Back up all projects" hiện vòng chờ thay cho "To a file" và không bấm được (câu hỏi 5).
-- [ ] Khi sao lưu xong thì thông báo ngắn ở đáy ghi số dự án (ví dụ "Backed up 4 projects"); lỗi thì thông báo "Couldn't back up. Try again." có nút "Retry" (câu hỏi 5).
+- [ ] Khi sao lưu xong thì thông báo ngắn ở đáy ghi số dự án (ví dụ "Backed up 4 projects"); lỗi thì thông báo "Couldn't save the backup. Try again." có nút "Retry", cùng câu với sao lưu một dự án (spec projects KB-8) (câu hỏi 5).
 
 Trường hợp đặc biệt:
 
@@ -232,8 +231,8 @@ Theo bản đề xuất mục 9.2; danh sách và tham số đã được anh Nh
 
 | Tên sự kiện | Khi nào ghi | Tham số | Dùng để trả lời câu hỏi gì |
 | --- | --- | --- | --- |
-| `backup_export` | Khi sao lưu ghi file xong (chỉ khi thành công) | Đề xuất: `scope` (`all` từ Cài đặt, `project` từ menu dự án), `project_count` | Bao nhiêu người sao lưu, sao lưu tất cả hay một dự án |
-| `backup_restore` | Khi khôi phục xong (chỉ khi thành công) | Đề xuất: `scope` (`all` khi bấm "Restore from a file" ở Cài đặt, `project` khi bấm nút nhập file ở danh sách dự án), `project_count` (số dự án đã khôi phục) | Bao nhiêu người khôi phục, từ đâu, bao nhiêu dự án |
+| `backup_export` | Khi sao lưu ghi file xong (chỉ khi thành công) | `scope` (`all` từ Cài đặt, `project` từ menu dự án), `project_count` | Bao nhiêu người sao lưu, sao lưu tất cả hay một dự án |
+| `backup_restore` | Khi khôi phục xong (chỉ khi thành công) | `scope` (`all` khi bấm "Restore from a file" ở Cài đặt, `project` khi bấm nút nhập file ở danh sách dự án), `project_count` (số dự án đã khôi phục) | Bao nhiêu người khôi phục, từ đâu, bao nhiêu dự án |
 
 Hai sự kiện này dùng chung với spec projects, cùng tên và tham số (spec projects, câu 17).
 
@@ -249,7 +248,7 @@ Không có.
 
 | Tên cờ | Mặc định | Ý nghĩa |
 | --- | --- | --- |
-| `feature_settings_enabled` | tắt | Bật để hiện nút cài đặt trên danh sách dự án và mở màn Cài đặt. Bản staging bật sẵn |
+| `feature_settings_enabled` | tắt | Bật để hiện nút cài đặt trên danh sách dự án và mở màn Cài đặt. Bản staging bật sẵn; bản production bật từ ngày phát hành vì đây là lối vào duy nhất để rút đồng ý quảng cáo (câu hỏi 15) |
 
 ## 9. Câu hỏi còn mở
 
