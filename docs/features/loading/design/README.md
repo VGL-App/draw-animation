@@ -21,6 +21,8 @@ Phiên tự chạy chỉ đọc thư mục này, không mở được Figma.
 
 ## 1. Các màn hình và trạng thái
 
+Thiết kế này là bản của dự án mẫu (màu xanh lá, phông Inter). Từ ngày 2026-11-22 app dùng thương hiệu Studio Night (màu, phông Space Grotesk, dấu logo, khẩu hiệu), nên ảnh so sánh trong `review/` lệch nhiều hơn; độ lệch đó do thương hiệu, không phải lỗi bố cục. Vẽ lại thiết kế theo Studio Night là việc riêng.
+
 | Màn hình (composable) | Trạng thái | Ảnh trong `screens/`, số liệu trong `context/` | Kịch bản |
 | --- | --- | --- | --- |
 | `LoadingScreen` | Đang tải, 68% | `LoadingScreen_progress_light` | KB-1 |
@@ -33,7 +35,7 @@ Phiên tự chạy chỉ đọc thư mục này, không mở được Figma.
 | Màn hình, trạng thái | Vị trí | Chữ | Chữ tiếng Anh (`values/`) | Kiểu chữ |
 | --- | --- | --- | --- | --- |
 | Mọi trạng thái | Tên app | Tên của app đang chạy (`app_name`). Thiết kế và screenshot test dùng chữ mẫu "Todo App" | như cột Chữ | `headlineLarge` |
-| Mọi trạng thái | Khẩu hiệu | Mọi việc vào đúng nhịp. | Everything in rhythm. | `bodyMedium` |
+| Mọi trạng thái | Khẩu hiệu | Draw it. Flip it. Watch it move. | Draw it. Flip it. Watch it move. | `bodyMedium` |
 | Đang tải | Nhãn tiến trình | Đang tải dữ liệu | Loading data | `labelLarge` |
 | Mọi trạng thái | Phần trăm | 68% (theo tiến độ, `%1$d%%`) | như cột Chữ | `bodyMedium` |
 | Đang tải | Dòng hướng dẫn | Đang chuẩn bị không gian của bạn… | Preparing your space… | `bodySmall` |

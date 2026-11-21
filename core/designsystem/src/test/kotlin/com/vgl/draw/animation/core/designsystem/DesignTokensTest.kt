@@ -9,6 +9,7 @@ import com.vgl.draw.animation.core.designsystem.theme.AppColors
 import com.vgl.draw.animation.core.designsystem.theme.AppTypography
 import com.vgl.draw.animation.core.designsystem.theme.DarkAppColors
 import com.vgl.draw.animation.core.designsystem.theme.DarkColors
+import com.vgl.draw.animation.core.designsystem.theme.InterFamily
 import com.vgl.draw.animation.core.designsystem.theme.LightAppColors
 import com.vgl.draw.animation.core.designsystem.theme.LightColors
 import com.vgl.draw.animation.core.designsystem.theme.SpaceGroteskFamily
@@ -55,11 +56,23 @@ class DesignTokensTest {
             colorRoles(LightColors).map { it.first }.sorted(),
         )
     }
+
+    @Test
+    fun appColorRoles_listEveryFieldOfAppColors() {
+        val fields = AppColors::class.java.declaredFields
+            .filter { !java.lang.reflect.Modifier.isStatic(it.modifiers) }
+            .map { it.name }
+            .sorted()
+        assertEquals(
+            "tokens.json must list every color of AppColors: add the new one to appColorRoles.",
+            fields,
+            appColorRoles(LightAppColors).map { it.first }.sorted(),
+        )
+    }
 }
 
 internal fun tokensJson(): String = buildString {
     appendLine("{")
-    appendLine("  \"fontFamily\": \"Inter\",")
     appendLine("  \"color\": {")
     appendLine("    \"light\": ${colors(LightColors, LightAppColors)},")
     appendLine("    \"dark\": ${colors(DarkColors, DarkAppColors)}")
@@ -145,7 +158,12 @@ private fun typographyStyles(type: Typography): List<Pair<String, TextStyle>> = 
     "labelSmall" to type.labelSmall,
 )
 
-private fun textStyle(style: TextStyle): String =
-    "{\"fontFamily\": \"${if (style.fontFamily == SpaceGroteskFamily) "Space Grotesk" else "Inter"}\", " +
-        "\"fontSizeSp\": ${style.fontSize.value}, \"lineHeightSp\": ${style.lineHeight.value}, " +
-        "\"fontWeight\": ${style.fontWeight?.weight}, \"letterSpacingSp\": ${style.letterSpacing.value}}"
+private fun textStyle(style: TextStyle): String = "{\"fontFamily\": \"${familyName(style)}\", " +
+    "\"fontSizeSp\": ${style.fontSize.value}, \"lineHeightSp\": ${style.lineHeight.value}, " +
+    "\"fontWeight\": ${style.fontWeight?.weight}, \"letterSpacingSp\": ${style.letterSpacing.value}}"
+
+private fun familyName(style: TextStyle): String = when (style.fontFamily) {
+    InterFamily -> "Inter"
+    SpaceGroteskFamily -> "Space Grotesk"
+    else -> error("Unknown font family in AppTypography: ${style.fontFamily}. Name it in DesignTokensTest.")
+}
