@@ -19,6 +19,8 @@ Quy trình: docs/ops/design-workflow.md. Quyết định: ADR-0020, ADR-0024.
 
 ## 1. Các màn hình và trạng thái
 
+Thiết kế này là bản của dự án mẫu (màu xanh lá, phông Inter). Từ ngày 2026-11-22 app dùng thương hiệu Studio Night (màu, phông Space Grotesk, dấu logo, khẩu hiệu), nên ảnh so sánh trong `review/` lệch nhiều hơn; độ lệch đó do thương hiệu, không phải lỗi bố cục. Vẽ lại thiết kế theo Studio Night là việc riêng.
+
 | Màn hình (composable) | Trạng thái | Ảnh trong `screens/`, số liệu trong `context/` | Kịch bản |
 | --- | --- | --- | --- |
 | `NetworkLostScreen` (popup đè lên màn hình mẫu) | Mất mạng | `NetworkLostScreen_default_light` | KB-1, KB-2 |

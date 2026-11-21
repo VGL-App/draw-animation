@@ -5,9 +5,14 @@ import androidx.compose.material3.Typography
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.TextStyle
+import com.vgl.draw.animation.core.designsystem.theme.AppColors
 import com.vgl.draw.animation.core.designsystem.theme.AppTypography
+import com.vgl.draw.animation.core.designsystem.theme.DarkAppColors
 import com.vgl.draw.animation.core.designsystem.theme.DarkColors
+import com.vgl.draw.animation.core.designsystem.theme.InterFamily
+import com.vgl.draw.animation.core.designsystem.theme.LightAppColors
 import com.vgl.draw.animation.core.designsystem.theme.LightColors
+import com.vgl.draw.animation.core.designsystem.theme.SpaceGroteskFamily
 import com.vgl.draw.animation.core.designsystem.theme.Spacing
 import java.io.File
 import org.junit.Assert.assertEquals
@@ -51,14 +56,26 @@ class DesignTokensTest {
             colorRoles(LightColors).map { it.first }.sorted(),
         )
     }
+
+    @Test
+    fun appColorRoles_listEveryFieldOfAppColors() {
+        val fields = AppColors::class.java.declaredFields
+            .filter { !java.lang.reflect.Modifier.isStatic(it.modifiers) }
+            .map { it.name }
+            .sorted()
+        assertEquals(
+            "tokens.json must list every color of AppColors: add the new one to appColorRoles.",
+            fields,
+            appColorRoles(LightAppColors).map { it.first }.sorted(),
+        )
+    }
 }
 
 internal fun tokensJson(): String = buildString {
     appendLine("{")
-    appendLine("  \"fontFamily\": \"Inter\",")
     appendLine("  \"color\": {")
-    appendLine("    \"light\": ${colors(LightColors)},")
-    appendLine("    \"dark\": ${colors(DarkColors)}")
+    appendLine("    \"light\": ${colors(LightColors, LightAppColors)},")
+    appendLine("    \"dark\": ${colors(DarkColors, DarkAppColors)}")
     appendLine("  },")
     val styles = typographyStyles(AppTypography)
     appendLine("  \"typography\": {")
@@ -72,7 +89,8 @@ internal fun tokensJson(): String = buildString {
     appendLine("}")
 }
 
-private fun colors(scheme: ColorScheme): String = colorRoles(scheme)
+// Material 3 roles first, then the app roles without a Material 3 slot (AppColors), so designers find both.
+private fun colors(scheme: ColorScheme, app: AppColors): String = (colorRoles(scheme) + appColorRoles(app))
     .joinToString(prefix = "{", postfix = "}", separator = ", ") { (name, color) -> "\"$name\": \"${hex(color)}\"" }
 
 internal fun colorRoles(scheme: ColorScheme): List<Pair<String, Color>> = listOf(
@@ -113,6 +131,13 @@ internal fun colorRoles(scheme: ColorScheme): List<Pair<String, Color>> = listOf
     "surfaceContainerHighest" to scheme.surfaceContainerHighest,
 )
 
+internal fun appColorRoles(app: AppColors): List<Pair<String, Color>> = listOf(
+    "canvas" to app.canvas,
+    "onCanvas" to app.onCanvas,
+    "onionPrevious" to app.onionPrevious,
+    "onionNext" to app.onionNext,
+)
+
 private fun hex(color: Color): String = "#%06X".format(color.toArgb() and 0xFFFFFF)
 
 private fun typographyStyles(type: Typography): List<Pair<String, TextStyle>> = listOf(
@@ -133,6 +158,12 @@ private fun typographyStyles(type: Typography): List<Pair<String, TextStyle>> = 
     "labelSmall" to type.labelSmall,
 )
 
-private fun textStyle(style: TextStyle): String =
-    "{\"fontSizeSp\": ${style.fontSize.value}, \"lineHeightSp\": ${style.lineHeight.value}, " +
-        "\"fontWeight\": ${style.fontWeight?.weight}, \"letterSpacingSp\": ${style.letterSpacing.value}}"
+private fun textStyle(style: TextStyle): String = "{\"fontFamily\": \"${familyName(style)}\", " +
+    "\"fontSizeSp\": ${style.fontSize.value}, \"lineHeightSp\": ${style.lineHeight.value}, " +
+    "\"fontWeight\": ${style.fontWeight?.weight}, \"letterSpacingSp\": ${style.letterSpacing.value}}"
+
+private fun familyName(style: TextStyle): String = when (style.fontFamily) {
+    InterFamily -> "Inter"
+    SpaceGroteskFamily -> "Space Grotesk"
+    else -> error("Unknown font family in AppTypography: ${style.fontFamily}. Name it in DesignTokensTest.")
+}
