@@ -26,6 +26,7 @@ confirmed:
 - Mỗi trang có: số trang ("1 / 4" tới "4 / 4") ở trên, hình minh họa, tiêu đề, một câu mô tả, dãy chấm cho biết đang ở trang nào, thẻ quảng cáo dưới nội dung, nút ở đáy. Trang 1 tới 3 có nút "Next", trang 4 có nút "Start drawing". Chữ theo bảng chữ của thiết kế (tiếng Anh).
 - Bắt buộc qua đủ 4 trang. Không có nút bỏ qua.
 - Nút Back của hệ thống về trang trước; ở trang 1 thì thoát app.
+- Vuốt ngang để đổi trang: vuốt sang trái tới trang sau, vuốt sang phải về trang trước (câu hỏi 1).
 - Chỉ đánh dấu đã xong khi bấm "Start drawing". Xong rồi thì không bao giờ hiện lại, app mở thẳng vào danh sách dự án.
 - Chưa xong mà app bị đóng thì lần mở sau hiện lại từ trang 1.
 - Thẻ quảng cáo chỉ ở lần mở đầu sau khi cài, đổi quảng cáo mỗi trang. Nút ở đáy đứng cùng chỗ ở mọi trang, cách thẻ ít nhất 24 dp ở mọi cỡ chữ. Sang trang không chờ quảng cáo.
@@ -34,7 +35,6 @@ confirmed:
 
 **Ngoài phạm vi lần này:**
 
-- Vuốt ngang để đổi trang: chờ câu hỏi 1.
 - Nút bỏ qua, hỏi tuổi, màn trả phí.
 - Xem lại onboarding sau khi đã xong (ví dụ từ Cài đặt).
 - Hướng dẫn trên màn vẽ: thuộc feature editor.
@@ -75,6 +75,9 @@ Tiêu chí chấp nhận:
 - [ ] Khi bấm Back ở trang 2, 3 hay 4 thì app về trang ngay trước đó, số trang và chấm nổi bật đổi theo.
 - [ ] Khi bấm Back ở trang 1 thì app thoát, không đánh dấu đã xong.
 - [ ] Khi đã về trang trước rồi bấm "Next" thì app sang lại trang sau như bình thường.
+- [ ] Khi vuốt sang trái ở trang 1, 2, 3 thì app sang trang kế tiếp như bấm "Next"; khi vuốt sang phải ở trang 2, 3, 4 thì app về trang trước như bấm Back.
+- [ ] Khi vuốt sang trái ở trang 4 thì không có gì xảy ra; chỉ bấm "Start drawing" mới xong onboarding.
+- [ ] Khi đang vuốt dở giữa hai trang thì thẻ quảng cáo chưa đổi; quảng cáo của trang mới hiện khi trang đã dừng hẳn.
 
 ### KB-3. Chưa xong mà app bị đóng, mở lại
 
@@ -88,7 +91,7 @@ Tiêu chí chấp nhận:
 
 Trường hợp đặc biệt:
 
-- [ ] Khi bấm Back ở trang 1 rồi mở lại app ngay, lúc hệ thống chưa đóng hẳn app, thì có còn quảng cáo hay không theo câu hỏi 2.
+- [ ] Khi bấm Back ở trang 1 rồi mở lại app ngay, lúc hệ thống chưa đóng hẳn app, thì onboarding hiện lại từ trang 1 và thẻ quảng cáo vẫn hiện, vì lần mở đầu kéo dài tới khi hệ thống đóng hẳn app (câu hỏi 2).
 
 ### KB-4. Thẻ quảng cáo trên các trang
 
@@ -101,7 +104,7 @@ Tiêu chí chấp nhận:
 - [ ] Khi bấm "Next" mà quảng cáo của trang sau chưa có thì app sang trang ngay, không chờ; quảng cáo hiện khi nạp xong.
 - [ ] Khi đổi trang thì nút ở đáy đứng yên cùng một chỗ trên màn hình ở cả 4 trang, có hay không có quảng cáo, đang chờ hay đã có quảng cáo.
 - [ ] Khi cỡ chữ của máy lớn nhất thì thẻ có thể cao thêm, nhưng nút vẫn cách thẻ ít nhất 24 dp, không bị thẻ che hay đẩy ra khỏi màn hình.
-- [ ] Khi người dùng không đồng ý quảng cáo, vị trí bị tắt từ xa, hay không phải lần mở đầu thì không có thẻ quảng cáo (chỗ trống hay không theo câu hỏi 3).
+- [ ] Khi người dùng không đồng ý quảng cáo, vị trí bị tắt từ xa, hay không phải lần mở đầu thì không có thẻ quảng cáo; không có khung giữ chỗ, nội dung trang dùng phần chỗ đó, nút vẫn ghim đáy cùng chỗ. Khi vị trí được phép mà quảng cáo đang nạp hay nạp lỗi thì khung cao bằng thẻ vẫn giữ chỗ và hiện khung chờ (câu hỏi 3).
 - [ ] Khi ở onboarding thì không có quảng cáo nào khác (không thanh quảng cáo ở đáy, không quảng cáo toàn màn hình khi bấm nút).
 
 ### KB-5. Đã xong onboarding, mở lại app
@@ -118,10 +121,10 @@ Tiêu chí chấp nhận:
 Tiêu chí chấp nhận:
 
 - [ ] Khi máy ở chế độ tối thì 4 trang theo bản tối của thiết kế; chế độ sáng theo bản sáng.
-- [ ] Khi màn hình thấp 360 × 640 dp thì tiêu đề, câu mô tả và nút đáy không bị cắt hay chồng lên nhau, nút đáy không bị che; nội dung không vừa thì đọc được hết bằng cách cuộn (cách co hình minh họa theo câu hỏi 7).
+- [ ] Khi màn hình thấp 360 × 640 dp thì tiêu đề, câu mô tả và nút đáy không bị cắt hay chồng lên nhau, nút đáy không bị che; nội dung không vừa thì đọc được hết bằng cách cuộn (hình minh họa co lại giữ tỷ lệ, thấp nhất 96 dp; câu hỏi 7).
 - [ ] Khi cỡ chữ của máy lớn nhất thì tiêu đề và câu mô tả xuống dòng, không bị cắt bằng dấu ba chấm; chữ "Start drawing" trên nút không bị cắt.
 - [ ] Khi đo vùng chạm thì nút ở đáy cao ít nhất 48 dp.
-- [ ] Khi máy gập mở ra thì bố cục theo câu hỏi 8.
+- [ ] Khi máy gập mở ra thì bố cục một cột, căn giữa, nội dung, thẻ và nút rộng tối đa 411 dp, nút vẫn ghim đáy (câu hỏi 8).
 
 ### KB-7. Tắt feature từ xa
 
@@ -130,8 +133,8 @@ Người phụ trách tắt onboarding khi có sự cố.
 Tiêu chí chấp nhận:
 
 - [ ] Khi cờ của feature tắt thì sau Loading app mở thẳng danh sách dự án, không hiện onboarding và không ghi là đã xong.
-- [ ] Khi cờ bật lại thì người dùng chưa xong sẽ thấy onboarding ở lần mở sau, từ trang 1 (với người dùng đã có dự án, xem câu hỏi 6).
-- [ ] Khi cờ của danh sách dự án tắt thì sau "Start drawing" (hay khi cờ onboarding tắt) app mở vào màn thay cho danh sách dự án theo spec projects câu 18, chờ trả lời (đề xuất ở đó: màn chờ có sẵn của app).
+- [ ] Khi cờ bật lại thì người dùng chưa xong sẽ thấy onboarding ở lần mở sau, từ trang 1 (kể cả người dùng đã có dự án), không có quảng cáo vì không phải lần mở đầu (câu hỏi 6).
+- [ ] Khi cờ của danh sách dự án tắt thì sau "Start drawing" (hay khi cờ onboarding tắt) app mở vào màn thay cho danh sách dự án theo spec projects câu 18: màn mẫu có sẵn từ dự án mẫu (màn mà app mới tạo từ dự án mẫu mở ra, trước khi có các feature của Frameloop).
 
 ## 4. Giao diện
 
@@ -160,7 +163,7 @@ Ghi chú:
 
 - **Trước nét vẽ đầu tiên** (bản đề xuất, dưới bảng 9.1; app tự làm, `:core:ads` không có luật này): tới khi người dùng vẽ nét đầu tiên ở bất kỳ dự án hay bài học nào, app chỉ hiện `native_onboarding`, `projects_empty_native` trên màn trống và `editor_top_native` khi đã vào màn vẽ, không hiện vị trí quảng cáo nào khác. Onboarding nằm trong khoảng này nên chỉ có `native_onboarding`.
 - Màn onboarding khai `native_onboarding` là quảng cáo trong nội dung (MC-13), nên không có lớp nổi.
-- Thẻ do `:core:ads` vẽ theo bố cục `native_step`; bố cục thẻ trên thiết kế khác (câu hỏi 4).
+- Thẻ do `:core:ads` vẽ theo bố cục `native_step`; bố cục thẻ trên thiết kế khác và chỉ là khung giữ chỗ (câu hỏi 4).
 
 ## 6. Dữ liệu và phân tích
 
@@ -176,7 +179,10 @@ Trang đang xem không lưu trên máy: app bị đóng thì lần sau luôn b�
 
 | Tên sự kiện | Khi nào ghi | Tham số | Dùng để trả lời câu hỏi gì |
 | --- | --- | --- | --- |
-| Không có | | | Bản đề xuất 9.2 không có sự kiện cho onboarding; xem câu hỏi 5 |
+| `onboarding_page_view` | Mỗi lần một trang hiện (kể cả khi quay lại trang trước) | `page`: 1 tới 4 | Người dùng bỏ app ở trang nào |
+| `onboarding_complete` | Khi bấm "Start drawing" | Không có | Tỷ lệ người dùng đi hết onboarding |
+
+Hai sự kiện này anh Nhật thêm ngày 2026-11-21 (câu hỏi 5); bản đề xuất mục 9.2 đã cập nhật theo.
 
 **Quyền của app và dịch vụ bên ngoài:** Không có. Feature không cần quyền nào và không thêm SDK; quảng cáo đi qua `:core:ads`.
 
@@ -194,37 +200,38 @@ Không có. Hình minh họa của 4 trang vẽ trong app theo số liệu thi�
 
 1. **Có vuốt ngang để đổi trang không, hay chỉ bấm "Next"?** Bản đề xuất chỉ nói "4 lần Next" và nút Back. Thiết kế đặt tên vùng nội dung là "Page (pager)" và có dãy chấm trang, thường đi với vuốt, nhưng không ghi rõ.
    - Đề xuất của AI: cho vuốt. Vuốt sang trái tới trang sau, vuốt sang phải về trang trước, như bấm "Next" và Back. Ở trang 4 vuốt sang trái không làm gì; chỉ nút "Start drawing" mới xong onboarding. Thẻ quảng cáo đổi khi trang đã dừng hẳn, không đổi giữa lúc vuốt. Thước đo 7 thao tác không đổi. Nếu chọn chỉ bấm nút thì bỏ dòng "Vuốt ngang" ở mục Ngoài phạm vi, KB-1 giữ nguyên.
-   - Trả lời:
+   - Trả lời: Cho vuốt, theo đề xuất của AI.
 2. **"Lần mở sau" ở KB-3 tính thế nào khi app chưa bị hệ thống đóng hẳn?** Bản đề xuất: tắt app giữa chừng thì lần mở sau không còn quảng cáo vì không phải lần mở đầu. Luật của `:core:ads` (OB-03): lần mở đầu kéo dài tới khi tiến trình của app kết thúc. Người dùng bấm Back ở trang 1 rồi mở lại ngay thì tiến trình thường còn sống, nên theo luật của `:core:ads` thẻ quảng cáo vẫn hiện.
    - Đề xuất của AI: theo luật của `:core:ads`, không làm luật riêng. Onboarding luôn hiện lại từ trang 1 khi mở lại sau Back ở trang 1; thẻ quảng cáo hiện khi tiến trình còn sống, không hiện khi app đã bị đóng hẳn.
-   - Trả lời:
+   - Trả lời: Đồng ý đề xuất của AI.
 3. **Chỗ của thẻ quảng cáo khi không có quảng cáo.** Thiết kế chỉ có trạng thái có thẻ. Có hai trường hợp: (a) vị trí được phép nhưng quảng cáo đang nạp hay nạp lỗi; (b) vị trí không được phép (không phải lần mở đầu, khóa tắt, chưa đồng ý quảng cáo).
    - Đề xuất của AI: (a) giữ khung cố định cao bằng thẻ, hiện khung chờ, để nội dung và nút không nhảy giữa các trang; (b) không có khung, nội dung trang dùng phần chỗ đó, nút vẫn ghim đáy cùng chỗ. Thêm ảnh trạng thái (b) vào thiết kế, hoặc chấp nhận screenshot test không có ảnh thiết kế tương ứng.
-   - Trả lời:
+   - Trả lời: Đồng ý đề xuất của AI.
 4. **Bố cục thẻ quảng cáo trên thiết kế khác thẻ của `:core:ads`.** Thiết kế vẽ thẻ theo kiểu native medium: hàng đầu (icon 36 dp, nhãn "Ad", tên), ảnh 136 dp, nút "Install". Thẻ `native_step` của `:core:ads` có ảnh ở trên, dưới ảnh là icon 32 dp, tiêu đề một dòng, nhãn "Ad", nút cao 36 dp.
    - Đề xuất của AI: theo thẻ của `:core:ads` (cùng chiều cao 250 dp, cùng chỗ trên màn), coi thẻ trên thiết kế là khung giữ chỗ. Screenshot test dùng thẻ giả, như các màn khác của dự án mẫu.
-   - Trả lời:
+   - Trả lời: Theo thẻ của `:core:ads`, theo đề xuất của AI.
 5. **Sự kiện phân tích cho onboarding.** Bản đề xuất 9.2 không có sự kiện nào cho onboarding, nên spec không ghi sự kiện. Nhưng onboarding bắt buộc là bước thêm trước nét vẽ đầu tiên, và không có sự kiện thì không biết bao nhiêu người bỏ app giữa 4 trang.
    - Đề xuất của AI: hai phương án. (a) Không thêm sự kiện ở bản đầu, như 9.2. (b) Thêm `onboarding_page_view` (tham số `page`: 1 tới 4, ghi mỗi lần một trang hiện) và `onboarding_complete` (không tham số, ghi khi bấm "Start drawing"), đủ để đo tỷ lệ đi hết và trang bị bỏ nhiều nhất. AI nghiêng về (b) vì Q19 đã nêu rủi ro mất người dùng ở bước này; chọn (b) thì cập nhật 9.2 của bản đề xuất và mục 6 của spec.
-   - Trả lời:
+   - Trả lời: Phương án (b): thêm `onboarding_page_view` và `onboarding_complete`.
 6. **Người dùng đã có dự án mà chưa xong onboarding.** Chỉ xảy ra khi cờ `feature_onboarding_enabled` tắt lúc người dùng cài app rồi được bật sau (KB-7).
    - Đề xuất của AI: cờ bật từ bản phát hành đầu nên trường hợp này gần như không có. Giữ đơn giản: người chưa xong thì thấy onboarding một lần ở lần mở sau, không có quảng cáo vì không phải lần mở đầu. Không dò dự án đã có để bỏ qua.
-   - Trả lời:
+   - Trả lời: Đồng ý đề xuất của AI.
 7. **Màn hình thấp 360 × 640 dp và chữ lớn.** Ở khung này, sau thanh trạng thái, thanh trên, thẻ quảng cáo 250 dp và phần nút 96 dp, chỉ còn khoảng 220 dp cho nội dung trang, trong khi thiết kế cần khoảng 318 dp. Thiết kế không có khung thấp.
    - Đề xuất của AI: hình minh họa co lại theo chỗ còn lại, giữ tỷ lệ, thấp nhất 96 dp; vẫn không đủ thì phần nội dung trang cuộn được, thẻ quảng cáo và nút đứng yên. Có screenshot test `OnboardingScreen_page-2_small` (trang có câu mô tả dài nhất) ở khung 360 × 640.
-   - Trả lời:
+   - Trả lời: Đồng ý đề xuất của AI.
 8. **Bố cục khi máy gập mở ra.** App hỗ trợ máy gập (Q6) nhưng thiết kế không có frame máy gập mở.
    - Đề xuất của AI: một cột, căn giữa, nội dung, thẻ và nút rộng tối đa bằng khung thiết kế (411 dp), nút vẫn ghim đáy. Không có ảnh `_unfolded` nên không cần screenshot test cùng tên; plan thêm một ảnh ở khung `w673dp-h841dp` để xem bố cục.
-   - Trả lời:
+   - Trả lời: Đồng ý đề xuất của AI.
 9. **Ghi "đã xong" lên máy bị lỗi khi bấm "Start drawing".**
    - Đề xuất của AI: vẫn mở danh sách dự án, không báo lỗi cho người dùng, ghi log lỗi. Lần mở sau có thể hiện lại onboarding; chấp nhận vì lỗi này rất hiếm và chặn người dùng ở trang cuối tệ hơn.
-   - Trả lời:
+   - Trả lời: Đồng ý đề xuất của AI.
 10. **Chữ "Start drawing" mà đích là danh sách dự án trống.** Nút ở trang 4 gợi là vào vẽ ngay, nhưng bản đề xuất mục 6 đưa người dùng tới danh sách dự án (trống), rồi còn "New animation" và "Create" mới tới màn vẽ.
    - Đề xuất của AI: giữ đích theo bản đề xuất (thước đo 7 thao tác đã tính hai bước này) và giữ chữ theo thiết kế đã duyệt. Nếu muốn khớp chữ hơn thì có hai cách: đổi chữ nút (ví dụ "Get started"), hoặc mở thẳng màn Tạo dự án (bớt một thao tác); cả hai cần sửa thiết kế hay bản đề xuất.
-   - Trả lời:
+   - Trả lời: Giữ nguyên đích và chữ, theo đề xuất của AI.
 
 ## 10. Lịch sử
 
 | Ngày | Người | Nội dung |
 | --- | --- | --- |
 | 2026-11-21 | AI | Tạo bản đầu từ bản đề xuất đã duyệt (docs/research/proposal.md) và thiết kế đã duyệt |
+| 2026-11-21 | AI | Ghi câu trả lời của anh Nhật cho mọi câu hỏi ở mục 9 (anh chọn trong phiên ngày 2026-11-21) và sửa phần thân spec theo các câu trả lời; sửa các điểm nên sửa còn lại của lần rà soát cuối. Spec vẫn `draft` |

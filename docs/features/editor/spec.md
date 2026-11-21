@@ -23,12 +23,13 @@ confirmed:
 **Trong phạm vi:**
 
 - Canvas theo tỷ lệ khung của dự án, thanh tiêu đề (quay lại, tên dự án, trạng thái lưu, hoàn tác, làm lại, Xuất), thanh công cụ dọc bên trái, cột tùy chọn bên phải, dòng thời gian ở đáy.
+- Nút "thêm" (ba chấm) của thanh công cụ mở menu: hút màu, thước, vẽ đối xứng, nhập ảnh hay video, âm thanh, xem lại hướng dẫn (câu hỏi 1, 15).
 - Cọ: 8 cọ cơ bản luôn miễn phí, chỉnh cỡ, độ mờ, chống rung, lực bút; gói 4 cọ nâng cao mở 24 giờ bằng một lượt xem quảng cáo có thưởng.
 - Tẩy, chọn màu, hút màu, tô màu tự đóng khe hở và tô lấn dưới nét.
 - Chọn vùng, di chuyển, thu phóng, xoay, lật, chép, xóa vùng chọn; thu phóng, xoay canvas bằng hai ngón; thước, hình, chữ, vẽ đối xứng.
 - Layer: 5 miễn phí; layer 6 đến 10 mở cho cả dự án bằng một lượt xem quảng cáo có thưởng.
 - Onion skin: số khung trước, sau, độ mờ, màu, lặp ở hai đầu.
-- Dòng thời gian: thêm, xóa, nhân bản, chọn nhiều, chép và dán theo dải, giữ khung, đổi tốc độ khung, phát, lặp.
+- Dòng thời gian: thêm, xóa, nhân bản, chọn nhiều, chép và dán theo dải, giữ khung, đổi tốc độ khung, phát, lặp; thu gọn được còn 56 dp để canvas lớn hơn (câu hỏi 2).
 - Hoàn tác, làm lại nhiều bước, kể cả xóa khung, xóa layer.
 - Nhập ảnh, video làm nền vẽ theo qua bộ chọn ảnh của hệ thống.
 - Âm thanh: nhập nhạc miễn phí, bộ hiệu ứng cơ bản miễn phí, ghi âm giọng; gói hiệu ứng thêm mở 24 giờ bằng một lượt xem quảng cáo có thưởng.
@@ -78,7 +79,7 @@ Tiêu chí chấp nhận:
 - [ ] Khi chạm công cụ cọ lần nữa (lúc cọ đang được chọn) thì bảng "Brush" mở với 8 cọ cơ bản: "Pencil", "Ink", "Marker", "Airbrush", "Soft", "Pixel", "Calligraphy", "Chalk", cùng thanh "Size", "Opacity", "Stabilizer" và công tắc "Pressure from stylus".
 - [ ] Khi vẽ bằng một ngón trên canvas thì nét theo cọ, cỡ, độ mờ, màu đang chọn hiện ngay trên khung và layer đang chọn.
 - [ ] Khi kéo hai ngón trên canvas thì canvas di chuyển, thu phóng, xoay; không có nét nào được vẽ.
-- [ ] Khi bật "Pressure from stylus" và vẽ bằng bút cảm ứng lực thì nét dày mỏng theo lực nhấn; tắt thì nét đều (quan hệ với công tắc "Stylus pressure" của Cài đặt: câu hỏi 22).
+- [ ] Khi bật "Pressure from stylus" và vẽ bằng bút cảm ứng lực thì nét dày mỏng theo lực nhấn; tắt thì nét đều; công tắc này chỉnh riêng cọ đang chọn và thắng giá trị mặc định "Stylus pressure" của Cài đặt (câu hỏi 22).
 - [ ] Khi tăng "Stabilizer" thì nét mượt hơn, bớt rung tay.
 - [ ] Khi chọn tẩy và vẽ thì phần nét dưới tẩy bị xóa trên layer đang chọn, các layer khác không đổi.
 - [ ] Khi chạm ô màu ở cột phải thì chọn được màu mới; khi dùng hút màu và chạm canvas thì màu tại điểm chạm thành màu đang chọn.
@@ -127,7 +128,7 @@ Tiêu chí chấp nhận:
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi bấm thêm layer thứ 6 thì hiện lời mời "Unlock layers 6 to 10", "Watch one short ad to use up to 10 layers in this project.", nút "Not now" và "Watch ad" (cách hiện: câu hỏi 3).
+- [ ] Khi bấm thêm layer thứ 6 thì hiện lời mời "Unlock layers 6 to 10", "Watch one short ad to use up to 10 layers in this project.", nút "Not now" và "Watch ad" trong hộp thoại như thiết kế (câu hỏi 3).
 - [ ] Khi bấm "Not now" thì lời mời đóng, dự án giữ 5 layer.
 - [ ] Khi bấm "Watch ad" và xem hết quảng cáo thì layer thứ 6 được thêm và dự án dùng được tới 10 layer mãi mãi; bảng "Layers" hiện "6 / 10".
 - [ ] Khi mở layer 6 đến 10 trong một dự án thì cần đúng 1 lượt xem; khi thêm layer thứ 6 ở một dự án khác thì lời mời hiện lại, cần mở riêng.
@@ -149,11 +150,12 @@ Tiêu chí chấp nhận:
 - [ ] Khi bấm thêm khung thì khung trống mới được thêm sau khung hiện tại và thành khung hiện tại; không có giới hạn số khung.
 - [ ] Khi chạm một khung nhỏ thì khung đó thành khung hiện tại, viền nổi bật, canvas đổi theo.
 - [ ] Khi nhấn giữ một khung thì vào chế độ chọn nhiều: thanh "4 frames selected" (theo số khung chọn) với đóng, chép, nhân bản, giữ khung, xóa; khung được chọn có dấu chọn.
-- [ ] Khi muốn nhân bản 10 khung liền nhau thì người dùng làm được trong tối đa 3 thao tác (cách chọn dải: câu hỏi 9).
+- [ ] Khi muốn nhân bản 10 khung liền nhau thì người dùng làm được trong tối đa 3 thao tác: nhấn giữ khung đầu rồi kéo dọc dải để chọn cả dải, rồi bấm nhân bản (câu hỏi 9).
 - [ ] Khi chép một dải khung rồi dán thì cả dải được chèn sau khung hiện tại, đúng thứ tự, đủ mọi layer.
 - [ ] Khi đặt giữ khung cho một khung thì khung đó hiện lâu hơn đúng số nhịp đã chọn lúc phát.
 - [ ] Khi chạm chip tốc độ khung thì đổi được tốc độ trong khoảng 6 đến 30 khung/giây.
 - [ ] Khi xóa khung thì có thể lấy lại bằng hoàn tác.
+- [ ] Khi thu gọn dòng thời gian thì dòng thời gian cao 56 dp và canvas lớn ra theo chỗ trống; khi mở lại thì dòng thời gian về 140 dp như thiết kế. Phần còn hiện khi thu gọn và chỗ nút thu gọn theo thiết kế bổ sung (câu hỏi 2).
 
 ### KB-10. Phát thử
 
@@ -161,7 +163,7 @@ Tiêu chí chấp nhận:
 
 - [ ] Khi bấm phát thì hoạt hình chạy theo tốc độ khung của dự án, dòng phụ của tiêu đề thành "Playing · 12 fps" (theo tốc độ), nút phát thành nút dừng, chip "Loop" hiện, số khung chạy theo; thanh công cụ và cột phải ẩn.
 - [ ] Khi bật "Loop" thì phát xong khung cuối quay về khung đầu; tắt thì dừng ở khung cuối.
-- [ ] Khi dự án có 200 khung × 5 layer thì phát ở 12 khung/giây mượt trên máy tầm trung (cách đo: câu hỏi 10).
+- [ ] Khi dự án có 200 khung × 5 layer thì phát ở 12 khung/giây mượt trên máy tầm trung: ít nhất 95% khung hiện đúng nhịp trong 3 vòng phát, đo trên một máy tầm trung chốt ở prototype (câu hỏi 10).
 - [ ] Khi dự án có âm thanh thì âm thanh phát khớp với khung.
 - [ ] Khi đang phát thì không quảng cáo nào hiện lên (dải quảng cáo cố định ở trên không tính).
 
@@ -169,7 +171,7 @@ Tiêu chí chấp nhận:
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi bấm hoàn tác thì thao tác gần nhất bị bỏ, kể cả nét vẽ, tô màu, biến đổi vùng chọn, thêm hay xóa khung, thêm hay xóa layer; bấm liên tiếp thì lùi được nhiều bước (số bước: câu hỏi 11).
+- [ ] Khi bấm hoàn tác thì thao tác gần nhất bị bỏ, kể cả nét vẽ, tô màu, biến đổi vùng chọn, thêm hay xóa khung, thêm hay xóa layer; bấm liên tiếp thì lùi được ít nhất 50 bước trong một lần mở dự án (câu hỏi 11).
 - [ ] Khi bấm làm lại thì thao tác vừa hoàn tác được làm lại; khi đã có thao tác mới sau hoàn tác thì làm lại không còn.
 - [ ] Khi không còn gì để hoàn tác hay làm lại thì nút tương ứng mờ đi và không làm gì.
 
@@ -194,7 +196,7 @@ Tiêu chí chấp nhận:
 - [ ] Khi bấm "Music" thì bộ chọn file của hệ thống mở; chọn một bài thì bài được thêm vào dự án, miễn phí.
 - [ ] Khi bấm "Record" lần đầu thì app hỏi quyền ghi âm; cho phép thì ghi được giọng, giọng được đặt từ khung hiện tại.
 - [ ] Khi bấm "Effects" thì chọn được hiệu ứng trong bộ cơ bản miễn phí; hiệu ứng được đặt tại khung hiện tại.
-- [ ] Khi từ chối quyền ghi âm thì app báo cần quyền để ghi âm; nhạc và hiệu ứng vẫn dùng được (khi từ chối hẳn: câu hỏi 13).
+- [ ] Khi từ chối quyền ghi âm thì app báo cần quyền để ghi âm; nhạc và hiệu ứng vẫn dùng được; từ chối hẳn thì bấm "Record" hiện lời giải thích ngắn và nút mở cài đặt quyền của app (câu hỏi 13).
 
 Trường hợp đặc biệt:
 
@@ -234,10 +236,10 @@ Trường hợp đặc biệt:
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi lần đầu vào một dự án thường (không phải bài học; theo đề xuất câu hỏi 15, chờ trả lời) thì hướng dẫn 9 bước hiện: thẻ chỉ dẫn có số bước "1 / 9", tiêu đề, lời chỉ dẫn (ví dụ "Draw on the canvas", "Pick a brush on the left, then draw with one finger. Two fingers move and zoom."), nút "Skip tour" và "Next"; lớp tối phủ phần màn vẽ dưới dải quảng cáo, không phủ thanh tiêu đề và dải quảng cáo.
+- [ ] Khi lần đầu vào một dự án thường (không phải bài học; câu hỏi 15) thì hướng dẫn 9 bước hiện: thẻ chỉ dẫn có số bước "1 / 9", tiêu đề, lời chỉ dẫn (ví dụ "Draw on the canvas", "Pick a brush on the left, then draw with one finger. Two fingers move and zoom."), nút "Skip tour" và "Next"; lớp tối phủ phần màn vẽ dưới dải quảng cáo, không phủ thanh tiêu đề và dải quảng cáo.
 - [ ] Khi bấm "Skip tour" ở bất kỳ bước nào thì hướng dẫn đóng ngay và không tự hiện lại.
 - [ ] Khi qua hết 9 bước thì hướng dẫn đóng và không tự hiện lại.
-- [ ] Khi người dùng muốn xem lại thì mở lại được hướng dẫn từ màn vẽ (chỗ mở: câu hỏi 15).
+- [ ] Khi người dùng muốn xem lại thì mở lại được hướng dẫn từ bước 1 bằng mục xem lại hướng dẫn trong menu của nút "thêm" (câu hỏi 15).
 
 ### KB-18. Chỉ dẫn bài học trên màn vẽ
 
@@ -248,9 +250,9 @@ Tiêu chí chấp nhận:
 - [ ] Khi bài mở thì tiêu đề hiện tên bài và bước ("Lesson 1 · Bouncing ball", "Step 3 of 6"), nút đóng thay cho nút quay lại, không có nút "Export".
 - [ ] Khi đang ở một bước thì thẻ chỉ dẫn hiện tên bước, số bước ("3 / 6"), lời chỉ dẫn, nút "Show me" và "Next step"; nét dẫn màu đỏ hiện trên canvas.
 - [ ] Khi bấm "Next step" thì sang bước sau; ở bước cuối thì sang màn Hoàn thành bài học của feature Bài học.
-- [ ] Khi bấm "Show me" thì app cho xem cách làm bước đó (cách xem: câu hỏi 16).
+- [ ] Khi bấm "Show me" thì app cho xem cách làm bước đó bằng một đoạn mẫu của bước đó phát trên canvas, xong thì trả về khung đang vẽ (câu hỏi 16).
 - [ ] Khi đang làm bài thì mọi công cụ vẽ dùng được như ở dự án thường; bài không xuất hiện trong danh sách dự án và không tính vào số dự án.
-- [ ] Khi bấm nút đóng (hay nút back của máy) lúc bài chưa xong thì app tự lưu xong rồi về màn Bài học, không về danh sách dự án (bản đề xuất và thiết kế không nói chỗ về; theo đề xuất câu hỏi 17, chờ trả lời, gồm cả quảng cáo xen giữa và giữ bước đang làm).
+- [ ] Khi bấm nút đóng (hay nút back của máy) lúc bài chưa xong thì app tự lưu xong rồi về màn Bài học, không về danh sách dự án; có thể hiện quảng cáo xen giữa như rời màn vẽ thường, và bước đang làm được giữ để lần sau mở tiếp (câu hỏi 17).
 
 ### KB-19. Dải quảng cáo trên màn vẽ
 
@@ -281,7 +283,7 @@ Tiêu chí chấp nhận:
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi cờ của feature tắt mà người dùng chạm một dự án, bấm "Create", chạm một thẻ bài học hay bấm "Next lesson" thì app hiện thông báo ngắn "coming soon" và ở lại màn đang đứng, không mở màn vẽ, không tạo dự án (theo đề xuất câu hỏi 20, chờ trả lời).
+- [ ] Khi cờ của feature tắt mà người dùng dùng bất kỳ lối nào mở màn vẽ (chạm một dự án, bấm "Open" trong menu dự án, bấm "Create", chạm một thẻ bài học hay bấm "Next lesson") thì app hiện thông báo ngắn "coming soon" và ở lại màn đang đứng, không mở màn vẽ, không tạo dự án (câu hỏi 20).
 
 ## 4. Giao diện
 
@@ -308,7 +310,7 @@ Tiêu chí chấp nhận:
 | `EditorScreen` | sound-locked | Mời mở gói hiệu ứng | KB-14 |
 | `EditorScreen` | lesson-step | Chỉ dẫn bài học | KB-18 |
 
-- Thiết kế chưa có bảng hay trạng thái cho: tẩy, hình, thước, vẽ đối xứng, hút màu, chọn màu, camera ảo, nhập ảnh và video, chọn tốc độ khung, giữ khung, dòng thời gian thu gọn, khung 360 × 640 (câu hỏi 1, 2, 18).
+- Thiết kế chưa có bảng hay trạng thái cho: tẩy, hình, thước, vẽ đối xứng, hút màu, chọn màu, camera ảo, nhập ảnh và video, chọn tốc độ khung, giữ khung, dòng thời gian thu gọn, khung 360 × 640 (câu hỏi 1, 2, 18). Các bảng, menu "thêm" và trạng thái thu gọn được dựng bổ sung trên Figma bằng thành phần đã duyệt trước khi viết plan cho phần tương ứng; plan của phần chưa có thiết kế không chạy (câu hỏi 1, 2).
 
 ## 5. Quảng cáo
 
@@ -326,7 +328,7 @@ Chép từ bản đề xuất mục 9.1. Mọi vị trí mặc định tắt, b�
 
 - **Định dạng mới cho `editor_top_native` (ngoại lệ có chủ đích, bản đề xuất đoạn dưới bảng 9.1, Q17):** `:core:ads` chưa có native cao dưới 106 dp, nên app tự làm native banner gọn một tầng trong `:core:ads` của app. Việc này lệch MC-02, `ads-guide.md` và `docs/ops/to-app.md` mục 2, nên: plan làm định dạng là plan rủi ro cao kèm một ADR của app (dải 1001 trở lên); mọi lần chạy `template-sync.sh` cho app đặt `hold=core/ads` tới khi dự án mẫu nhận định dạng; chạy ổn trên bản phát hành thì mở issue `from-app`. Hình thức: chỉ icon, không ảnh chính; nhãn "Ad" luôn thấy; chừa góc trên phải cho AdChoices; CTA viền, khác nút xanh chanh của app; cao cố định khoảng 56 dp ở mọi cỡ chữ, chữ dài cắt bằng "…"; plan có test nhãn "Ad" và chữ CTA không bị cắt ở cỡ chữ lớn.
 - **Trước nét vẽ đầu tiên (app tự làm):** tới khi người dùng vẽ nét đầu tiên ở bất kỳ dự án hay bài học nào, màn vẽ chỉ hiện `editor_top_native`; không hiện `editor_exit_inter`. Rewarded chỉ khi người dùng tự chọn.
-- **Rewarded:** lời mời là thẻ trong bảng công cụ (cọ, âm thanh) hay lời mời khi thêm layer thứ 6; chỉ khi người dùng bấm "Watch ad" mới mở quảng cáo, không tự mở. Khóa `is_show_<mã>` tắt thì hành động làm thẳng, không mời (MC-05). Điều kiện "mở 24 giờ" và "cả dự án" do app tự làm. Chính sách khi không có quảng cáo: câu hỏi 4.
+- **Rewarded:** lời mời là thẻ trong bảng công cụ (cọ, âm thanh) hay lời mời khi thêm layer thứ 6; chỉ khi người dùng bấm "Watch ad" mới mở quảng cáo, không tự mở. Khóa `is_show_<mã>` tắt thì hành động làm thẳng, không mời (MC-05). Điều kiện "mở 24 giờ" và "cả dự án" do app tự làm. Khi không có quảng cáo để hiện: `allow_after_2`, sau 2 lần thử liên tiếp không có quảng cáo thì mở luôn (câu hỏi 4).
 - **Vị trí toàn app (không thuộc bảng này):** `resume`, `resume_inter` hiện cả ở màn vẽ khi quay lại app (Q4); `native_combo` có thể hiện sau `editor_exit_inter` theo spec ads.
 
 ## 6. Dữ liệu và phân tích
@@ -342,7 +344,7 @@ Chép từ bản đề xuất mục 9.1. Mọi vị trí mặc định tắt, b�
 | Đã xem hay bỏ qua hướng dẫn trên màn vẽ | Không tự hiện lại | Đến khi xóa dữ liệu app |
 | Bộ hiệu ứng âm thanh đã tải | Không tải lại mỗi lần | Đến khi xóa dữ liệu app |
 
-**Sự kiện phân tích:** lấy từ danh sách đề xuất ở bản đề xuất mục 9.2; danh sách và tham số chờ xác nhận (câu hỏi 5). Không ghi nội dung tranh, âm thanh hay chữ người dùng nhập.
+**Sự kiện phân tích:** lấy từ danh sách đề xuất ở bản đề xuất mục 9.2; danh sách và tham số đã được anh Nhật duyệt (câu hỏi 5). Không ghi nội dung tranh, âm thanh hay chữ người dùng nhập.
 
 | Tên sự kiện | Khi nào ghi | Tham số | Dùng để trả lời câu hỏi gì |
 | --- | --- | --- | --- |
@@ -355,7 +357,7 @@ Chép từ bản đề xuất mục 9.1. Mọi vị trí mặc định tắt, b�
 
 **Quyền của app và dịch vụ bên ngoài:**
 
-- `RECORD_AUDIO`: hỏi khi người dùng bấm "Record" lần đầu (Q5), mọi phiên bản Android. Từ chối thì app báo cần quyền để ghi âm, mọi phần khác vẫn dùng được; từ chối hẳn thì xem câu hỏi 13.
+- `RECORD_AUDIO`: hỏi khi người dùng bấm "Record" lần đầu (Q5), mọi phiên bản Android. Từ chối thì app báo cần quyền để ghi âm, mọi phần khác vẫn dùng được; từ chối hẳn thì bấm "Record" hiện lời giải thích và nút mở cài đặt quyền của app (câu hỏi 13).
 - Nhập ảnh, video qua bộ chọn ảnh của hệ thống (Photo Picker), nhập nhạc qua bộ chọn file của hệ thống: không cần quyền.
 - `WRITE_EXTERNAL_STORAGE` (`maxSdkVersion=28`) dùng cho lưu file vào thư viện máy ở feature export, màn vẽ không cần.
 - Không dịch vụ hay SDK bên ngoài mới; quảng cáo qua `:core:ads` (chỉ AdMob, Q7).
@@ -364,8 +366,8 @@ Chép từ bản đề xuất mục 9.1. Mọi vị trí mặc định tắt, b�
 
 | Nhóm file | Dung lượng ước tính | Khi nào tải | Khi không tải được |
 | --- | --- | --- | --- |
-| Bộ hiệu ứng âm thanh cơ bản (CC0) | Chưa rõ, đề xuất dưới 2 MB (câu hỏi 14) | Lần đầu mở "Effects"; lần sau dùng bản trên máy | Bảng âm thanh báo lỗi, có nút thử lại (KB-13) |
-| Gói hiệu ứng thêm (CC0): "Cartoon" 24 âm, "Ambience" 16 âm | Chưa rõ (câu hỏi 14) | Khi người dùng dùng gói đã mở | Báo lỗi, có nút thử lại; quyền mở 24 giờ vẫn giữ |
+| Bộ hiệu ứng âm thanh cơ bản (CC0) | Khoảng 10 hiệu ứng, dưới 2 MB, đường dẫn có phiên bản như `sounds/basic/v1/` (câu hỏi 14) | Lần đầu mở "Effects"; lần sau dùng bản trên máy | Bảng âm thanh báo lỗi, có nút thử lại (KB-13) |
+| Gói hiệu ứng thêm (CC0): "Cartoon" 24 âm, "Ambience" 16 âm | Mỗi gói dưới 5 MB, đường dẫn có phiên bản như `sounds/cartoon/v1/` (câu hỏi 14) | Khi người dùng dùng gói đã mở | Báo lỗi, có nút thử lại; quyền mở 24 giờ vẫn giữ |
 | Nội dung bài học | Theo spec lessons | Feature Bài học tải và đưa cho màn vẽ | Theo spec lessons |
 
 ## 8. Cờ tính năng
@@ -374,79 +376,80 @@ Chép từ bản đề xuất mục 9.1. Mọi vị trí mặc định tắt, b�
 | --- | --- | --- |
 | `feature_editor_enabled` | tắt | Bật để người dùng vào màn vẽ mới. Bản staging bật sẵn |
 
-Tham số Remote Config của màn vẽ (không phải cờ): `time_reload_editor_top_native`, mặc định 120 giây (mục 5). Cờ riêng cho camera ảo: câu hỏi 19.
+Tham số Remote Config của màn vẽ (không phải cờ): `time_reload_editor_top_native`, mặc định 120 giây (mục 5). Camera ảo không có cờ riêng, đi chung cờ `feature_editor_enabled` (câu hỏi 19).
 
 ## 9. Câu hỏi còn mở
 
 1. **Thiết kế chưa có bảng cho nhiều công cụ của bản đề xuất:** tẩy, hình, thước, vẽ đối xứng, hút màu, chọn màu (bảng màu), camera ảo, nhập ảnh và video, chọn tốc độ khung, giữ khung. Thanh công cụ có 8 nút (cọ, tẩy, tô, chọn vùng, hình, chữ, camera ảo, thêm), không có nút riêng cho hút màu, thước, đối xứng, nhập nền; bảng âm thanh cũng không có nút mở rõ trên trạng thái drawing.
    - Đề xuất của AI: nút "thêm" (ba chấm) mở một menu gồm hút màu, thước, vẽ đối xứng, nhập ảnh hay video, âm thanh, xem lại hướng dẫn. Dựng thêm các bảng còn thiếu trên Figma (cùng thành phần đã duyệt) trước khi viết plan cho các phần đó; plan chưa có thiết kế thì không chạy.
-   - Trả lời:
+   - Trả lời: Menu "thêm", và dựng các bảng còn thiếu trên Figma trước khi viết plan, theo đề xuất của AI.
 2. **Dòng thời gian thu gọn:** bản đề xuất mục 4 ghi "dòng thời gian thu gọn được (dòng thời gian 56 dp)"; thiết kế chỉ có dòng thời gian 140 dp, không có trạng thái thu gọn, và canvas 9:16 vẫn đạt khoảng 57% chiều cao.
    - Đề xuất của AI: không làm thu gọn ở bản đầu vì thước đo canvas đã đạt; ghi lại để xét ở bản sau.
-   - Trả lời:
+   - Trả lời: Có làm dòng thời gian thu gọn 56 dp ở bản đầu (khác đề xuất của AI). Dựng trạng thái thu gọn trên Figma trước khi viết plan cho phần này.
 3. **Lời mời mở layer 6 đến 10: thẻ nhỏ hay hộp thoại?** Bản đề xuất mục 4 ghi "mời rewarded bằng thẻ nhỏ trên màn vẽ" (học từ ZenByte: không chặn, không làm tối nền). Thiết kế `layer-locked` là hộp thoại giữa màn có nút "Not now" và "Watch ad". Hai trạng thái cọ và âm thanh dùng thẻ trong bảng công cụ.
    - Đề xuất của AI: giữ hộp thoại như thiết kế đã duyệt vì nó chỉ hiện sau khi người dùng bấm thêm layer, không phải màn toàn màn hình; hoặc đổi thành thẻ mời trong bảng "Layers" cho đồng bộ với cọ và âm thanh. Anh Nhật chọn.
-   - Trả lời:
+   - Trả lời: Giữ hộp thoại như thiết kế.
 4. **Chính sách khi không có quảng cáo có thưởng để hiện** (`editor_rw_layer`, `editor_rw_brushes`, `editor_rw_sounds`): mặc định của `:core:ads` là chặn, người dùng thử lại được (MC-05).
    - Đề xuất của AI: `allow_after_2`: sau 2 lần thử liên tiếp không có quảng cáo thì cho mở luôn, để người dùng không kẹt vì lỗi mạng quảng cáo. Áp chung một chính sách cho cả bốn vị trí rewarded của app, gồm cả `export_rw_extra` của màn Xuất (spec export câu 14 trỏ về đây), để anh chọn một lần.
-   - Trả lời:
+   - Trả lời: `allow_after_2`, áp cho cả bốn vị trí rewarded.
 5. **Xác nhận danh sách sự kiện và tham số ở mục 6** (bản đề xuất mục 9.2 chỉ là đề xuất). Hai điểm cần chốt thêm: `project_open` do màn vẽ hay feature projects ghi; `lesson_complete` (bước cuối của bài nằm trên màn vẽ) do màn vẽ hay feature lessons ghi.
    - Đề xuất của AI: giữ sáu sự kiện ở mục 6 với tham số đã ghi; `project_open` do màn vẽ ghi khi mở được dự án (spec projects câu 17 đã theo hướng này, bảng sự kiện của projects không còn dòng `project_open`); `lesson_start`, `lesson_complete` do feature lessons ghi, màn vẽ báo cho lessons khi người dùng bấm "Next step" ở bước cuối.
-   - Trả lời:
+   - Trả lời: Duyệt như đề xuất.
 6. **Cọ nâng cao hết hạn khi đang được chọn:** nét đã vẽ giữ nguyên, còn cọ đang chọn thì sao?
    - Đề xuất của AI: người dùng vẽ tiếp được tới khi rời màn vẽ; lần mở sau cọ đang chọn về "Pencil".
-   - Trả lời:
+   - Trả lời: Đồng ý đề xuất của AI.
 7. **Hiệu ứng từ gói thêm đã đặt vào dự án khi gói hết 24 giờ:** giữ trong dự án và khi xuất không?
    - Đề xuất của AI: giữ, phát và xuất bình thường; chỉ không đặt thêm được hiệu ứng mới từ gói.
-   - Trả lời:
+   - Trả lời: Đồng ý đề xuất của AI.
 8. **Mức "Close gaps":** thiết kế ghi "Medium · 4 px"; bản đề xuất chỉ đo khe 1, 2, 4 px.
    - Đề xuất của AI: các mức "Off", "Small · 2 px", "Medium · 4 px" (mặc định), "Large · 8 px"; thước đo ảnh thử 1, 2, 4 px dùng mức mặc định.
-   - Trả lời:
+   - Trả lời: Đồng ý đề xuất của AI.
 9. **Cách chọn dải khung để nhân bản 10 khung trong tối đa 3 thao tác:** thiết kế chỉ có nhấn giữ để vào chọn nhiều và chạm từng khung.
    - Đề xuất của AI: nhấn giữ khung đầu rồi kéo ngón dọc dải để chọn liền cả dải (thao tác 1), bấm nhân bản (thao tác 2). Chạm từng khung vẫn chọn thêm hay bỏ từng khung.
-   - Trả lời:
+   - Trả lời: Đồng ý đề xuất của AI.
 10. **Cách đo "phát mượt 12 khung/giây trên máy tầm trung":** máy nào, mượt là bao nhiêu.
     - Đề xuất của AI: đo trên một máy Android tầm trung cụ thể của nhóm (anh Nhật chọn máy); mượt là ít nhất 95% khung hiện đúng nhịp trong 3 vòng phát dự án 200 khung × 5 layer. Đo ở prototype tuần đầu (bản đề xuất mục 5).
-    - Trả lời:
+    - Trả lời: Giữ ngưỡng 95%; chốt máy đo ở prototype tuần đầu.
 11. **Số bước hoàn tác tối đa:** bản đề xuất không ghi.
     - Đề xuất của AI: ít nhất 50 bước mỗi lần mở dự án; lịch sử hoàn tác không giữ sau khi rời màn vẽ.
-    - Trả lời:
+    - Trả lời: Đồng ý đề xuất của AI.
 12. **Nhập ảnh, video để vẽ theo (KB-12):** video dài hơn dự án thì sao, lớp vẽ theo có xuất ra file không? Câu này chỉ nói ảnh hay video nhập trên màn vẽ để vẽ theo, khác nền "Photo" chọn ở màn Tạo dự án (spec projects câu 3 đề xuất nền đó có trong file xuất).
     - Đề xuất của AI: video được chia theo tốc độ khung của dự án, tối đa 10 giây; lớp vẽ theo chỉ để vẽ theo, hiện mờ, không xuất ra file (có công tắc ẩn hiện). Ảnh nhập để vẽ theo cũng không xuất ra file. Nền "Photo" của dự án theo câu trả lời ở spec projects câu 3.
-    - Trả lời:
+    - Trả lời: Đồng ý đề xuất của AI.
 13. **Người dùng từ chối hẳn quyền ghi âm ("Don't ask again"):** bản đề xuất không nói.
     - Đề xuất của AI: bấm "Record" thì hiện lời giải thích ngắn và nút mở cài đặt quyền của app trong hệ thống.
-    - Trả lời:
+    - Trả lời: Đồng ý đề xuất của AI.
 14. **Dung lượng và đường dẫn của bộ hiệu ứng cơ bản và các gói trên R2:** chưa có số. R2 staging tạm dùng `https://draw-animation-staging.vgl.io.vn/`.
     - Đề xuất của AI: bộ cơ bản khoảng 10 hiệu ứng, dưới 2 MB; mỗi gói tải riêng, dưới 5 MB; đường dẫn có phiên bản, ví dụ `sounds/basic/v1/`, `sounds/cartoon/v1/`. Nhóm chọn nguồn CC0 và ghi giấy phép.
-    - Trả lời:
+    - Trả lời: Đồng ý đề xuất của AI.
 15. **Chỗ xem lại hướng dẫn trên màn vẽ, và hướng dẫn có tự hiện khi vào qua bài học không** ("xem lại được" ở bản đề xuất mục 5; thiết kế không có).
     - Đề xuất của AI: một mục trong menu của nút "thêm" trên thanh công cụ (cùng câu hỏi 1). Hướng dẫn không tự hiện khi vào màn vẽ qua bài học; hiện ở lần đầu vào một dự án thường. Spec settings câu 14 đề xuất thêm một dòng trong Cài đặt; trả lời chung hai câu, có thể chọn một hay cả hai lối vào.
-    - Trả lời:
+    - Trả lời: Chỉ lối vào trong menu "thêm" của màn vẽ, không thêm dòng ở Cài đặt. Hướng dẫn không tự hiện khi vào qua bài học, theo đề xuất của AI.
 16. **Nút "Show me" của chỉ dẫn bài học làm gì, và nội dung bài đưa sang màn vẽ gồm gì?**
     - Đề xuất của AI: "Show me" phát một đoạn mẫu của bước đó trên canvas rồi trả về khung đang vẽ. Mỗi bài từ feature Bài học gồm: dự án dựng sẵn, danh sách bước (tên, lời chỉ dẫn, khung áp dụng, lớp nét dẫn, đoạn mẫu). Hai spec editor và lessons chốt cùng một dạng.
-    - Trả lời:
+    - Trả lời: Đồng ý đề xuất của AI.
 17. **Đóng bài học giữa chừng:** về đâu, có hiện `editor_exit_inter` không, có giữ tiến độ bài không? Bản đề xuất và thiết kế không nói.
     - Đề xuất của AI: về màn Bài học (KB-18); có hiện `editor_exit_inter` như rời màn vẽ thường (theo `ads_interval`, sau nét vẽ đầu tiên); giữ bước đang làm để lần sau mở tiếp (spec lessons KB-4, mục 5).
-    - Trả lời:
+    - Trả lời: Đồng ý đề xuất của AI.
 18. **Màn 360 × 640:** thiết kế chỉ có khung 411 × 891 và màn gập. Ở 360 × 640, thanh công cụ 8 nút (cao 392 dp) không vừa vùng làm việc khi có dải quảng cáo.
     - Đề xuất của AI: thanh công cụ cuộn được; canvas thu nhỏ giữ tỷ lệ; các bảng công cụ cuộn được. Screenshot test ở trạng thái drawing có dải quảng cáo và tool-brush.
-    - Trả lời:
+    - Trả lời: Đồng ý đề xuất của AI.
 19. **Camera ảo có cần cờ riêng không?** Camera ảo có trong bản đầu (Q3) nhưng làm lịch dài thêm khoảng một tuần.
     - Đề xuất của AI: thêm cờ phụ `feature_editor_camera_enabled` (mặc định tắt) để phát hành màn vẽ trước nếu camera ảo chưa xong.
-    - Trả lời:
+    - Trả lời: Không thêm cờ phụ; camera ảo đi chung cờ `feature_editor_enabled` (khác đề xuất của AI).
 20. **Cờ `feature_editor_enabled` tắt thì sao?** Màn vẽ là lõi của app, không có màn cũ để thay.
     - Đề xuất của AI: cờ chỉ để giữ màn vẽ khỏi bản phát hành khi chưa xong; khi tắt, chạm thẻ dự án, bấm "Create" (không tạo dự án), chạm thẻ bài học hay bấm "Next lesson" thì hiện thông báo ngắn "coming soon" và ở lại màn đang đứng. Bản staging bật sẵn.
-    - Trả lời:
+    - Trả lời: Đồng ý đề xuất của AI.
 21. **Vùng chạm của thanh công cụ trái:** thiết kế ghi nút 44 dp, cách nhau 4 dp; bảng tiêu chí duyệt của thiết kế đòi vùng chạm ít nhất 48 dp.
     - Đề xuất của AI: giữ hình nút 44 dp như thiết kế, vùng chạm mở rộng tới 48 dp (dùng khoảng cách giữa các nút), như tiêu chí 48 dp của cột phải ở KB-1.
-    - Trả lời:
+    - Trả lời: Đồng ý đề xuất của AI.
 22. **Lực bút: công tắc chung hay theo từng cọ?** Thiết kế Cài đặt có công tắc chung "Stylus pressure" (spec settings câu 7); thiết kế bảng "Brush" của màn vẽ có công tắc "Pressure from stylus" (KB-2). Bản đề xuất chỉ nói "lực bút" trong cọ. Có giữ cả hai không, và khi hai công tắc khác nhau thì bên nào thắng?
     - Đề xuất của AI: giữ cả hai. Công tắc ở Cài đặt là giá trị mặc định cho cọ chưa chỉnh; công tắc ở bảng "Brush" chỉnh riêng cọ đang chọn và thắng giá trị mặc định cho cọ đó. Phương án khác: bỏ công tắc ở bảng "Brush" (chỉ còn công tắc chung), hoặc bỏ dòng ở Cài đặt (chỉ còn theo cọ); cả hai cần sửa thiết kế. Trả lời chung với spec settings câu 7.
-    - Trả lời:
+    - Trả lời: Giữ cả hai công tắc, theo đề xuất của AI.
 
 ## 10. Lịch sử
 
 | Ngày | Người | Nội dung |
 | --- | --- | --- |
 | 2026-11-21 | AI | Tạo bản đầu từ bản đề xuất đã duyệt (docs/research/proposal.md) và thiết kế đã duyệt |
+| 2026-11-21 | AI | Ghi câu trả lời của anh Nhật cho mọi câu hỏi ở mục 9 (anh chọn trong phiên ngày 2026-11-21) và sửa phần thân spec theo các câu trả lời; sửa các điểm nên sửa còn lại của lần rà soát cuối. Spec vẫn `draft` |

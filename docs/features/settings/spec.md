@@ -16,7 +16,7 @@ confirmed:
 
 - **Người dùng được gì:** một chỗ để chọn giá trị mặc định cho dự án mới, sao lưu cả kho dự án ra một file và khôi phục lại, xem lại lựa chọn quyền riêng tư quảng cáo, đọc chính sách quyền riêng tư và biết phiên bản app.
 - **Vì sao làm bây giờ:** mất bài là nỗi sợ lớn nhất của người dùng app vẽ hoạt hình (bản đề xuất mục 4). Sao lưu tất cả dự án ra một file giúp người dùng chuyển máy hay cài lại app mà không mất gì, khi app không có tài khoản hay đám mây (mục 9.4). Màn này cũng là lối vào lựa chọn quyền riêng tư quảng cáo mà người dùng cần để rút hay cho lại đồng ý.
-- **Đo kết quả bằng gì:** số lần sao lưu tất cả và số lần khôi phục thành công mỗi tuần, so với số người dùng hoạt động (mục 6); tỷ lệ khôi phục thành công trên số lần thử chỉ đo được khi chọn phương án ghi cả lần lỗi, hủy (câu hỏi 1).
+- **Đo kết quả bằng gì:** số lần sao lưu tất cả và số lần khôi phục thành công mỗi tuần, so với số người dùng hoạt động (mục 6); không đo tỷ lệ khôi phục thành công trên số lần thử, vì sự kiện chỉ ghi lần thành công (câu hỏi 1).
 
 ## 2. Phạm vi
 
@@ -32,10 +32,10 @@ confirmed:
 **Ngoài phạm vi lần này:**
 
 - Sao lưu hay khôi phục một dự án lẻ từ menu dự án và nút "Nhập từ file" trên danh sách dự án: thuộc feature projects.
-- Hướng dẫn trên màn vẽ: thuộc feature editor. Lối vào "xem lại hướng dẫn" chưa có trên thiết kế nào (câu hỏi 14).
+- Hướng dẫn trên màn vẽ: thuộc feature editor. Lối vào "xem lại hướng dẫn" nằm trong menu "thêm" của màn vẽ, không ở Cài đặt (câu hỏi 14).
 - Tài khoản, đồng bộ đám mây, sao lưu tự động theo lịch, gói gỡ quảng cáo (bản đề xuất mục 5, Q10).
 - Chọn ngôn ngữ trong app: app chỉ có tiếng Anh (Q9).
-- Điều khoản sử dụng, liên hệ hỗ trợ: không có trên thiết kế và bản đề xuất (câu hỏi 11, 13).
+- Điều khoản sử dụng, liên hệ hỗ trợ: không có trên thiết kế và bản đề xuất, không làm ở bản đầu (câu hỏi 11, 13).
 
 ## 3. Kịch bản sử dụng
 
@@ -78,7 +78,7 @@ Người dùng hay làm video ngang, muốn mặc định 16:9.
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi bấm dòng "Default canvas" thì app hiện danh sách tỷ lệ khung giống các lựa chọn ở màn Tạo dự án, lựa chọn hiện tại được đánh dấu (danh sách tỷ lệ chờ câu hỏi 9).
+- [ ] Khi bấm dòng "Default canvas" thì app hiện danh sách tỷ lệ khung giống các lựa chọn ở màn Tạo dự án, lựa chọn hiện tại được đánh dấu: 16:9, 9:16, 1:1 (câu hỏi 9).
 - [ ] Khi chọn 16:9 thì dòng hiện "16:9", và lần tạo dự án sau màn Tạo dự án chọn sẵn 16:9.
 - [ ] Khi tắt app rồi mở lại thì giá trị đã chọn vẫn còn.
 
@@ -92,15 +92,15 @@ Người dùng vẽ bằng bút cảm ứng, muốn nét đậm nhạt theo lự
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi bấm dòng "Stylus pressure" lúc đang "On" thì dòng chuyển sang "Off", và trên màn vẽ, với cọ chưa chỉnh riêng lực bút trong bảng "Brush", nét vẽ bằng bút cảm ứng có độ dày đều, không theo lực nhấn (quan hệ với bảng "Brush": câu hỏi 7 và spec editor câu 22).
-- [ ] Khi bấm lại thì dòng về "On" và nét vẽ bằng bút cảm ứng lại theo lực nhấn ở các cọ có lực bút.
+- [ ] Khi bấm dòng "Stylus pressure" lúc đang "On" thì dòng chuyển sang "Off", và trên màn vẽ, với cọ chưa chỉnh riêng lực bút trong bảng "Brush", nét vẽ bằng bút cảm ứng có độ dày đều, không theo lực nhấn (công tắc "Pressure from stylus" trong bảng "Brush" chỉnh riêng cọ đang chọn và thắng giá trị này: câu hỏi 7, spec editor câu 22).
+- [ ] Khi bấm lại thì dòng về "On" và nét vẽ bằng bút cảm ứng lại theo lực nhấn ở các cọ có lực bút mà người dùng chưa chỉnh riêng lực bút.
 - [ ] Khi tắt app rồi mở lại thì lựa chọn vẫn còn.
 
 Trường hợp đặc biệt:
 
 - [ ] Khi vẽ bằng ngón tay thì lựa chọn này không đổi gì.
 
-Cách chọn (công tắc hay danh sách) và phạm vi áp dụng chờ câu hỏi 7.
+Chạm dòng để bật tắt, mặc định "On"; chỉ áp khi vẽ bằng bút cảm ứng (câu hỏi 7).
 
 ### KB-5. Sao lưu tất cả dự án ra một file
 
@@ -111,12 +111,13 @@ Tiêu chí chấp nhận:
 - [ ] Khi bấm "Back up all projects" thì bộ chọn file của hệ thống mở để chọn chỗ lưu, tên file gợi ý có tên app và ngày (ví dụ "Frameloop-backup-2026-11-21"), chọn được Google Drive.
 - [ ] Khi chọn chỗ lưu thì app ghi mọi dự án của người dùng (khung, layer, âm thanh, tên, tốc độ khung, khung hình) vào đúng một file, và báo sao lưu xong kèm số dự án.
 - [ ] Khi file sao lưu được khôi phục trên một máy khác (KB-6) thì mọi dự án hiện lại đủ khung, layer, âm thanh như lúc sao lưu.
-- [ ] Khi đang sao lưu thì người dùng thấy app đang làm việc và không bấm sao lưu lần nữa được (trạng thái hiển thị chờ câu hỏi 5).
+- [ ] Khi đang sao lưu thì người dùng thấy app đang làm việc và không bấm sao lưu lần nữa được: dòng "Back up all projects" hiện vòng chờ thay cho "To a file" và không bấm được (câu hỏi 5).
+- [ ] Khi sao lưu xong thì thông báo ngắn ở đáy ghi số dự án (ví dụ "Backed up 4 projects"); lỗi thì thông báo "Couldn't back up. Try again." có nút "Retry" (câu hỏi 5).
 
 Trường hợp đặc biệt:
 
 - [ ] Khi người dùng đóng bộ chọn file mà không chọn chỗ lưu thì không có file nào được ghi, không báo lỗi.
-- [ ] Khi chưa có dự án nào thì app không mở bộ chọn file và báo không có dự án để sao lưu (câu hỏi 5).
+- [ ] Khi chưa có dự án nào thì dòng "Back up all projects" mờ đi, chữ phụ "No projects yet", bấm không mở bộ chọn file (câu hỏi 5).
 - [ ] Khi ghi file thất bại (hết chỗ, mất quyền ghi, Google Drive lỗi) thì app báo sao lưu không thành công, có thể thử lại, các dự án trên máy không bị đổi, và file dở dang không được để lại như một bản sao lưu dùng được.
 - [ ] Khi sao lưu thì app đọc các dự án từ bản đã lưu trên máy; bản sao lưu chứa đúng nội dung mà mở dự án trên màn vẽ sẽ thấy (màn vẽ tự lưu xong trước khi người dùng rời màn).
 
@@ -127,8 +128,8 @@ Người dùng vừa cài lại app, có file sao lưu.
 Tiêu chí chấp nhận:
 
 - [ ] Khi bấm "Restore from a file" thì bộ chọn file của hệ thống mở, chọn được file trên máy và trên Google Drive.
-- [ ] Khi chọn một file sao lưu hợp lệ thì app khôi phục các dự án trong file, hiện tiến độ khôi phục, xong thì các dự án có trong danh sách dự án (nơi hiện tiến độ chờ câu hỏi 3).
-- [ ] Khi khôi phục xong thì không dự án nào đang có trên máy bị xóa hay ghi đè (cách đặt tên khi trùng chờ câu hỏi 4).
+- [ ] Khi chọn một file sao lưu hợp lệ thì app về danh sách dự án, khôi phục các dự án trong file với hộp thoại khôi phục của danh sách dự án (có tiến độ), xong thì các dự án có trong danh sách (câu hỏi 3).
+- [ ] Khi khôi phục xong thì không dự án nào đang có trên máy bị xóa hay ghi đè; dự án khôi phục luôn là dự án mới, giữ tên trong file, cho phép trùng tên (câu hỏi 4).
 
 Trường hợp đặc biệt:
 
@@ -150,7 +151,7 @@ Tiêu chí chấp nhận:
 
 Trường hợp đặc biệt:
 
-- [ ] Khi người dùng ở vùng không bắt buộc hộp thoại này thì dòng "Ad privacy choices" xử lý theo câu hỏi 10.
+- [ ] Khi người dùng ở vùng không bắt buộc hộp thoại này thì dòng "Ad privacy choices" không hiện (câu hỏi 10).
 
 ### KB-8. Thông tin app
 
@@ -158,10 +159,10 @@ Người dùng muốn đọc chính sách quyền riêng tư, đánh giá app ha
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi bấm "Privacy policy" thì trang chính sách quyền riêng tư của Frameloop mở trong trình duyệt của máy (địa chỉ chờ câu hỏi 11).
-- [ ] Khi bấm "Rate Frameloop" thì trang của Frameloop trên Google Play mở (cách mở chờ câu hỏi 12).
+- [ ] Khi bấm "Privacy policy" thì trang chính sách quyền riêng tư của Frameloop mở trong trình duyệt của máy (địa chỉ https://studio.vgl.io.vn/privacy-policy, câu hỏi 11).
+- [ ] Khi bấm "Rate Frameloop" thì trang của Frameloop trên Google Play mở (câu hỏi 12).
 - [ ] Khi xem dòng "Version" thì dòng hiện đúng số phiên bản của bản app đang chạy (thiết kế ghi "1.0.0" là ví dụ); dòng không bấm được.
-- [ ] Khi xem dòng "Autosave" thì dòng hiện "Every 30 s", đúng với mức mất tối đa 30 giây công của tự lưu (bấm được hay không chờ câu hỏi 8).
+- [ ] Khi xem dòng "Autosave" thì dòng hiện "Every 30 s", đúng với mức mất tối đa 30 giây công của tự lưu; dòng chỉ để xem, không bấm được (câu hỏi 8).
 
 Trường hợp đặc biệt:
 
@@ -187,7 +188,7 @@ Người vận hành tắt màn Cài đặt khi có sự cố.
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi feature Cài đặt bị tắt thì danh sách dự án không có nút cài đặt, và màn Tạo dự án dùng giá trị mặc định 12 fps, 9:16 (giá trị đã chọn trước đó xử lý theo câu hỏi 15).
+- [ ] Khi feature Cài đặt bị tắt thì danh sách dự án không có nút cài đặt, và màn Tạo dự án dùng giá trị mặc định 12 fps, 9:16; giá trị đã chọn trước đó vẫn giữ trên máy để dùng lại khi bật cờ (câu hỏi 15).
 
 ## 4. Giao diện
 
@@ -227,7 +228,7 @@ Chỉ lưu trên máy, không tài khoản (bản đề xuất mục 9.4).
 
 **Sự kiện phân tích:**
 
-Theo bản đề xuất mục 9.2; danh sách và tham số chờ xác nhận (câu hỏi 1).
+Theo bản đề xuất mục 9.2; danh sách và tham số đã được anh Nhật duyệt (câu hỏi 1, spec projects câu 17).
 
 | Tên sự kiện | Khi nào ghi | Tham số | Dùng để trả lời câu hỏi gì |
 | --- | --- | --- | --- |
@@ -254,52 +255,53 @@ Không có.
 
 1. **Danh sách sự kiện và tham số:** bản đề xuất 9.2 là đề xuất, chưa có câu trả lời riêng. `backup_export`, `backup_restore` có ghi cho cả sao lưu tất cả (Cài đặt) và sao lưu một dự án (menu dự án) không? Có ghi lần thất bại không?
    - Đề xuất của AI: trả lời chung với câu 17 của spec projects, nơi ghi đề xuất duy nhất cho cả hai spec: dùng chung hai sự kiện cho cả hai nơi, cả hai có `scope` (`all`, `project`) và `project_count`, chỉ ghi khi thành công (9.2 không có sự kiện lỗi); phương án ghi cả lần lỗi, hủy cũng nêu ở câu đó.
-   - Trả lời:
+   - Trả lời: Theo spec projects câu 17: chỉ ghi khi thành công.
 2. **File sao lưu tất cả và file sao lưu một dự án có cùng loại không? "Restore from a file" ở Cài đặt nhận loại nào?**
    - Đề xuất của AI: một loại file chung, chứa một hay nhiều dự án; cả "Restore from a file" ở Cài đặt và "Nhập từ file" ở danh sách dự án nhận cả hai, đuôi ".frameloop" như spec projects. Trả lời chung với câu 19 của spec projects.
-   - Trả lời:
+   - Trả lời: Đồng ý đề xuất của AI.
 3. **Khôi phục từ Cài đặt hiện tiến độ ở đâu?** Thiết kế chỉ có hộp thoại đang khôi phục và hộp thoại lỗi trên danh sách dự án (có MREC `restore_mrec`); màn Cài đặt không có trạng thái này.
    - Đề xuất của AI: chọn file xong thì app về danh sách dự án và chạy khôi phục ở đó, dùng chung hộp thoại đang khôi phục và hộp thoại lỗi của projects (kèm `restore_mrec` như 9.1). Không thêm quảng cáo vào màn Cài đặt. Trả lời chung với câu 19 của spec projects.
-   - Trả lời:
+   - Trả lời: Đồng ý đề xuất của AI.
 4. **Khôi phục khi trên máy đã có dự án trùng (cùng dự án hay cùng tên)?**
    - Đề xuất của AI: luôn thêm thành dự án mới, giữ tên trong file (cho phép trùng tên), không ghi đè dự án đang có. Trả lời chung với câu 10 của spec projects.
-   - Trả lời:
+   - Trả lời: Đồng ý đề xuất của AI.
 5. **Trạng thái sao lưu không có trên thiết kế:** đang sao lưu, sao lưu xong, sao lưu lỗi, chưa có dự án để sao lưu.
    - Đề xuất của AI: đang sao lưu thì dòng "Back up all projects" hiện vòng chờ thay cho "To a file" và không bấm được; xong hay lỗi thì hiện thông báo ngắn ở đáy màn ("Backed up 4 projects", "Couldn't back up. Try again." có nút "Retry"); chưa có dự án thì dòng mờ đi, chữ phụ "No projects yet". Chữ tiếng Anh này cần anh duyệt, có thể bổ sung thiết kế.
-   - Trả lời:
+   - Trả lời: Đồng ý đề xuất của AI.
 6. **Bài học đang làm dở có nằm trong bản sao lưu không?** Bản đề xuất ghi bài học không tính vào số dự án.
    - Đề xuất của AI: không; bản sao lưu chỉ gồm dự án của người dùng.
-   - Trả lời:
+   - Trả lời: Đồng ý đề xuất của AI.
 7. **"Stylus pressure" có trên thiết kế, bản đề xuất không có mục cài đặt này** (chỉ có "lực bút" trong cọ của màn vẽ). Có giữ không, chọn thế nào, áp cho đâu?
    - Đề xuất của AI: giữ; chạm dòng để bật tắt (có thể thay chữ "On" bằng công tắc nếu anh muốn sửa thiết kế); mặc định bật; là giá trị mặc định cho mọi cọ có lực bút mà người dùng chưa chỉnh riêng trong bảng "Brush", chỉ khi vẽ bằng bút cảm ứng (khớp đề xuất của spec editor câu 22). Quan hệ với công tắc "Pressure from stylus" trong bảng "Brush" của màn vẽ (bên nào thắng, có bỏ một bên không): trả lời chung với câu 22 của spec editor.
-   - Trả lời:
+   - Trả lời: Giữ cả hai công tắc, theo đề xuất của AI (trả lời chung với spec editor câu 22).
 8. **"Autosave, Every 30 s" chỉ để xem hay người dùng chọn được chu kỳ?** Bản đề xuất chỉ cam kết mất tối đa 30 giây công.
    - Đề xuất của AI: chỉ để xem, không bấm được, để giữ cam kết 30 giây.
-   - Trả lời:
+   - Trả lời: Đồng ý đề xuất của AI.
 9. **Danh sách giá trị và cách chọn mặc định:** thiết kế không có danh sách chọn. Tỷ lệ khung: bản đề xuất có 16:9, 9:16, 1:1; thiết kế màn Tạo dự án (projects) có thêm 4:5. Mặc định có gồm kích thước (720p, 1080p) và nền không?
    - Đề xuất của AI: chạm dòng mở hộp thoại chọn một giá trị, chọn là lưu ngay. Tốc độ khung: 6, 8, 12, 15, 24, 30 như chip của màn Tạo dự án. Tỷ lệ khung: theo câu trả lời của spec projects về 4:5, hai màn dùng cùng danh sách. Không thêm mặc định cho kích thước và nền (thiết kế không có).
-   - Trả lời:
+   - Trả lời: Đồng ý đề xuất của AI. Tỷ lệ khung là 16:9, 9:16, 1:1 (spec projects câu 1 bỏ 4:5).
 10. **"Ad privacy choices" luôn hiện trên thiết kế, nhưng phần quảng cáo dùng chung chỉ mở được hộp thoại này khi hộp thoại là bắt buộc với người dùng** (ví dụ ở châu Âu; gọi lúc không bắt buộc thì không mở được).
     - Đề xuất của AI: chỉ hiện dòng khi hộp thoại là bắt buộc; người dùng ở vùng khác không thấy dòng này. Screenshot test cùng tên ảnh thiết kế vẽ trạng thái có dòng.
-    - Trả lời:
+    - Trả lời: Chỉ hiện dòng khi hộp thoại là bắt buộc, theo đề xuất của AI.
 11. **"Privacy policy" cần địa chỉ thật; có thêm điều khoản sử dụng không?** Thiết kế không có điều khoản.
     - Đề xuất của AI: anh cho địa chỉ trang chính sách quyền riêng tư của Frameloop (cùng địa chỉ khai trên Google Play), cố định trong app. Không thêm điều khoản sử dụng ở bản đầu.
-    - Trả lời:
+    - Trả lời: Địa chỉ: https://studio.vgl.io.vn/privacy-policy. Không thêm điều khoản sử dụng.
 12. **"Rate Frameloop" có trên thiết kế, bản đề xuất không có.** Có giữ không, mở thế nào?
     - Đề xuất của AI: giữ; mở trang Frameloop trên Google Play. Không dùng hộp thoại đánh giá trong app, vì cần thêm thư viện mới.
-    - Trả lời:
+    - Trả lời: Giữ, mở trang Frameloop trên Google Play, theo đề xuất của AI.
 13. **Liên hệ hỗ trợ (gửi thư cho nhóm) không có trên thiết kế và bản đề xuất.** Có cần không?
     - Đề xuất của AI: không làm ở bản đầu.
-    - Trả lời:
+    - Trả lời: Đồng ý đề xuất của AI.
 14. **Xem lại hướng dẫn trên màn vẽ:** bản đề xuất mục 5 ghi hướng dẫn "xem lại được", nhưng thiết kế Cài đặt và thiết kế màn vẽ đều không có lối vào xem lại.
     - Đề xuất của AI: thêm dòng "Replay drawing tour" vào nhóm "Drawing" của Cài đặt (cần bổ sung thiết kế); bấm thì lần mở màn vẽ tới hướng dẫn hiện lại từ bước 1. Phần hướng dẫn thuộc spec editor, Cài đặt chỉ đặt lại mốc "đã xem". Spec editor câu 15 đề xuất lối vào trong menu "thêm" của màn vẽ; trả lời chung hai câu, có thể chọn một hay cả hai lối vào.
-    - Trả lời:
+    - Trả lời: Chỉ một lối vào: mục trong menu "thêm" của màn vẽ (spec editor câu 15). Cài đặt không thêm dòng.
 15. **Khi cờ `feature_settings_enabled` tắt:** người dùng mất lối vào lựa chọn quyền riêng tư quảng cáo, và giá trị mặc định đã chọn trước đó có còn dùng ở màn Tạo dự án không?
     - Đề xuất của AI: bật cờ trên production từ ngày phát hành, vì đây là lối vào duy nhất để rút đồng ý quảng cáo. Khi cờ tắt, màn Tạo dự án dùng 12 fps, 9:16, giá trị đã lưu vẫn giữ để dùng lại khi bật cờ.
-    - Trả lời:
+    - Trả lời: Đồng ý đề xuất của AI.
 
 ## 10. Lịch sử
 
 | Ngày | Người | Nội dung |
 | --- | --- | --- |
 | 2026-11-21 | AI | Tạo bản đầu từ bản đề xuất đã duyệt (docs/research/proposal.md) và thiết kế đã duyệt |
+| 2026-11-21 | AI | Ghi câu trả lời của anh Nhật cho mọi câu hỏi ở mục 9 (anh chọn trong phiên ngày 2026-11-21) và sửa phần thân spec theo các câu trả lời; sửa các điểm nên sửa còn lại của lần rà soát cuối. Spec vẫn `draft` |

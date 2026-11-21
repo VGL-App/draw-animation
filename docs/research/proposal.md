@@ -242,7 +242,7 @@ Không đặt vị trí quảng cáo ở: canvas, dòng thời gian, các bảng
 
 ### 9.2 Sự kiện phân tích đề xuất
 
-`project_create`, `project_open`, `frame_add` (gom theo phiên, không ghi mỗi lần), `playback_start`, `layer_unlock_rewarded`, `brush_pack_unlock_rewarded`, `sound_pack_unlock_rewarded`, `export_option_unlock_rewarded`, `export_start`, `export_success` (định dạng, số khung, thời lượng), `export_fail`, `backup_export`, `backup_restore`, `lesson_start`, `lesson_complete`. Không ghi nội dung tranh, âm thanh hay chữ người dùng nhập.
+`project_create`, `project_open`, `frame_add` (gom theo phiên, không ghi mỗi lần), `playback_start`, `layer_unlock_rewarded`, `brush_pack_unlock_rewarded`, `sound_pack_unlock_rewarded`, `export_option_unlock_rewarded`, `export_start`, `export_success` (định dạng, số khung, thời lượng), `export_fail`, `backup_export`, `backup_restore`, `lesson_start`, `lesson_complete`, `onboarding_page_view` (trang 1 tới 4), `onboarding_complete` (hai sự kiện onboarding anh Nhật thêm ngày 2026-11-21, spec onboarding câu 5). Không ghi nội dung tranh, âm thanh hay chữ người dùng nhập.
 
 ### 9.3 Trẻ em và chính sách gia đình
 

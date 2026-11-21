@@ -19,7 +19,7 @@ confirmed:
 - **Đo kết quả bằng gì:**
   - Từ lần mở đầu tới nét vẽ đầu tiên không quá 7 thao tác; phần của feature này là 2 thao tác ("New animation", "Create").
   - Số dự án được tạo và được mở lại mỗi ngày (sự kiện ở mục 6; lần mở lại do màn vẽ ghi, spec editor câu 5).
-  - Số lần sao lưu và khôi phục thành công (sự kiện ở mục 6); tỉ lệ khôi phục thành công chỉ đo được khi chọn phương án ghi cả lần lỗi, hủy ở câu hỏi 17.
+  - Số lần sao lưu và khôi phục thành công (sự kiện ở mục 6); không đo tỉ lệ khôi phục thành công, vì sự kiện chỉ ghi lần thành công (câu hỏi 17).
 
 ## 2. Phạm vi
 
@@ -54,7 +54,7 @@ Người mới vừa qua onboarding, hoặc người dùng đã xóa hết dự 
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi chưa có dự án nào thì màn hiện hình minh họa, tiêu đề "Make your first animation", lời giới thiệu "Draw frame by frame, add sound, then export a video or GIF. Everything saves on your phone as you go.", nút chính "New animation" và nút phụ "Try a free lesson" (chữ "free": câu hỏi 22), đúng thiết kế màn trống.
+- [ ] Khi chưa có dự án nào thì màn hiện hình minh họa, tiêu đề "Make your first animation", lời giới thiệu "Draw frame by frame, add sound, then export a video or GIF. Everything saves on your phone as you go.", nút chính "New animation" và nút phụ "Try a free lesson" (giữ chữ "free", câu hỏi 22), đúng thiết kế màn trống.
 - [ ] Khi bấm "New animation" thì màn Tạo dự án mở ra (KB-3).
 - [ ] Khi bấm "Try a free lesson" thì danh sách bài học mở ra (feature `lessons`).
 - [ ] Khi cờ của feature Bài học tắt thì màn trống không có nút "Try a free lesson" và thanh điều hướng không có mục "Lessons"; thanh còn một mục thì ẩn cả thanh (xem spec lessons KB-10, câu 14).
@@ -77,7 +77,7 @@ Tiêu chí chấp nhận:
 - [ ] Khi xem một thẻ thì thẻ có ảnh thu nhỏ của dự án, tên dự án và dòng "<số khung> frames · <tốc độ> fps" (ví dụ "48 frames · 12 fps").
 - [ ] Khi danh sách có nhiều dự án thì dự án sửa gần nhất đứng đầu; dự án vừa tạo, vừa nhân bản hay vừa khôi phục đứng đầu.
 - [ ] Khi chạm một thẻ thì dự án đó mở trong màn vẽ.
-- [ ] Khi cờ của màn vẽ tắt mà chạm một thẻ hay bấm "Create" thì app hiện thông báo ngắn và ở lại màn đang đứng, không mở màn vẽ; bấm "Create" lúc đó không tạo dự án (theo spec editor câu 20, chờ trả lời).
+- [ ] Khi cờ của màn vẽ tắt mà người dùng dùng bất kỳ lối nào mở màn vẽ (chạm một thẻ, bấm "Open" trong menu dự án, bấm "Create") thì app hiện thông báo ngắn và ở lại màn đang đứng, không mở màn vẽ; bấm "Create" lúc đó không tạo dự án (spec editor câu 20).
 - [ ] Khi từ màn vẽ quay về danh sách thì thẻ của dự án đó đứng đầu, ảnh thu nhỏ và số khung đúng với nội dung vừa vẽ.
 - [ ] Khi danh sách dài hơn màn thì cuộn được; thanh trên và thanh điều hướng giữ nguyên chỗ.
 - [ ] Khi tên dự án dài hơn bề rộng thẻ thì tên cắt bằng dấu "…" trên một dòng, không đè lên dòng số khung.
@@ -94,17 +94,19 @@ Người dùng bấm "New animation" ở danh sách.
 Tiêu chí chấp nhận:
 
 - [ ] Khi màn Tạo dự án mở thì có tiêu đề "New animation", nút đóng, ô "Name", nhóm "Canvas" (9:16, 16:9, 1:1), nhóm "Size" (720p, 1080p), nhóm "Frame rate" (6, 8, 12 fps, 15, 24, 30), nhóm "Background" (trắng, xám đậm, xanh, "Photo") và nút "Create" ghim ở đáy, đúng thiết kế màn Tạo dự án.
-- [ ] Khi màn mở thì mỗi nhóm đã có sẵn một lựa chọn: khung hình và tốc độ khung lấy theo "Default canvas" và "Default frame rate" của màn Cài đặt (chưa đổi thì 9:16 và 12 khung/giây); độ phân giải 1080p; nền trắng; tên "My animation <số>" (cách đánh số: câu hỏi 4).
+- [ ] Khi màn mở thì mỗi nhóm đã có sẵn một lựa chọn: khung hình và tốc độ khung lấy theo "Default canvas" và "Default frame rate" của màn Cài đặt (chưa đổi thì 9:16 và 12 khung/giây); độ phân giải 1080p; nền trắng; tên "My animation <số>"; số là số dự án đã từng tạo cộng một, không giảm khi xóa (câu hỏi 4).
 - [ ] Khi bấm "Create" mà không đổi gì thì dự án được tạo với các giá trị mặc định trên và mở ngay trong màn vẽ. Từ danh sách trống tới màn vẽ là đúng 2 lần chạm.
 - [ ] Khi chọn một lựa chọn khác trong một nhóm thì lựa chọn đó sáng lên, lựa chọn cũ của nhóm tắt; mỗi nhóm luôn có đúng một lựa chọn.
 - [ ] Khi tạo dự án 16:9 ở 1080p thì khung vẽ là 1920 × 1080; 9:16 ở 1080p là 1080 × 1920; 1:1 ở 1080p là 1080 × 1080; 720p cho 1280 × 720, 720 × 1280, 720 × 720.
-- [ ] Khi bấm "Photo" thì bộ chọn ảnh của hệ thống mở ra, không hỏi quyền; chọn một ảnh thì ảnh đó là nền của dự án; đóng bộ chọn mà không chọn thì nền giữ lựa chọn trước (cách dùng ảnh nền: câu hỏi 3).
+- [ ] Khi bấm "Photo" thì bộ chọn ảnh của hệ thống mở ra, không hỏi quyền; chọn một ảnh thì ảnh đó là nền của dự án; đóng bộ chọn mà không chọn thì nền giữ lựa chọn trước; ảnh là nền cố định của mọi khung, có trong file xuất, được cắt vừa khung hình (câu hỏi 3).
+- [ ] Khi ảnh gốc bị xóa khỏi máy sau khi tạo dự án thì nền của dự án không đổi, vì app đã chép ảnh vào dự án (câu hỏi 3).
 - [ ] Khi bấm nút đóng hay nút quay lại của máy thì về danh sách, không tạo dự án nào.
 - [ ] Khi tạo dự án thì dự án nằm trên máy, xuất hiện ở đầu danh sách khi quay về.
 
 Trường hợp đặc biệt:
 
 - [ ] Khi xóa hết chữ trong ô tên rồi bấm "Create" thì dự án dùng tên mặc định (câu hỏi 5).
+- [ ] Khi nhập tên thì ô tên nhận tối đa 40 ký tự (câu hỏi 5).
 - [ ] Khi đây là dự án đầu tiên người dùng tạo thì bấm "Create" không hiện quảng cáo toàn màn hình nào.
 - [ ] Khi máy không đủ chỗ trống để tạo dự án thì app báo lỗi bằng lời dễ hiểu, giữ người dùng ở màn Tạo dự án với các lựa chọn đã chọn, không tạo dự án dở.
 - [ ] Khi màn hình thấp 360 × 640 thì phần tùy chọn cuộn được; nút "Create" luôn thấy ở đáy, không che lựa chọn cuối khi cuộn hết.
@@ -139,7 +141,7 @@ Trường hợp đặc biệt:
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi bấm "Duplicate" thì một dự án mới có cùng khung, layer, âm thanh, khung hình, độ phân giải, tốc độ và nền xuất hiện ở đầu danh sách, tên theo câu hỏi 5; dự án gốc không đổi.
+- [ ] Khi bấm "Duplicate" thì một dự án mới có cùng khung, layer, âm thanh, khung hình, độ phân giải, tốc độ và nền xuất hiện ở đầu danh sách, tên "<tên> copy" (lần sau "<tên> copy 2"), cắt bớt tên gốc khi vượt 40 ký tự (câu hỏi 5); dự án gốc không đổi.
 - [ ] Khi vẽ trên bản sao thì dự án gốc không đổi, và ngược lại.
 
 Trường hợp đặc biệt:
@@ -151,7 +153,7 @@ Trường hợp đặc biệt:
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi bấm "Delete" thì app hỏi xác nhận trước khi xóa (câu hỏi 7).
+- [ ] Khi bấm "Delete" thì app hỏi xác nhận bằng hộp thoại trước khi xóa; đã xóa thì không hoàn tác được (câu hỏi 7).
 - [ ] Khi xác nhận thì thẻ biến mất khỏi danh sách và dữ liệu của dự án bị xóa khỏi máy; mở lại app không thấy lại dự án.
 - [ ] Khi hủy thì dự án giữ nguyên.
 - [ ] Khi xóa dự án cuối cùng thì màn về trạng thái trống (KB-1).
@@ -163,7 +165,7 @@ Người dùng muốn giữ bản sao của một dự án ngoài app, ví dụ 
 Tiêu chí chấp nhận:
 
 - [ ] Khi bấm "Back up to a file" thì bộ chọn file của hệ thống mở ra để lưu, tên file gợi ý là tên dự án với đuôi ".frameloop"; app không hỏi quyền nào.
-- [ ] Khi người dùng chọn một thư mục trên máy hay trên Google Drive và lưu thì file được ghi xong, app báo đã sao lưu (cách báo: câu hỏi 8).
+- [ ] Khi người dùng chọn một thư mục trên máy hay trên Google Drive và lưu thì file được ghi xong, app báo đã sao lưu bằng thông báo ngắn "Backup saved" ở đáy, tự ẩn, không có nút (câu hỏi 8).
 - [ ] Khi khôi phục file vừa sao lưu (KB-9) thì được một dự án giống hệt: cùng số khung, layer, âm thanh, khung hình, độ phân giải, tốc độ, nền và tên.
 - [ ] Khi người dùng đóng bộ chọn file mà không lưu thì không có gì xảy ra, không báo lỗi.
 
@@ -227,7 +229,7 @@ Tiêu chí chấp nhận:
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi cờ của feature tắt thì app mở vào màn chờ có sẵn của app, người dùng không vào được danh sách dự án và màn Tạo dự án (theo đề xuất câu hỏi 18, chờ trả lời).
+- [ ] Khi cờ của feature tắt thì app mở vào màn mẫu có sẵn từ dự án mẫu (màn mà app mới tạo từ dự án mẫu mở ra, trước khi có các feature của Frameloop), người dùng không vào được danh sách dự án và màn Tạo dự án (câu hỏi 18).
 
 ## 4. Giao diện
 
@@ -243,9 +245,9 @@ Tiêu chí chấp nhận:
 | `ProjectsScreen` | restoring | Hộp thoại đang khôi phục, có tiến độ và nút hủy | KB-9 |
 | `ProjectsScreen` | restore-error | Hộp thoại lỗi khôi phục | KB-10 |
 | `NewProjectScreen` | default | Chọn tên, khung hình, độ phân giải, tốc độ, nền rồi tạo | KB-3 |
-| Hộp thoại đổi tên | chưa có thiết kế | Nhập tên mới | KB-5 (câu hỏi 2) |
-| Hộp thoại xác nhận xóa | chưa có thiết kế | Xác nhận trước khi xóa | KB-7 (câu hỏi 2, 7) |
-| Thông báo sao lưu xong, sao lưu lỗi, đang nhân bản | chưa có thiết kế | Báo kết quả | KB-6, KB-8 (câu hỏi 2, 8) |
+| Hộp thoại đổi tên | hộp thoại chuẩn của hệ thống thiết kế, không có frame riêng | Nhập tên mới | KB-5 (câu hỏi 2) |
+| Hộp thoại xác nhận xóa | hộp thoại chuẩn của hệ thống thiết kế, không có frame riêng | Xác nhận trước khi xóa | KB-7 (câu hỏi 2, 7) |
+| Thông báo sao lưu xong, sao lưu lỗi, đang nhân bản | thông báo ngắn chuẩn của hệ thống thiết kế, không có frame riêng | Báo kết quả | KB-6, KB-8 (câu hỏi 2, 8) |
 
 ## 5. Quảng cáo
 
@@ -284,7 +286,7 @@ File sao lưu ".frameloop" nằm ở nơi người dùng chọn (trên máy hay 
 
 **Sự kiện phân tích:**
 
-Chỉ các sự kiện của bản đề xuất mục 9.2 thuộc feature này; tham số là đề xuất, chờ xác nhận (câu hỏi 17). Không ghi tên dự án, nội dung tranh, âm thanh hay chữ người dùng nhập.
+Chỉ các sự kiện của bản đề xuất mục 9.2 thuộc feature này; danh sách và tham số đã được anh Nhật duyệt (câu hỏi 17). Không ghi tên dự án, nội dung tranh, âm thanh hay chữ người dùng nhập.
 
 | Tên sự kiện | Khi nào ghi | Tham số | Dùng để trả lời câu hỏi gì |
 | --- | --- | --- | --- |
@@ -310,74 +312,75 @@ Không có.
 
 1. **Tỷ lệ khung 4:5 có trên thiết kế màn Tạo dự án nhưng bản đề xuất chỉ có 16:9, 9:16, 1:1 (mục 5).** Spec đang theo bản đề xuất.
    - Đề xuất của AI: bỏ 4:5 khỏi thiết kế cho đúng bản đề xuất đã duyệt, sửa frame Figma và xuất lại. Nếu muốn giữ 4:5 thì ghi kích thước (1080 × 1350 ở 1080p, 720 × 900 ở 720p) và feature `export`, `settings` ("Default canvas") cũng phải có 4:5.
-   - Trả lời:
+   - Trả lời: Bỏ 4:5 khỏi thiết kế, theo đề xuất của AI.
 2. **Thiết kế chưa có hộp thoại đổi tên, hộp thoại xác nhận xóa, thông báo sao lưu xong hay lỗi, dấu hiệu đang nhân bản.**
    - Đề xuất của AI: dùng hộp thoại và thông báo ngắn (snackbar) chuẩn của hệ thống thiết kế, không cần frame mới; chữ đề xuất: "Rename" / "Save" / "Cancel"; "Delete “<tên>”?" / "This can't be undone." / "Delete" / "Cancel"; "Backup saved"; "Couldn't save the backup. Try again." Nếu muốn so ảnh thiết kế thì thêm frame trên Figma trước khi viết plan.
-   - Trả lời:
+   - Trả lời: Đồng ý đề xuất của AI.
 3. **Nền "Photo" ở màn Tạo dự án:** bản đề xuất có nhập ảnh, video làm nền vẽ theo trong màn vẽ (feature `editor`), không nói tới chọn ảnh lúc tạo dự án. Ảnh nền là nền cố định của mọi khung (xuất ra cả trong video) hay chỉ là lớp vẽ theo (không xuất)?
    - Đề xuất của AI: giữ "Photo" như thiết kế; ảnh là nền cố định của mọi khung, có trong file xuất, ảnh được cắt vừa khung hình; chép ảnh vào dự án để xóa ảnh gốc không ảnh hưởng. Lớp vẽ theo vẫn ở màn vẽ.
-   - Trả lời:
+   - Trả lời: Ảnh là nền cố định của mọi khung, có trong file xuất, theo đề xuất của AI.
 4. **Tên mặc định "My animation 5":** số lấy theo gì?
    - Đề xuất của AI: số = số dự án đã từng tạo cộng một (không giảm khi xóa), để tên không trùng với dự án đã xóa rồi tạo lại.
-   - Trả lời:
+   - Trả lời: Đồng ý đề xuất của AI.
 5. **Quy tắc tên dự án:** độ dài tối đa, tên trùng, tên của bản nhân bản.
    - Đề xuất của AI: tối đa 40 ký tự; cho trùng tên; ô tên trống khi bấm "Create" thì dùng tên mặc định; bản nhân bản tên "<tên> copy" (lần sau "<tên> copy 2"), cắt bớt tên gốc nếu vượt 40 ký tự.
-   - Trả lời:
+   - Trả lời: Đồng ý đề xuất của AI.
 6. **Nhãn "Recent" ở danh sách:** chỉ là nhãn cho biết thứ tự, hay bấm được để đổi cách sắp xếp (tên, ngày tạo)?
    - Đề xuất của AI: chỉ là nhãn, không bấm được ở bản đầu; đổi cách sắp xếp để bản sau. Bố cục điện thoại gập không có nhãn này trên thiết kế, giữ như thiết kế.
-   - Trả lời:
+   - Trả lời: Đồng ý đề xuất của AI.
 7. **Xóa dự án có hỏi xác nhận không, có hoàn tác được không?** Thiết kế không có hộp thoại xác nhận; bản đề xuất hứa "không bao giờ mất bài".
    - Đề xuất của AI: hỏi xác nhận bằng hộp thoại; không có thùng rác hay hoàn tác ở bản đầu.
-   - Trả lời:
+   - Trả lời: Đồng ý đề xuất của AI.
 8. **Cách báo sao lưu xong:** thông báo ngắn ở đáy hay hộp thoại? Có nút mở hay chia sẻ file không?
    - Đề xuất của AI: thông báo ngắn "Backup saved" ở đáy, tự ẩn, không có nút.
-   - Trả lời:
+   - Trả lời: Đồng ý đề xuất của AI.
 9. **Dự án không đọc được (dữ liệu hỏng)** hiện thế nào trong danh sách?
    - Đề xuất của AI: vẫn hiện thẻ với tên (nếu đọc được) và ảnh thu nhỏ trống; chạm thì báo không mở được, menu chỉ còn "Delete". Không tự xóa.
-   - Trả lời:
+   - Trả lời: Đồng ý đề xuất của AI.
 10. **Khôi phục file của dự án đang có trong danh sách:** tạo dự án mới hay hỏi ghi đè?
     - Đề xuất của AI: luôn tạo dự án mới, giữ tên trong file; người dùng tự xóa bản cũ nếu muốn. Không ghi đè để không mất bài.
-    - Trả lời:
+    - Trả lời: Đồng ý đề xuất của AI.
 11. **Nút quay lại của máy và rời app trong lúc khôi phục.** Thiết kế chỉ nói "Cancel dừng khôi phục, về danh sách, không tạo dự án dở".
     - Đề xuất của AI: nút quay lại làm như "Cancel"; chạm ra ngoài không đóng hộp thoại; rời app thì khôi phục vẫn chạy khi app còn sống, app bị hệ thống đóng thì phần dở bị dọn ở lần mở sau, không hiện trong danh sách.
-    - Trả lời:
+    - Trả lời: Đồng ý đề xuất của AI.
 12. **Lời báo lỗi khôi phục khi máy hết chỗ hay file của bản app mới hơn:** thiết kế chỉ có một lời "not a Frameloop backup, or it is damaged", không đúng với hai trường hợp này.
     - Đề xuất của AI: dùng cùng hộp thoại, đổi lời: hết chỗ "Not enough space on your phone. Free up some space and try again."; bản mới hơn "This backup was made with a newer version of Frameloop. Update the app and try again."
-    - Trả lời:
+    - Trả lời: Đồng ý đề xuất của AI.
 13. **Hộp thoại khôi phục ở màn 360 × 640:** hộp thoại cao hơn màn (MREC 250 cộng tiêu đề, tiến độ, nút). Thiết kế ghi nội dung cuộn được.
     - Đề xuất của AI: phần nội dung (tiêu đề, lời, tiến độ, quảng cáo) cuộn được, nút "Cancel" luôn ở đáy hộp thoại; có screenshot test ở khung 360 × 640 (trạng thái `restoring_small`) kiểm nút thấy được và quảng cáo cách nút ít nhất 24 dp.
-    - Trả lời:
+    - Trả lời: Đồng ý đề xuất của AI.
 14. **`projects_bottom` ở trạng thái trống:** bản đề xuất ghi thanh đáy ở "Danh sách dự án" không phân biệt trạng thái; thiết kế `ProjectsScreen_empty` không có thanh đáy.
     - Đề xuất của AI: theo thiết kế, trạng thái trống không có thanh đáy (đã có `projects_empty_native`); thanh đáy chỉ ở trạng thái có dự án.
-    - Trả lời:
+    - Trả lời: Đồng ý đề xuất của AI.
 15. **Ô quảng cáo trong lưới "sau mỗi 6 dự án" là số cố định hay chỉnh được từ xa?** Quy tắc quảng cáo cho phép một khóa `native_every_<mã vị trí>`, nhưng bản đề xuất không có khóa này.
     - Đề xuất của AI: số cố định 6 ở bản đầu, không thêm khóa. Ở bố cục ba cột của điện thoại gập vẫn sau mỗi 6 dự án.
-    - Trả lời:
+    - Trả lời: Đồng ý đề xuất của AI.
 16. **"Từ dự án thứ 2" của `create_inter` tính thế nào?** Theo số dự án đã từng tạo hay số dự án đang có? Dự án khôi phục, nhân bản có tính không?
     - Đề xuất của AI: tính theo số dự án đã từng tạo bằng màn Tạo dự án (không giảm khi xóa, không tính bài học, khôi phục hay nhân bản): lần bấm "Create" đầu tiên trong đời app không có interstitial, các lần sau theo `ads_interval` và luật trước nét vẽ đầu tiên.
-    - Trả lời:
+    - Trả lời: Đồng ý đề xuất của AI.
 17. **Xác nhận danh sách sự kiện và tham số ở mục 6.** Bản đề xuất mục 9.2 là "đề xuất", chưa có câu trả lời riêng. Đổi tên, nhân bản, xóa dự án không có sự kiện nào trong 9.2. `backup_export`, `backup_restore` dùng chung cho sao lưu, khôi phục một dự án (feature này) và tất cả dự án (spec `settings`); câu này là chỗ trả lời chung cho hai spec (spec settings câu 1 trỏ về đây).
     - Đề xuất của AI: dùng ba sự kiện `project_create`, `backup_export`, `backup_restore` với tham số ở mục 6; không thêm sự kiện cho đổi tên, nhân bản, xóa ở bản đầu. Theo đề xuất, `project_open` do màn vẽ ghi (spec editor câu 5, chờ trả lời), feature này không ghi. Hai sự kiện sao lưu và khôi phục có `scope` (`all`, `project`) và `project_count`, chỉ ghi khi thành công, vì 9.2 không có sự kiện lỗi.
     - Phương án khác cho anh chọn: ghi cả lần lỗi và lần hủy bằng thêm tham số `result` (`success`, `fail`, `cancel`; `cancel` chỉ có ở khôi phục), có thể thêm `frame_count`. Phương án này đo được tỉ lệ khôi phục thành công (mục 1 của spec này và của spec settings) nhưng ghi cả lúc thất bại, ngoài những gì 9.2 nêu.
-    - Trả lời:
+    - Trả lời: Chỉ ghi khi thành công, theo đề xuất của AI. Duyệt danh sách sự kiện và tham số ở mục 6.
 18. **Cờ `feature_projects_enabled` tắt thì app vào đâu?** Danh sách dự án là màn chính, mọi luồng (màn vẽ, bài học, cài đặt) đi qua nó.
-    - Đề xuất của AI: cờ chỉ để giấu feature trong lúc làm; tắt thì app vào màn hình chính hiện có của dự án mẫu như hôm nay. Bản staging bật sẵn, bản production bật từ lần phát hành đầu và không tắt sau đó.
-    - Trả lời:
+    - Đề xuất của AI: cờ chỉ để giấu feature trong lúc làm; tắt thì app vào màn mẫu có sẵn từ dự án mẫu như hôm nay. Bản staging bật sẵn, bản production bật từ lần phát hành đầu và không tắt sau đó.
+    - Trả lời: Đồng ý đề xuất của AI.
 19. **"Restore from a file" ở màn Cài đặt** (thiết kế của `settings`) và nút nhập file ở danh sách: cùng loại file, cùng hộp thoại khôi phục không? Sao lưu tất cả dự án có dùng đuôi ".frameloop" không?
     - Đề xuất của AI: hai nút cùng nhận một loại file ".frameloop", chứa một hay nhiều dự án; khôi phục từ Cài đặt quay về danh sách dự án và chạy với cùng hộp thoại (có `restore_mrec`), hộp thoại ghi số dự án khi file có nhiều dự án. Spec `settings` ghi phần của nó.
-    - Trả lời:
+    - Trả lời: Đồng ý đề xuất của AI.
 20. **Ảnh thu nhỏ trên thẻ dự án** lấy từ đâu?
     - Đề xuất của AI: khung đầu tiên của dự án, gộp mọi layer đang hiện, trên nền của dự án; cập nhật khi rời màn vẽ.
-    - Trả lời:
+    - Trả lời: Đồng ý đề xuất của AI.
 21. **Bố cục điện thoại gập cho trạng thái trống, menu, hộp thoại khôi phục và màn Tạo dự án** chưa có trên thiết kế (chỉ có `list_unfolded`).
     - Đề xuất của AI: trạng thái trống và màn Tạo dự án giữ một cột, căn giữa, rộng tối đa bằng bố cục điện thoại; menu và hộp thoại như trên điện thoại. Chỉ `ProjectsScreen_list_unfolded` có screenshot so với ảnh thiết kế.
-    - Trả lời:
+    - Trả lời: Đồng ý đề xuất của AI.
 22. **Chữ "free" trong nút "Try a free lesson" ở màn trống.** Mọi bài học đều miễn phí, nên chữ "free" có thể làm người dùng nghĩ có bài trả phí. Bản đề xuất mục 6 gọi lối vào này là thẻ "Học bài đầu tiên"; thiết kế đã duyệt ghi "Try a free lesson". Spec lessons câu 15 giao quyết định về chữ cho câu này.
     - Đề xuất của AI: giữ chữ theo thiết kế đã duyệt. Nếu muốn tránh hiểu nhầm thì đổi thành "Try a lesson" hay "Start your first lesson", cần sửa thiết kế và bảng chữ. Nút mở màn Bài học theo spec lessons câu 15.
-    - Trả lời:
+    - Trả lời: Giữ chữ "Try a free lesson".
 
 ## 10. Lịch sử
 
 | Ngày | Người | Nội dung |
 | --- | --- | --- |
 | 2026-11-21 | AI | Tạo bản đầu từ bản đề xuất đã duyệt (docs/research/proposal.md) và thiết kế đã duyệt |
+| 2026-11-21 | AI | Ghi câu trả lời của anh Nhật cho mọi câu hỏi ở mục 9 (anh chọn trong phiên ngày 2026-11-21) và sửa phần thân spec theo các câu trả lời; sửa các điểm nên sửa còn lại của lần rà soát cuối. Spec vẫn `draft` |
