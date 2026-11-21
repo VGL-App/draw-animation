@@ -81,7 +81,7 @@ Toạ độ và cỡ tính theo dp, gốc là góc trên trái của khung. Th�
       - Frame "Preview", vị trí 28,108, cỡ 54 x 96, nền #FFFFFF (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest), bo góc 8
         - Rectangle "Rectangle", vị trí 32,187, cỡ 45 x 2, nền #1A1C22 (ngoài hệ thống)
         - Ellipse "Ellipse", vị trí 49,174, cỡ 13 x 13, nền #2F6FE0 (ngoài hệ thống)
-        - Frame "Watermark", vị trí 65,199, cỡ 16 x 3, xếp ngang, cách nhau 1 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/CENTER
+        - Frame "PreviewWatermark", vị trí 65,199, cỡ 16 x 3, xếp ngang, cách nhau 1 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/CENTER
           - Instance "Icon", vị trí 65,200, cỡ 3 x 3, CHÚ Ý: ghi đè màu nền, viền của component gốc
             - Text "glyph", vị trí 65,200, cỡ 3 x 3, chữ "animation", kiểu ngoài hệ thống (3/3, đậm 400), màu #FFFFFF (độ mờ 0.90, lớp tô 0.90) (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest)
           - Text "Frameloop", vị trí 68,199, cỡ 12 x 3, chữ "Frameloop", kiểu ngoài hệ thống (2/3, đậm 600), màu #FFFFFF (độ mờ 0.90, lớp tô 0.90) (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest)

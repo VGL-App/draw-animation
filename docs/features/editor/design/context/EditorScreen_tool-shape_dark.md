@@ -208,15 +208,15 @@ Toạ độ và cỡ tính theo dp, gốc là góc trên trái của khung. Th�
           - Text "Label", vị trí 182,723, cỡ 38 x 16, chữ "Ellipse", kiểu labelMedium (12/16, đậm 500), màu #EEF0F4 (ngoài hệ thống)
         - Instance "Arrow", vị trí 240,717, cỡ 59 x 28, nền #22262E (ngoài hệ thống), bo góc 8, xếp ngang, cách nhau 6 (ngoài hệ thống), lề trên/phải/dưới/trái 6 (ngoài hệ thống)/12 (ngoài hệ thống)/6 (ngoài hệ thống)/12 (ngoài hệ thống), căn MIN/CENTER
           - Text "Label", vị trí 252,723, cỡ 35 x 16, chữ "Arrow", kiểu labelMedium (12/16, đậm 500), màu #EEF0F4 (ngoài hệ thống)
-      - Instance "Stroke", vị trí 24,761, cỡ 363 x 48, xếp dọc, cách nhau 8 (sm), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
+      - Frame "Slider · Stroke", vị trí 24,761, cỡ 363 x 48, xếp dọc, cách nhau 8 (sm), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
         - Frame "Header", vị trí 24,761, cỡ 363 x 20, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
           - Text "Label", vị trí 24,761, cỡ 45 x 20, chữ "Stroke", kiểu ngoài hệ thống (14/20, đậm 600), màu #EEF0F4 (ngoài hệ thống)
           - Frame "spacer", vị trí 69,761, cỡ 289 x 1, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
           - Text "Value", vị trí 358,761, cỡ 29 x 20, chữ "6 px", kiểu ngoài hệ thống (14/20, đậm 600), màu #8C93A3 (ngoài hệ thống)
         - Frame "Track", vị trí 24,789, cỡ 363 x 20
           - Rectangle "Rectangle", vị trí 24,797, cỡ 363 x 4, nền #2B303A (ngoài hệ thống), bo góc 2
-          - Rectangle "Rectangle", vị trí 24,797, cỡ 110 x 4, nền #B6F35C (ngoài hệ thống), bo góc 2
-          - Ellipse "Thumb", vị trí 124,789, cỡ 20 x 20, nền #B6F35C (ngoài hệ thống)
+          - Rectangle "Rectangle", vị trí 24,797, cỡ 47 x 4, nền #B6F35C (ngoài hệ thống), bo góc 2
+          - Ellipse "Thumb", vị trí 61,789, cỡ 20 x 20, nền #B6F35C (ngoài hệ thống)
       - Frame "Fill shape", vị trí 24,825, cỡ 363 x 42, xếp ngang, cách nhau 12 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/CENTER
         - Frame "Text", vị trí 24,825, cỡ 299 x 42, xếp dọc, cách nhau 2 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
           - Text "Fill shape", vị trí 24,825, cỡ 72 x 24, chữ "Fill shape", kiểu bodyLarge (16/24, đậm 400), màu #EEF0F4 (ngoài hệ thống)

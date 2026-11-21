@@ -50,6 +50,7 @@ nào trùng; plan quyết định làm tròn về token gần nhất hay thêm t
 | màu nền | #1A1C22 | ngoài hệ thống |
 | màu nền | #2F6FE0 | ngoài hệ thống |
 | màu nền | #3D6A00 | ngoài hệ thống |
+| màu nền | #5C854D | ngoài hệ thống |
 | màu nền | #B9BEC8 | ngoài hệ thống |
 | màu nền | #D9DDE2 | ngoài hệ thống |
 | màu nền | #DDF5B8 | ngoài hệ thống |
@@ -57,7 +58,9 @@ nào trùng; plan quyết định làm tròn về token gần nhất hay thêm t
 | màu nền | #ECEEF1 | ngoài hệ thống |
 | màu nền | #F1F2F5 | ngoài hệ thống |
 | màu nền | #F7F8FA | ngoài hệ thống |
+| màu nền | #FAD166 | ngoài hệ thống |
 | màu nền | #FFFFFF | onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest |
+| độ mờ của lớp | 0.40 | - |
 | độ mờ của lớp | 0.45 | - |
 
 ## 3. Cấu trúc và số liệu
@@ -104,6 +107,9 @@ Toạ độ và cỡ tính theo dp, gốc là góc trên trái của khung. Th�
         - Text "Open", vị trí 346,120, cỡ 31 x 16, chữ "Open", kiểu labelMedium (12/16, đậm 500), màu #2F6FE0 (ngoài hệ thống)
   - Frame "Workspace", vị trí 0,156, cỡ 411 x 595, nền #F7F8FA (ngoài hệ thống)
     - Frame "Canvas 9:16", vị trí 62,198, cỡ 288 x 512, nền #FFFFFF (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest)
+      - Frame "Reference photo (40%)", vị trí 62,198, cỡ 288 x 512, độ mờ của lớp 0.40
+        - Ellipse "Ellipse", vị trí 2,578, cỡ 420 x 220, nền #5C854D (ngoài hệ thống)
+        - Ellipse "Ellipse", vị trí 252,258, cỡ 70 x 70, nền #FAD166 (ngoài hệ thống)
       - Rectangle "Ground stroke", vị trí 85,618, cỡ 242 x 3, nền #1A1C22 (ngoài hệ thống)
       - Ellipse "Onion previous", vị trí 176,444, cỡ 60 x 60, viền #FF5A5F (ngoài hệ thống), dày 4.0, độ mờ của lớp 0.45
       - Ellipse "Onion next", vị trí 176,341, cỡ 60 x 60, viền #3D8BFF (ngoài hệ thống), dày 4.0, độ mờ của lớp 0.45
@@ -198,15 +204,15 @@ Toạ độ và cỡ tính theo dp, gốc là góc trên trái của khung. Th�
         - Instance "Glyph", vị trí 363,649, cỡ 24 x 24
           - Text "glyph", vị trí 363,649, cỡ 24 x 24, chữ "close", kiểu ngoài hệ thống (24/24, đậm 400), màu #12141A (ngoài hệ thống)
     - Frame "Body", vị trí 0,697, cỡ 411 x 170, xếp dọc, cách nhau 16 (md), lề trên/phải/dưới/trái 0/24 (lg)/0/24 (lg), căn MIN/MIN
-      - Instance "Opacity", vị trí 24,697, cỡ 363 x 48, xếp dọc, cách nhau 8 (sm), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
+      - Frame "Slider · Opacity", vị trí 24,697, cỡ 363 x 48, xếp dọc, cách nhau 8 (sm), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
         - Frame "Header", vị trí 24,697, cỡ 363 x 20, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
           - Text "Label", vị trí 24,697, cỡ 53 x 20, chữ "Opacity", kiểu ngoài hệ thống (14/20, đậm 600), màu #12141A (ngoài hệ thống)
           - Frame "spacer", vị trí 77,697, cỡ 279 x 1, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
           - Text "Value", vị trí 356,697, cỡ 31 x 20, chữ "40%", kiểu ngoài hệ thống (14/20, đậm 600), màu #5F6675 (ngoài hệ thống)
         - Frame "Track", vị trí 24,725, cỡ 363 x 20
           - Rectangle "Rectangle", vị trí 24,733, cỡ 363 x 4, nền #D9DDE2 (ngoài hệ thống), bo góc 2
-          - Rectangle "Rectangle", vị trí 24,733, cỡ 110 x 4, nền #3D6A00 (ngoài hệ thống), bo góc 2
-          - Ellipse "Thumb", vị trí 124,725, cỡ 20 x 20, nền #3D6A00 (ngoài hệ thống)
+          - Rectangle "Rectangle", vị trí 24,733, cỡ 145 x 4, nền #3D6A00 (ngoài hệ thống), bo góc 2
+          - Ellipse "Thumb", vị trí 159,725, cỡ 20 x 20, nền #3D6A00 (ngoài hệ thống)
       - Frame "Show reference", vị trí 24,761, cỡ 363 x 42, xếp ngang, cách nhau 12 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/CENTER
         - Frame "Text", vị trí 24,761, cỡ 299 x 42, xếp dọc, cách nhau 2 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
           - Text "Show reference", vị trí 24,761, cỡ 119 x 24, chữ "Show reference", kiểu bodyLarge (16/24, đậm 400), màu #12141A (ngoài hệ thống)

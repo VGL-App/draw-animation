@@ -197,7 +197,7 @@ Toạ độ và cỡ tính theo dp, gốc là góc trên trái của khung. Th�
         - Instance "Glyph", vị trí 363,727, cỡ 24 x 24
           - Text "glyph", vị trí 363,727, cỡ 24 x 24, chữ "close", kiểu ngoài hệ thống (24/24, đậm 400), màu #12141A (ngoài hệ thống)
     - Frame "Body", vị trí 0,775, cỡ 411 x 92, xếp dọc, cách nhau 16 (md), lề trên/phải/dưới/trái 0/24 (lg)/0/24 (lg), căn MIN/MIN
-      - Text "Frame 12 stays on screen", vị trí 24,775, cỡ 363 x 16, chữ "Frame 12 stays on screen for", kiểu bodySmall (12/16, đậm 400), màu #5F6675 (ngoài hệ thống)
+      - Text "The 4 selected frames stay on screen for", vị trí 24,775, cỡ 363 x 16, chữ "The 4 selected frames stay on screen for", kiểu bodySmall (12/16, đậm 400), màu #5F6675 (ngoài hệ thống)
       - Frame "Hold", vị trí 24,807, cỡ 363 x 28, xếp ngang, cách nhau 8 (sm), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
         - Instance "1×", vị trí 24,807, cỡ 38 x 28, nền #E3E6EA (ngoài hệ thống), bo góc 8, xếp ngang, cách nhau 6 (ngoài hệ thống), lề trên/phải/dưới/trái 6 (ngoài hệ thống)/12 (ngoài hệ thống)/6 (ngoài hệ thống)/12 (ngoài hệ thống), căn MIN/CENTER
           - Text "Label", vị trí 36,813, cỡ 14 x 16, chữ "1×", kiểu labelMedium (12/16, đậm 500), màu #12141A (ngoài hệ thống)

@@ -143,10 +143,10 @@ Toạ độ và cỡ tính theo dp, gốc là góc trên trái của khung. Th�
         - Text "glyph", vị trí 372,370, cỡ 22 x 22, chữ "opacity", kiểu ngoài hệ thống (22/22, đậm 400), màu #EEF0F4 (ngoài hệ thống)
       - Instance "Icon", vị trí 372,404, cỡ 22 x 22
         - Text "glyph", vị trí 372,404, cỡ 22 x 22, chữ "layers", kiểu ngoài hệ thống (22/22, đậm 400), màu #EEF0F4 (ngoài hệ thống)
-    - Instance "Ruler on · tap to turn off", vị trí 113,164, cỡ 185 x 30, nền #2E3D17 (ngoài hệ thống), bo góc 8, xếp ngang, cách nhau 6 (ngoài hệ thống), lề trên/phải/dưới/trái 6 (ngoài hệ thống)/12 (ngoài hệ thống)/6 (ngoài hệ thống)/12 (ngoài hệ thống), căn MIN/CENTER
-      - Instance "Leading icon", vị trí 125,170, cỡ 18 x 18
-        - Text "glyph", vị trí 125,170, cỡ 18 x 18, chữ "straighten", kiểu ngoài hệ thống (18/18, đậm 400), màu #D8FA9E (ngoài hệ thống)
-      - Text "Label", vị trí 149,171, cỡ 137 x 16, chữ "Ruler on · tap to turn off", kiểu labelMedium (12/16, đậm 500), màu #D8FA9E (ngoài hệ thống)
+    - Instance "Ruler on · tap to turn off", vị trí 113,716, cỡ 185 x 30, nền #2E3D17 (ngoài hệ thống), bo góc 8, xếp ngang, cách nhau 6 (ngoài hệ thống), lề trên/phải/dưới/trái 6 (ngoài hệ thống)/12 (ngoài hệ thống)/6 (ngoài hệ thống)/12 (ngoài hệ thống), căn MIN/CENTER
+      - Instance "Leading icon", vị trí 125,722, cỡ 18 x 18
+        - Text "glyph", vị trí 125,722, cỡ 18 x 18, chữ "straighten", kiểu ngoài hệ thống (18/18, đậm 400), màu #D8FA9E (ngoài hệ thống)
+      - Text "Label", vị trí 149,723, cỡ 137 x 16, chữ "Ruler on · tap to turn off", kiểu labelMedium (12/16, đậm 500), màu #D8FA9E (ngoài hệ thống)
   - Frame "Timeline", vị trí 0,751, cỡ 411 x 140, nền #171A20 (ngoài hệ thống), xếp dọc, cách nhau 4 (xs), lề trên/phải/dưới/trái 4 (xs)/0/16 (md)/0, căn MIN/MIN
     - Frame "Controls", vị trí 0,755, cỡ 411 x 52, xếp ngang, cách nhau 4 (xs), lề trên/phải/dưới/trái 0/8 (sm)/0/8 (sm), căn MIN/CENTER
       - Instance "Chip", vị trí 8,766, cỡ 108 x 30, nền #2E3D17 (ngoài hệ thống), bo góc 8, xếp ngang, cách nhau 6 (ngoài hệ thống), lề trên/phải/dưới/trái 6 (ngoài hệ thống)/12 (ngoài hệ thống)/6 (ngoài hệ thống)/12 (ngoài hệ thống), căn MIN/CENTER

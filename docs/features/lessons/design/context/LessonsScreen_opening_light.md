@@ -108,7 +108,7 @@ Toạ độ và cỡ tính theo dp, gốc là góc trên trái của khung. Th�
         - Text "Title", vị trí 220,306, cỡ 130 x 20, chữ "Squash and stretch", kiểu titleSmall, labelLarge (14/20, đậm 500), màu #12141A (ngoài hệ thống)
         - Text "Meta", vị trí 220,332, cỡ 97 x 16, chữ "6 min · 16 frames", kiểu bodySmall (12/16, đậm 400), màu #5F6675 (ngoài hệ thống)
         - Instance "Progress", vị trí 220,354, cỡ 168 x 4, nền #E3E6EA (ngoài hệ thống), bo góc 999
-          - Rectangle "Value", vị trí 220,354, cỡ 168 x 8, nền #3D6A00 (ngoài hệ thống), bo góc 4
+          - Rectangle "Value", vị trí 220,354, cỡ 100 x 4, nền #3D6A00 (ngoài hệ thống), bo góc 4
     - Frame "SectionHeader", vị trí 16,382, cỡ 379 x 28, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/CENTER
       - Text "Motion", vị trí 16,382, cỡ 76 x 28, chữ "Motion", kiểu ngoài hệ thống (22/28, đậm 500), màu #12141A (ngoài hệ thống)
       - Frame "spacer", vị trí 92,396, cỡ 263 x 1, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
@@ -153,7 +153,7 @@ Toạ độ và cỡ tính theo dp, gốc là góc trên trái của khung. Th�
   - Instance "Dialog", vị trí 42,394, cỡ 328 x 104, nền #E3E6EA (ngoài hệ thống), bo góc 20, xếp dọc, cách nhau 16 (md), lề trên/phải/dưới/trái 24 (lg)/24 (lg)/16 (md)/24 (lg), căn MIN/MIN
     - Text "Title", vị trí 66,418, cỡ 280 x 28, chữ "Opening lesson…", kiểu ngoài hệ thống (22/28, đậm 500), màu #12141A (ngoài hệ thống)
     - Text "Body", vị trí 66,462, cỡ 280 x 20, chữ "Bouncing ball", kiểu bodyMedium (14/20, đậm 400), màu #5F6675 (ngoài hệ thống)
-  - Ellipse "Spinner", vị trí 306,418, cỡ 40 x 40, viền #A6E64A (ngoài hệ thống), dày 4.0
+  - Ellipse "Spinner", vị trí 306,418, cỡ 40 x 40, viền #3D6A00 (ngoài hệ thống), dày 4.0
 
 ## 4. Code tham khảo
 

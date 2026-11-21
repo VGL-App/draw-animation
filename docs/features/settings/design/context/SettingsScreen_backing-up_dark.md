@@ -126,7 +126,7 @@ Toạ độ và cỡ tính theo dp, gốc là góc trên trái của khung. Th�
       - Text "Body", vị trí 76,858, cỡ 236 x 16, chữ "Native ad, bottom bar", kiểu bodySmall (12/16, đậm 400), màu #8C93A3 (ngoài hệ thống)
     - Frame "Ad CTA", vị trí 324,838, cỡ 71 x 36, viền #6EA8FF (ngoài hệ thống), dày 1.0, bo góc 6, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/14 (ngoài hệ thống)/0/14 (ngoài hệ thống), căn CENTER/CENTER
       - Text "Install", vị trí 339,846, cỡ 41 x 20, chữ "Install", kiểu ngoài hệ thống (14/20, đậm 600), màu #6EA8FF (ngoài hệ thống)
-  - Ellipse "Backing up spinner", vị trí 363,356, cỡ 24 x 24, viền #A6E64A (ngoài hệ thống), dày 3.0
+  - Ellipse "Backing up spinner", vị trí 363,356, cỡ 24 x 24, viền #B6F35C (ngoài hệ thống), dày 3.0
 
 ## 4. Code tham khảo
 

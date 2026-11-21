@@ -211,7 +211,7 @@ Toạ độ và cỡ tính theo dp, gốc là góc trên trái của khung. Th�
       - Frame "Add frame", vị trí 348,811, cỡ 36 x 64, viền #B9BEC8 (ngoài hệ thống), dày 1.0, bo góc 8, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn CENTER/CENTER
         - Instance "Icon", vị trí 355,832, cỡ 22 x 22, CHÚ Ý: ghi đè màu nền của component gốc
           - Text "glyph", vị trí 355,832, cỡ 22 x 22, chữ "add", kiểu ngoài hệ thống (22/22, đậm 400), màu #5F6675 (ngoài hệ thống)
-  - Frame "Color sheet", vị trí 0,577, cỡ 411 x 314, nền #E3E6EA (ngoài hệ thống), xếp dọc, cách nhau 12 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/24 (lg)/0, căn MIN/MIN
+  - Frame "Color sheet", vị trí 0,577, cỡ 411 x 316, nền #E3E6EA (ngoài hệ thống), xếp dọc, cách nhau 12 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/24 (lg)/0, căn MIN/MIN
     - Instance "SheetHandle", vị trí 0,577, cỡ 411 x 24, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn CENTER/CENTER
       - Rectangle "Rectangle", vị trí 190,587, cỡ 32 x 4, nền #B9BEC8 (ngoài hệ thống), bo góc 2
     - Frame "Header", vị trí 0,613, cỡ 411 x 48, xếp ngang, cách nhau 4 (xs), lề trên/phải/dưới/trái 0/12 (ngoài hệ thống)/0/24 (lg), căn MIN/CENTER
@@ -220,43 +220,43 @@ Toạ độ và cỡ tính theo dp, gốc là góc trên trái của khung. Th�
       - Instance "IconButton", vị trí 351,613, cỡ 48 x 48, bo góc 999, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn CENTER/CENTER
         - Instance "Glyph", vị trí 363,625, cỡ 24 x 24
           - Text "glyph", vị trí 363,625, cỡ 24 x 24, chữ "close", kiểu ngoài hệ thống (24/24, đậm 400), màu #12141A (ngoài hệ thống)
-    - Frame "Body", vị trí 0,673, cỡ 411 x 194, xếp dọc, cách nhau 16 (md), lề trên/phải/dưới/trái 0/24 (lg)/0/24 (lg), căn MIN/MIN
-      - Frame "Palette", vị trí 24,673, cỡ 363 x 82, xếp ngang, cách nhau 10 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
+    - Frame "Body", vị trí 0,673, cỡ 411 x 196, xếp dọc, cách nhau 16 (md), lề trên/phải/dưới/trái 0/24 (lg)/0/24 (lg), căn MIN/MIN
+      - Frame "Palette", vị trí 24,673, cỡ 363 x 84, xếp ngang, cách nhau 12 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
         - Instance "Swatch #F4F1EA", vị trí 24,673, cỡ 36 x 36, CHÚ Ý: ghi đè màu nền của component gốc
           - Ellipse "Color", vị trí 26,675, cỡ 32 x 32, nền #F4F1EA (ngoài hệ thống), viền #D2D6DC (ngoài hệ thống), dày 1.0
-        - Instance "Swatch #1E1E24", vị trí 70,673, cỡ 36 x 36, CHÚ Ý: ghi đè màu nền của component gốc
-          - Ellipse "Color", vị trí 72,675, cỡ 32 x 32, nền #1E1E24 (ngoài hệ thống), viền #D2D6DC (ngoài hệ thống), dày 1.0
-        - Instance "Swatch #E5484D", vị trí 116,673, cỡ 36 x 36, CHÚ Ý: ghi đè màu nền của component gốc
-          - Ellipse "Color", vị trí 118,675, cỡ 32 x 32, nền #E5484D (ngoài hệ thống), viền #D2D6DC (ngoài hệ thống), dày 1.0
-        - Instance "Swatch #F76B15", vị trí 162,673, cỡ 36 x 36, CHÚ Ý: ghi đè màu nền của component gốc
-          - Ellipse "Color", vị trí 164,675, cỡ 32 x 32, nền #F76B15 (ngoài hệ thống), viền #D2D6DC (ngoài hệ thống), dày 1.0
-        - Instance "Swatch #FFC53D", vị trí 208,673, cỡ 36 x 36, CHÚ Ý: ghi đè màu nền của component gốc
-          - Ellipse "Color", vị trí 210,675, cỡ 32 x 32, nền #FFC53D (ngoài hệ thống), viền #D2D6DC (ngoài hệ thống), dày 1.0
-        - Instance "Swatch #8BD450", vị trí 254,673, cỡ 36 x 36, CHÚ Ý: ghi đè màu nền của component gốc
-          - Ellipse "Color", vị trí 256,675, cỡ 32 x 32, nền #8BD450 (ngoài hệ thống), viền #D2D6DC (ngoài hệ thống), dày 1.0
-        - Instance "Swatch #30A46C", vị trí 300,673, cỡ 36 x 36, CHÚ Ý: ghi đè màu nền của component gốc
-          - Ellipse "Color", vị trí 304,677, cỡ 28 x 28, nền #30A46C (ngoài hệ thống), viền #D2D6DC (ngoài hệ thống), dày 1.0
-          - Ellipse "Ring", vị trí 300,673, cỡ 36 x 36, viền #12141A (ngoài hệ thống), dày 2.0
-        - Instance "Swatch #12A594", vị trí 346,673, cỡ 36 x 36, CHÚ Ý: ghi đè màu nền của component gốc
-          - Ellipse "Color", vị trí 348,675, cỡ 32 x 32, nền #12A594 (ngoài hệ thống), viền #D2D6DC (ngoài hệ thống), dày 1.0
-        - Instance "Swatch #3E9BF5", vị trí 24,719, cỡ 36 x 36, CHÚ Ý: ghi đè màu nền của component gốc
-          - Ellipse "Color", vị trí 26,721, cỡ 32 x 32, nền #3E9BF5 (ngoài hệ thống), viền #D2D6DC (ngoài hệ thống), dày 1.0
-        - Instance "Swatch #3E63DD", vị trí 70,719, cỡ 36 x 36, CHÚ Ý: ghi đè màu nền của component gốc
-          - Ellipse "Color", vị trí 72,721, cỡ 32 x 32, nền #3E63DD (ngoài hệ thống), viền #D2D6DC (ngoài hệ thống), dày 1.0
-        - Instance "Swatch #8E4EC6", vị trí 116,719, cỡ 36 x 36, CHÚ Ý: ghi đè màu nền của component gốc
-          - Ellipse "Color", vị trí 118,721, cỡ 32 x 32, nền #8E4EC6 (ngoài hệ thống), viền #D2D6DC (ngoài hệ thống), dày 1.0
-        - Instance "Swatch #D6409F", vị trí 162,719, cỡ 36 x 36, CHÚ Ý: ghi đè màu nền của component gốc
-          - Ellipse "Color", vị trí 164,721, cỡ 32 x 32, nền #D6409F (ngoài hệ thống), viền #D2D6DC (ngoài hệ thống), dày 1.0
-      - Instance "Opacity", vị trí 24,771, cỡ 363 x 48, xếp dọc, cách nhau 8 (sm), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
-        - Frame "Header", vị trí 24,771, cỡ 363 x 20, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
-          - Text "Label", vị trí 24,771, cỡ 53 x 20, chữ "Opacity", kiểu ngoài hệ thống (14/20, đậm 600), màu #12141A (ngoài hệ thống)
-          - Frame "spacer", vị trí 77,771, cỡ 272 x 1, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
-          - Text "Value", vị trí 349,771, cỡ 38 x 20, chữ "100%", kiểu ngoài hệ thống (14/20, đậm 600), màu #5F6675 (ngoài hệ thống)
-        - Frame "Track", vị trí 24,799, cỡ 363 x 20
-          - Rectangle "Rectangle", vị trí 24,807, cỡ 363 x 4, nền #D9DDE2 (ngoài hệ thống), bo góc 2
-          - Rectangle "Rectangle", vị trí 24,807, cỡ 110 x 4, nền #3D6A00 (ngoài hệ thống), bo góc 2
-          - Ellipse "Thumb", vị trí 124,799, cỡ 20 x 20, nền #3D6A00 (ngoài hệ thống)
-      - Text "Tip: use the eyedropper ", vị trí 24,835, cỡ 363 x 32, chữ "Tip: use the eyedropper in the More menu to pick a color from the canvas.", kiểu bodySmall (12/16, đậm 400), màu #5F6675 (ngoài hệ thống)
+        - Instance "Swatch #1E1E24", vị trí 72,673, cỡ 36 x 36, CHÚ Ý: ghi đè màu nền của component gốc
+          - Ellipse "Color", vị trí 74,675, cỡ 32 x 32, nền #1E1E24 (ngoài hệ thống), viền #D2D6DC (ngoài hệ thống), dày 1.0
+        - Instance "Swatch #E5484D", vị trí 120,673, cỡ 36 x 36, CHÚ Ý: ghi đè màu nền của component gốc
+          - Ellipse "Color", vị trí 122,675, cỡ 32 x 32, nền #E5484D (ngoài hệ thống), viền #D2D6DC (ngoài hệ thống), dày 1.0
+        - Instance "Swatch #F76B15", vị trí 168,673, cỡ 36 x 36, CHÚ Ý: ghi đè màu nền của component gốc
+          - Ellipse "Color", vị trí 170,675, cỡ 32 x 32, nền #F76B15 (ngoài hệ thống), viền #D2D6DC (ngoài hệ thống), dày 1.0
+        - Instance "Swatch #FFC53D", vị trí 216,673, cỡ 36 x 36, CHÚ Ý: ghi đè màu nền của component gốc
+          - Ellipse "Color", vị trí 218,675, cỡ 32 x 32, nền #FFC53D (ngoài hệ thống), viền #D2D6DC (ngoài hệ thống), dày 1.0
+        - Instance "Swatch #8BD450", vị trí 264,673, cỡ 36 x 36, CHÚ Ý: ghi đè màu nền của component gốc
+          - Ellipse "Color", vị trí 266,675, cỡ 32 x 32, nền #8BD450 (ngoài hệ thống), viền #D2D6DC (ngoài hệ thống), dày 1.0
+        - Instance "Swatch #30A46C", vị trí 312,673, cỡ 36 x 36, CHÚ Ý: ghi đè màu nền của component gốc
+          - Ellipse "Color", vị trí 314,675, cỡ 32 x 32, nền #30A46C (ngoài hệ thống), viền #D2D6DC (ngoài hệ thống), dày 1.0
+        - Instance "Swatch #12A594", vị trí 24,721, cỡ 36 x 36, CHÚ Ý: ghi đè màu nền của component gốc
+          - Ellipse "Color", vị trí 26,723, cỡ 32 x 32, nền #12A594 (ngoài hệ thống), viền #D2D6DC (ngoài hệ thống), dày 1.0
+        - Instance "Swatch #3E9BF5", vị trí 72,721, cỡ 36 x 36, CHÚ Ý: ghi đè màu nền của component gốc
+          - Ellipse "Color", vị trí 76,725, cỡ 28 x 28, nền #3E9BF5 (ngoài hệ thống), viền #D2D6DC (ngoài hệ thống), dày 1.0
+          - Ellipse "Ring", vị trí 72,721, cỡ 36 x 36, viền #12141A (ngoài hệ thống), dày 2.0
+        - Instance "Swatch #3E63DD", vị trí 120,721, cỡ 36 x 36, CHÚ Ý: ghi đè màu nền của component gốc
+          - Ellipse "Color", vị trí 122,723, cỡ 32 x 32, nền #3E63DD (ngoài hệ thống), viền #D2D6DC (ngoài hệ thống), dày 1.0
+        - Instance "Swatch #8E4EC6", vị trí 168,721, cỡ 36 x 36, CHÚ Ý: ghi đè màu nền của component gốc
+          - Ellipse "Color", vị trí 170,723, cỡ 32 x 32, nền #8E4EC6 (ngoài hệ thống), viền #D2D6DC (ngoài hệ thống), dày 1.0
+        - Instance "Swatch #D6409F", vị trí 216,721, cỡ 36 x 36, CHÚ Ý: ghi đè màu nền của component gốc
+          - Ellipse "Color", vị trí 218,723, cỡ 32 x 32, nền #D6409F (ngoài hệ thống), viền #D2D6DC (ngoài hệ thống), dày 1.0
+      - Frame "Slider · Opacity", vị trí 24,773, cỡ 363 x 48, xếp dọc, cách nhau 8 (sm), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
+        - Frame "Header", vị trí 24,773, cỡ 363 x 20, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
+          - Text "Label", vị trí 24,773, cỡ 53 x 20, chữ "Opacity", kiểu ngoài hệ thống (14/20, đậm 600), màu #12141A (ngoài hệ thống)
+          - Frame "spacer", vị trí 77,773, cỡ 272 x 1, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
+          - Text "Value", vị trí 349,773, cỡ 38 x 20, chữ "100%", kiểu ngoài hệ thống (14/20, đậm 600), màu #5F6675 (ngoài hệ thống)
+        - Frame "Track", vị trí 24,801, cỡ 363 x 20
+          - Rectangle "Rectangle", vị trí 24,809, cỡ 363 x 4, nền #D9DDE2 (ngoài hệ thống), bo góc 2
+          - Rectangle "Rectangle", vị trí 24,809, cỡ 363 x 4, nền #3D6A00 (ngoài hệ thống), bo góc 2
+          - Ellipse "Thumb", vị trí 367,801, cỡ 20 x 20, nền #3D6A00 (ngoài hệ thống)
+      - Text "Tip: use the eyedropper ", vị trí 24,837, cỡ 363 x 32, chữ "Tip: use the eyedropper in the More menu to pick a color from the canvas.", kiểu bodySmall (12/16, đậm 400), màu #5F6675 (ngoài hệ thống)
 
 ## 4. Code tham khảo
 

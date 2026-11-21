@@ -84,6 +84,8 @@ Tiêu chí chấp nhận:
 - [ ] Khi cọ đang chọn chưa được chỉnh riêng lực bút thì công tắc "Pressure from stylus" hiện theo giá trị "Stylus pressure" của Cài đặt (câu hỏi 22).
 - [ ] Khi tăng "Stabilizer" thì nét mượt hơn, bớt rung tay.
 - [ ] Khi chọn tẩy và vẽ thì phần nét dưới tẩy bị xóa trên layer đang chọn, các layer khác không đổi.
+- [ ] Khi chạm công cụ tẩy lần nữa thì bảng "Eraser" mở với "Size" (thiết kế: 24 px), "Softness" (0%) và công tắc "Erase on all layers" (tắt); bật công tắc thì tẩy xóa nét ở mọi layer tại chỗ tẩy (câu hỏi 23).
+- [ ] Khi chạm ô màu ở cột phải thì bảng "Color" mở với 12 ô màu và thanh "Opacity"; chạm một ô thì màu đó thành màu đang chọn, ô có viền chọn.
 - [ ] Khi chạm ô màu ở cột phải thì chọn được màu mới; khi dùng hút màu và chạm canvas thì màu tại điểm chạm thành màu đang chọn.
 - [ ] Khi người dùng vẽ nét đầu tiên trên máy (ở bất kỳ dự án hay bài học nào) thì app nhớ mốc "nét vẽ đầu tiên" trên máy.
 
@@ -114,9 +116,10 @@ Tiêu chí chấp nhận:
 
 - [ ] Khi chọn công cụ chọn vùng và khoanh một vùng thì thanh thao tác nổi hiện cạnh vùng chọn với di chuyển, đổi cỡ, xoay, lật, chép, xóa; mỗi thao tác chỉ đổi phần trong vùng chọn.
 - [ ] Khi chọn công cụ hình thì vẽ được hình cơ bản bằng một lần kéo.
+- [ ] Khi chạm công cụ hình lần nữa thì bảng "Shape" mở với các loại "Line", "Rectangle", "Ellipse", "Arrow", thanh "Stroke" và công tắc "Fill shape"; bật "Fill shape" thì hình được tô màu đang chọn bên trong (câu hỏi 23).
 - [ ] Khi chọn công cụ chữ thì bảng "Text" mở: ô nhập chữ, ba phông "Space Grotesk", "Inter", "Marker", thanh "Size" (thiết kế: 44 pt), nút "Done"; chữ hiện trên canvas và kéo đặt được chỗ.
-- [ ] Khi bật thước thì nét vẽ bám theo đường thẳng của thước.
-- [ ] Khi bật vẽ đối xứng thì nét vẽ ở một bên hiện đối xứng ở bên kia trục.
+- [ ] Khi bật thước thì nét vẽ bám theo đường thẳng của thước; dưới canvas hiện chip "Ruler on · tap to turn off", chạm chip thì thước tắt.
+- [ ] Khi bật vẽ đối xứng thì nét vẽ ở một bên hiện đối xứng ở bên kia trục dọc giữa canvas (trục hiện nét đứt); dưới canvas hiện chip "Symmetry on · tap to turn off", chạm chip thì tắt.
 
 ### KB-6. Layer
 
@@ -156,7 +159,8 @@ Tiêu chí chấp nhận:
 - [ ] Khi muốn nhân bản 10 khung liền nhau thì người dùng làm được trong tối đa 3 thao tác: nhấn giữ khung đầu rồi kéo dọc dải để chọn cả dải, rồi bấm nhân bản (câu hỏi 9).
 - [ ] Khi chép một dải khung rồi dán thì cả dải được chèn sau khung hiện tại, đúng thứ tự, đủ mọi layer.
 - [ ] Khi đặt giữ khung cho một khung thì khung đó hiện lâu hơn đúng số nhịp đã chọn lúc phát.
-- [ ] Khi chạm chip tốc độ khung thì đổi được tốc độ trong khoảng 6 đến 30 khung/giây.
+- [ ] Khi chạm chip tốc độ khung thì bảng "Frame rate" mở với các mức 6, 8, 12, 15, 24, 30 khung/giây và dòng thời lượng (ví dụ "12 frames per second · 48 frames play in 4.0 s"); chọn một mức thì tốc độ của dự án đổi ngay.
+- [ ] Khi bấm giữ khung trên thanh chọn nhiều thì bảng "Hold frame" mở với các mức 1×, 2×, 3×, 4× cho các khung đang chọn.
 - [ ] Khi xóa khung thì có thể lấy lại bằng hoàn tác.
 - [ ] Khi thu gọn dòng thời gian thì dòng thời gian cao 56 dp và canvas lớn ra theo chỗ trống; khi mở lại thì dòng thời gian về 140 dp như thiết kế. Khi thu gọn chỉ còn hàng điều khiển (onion skin, số khung, phát, tốc độ khung, nút mở rộng); vuốt xuống trên dòng thời gian để thu gọn, bấm nút mũi tên ở cuối hàng để mở lại (thiết kế `timeline-collapsed`, câu hỏi 2).
 
@@ -186,6 +190,7 @@ Tiêu chí chấp nhận:
 - [ ] Khi chọn một ảnh thì ảnh hiện làm nền để vẽ theo, dưới các layer vẽ.
 - [ ] Khi chọn một video thì video được chia theo tốc độ khung của dự án và hiện làm nền theo từng khung; video dài hơn 10 giây thì chỉ lấy 10 giây đầu (câu hỏi 12).
 - [ ] Khi có ảnh hay video để vẽ theo thì lớp này hiện mờ, có công tắc ẩn hiện, và không có trong file xuất (câu hỏi 12).
+- [ ] Khi vừa chọn xong ảnh hay video, hoặc chọn lại mục nhập trong menu "thêm" khi đã có lớp vẽ theo, thì bảng "Reference" mở với "Opacity" (mặc định 40%), công tắc "Show reference" và nút "Remove reference"; bấm "Remove reference" thì lớp vẽ theo bị bỏ, nét vẽ không đổi.
 - [ ] Khi đóng bộ chọn mà không chọn gì thì màn vẽ không đổi.
 
 Trường hợp đặc biệt:
@@ -224,6 +229,7 @@ Tiêu chí chấp nhận:
 - [ ] Khi chọn công cụ camera ảo thì lia, phóng, xoay được cả cảnh ở từng khung, không đổi nét vẽ trên các layer.
 - [ ] Khi phát thì cảnh chuyển động theo camera ảo đã đặt.
 - [ ] Khi tắt camera ảo hay xóa điểm đặt thì cảnh về vị trí gốc.
+- [ ] Khi chạm công cụ camera ảo lần nữa thì bảng "Camera" mở với khung đang đặt, "Zoom" (thiết kế: 120%), "Rotate" (0°), công tắc "Camera on" và nút "Reset camera"; bấm "Reset camera" thì cảnh của khung đó về vị trí gốc.
 
 ### KB-16. Tự lưu và khôi phục
 
@@ -463,6 +469,10 @@ Tham số Remote Config của màn vẽ (không phải cờ): `time_reload_edito
 22. **Lực bút: công tắc chung hay theo từng cọ?** Thiết kế Cài đặt có công tắc chung "Stylus pressure" (spec settings câu 7); thiết kế bảng "Brush" của màn vẽ có công tắc "Pressure from stylus" (KB-2). Bản đề xuất chỉ nói "lực bút" trong cọ. Có giữ cả hai không, và khi hai công tắc khác nhau thì bên nào thắng?
     - Đề xuất của AI: giữ cả hai. Công tắc ở Cài đặt là giá trị mặc định cho cọ chưa chỉnh; công tắc ở bảng "Brush" chỉnh riêng cọ đang chọn và thắng giá trị mặc định cho cọ đó. Phương án khác: bỏ công tắc ở bảng "Brush" (chỉ còn công tắc chung), hoặc bỏ dòng ở Cài đặt (chỉ còn theo cọ); cả hai cần sửa thiết kế. Trả lời chung với spec settings câu 7.
     - Trả lời: Giữ cả hai công tắc, theo đề xuất của AI.
+
+23. **Điều khiển có trên thiết kế bổ sung mà bản đề xuất không nói** (thêm ngày 2026-11-21 khi dựng thiết kế): "Softness" và "Erase on all layers" ở bảng tẩy, loại "Arrow" và "Fill shape" ở bảng hình, "Reset camera" ở bảng camera, các mức 1× đến 4× của giữ khung.
+    - Đề xuất của AI: giữ cả, vì làm thêm ít và hợp với app vẽ; nếu muốn gọn thì bỏ "Softness" và "Erase on all layers" (tẩy chỉ có "Size"), sửa frame `tool-eraser`.
+    - Trả lời:
 
 ## 10. Lịch sử
 

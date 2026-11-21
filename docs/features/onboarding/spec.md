@@ -138,7 +138,7 @@ Tiêu chí chấp nhận:
 
 ## 4. Giao diện
 
-- **Thiết kế:** [design/README.md](design/README.md), Figma, đã duyệt 2026-11-20. 4 trang, mỗi trang bản sáng và tối. Trạng thái không có quảng cáo có frame `page-1-no-ad` (bổ sung ngày 2026-11-21, chờ anh Nhật duyệt; các trang khác theo cùng cách). Thiết kế không có khung thấp 360 × 640 hay khung máy gập mở (câu hỏi 3, 7, 8).
+- **Thiết kế:** [design/README.md](design/README.md), Figma, đã duyệt 2026-11-20. 4 trang, mỗi trang bản sáng và tối. Trạng thái không có quảng cáo có frame `page-1-no-ad` (bổ sung ngày 2026-11-21, chờ anh Nhật duyệt; các trang khác theo cùng cách). Thiết kế không có khung thấp 360 × 640 hay khung máy gập mở (câu hỏi 7, 8).
 - **Các màn hình:**
 
 | Màn hình | Trạng thái theo thiết kế | Mục đích | Kịch bản liên quan |

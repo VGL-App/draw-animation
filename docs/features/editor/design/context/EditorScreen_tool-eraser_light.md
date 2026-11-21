@@ -199,24 +199,24 @@ Toạ độ và cỡ tính theo dp, gốc là góc trên trái của khung. Th�
         - Instance "Glyph", vị trí 363,649, cỡ 24 x 24
           - Text "glyph", vị trí 363,649, cỡ 24 x 24, chữ "close", kiểu ngoài hệ thống (24/24, đậm 400), màu #12141A (ngoài hệ thống)
     - Frame "Body", vị trí 0,697, cỡ 411 x 170, xếp dọc, cách nhau 16 (md), lề trên/phải/dưới/trái 0/24 (lg)/0/24 (lg), căn MIN/MIN
-      - Instance "Size", vị trí 24,697, cỡ 363 x 48, xếp dọc, cách nhau 8 (sm), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
+      - Frame "Slider · Size", vị trí 24,697, cỡ 363 x 48, xếp dọc, cách nhau 8 (sm), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
         - Frame "Header", vị trí 24,697, cỡ 363 x 20, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
           - Text "Label", vị trí 24,697, cỡ 29 x 20, chữ "Size", kiểu ngoài hệ thống (14/20, đậm 600), màu #12141A (ngoài hệ thống)
           - Frame "spacer", vị trí 53,697, cỡ 296 x 1, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
           - Text "Value", vị trí 349,697, cỡ 38 x 20, chữ "24 px", kiểu ngoài hệ thống (14/20, đậm 600), màu #5F6675 (ngoài hệ thống)
         - Frame "Track", vị trí 24,725, cỡ 363 x 20
           - Rectangle "Rectangle", vị trí 24,733, cỡ 363 x 4, nền #D9DDE2 (ngoài hệ thống), bo góc 2
-          - Rectangle "Rectangle", vị trí 24,733, cỡ 110 x 4, nền #3D6A00 (ngoài hệ thống), bo góc 2
-          - Ellipse "Thumb", vị trí 124,725, cỡ 20 x 20, nền #3D6A00 (ngoài hệ thống)
-      - Instance "Softness", vị trí 24,761, cỡ 363 x 48, xếp dọc, cách nhau 8 (sm), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
+          - Rectangle "Rectangle", vị trí 24,733, cỡ 87 x 4, nền #3D6A00 (ngoài hệ thống), bo góc 2
+          - Ellipse "Thumb", vị trí 101,725, cỡ 20 x 20, nền #3D6A00 (ngoài hệ thống)
+      - Frame "Slider · Softness", vị trí 24,761, cỡ 363 x 48, xếp dọc, cách nhau 8 (sm), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
         - Frame "Header", vị trí 24,761, cỡ 363 x 20, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
           - Text "Label", vị trí 24,761, cỡ 61 x 20, chữ "Softness", kiểu ngoài hệ thống (14/20, đậm 600), màu #12141A (ngoài hệ thống)
           - Frame "spacer", vị trí 85,761, cỡ 280 x 1, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
           - Text "Value", vị trí 365,761, cỡ 22 x 20, chữ "0%", kiểu ngoài hệ thống (14/20, đậm 600), màu #5F6675 (ngoài hệ thống)
         - Frame "Track", vị trí 24,789, cỡ 363 x 20
           - Rectangle "Rectangle", vị trí 24,797, cỡ 363 x 4, nền #D9DDE2 (ngoài hệ thống), bo góc 2
-          - Rectangle "Rectangle", vị trí 24,797, cỡ 110 x 4, nền #3D6A00 (ngoài hệ thống), bo góc 2
-          - Ellipse "Thumb", vị trí 124,789, cỡ 20 x 20, nền #3D6A00 (ngoài hệ thống)
+          - Rectangle "Rectangle", vị trí 24,797, cỡ 0 x 4, nền #3D6A00 (ngoài hệ thống), bo góc 2
+          - Ellipse "Thumb", vị trí 24,789, cỡ 20 x 20, nền #3D6A00 (ngoài hệ thống)
       - Frame "Erase on all layers", vị trí 24,825, cỡ 363 x 42, xếp ngang, cách nhau 12 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/CENTER
         - Frame "Text", vị trí 24,825, cỡ 299 x 42, xếp dọc, cách nhau 2 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
           - Text "Erase on all layers", vị trí 24,825, cỡ 136 x 24, chữ "Erase on all layers", kiểu bodyLarge (16/24, đậm 400), màu #12141A (ngoài hệ thống)

@@ -199,24 +199,24 @@ Toạ độ và cỡ tính theo dp, gốc là góc trên trái của khung. Th�
           - Text "glyph", vị trí 363,537, cỡ 24 x 24, chữ "close", kiểu ngoài hệ thống (24/24, đậm 400), màu #12141A (ngoài hệ thống)
     - Frame "Body", vị trí 0,585, cỡ 411 x 282, xếp dọc, cách nhau 16 (md), lề trên/phải/dưới/trái 0/24 (lg)/0/24 (lg), căn MIN/MIN
       - Text "Frame 12 · Drag on the c", vị trí 24,585, cỡ 363 x 16, chữ "Frame 12 · Drag on the canvas to pan. Pinch to zoom.", kiểu bodySmall (12/16, đậm 400), màu #5F6675 (ngoài hệ thống)
-      - Instance "Zoom", vị trí 24,617, cỡ 363 x 48, xếp dọc, cách nhau 8 (sm), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
+      - Frame "Slider · Zoom", vị trí 24,617, cỡ 363 x 48, xếp dọc, cách nhau 8 (sm), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
         - Frame "Header", vị trí 24,617, cỡ 363 x 20, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
           - Text "Label", vị trí 24,617, cỡ 39 x 20, chữ "Zoom", kiểu ngoài hệ thống (14/20, đậm 600), màu #12141A (ngoài hệ thống)
           - Frame "spacer", vị trí 63,617, cỡ 287 x 1, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
           - Text "Value", vị trí 350,617, cỡ 37 x 20, chữ "120%", kiểu ngoài hệ thống (14/20, đậm 600), màu #5F6675 (ngoài hệ thống)
         - Frame "Track", vị trí 24,645, cỡ 363 x 20
           - Rectangle "Rectangle", vị trí 24,653, cỡ 363 x 4, nền #D9DDE2 (ngoài hệ thống), bo góc 2
-          - Rectangle "Rectangle", vị trí 24,653, cỡ 110 x 4, nền #3D6A00 (ngoài hệ thống), bo góc 2
-          - Ellipse "Thumb", vị trí 124,645, cỡ 20 x 20, nền #3D6A00 (ngoài hệ thống)
-      - Instance "Rotate", vị trí 24,681, cỡ 363 x 48, xếp dọc, cách nhau 8 (sm), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
+          - Rectangle "Rectangle", vị trí 24,653, cỡ 102 x 4, nền #3D6A00 (ngoài hệ thống), bo góc 2
+          - Ellipse "Thumb", vị trí 116,645, cỡ 20 x 20, nền #3D6A00 (ngoài hệ thống)
+      - Frame "Slider · Rotate", vị trí 24,681, cỡ 363 x 48, xếp dọc, cách nhau 8 (sm), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
         - Frame "Header", vị trí 24,681, cỡ 363 x 20, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
           - Text "Label", vị trí 24,681, cỡ 45 x 20, chữ "Rotate", kiểu ngoài hệ thống (14/20, đậm 600), màu #12141A (ngoài hệ thống)
           - Frame "spacer", vị trí 69,681, cỡ 302 x 1, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
           - Text "Value", vị trí 371,681, cỡ 16 x 20, chữ "0°", kiểu ngoài hệ thống (14/20, đậm 600), màu #5F6675 (ngoài hệ thống)
         - Frame "Track", vị trí 24,709, cỡ 363 x 20
           - Rectangle "Rectangle", vị trí 24,717, cỡ 363 x 4, nền #D9DDE2 (ngoài hệ thống), bo góc 2
-          - Rectangle "Rectangle", vị trí 24,717, cỡ 110 x 4, nền #3D6A00 (ngoài hệ thống), bo góc 2
-          - Ellipse "Thumb", vị trí 124,709, cỡ 20 x 20, nền #3D6A00 (ngoài hệ thống)
+          - Rectangle "Rectangle", vị trí 24,717, cỡ 182 x 4, nền #3D6A00 (ngoài hệ thống), bo góc 2
+          - Ellipse "Thumb", vị trí 196,709, cỡ 20 x 20, nền #3D6A00 (ngoài hệ thống)
       - Frame "Camera on", vị trí 24,745, cỡ 363 x 58, xếp ngang, cách nhau 12 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/CENTER
         - Frame "Text", vị trí 24,745, cỡ 299 x 58, xếp dọc, cách nhau 2 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
           - Text "Camera on", vị trí 24,745, cỡ 83 x 24, chữ "Camera on", kiểu bodyLarge (16/24, đậm 400), màu #12141A (ngoài hệ thống)
