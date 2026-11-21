@@ -24,10 +24,16 @@ Phiên tự chạy chỉ đọc thư mục này, không mở được Figma.
 
 Kịch bản: theo [spec của feature](../spec.md).
 
+Bổ sung ngày 2026-11-21 theo câu trả lời ở mục 9 của spec, anh Nhật duyệt ngày 2026-11-21 (chọn "Duyệt" trong phiên): `backing-up`, `no-projects`. Thông báo sao lưu xong hay lỗi dùng Snackbar chuẩn, không có frame riêng.
+
 | Màn hình (composable) | Trạng thái | Ảnh trong `screens/`, số liệu trong `context/` | Kịch bản |
 | --- | --- | --- | --- |
+| `SettingsScreen` | backing-up, chế độ tối | `SettingsScreen_backing-up_dark` | KB-5 |
+| `SettingsScreen` | backing-up | `SettingsScreen_backing-up_light` | KB-5 |
 | `SettingsScreen` | default, chế độ tối | `SettingsScreen_default_dark` | KB-1, KB-2, KB-3, KB-4, KB-5, KB-6, KB-7, KB-8, KB-9 |
 | `SettingsScreen` | default | `SettingsScreen_default_light` | KB-1, KB-2, KB-3, KB-4, KB-5, KB-6, KB-7, KB-8, KB-9 |
+| `SettingsScreen` | no-projects, chế độ tối | `SettingsScreen_no-projects_dark` | KB-5 |
+| `SettingsScreen` | no-projects | `SettingsScreen_no-projects_light` | KB-5 |
 
 ## 2. Bảng chữ
 
@@ -35,6 +41,25 @@ Chữ tiếng Anh như trên thiết kế (bản đề xuất Q9: tiếng Anh). 
 
 | Màn hình, trạng thái | Vị trí (phần tử cha trong `context/`) | Chữ | Kiểu chữ (text style trên Figma) |
 | --- | --- | --- | --- |
+| `SettingsScreen`, backing-up, chế độ tối | TopBar | Settings | titleLarge |
+| `SettingsScreen`, backing-up, chế độ tối | Section Drawing | Drawing | labelLarge |
+| `SettingsScreen`, backing-up, chế độ tối | ListItem | Default frame rate | bodyLarge |
+| `SettingsScreen`, backing-up, chế độ tối | ListItem | 12 fps | bodyMedium |
+| `SettingsScreen`, backing-up, chế độ tối | ListItem | Default canvas | bodyLarge |
+| `SettingsScreen`, backing-up, chế độ tối | ListItem | 9:16 | bodyMedium |
+| `SettingsScreen`, backing-up, chế độ tối | ListItem | Stylus pressure | bodyLarge |
+| `SettingsScreen`, backing-up, chế độ tối | ListItem | On | bodyMedium |
+| `SettingsScreen`, backing-up, chế độ tối | Section Your projects | Your projects | labelLarge |
+| `SettingsScreen`, backing-up, chế độ tối | ListItem | Back up all projects | bodyLarge |
+| `SettingsScreen`, backing-up, chế độ tối | ListItem | Restore from a file | bodyLarge |
+| `SettingsScreen`, backing-up, chế độ tối | ListItem | Autosave | bodyLarge |
+| `SettingsScreen`, backing-up, chế độ tối | ListItem | Every 30 s | bodyMedium |
+| `SettingsScreen`, backing-up, chế độ tối | Section About | About | labelLarge |
+| `SettingsScreen`, backing-up, chế độ tối | ListItem | Ad privacy choices | bodyLarge |
+| `SettingsScreen`, backing-up, chế độ tối | ListItem | Privacy policy | bodyLarge |
+| `SettingsScreen`, backing-up, chế độ tối | ListItem | Rate Frameloop | bodyLarge |
+| `SettingsScreen`, backing-up, chế độ tối | ListItem | Version | bodyLarge |
+| `SettingsScreen`, backing-up, chế độ tối | ListItem | 1.0.0 | bodyMedium |
 | `SettingsScreen`, default, chế độ tối | TopBar | Settings | titleLarge |
 | `SettingsScreen`, default, chế độ tối | Section Drawing | Drawing | labelLarge |
 | `SettingsScreen`, default, chế độ tối | ListItem | Default frame rate | bodyLarge |
@@ -55,6 +80,26 @@ Chữ tiếng Anh như trên thiết kế (bản đề xuất Q9: tiếng Anh). 
 | `SettingsScreen`, default, chế độ tối | ListItem | Rate Frameloop | bodyLarge |
 | `SettingsScreen`, default, chế độ tối | ListItem | Version | bodyLarge |
 | `SettingsScreen`, default, chế độ tối | ListItem | 1.0.0 | bodyMedium |
+| `SettingsScreen`, no-projects, chế độ tối | TopBar | Settings | titleLarge |
+| `SettingsScreen`, no-projects, chế độ tối | Section Drawing | Drawing | labelLarge |
+| `SettingsScreen`, no-projects, chế độ tối | ListItem | Default frame rate | bodyLarge |
+| `SettingsScreen`, no-projects, chế độ tối | ListItem | 12 fps | bodyMedium |
+| `SettingsScreen`, no-projects, chế độ tối | ListItem | Default canvas | bodyLarge |
+| `SettingsScreen`, no-projects, chế độ tối | ListItem | 9:16 | bodyMedium |
+| `SettingsScreen`, no-projects, chế độ tối | ListItem | Stylus pressure | bodyLarge |
+| `SettingsScreen`, no-projects, chế độ tối | ListItem | On | bodyMedium |
+| `SettingsScreen`, no-projects, chế độ tối | Section Your projects | Your projects | labelLarge |
+| `SettingsScreen`, no-projects, chế độ tối | ListItem | Back up all projects | bodyLarge |
+| `SettingsScreen`, no-projects, chế độ tối | ListItem | No projects yet | bodyMedium |
+| `SettingsScreen`, no-projects, chế độ tối | ListItem | Restore from a file | bodyLarge |
+| `SettingsScreen`, no-projects, chế độ tối | ListItem | Autosave | bodyLarge |
+| `SettingsScreen`, no-projects, chế độ tối | ListItem | Every 30 s | bodyMedium |
+| `SettingsScreen`, no-projects, chế độ tối | Section About | About | labelLarge |
+| `SettingsScreen`, no-projects, chế độ tối | ListItem | Ad privacy choices | bodyLarge |
+| `SettingsScreen`, no-projects, chế độ tối | ListItem | Privacy policy | bodyLarge |
+| `SettingsScreen`, no-projects, chế độ tối | ListItem | Rate Frameloop | bodyLarge |
+| `SettingsScreen`, no-projects, chế độ tối | ListItem | Version | bodyLarge |
+| `SettingsScreen`, no-projects, chế độ tối | ListItem | 1.0.0 | bodyMedium |
 
 ## 3. Ánh xạ sang hệ thống thiết kế
 

@@ -88,12 +88,12 @@ Tiêu chí chấp nhận:
 Tiêu chí chấp nhận:
 
 - [ ] Khi bấm nút xuất thì màn chuyển sang trạng thái đang xuất: tiêu đề "Exporting", ảnh khung đang làm, dòng "Making your video…" (GIF: "Making your GIF…"; chuỗi PNG: "Making your images…"; câu hỏi 6), thanh tiến độ, "Frame <đã làm> of <tổng số>" bên trái, "<phần trăm>% · about <số> s left" bên phải, nút "Cancel".
-- [ ] Khi xuất thì phần trăm bằng số khung đã làm chia tổng số khung, làm tròn xuống; ví dụ khung 30 của 48 hiện "62%". Thanh tiến độ và phần trăm không bao giờ lùi.
+- [ ] Khi xuất thì phần trăm bằng số khung đã làm chia tổng số khung, làm tròn xuống; ví dụ khung 29 của 48 hiện "60%". Thanh tiến độ và phần trăm không bao giờ lùi.
 - [ ] Khi bấm "Cancel" thì việc xuất dừng, không file nào được lưu vào thư viện, không để lại file dở, và màn quay về trạng thái chọn tùy chọn với lựa chọn cũ.
 - [ ] Khi bấm nút quay lại của hệ thống lúc đang xuất thì như bấm "Cancel": dừng ngay, không hỏi xác nhận (câu hỏi 4).
 - [ ] Khi xuất MP4 thì video có âm thanh của dự án (nếu dự án có âm thanh), đúng tốc độ khung và tỷ lệ khung của dự án, ở độ phân giải đã chọn.
 - [ ] Khi xuất GIF thì file lặp vô hạn, không âm thanh. Khi xuất chuỗi PNG thì có đúng một ảnh cho mỗi khung của dự án.
-- [ ] Khi watermark bật thì mọi khung của file xuất ra có watermark Frameloop (chữ "Frameloop" kèm biểu tượng app ở góc dưới phải, theo frame thiết kế bổ sung; câu hỏi 7); khi watermark tắt thì không khung nào có.
+- [ ] Khi watermark bật thì mọi khung của file xuất ra có watermark Frameloop (chữ "Frameloop" kèm biểu tượng app, màu trắng trên viên thuốc nền đen mờ, ở góc dưới phải, cao khoảng 5% cạnh ngắn của khung, cách mép 3%, theo mẫu watermark ở design/README.md; câu hỏi 7); khi watermark tắt thì không khung nào có.
 - [ ] Khi xuất, dù thành công, lỗi hay hủy, thì dự án không thay đổi.
 
 ### KB-5. Xuất xong: lưu, mở, chia sẻ
@@ -258,7 +258,7 @@ Không có.
 
 7. **Watermark trông thế nào, đặt ở đâu?** Bản đề xuất và thiết kế chỉ ghi "Frameloop watermark", không có hình mẫu.
    - Đề xuất của AI: chữ "Frameloop" kèm biểu tượng app, trắng mờ có viền tối mảnh để thấy được trên mọi nền, ở góc dưới phải, cao khoảng 5% cạnh ngắn của khung, cách mép khoảng 3%. Cần một frame thiết kế cho watermark trước khi làm plan.
-   - Trả lời: Đồng ý đề xuất của AI.
+   - Trả lời: Đồng ý đề xuất của AI. Sau đó (2026-11-21) đổi sang chữ trắng trên viên thuốc nền đen 35%, theo design/README.md.
 
 8. **Quyền lưu trên Android 8, 9: hỏi lúc nào, từ chối thì sao?** Q5 chốt có quyền này (`maxSdkVersion=28`) nhưng không nói lúc hỏi và cách xử lý khi bị từ chối.
    - Đề xuất của AI: hỏi khi bấm nút xuất, trước khi bắt đầu (không hỏi lúc mở màn); cho quyền thì xuất ngay; từ chối thì không xuất, hiện thông báo ở câu hỏi 6 với nút hỏi lại; từ chối hẳn thì nút đổi thành mở trang cài đặt của app (KB-8). Không có phương án "xuất rồi chỉ chia sẻ", vì thiết kế màn xong luôn ghi "Saved to Gallery".
@@ -294,3 +294,6 @@ Không có.
 | --- | --- | --- |
 | 2026-11-21 | AI | Tạo bản đầu từ bản đề xuất đã duyệt (docs/research/proposal.md) và thiết kế đã duyệt |
 | 2026-11-21 | AI | Ghi câu trả lời của anh Nhật cho mọi câu hỏi ở mục 9 (anh chọn trong phiên ngày 2026-11-21) và sửa phần thân spec theo các câu trả lời; sửa các điểm nên sửa còn lại của lần rà soát cuối. Spec vẫn `draft` |
+| 2026-11-21 | AI | Ghi các frame thiết kế bổ sung, sửa theo câu trả lời (chờ anh Nhật duyệt) ở mục 4 và các tiêu chí liên quan |
+| 2026-11-21 | AI | Watermark đổi sang chữ trắng trên viên thuốc nền đen mờ, theo lời anh Nhật trong phiên (dễ thấy trên nền trắng) |
+| 2026-11-21 | AI | Thiết kế bổ sung đã được anh Nhật duyệt trong phiên (chọn "Duyệt") |

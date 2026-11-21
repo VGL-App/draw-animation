@@ -6,7 +6,7 @@ Sinh bởi `scripts/figma-export.py`. Không sửa tay; thiết kế đổi thì
 
 - Link: https://www.figma.com/design/uDdqi9ojRvIy4689FvCh5O/?node-id=10-823
 - Frame: `10:823`, giao diện tối
-- Ngày lấy: 2026-11-20
+- Ngày lấy: 2026-11-21
 
 ## 2. Giá trị dùng
 
@@ -82,8 +82,8 @@ Toạ độ và cỡ tính theo dp, gốc là góc trên trái của khung. Th�
   - Frame "Content", vị trí 0,128, cỡ 411 x 603, xếp dọc, cách nhau 12 (ngoài hệ thống), lề trên/phải/dưới/trái 8 (sm)/16 (md)/0/16 (md), căn MIN/MIN
     - Frame "SectionHeader", vị trí 16,136, cỡ 379 x 28, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/CENTER
       - Text "Basics", vị trí 16,136, cỡ 69 x 28, chữ "Basics", kiểu ngoài hệ thống (22/28, đậm 500), màu #EEF0F4 (ngoài hệ thống)
-      - Frame "spacer", vị trí 85,150, cỡ 271 x 1, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
-      - Text "2 of 6", vị trí 356,140, cỡ 39 x 20, chữ "2 of 6", kiểu ngoài hệ thống (14/20, đậm 600), màu #8C93A3 (ngoài hệ thống)
+      - Frame "spacer", vị trí 85,150, cỡ 273 x 1, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
+      - Text "1 of 5", vị trí 358,140, cỡ 37 x 20, chữ "1 of 5", kiểu ngoài hệ thống (14/20, đậm 600), màu #8C93A3 (ngoài hệ thống)
     - Frame "Basics row", vị trí 16,176, cỡ 379 x 194, xếp ngang, cách nhau 12 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
       - Instance "LessonCard", vị trí 16,176, cỡ 184 x 184, nền #171A20 (ngoài hệ thống), bo góc 14, xếp dọc, cách nhau 6 (ngoài hệ thống), lề trên/phải/dưới/trái 8 (sm)/8 (sm)/12 (ngoài hệ thống)/8 (sm), căn MIN/MIN
         - Frame "Thumbnail", vị trí 24,184, cỡ 168 x 94, nền #FAFAF7 (ngoài hệ thống), bo góc 8
@@ -104,11 +104,11 @@ Toạ độ và cỡ tính theo dp, gốc là góc trên trái của khung. Th�
         - Text "Title", vị trí 220,306, cỡ 130 x 20, chữ "Squash and stretch", kiểu titleSmall, labelLarge (14/20, đậm 500), màu #EEF0F4 (ngoài hệ thống)
         - Text "Meta", vị trí 220,332, cỡ 97 x 16, chữ "6 min · 16 frames", kiểu bodySmall (12/16, đậm 400), màu #8C93A3 (ngoài hệ thống)
         - Instance "Progress", vị trí 220,354, cỡ 168 x 4, nền #22262E (ngoài hệ thống), bo góc 999
-          - Rectangle "Value", vị trí 220,354, cỡ 168 x 8, nền #B6F35C (ngoài hệ thống), bo góc 4
+          - Rectangle "Value", vị trí 220,354, cỡ 100 x 4, nền #B6F35C (ngoài hệ thống), bo góc 4
     - Frame "SectionHeader", vị trí 16,382, cỡ 379 x 28, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/CENTER
       - Text "Motion", vị trí 16,382, cỡ 76 x 28, chữ "Motion", kiểu ngoài hệ thống (22/28, đậm 500), màu #EEF0F4 (ngoài hệ thống)
-      - Frame "spacer", vị trí 92,396, cỡ 264 x 1, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
-      - Text "2 of 6", vị trí 356,386, cỡ 39 x 20, chữ "2 of 6", kiểu ngoài hệ thống (14/20, đậm 600), màu #8C93A3 (ngoài hệ thống)
+      - Frame "spacer", vị trí 92,396, cỡ 263 x 1, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
+      - Text "0 of 4", vị trí 355,386, cỡ 40 x 20, chữ "0 of 4", kiểu ngoài hệ thống (14/20, đậm 600), màu #8C93A3 (ngoài hệ thống)
     - Frame "Motion row", vị trí 16,422, cỡ 379 x 184, xếp ngang, cách nhau 12 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
       - Instance "LessonCard", vị trí 16,422, cỡ 184 x 184, nền #171A20 (ngoài hệ thống), bo góc 14, xếp dọc, cách nhau 6 (ngoài hệ thống), lề trên/phải/dưới/trái 8 (sm)/8 (sm)/12 (ngoài hệ thống)/8 (sm), căn MIN/MIN
         - Frame "Thumbnail", vị trí 24,430, cỡ 168 x 94, nền #FAFAF7 (ngoài hệ thống), bo góc 8

@@ -24,8 +24,12 @@ Phiên tự chạy chỉ đọc thư mục này, không mở được Figma.
 
 Kịch bản: theo [spec của feature](../spec.md).
 
+Bổ sung ngày 2026-11-21 theo câu trả lời ở mục 9 của spec, anh Nhật duyệt ngày 2026-11-21 (chọn "Duyệt" trong phiên): `page-1-no-ad` (không có thẻ quảng cáo; nội dung trang căn giữa phần còn lại, nút vẫn ghim đáy). Các trang 2 đến 4 không có quảng cáo theo cùng cách.
+
 | Màn hình (composable) | Trạng thái | Ảnh trong `screens/`, số liệu trong `context/` | Kịch bản |
 | --- | --- | --- | --- |
+| `OnboardingScreen` | page-1-no-ad, chế độ tối | `OnboardingScreen_page-1-no-ad_dark` | KB-4 |
+| `OnboardingScreen` | page-1-no-ad | `OnboardingScreen_page-1-no-ad_light` | KB-4 |
 | `OnboardingScreen` | page-1, chế độ tối | `OnboardingScreen_page-1_dark` | KB-1, KB-2, KB-3, KB-4, KB-6 |
 | `OnboardingScreen` | page-1 | `OnboardingScreen_page-1_light` | KB-1, KB-2, KB-3, KB-4, KB-6 |
 | `OnboardingScreen` | page-2, chế độ tối | `OnboardingScreen_page-2_dark` | KB-1, KB-2, KB-4, KB-6 |
@@ -41,6 +45,10 @@ Chữ tiếng Anh như trên thiết kế (bản đề xuất Q9: tiếng Anh). 
 
 | Màn hình, trạng thái | Vị trí (phần tử cha trong `context/`) | Chữ | Kiểu chữ (text style trên Figma) |
 | --- | --- | --- | --- |
+| `OnboardingScreen`, page-1-no-ad, chế độ tối | TopBar | 1 / 4 | labelLarge |
+| `OnboardingScreen`, page-1-no-ad, chế độ tối | Page (pager) | Draw frame by frame | headlineSmall |
+| `OnboardingScreen`, page-1-no-ad, chế độ tối | Page (pager) | Sketch each moment, then flip through the frames to see it move. | bodyLarge |
+| `OnboardingScreen`, page-1-no-ad, chế độ tối | Button | Next | labelLarge |
 | `OnboardingScreen`, page-1, chế độ tối | TopBar | 1 / 4 | labelLarge |
 | `OnboardingScreen`, page-1, chế độ tối | Page (pager) | Draw frame by frame | headlineSmall |
 | `OnboardingScreen`, page-1, chế độ tối | Page (pager) | Sketch each moment, then flip through the frames to see it move. | bodyLarge |

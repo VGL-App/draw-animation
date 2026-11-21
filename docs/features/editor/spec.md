@@ -29,7 +29,7 @@ confirmed:
 - Chọn vùng, di chuyển, thu phóng, xoay, lật, chép, xóa vùng chọn; thu phóng, xoay canvas bằng hai ngón; thước, hình, chữ, vẽ đối xứng.
 - Layer: 5 miễn phí; layer 6 đến 10 mở cho cả dự án bằng một lượt xem quảng cáo có thưởng.
 - Onion skin: số khung trước, sau, độ mờ, màu, lặp ở hai đầu.
-- Dòng thời gian: thêm, xóa, nhân bản, chọn nhiều, chép và dán theo dải, giữ khung, đổi tốc độ khung, phát, lặp; thu gọn được còn 56 dp để canvas lớn hơn (câu hỏi 2).
+- Dòng thời gian: thêm, xóa, nhân bản, chọn nhiều, chép và dán theo dải, giữ khung, đổi tốc độ khung, phát, lặp.
 - Hoàn tác, làm lại nhiều bước, kể cả xóa khung, xóa layer.
 - Nhập ảnh, video làm nền vẽ theo qua bộ chọn ảnh của hệ thống.
 - Âm thanh: nhập nhạc miễn phí, bộ hiệu ứng cơ bản miễn phí, ghi âm giọng; gói hiệu ứng thêm mở 24 giờ bằng một lượt xem quảng cáo có thưởng.
@@ -44,6 +44,7 @@ confirmed:
 
 - Danh sách dự án, tạo dự án, sao lưu và khôi phục từ file (feature projects).
 - Màn Xuất và lưu file vào thư viện máy (feature export). Màn vẽ chỉ mở màn Xuất.
+- Dòng thời gian thu gọn: không làm ở bản đầu (câu hỏi 2).
 - Thư viện bài học, tải bài, màn Hoàn thành bài học (feature lessons).
 - Khẩu hình, khung xương người que, nội suy chuyển động, làm mờ, 60 khung/giây (bản đề xuất mục 5, nhóm "sau").
 - Máy tính bảng (Q6).
@@ -84,6 +85,8 @@ Tiêu chí chấp nhận:
 - [ ] Khi cọ đang chọn chưa được chỉnh riêng lực bút thì công tắc "Pressure from stylus" hiện theo giá trị "Stylus pressure" của Cài đặt (câu hỏi 22).
 - [ ] Khi tăng "Stabilizer" thì nét mượt hơn, bớt rung tay.
 - [ ] Khi chọn tẩy và vẽ thì phần nét dưới tẩy bị xóa trên layer đang chọn, các layer khác không đổi.
+- [ ] Khi chạm công cụ tẩy lần nữa thì bảng "Eraser" mở với "Size" (thiết kế: 24 px), "Softness" (0%) và công tắc "Erase on all layers" (tắt); bật công tắc thì tẩy xóa nét ở mọi layer tại chỗ tẩy (câu hỏi 23).
+- [ ] Khi chạm ô màu ở cột phải thì bảng "Color" mở với 12 ô màu và thanh "Opacity"; chạm một ô thì màu đó thành màu đang chọn, ô có viền chọn.
 - [ ] Khi chạm ô màu ở cột phải thì chọn được màu mới; khi dùng hút màu và chạm canvas thì màu tại điểm chạm thành màu đang chọn.
 - [ ] Khi người dùng vẽ nét đầu tiên trên máy (ở bất kỳ dự án hay bài học nào) thì app nhớ mốc "nét vẽ đầu tiên" trên máy.
 
@@ -114,9 +117,10 @@ Tiêu chí chấp nhận:
 
 - [ ] Khi chọn công cụ chọn vùng và khoanh một vùng thì thanh thao tác nổi hiện cạnh vùng chọn với di chuyển, đổi cỡ, xoay, lật, chép, xóa; mỗi thao tác chỉ đổi phần trong vùng chọn.
 - [ ] Khi chọn công cụ hình thì vẽ được hình cơ bản bằng một lần kéo.
+- [ ] Khi chạm công cụ hình lần nữa thì bảng "Shape" mở với các loại "Line", "Rectangle", "Ellipse", "Arrow", thanh "Stroke" và công tắc "Fill shape"; bật "Fill shape" thì hình được tô màu đang chọn bên trong (câu hỏi 23).
 - [ ] Khi chọn công cụ chữ thì bảng "Text" mở: ô nhập chữ, ba phông "Space Grotesk", "Inter", "Marker", thanh "Size" (thiết kế: 44 pt), nút "Done"; chữ hiện trên canvas và kéo đặt được chỗ.
-- [ ] Khi bật thước thì nét vẽ bám theo đường thẳng của thước.
-- [ ] Khi bật vẽ đối xứng thì nét vẽ ở một bên hiện đối xứng ở bên kia trục.
+- [ ] Khi bật thước thì nét vẽ bám theo đường thẳng của thước; dưới canvas hiện chip "Ruler on · tap to turn off", chạm chip thì thước tắt.
+- [ ] Khi bật vẽ đối xứng thì nét vẽ ở một bên hiện đối xứng ở bên kia trục dọc giữa canvas (trục hiện nét đứt); dưới canvas hiện chip "Symmetry on · tap to turn off", chạm chip thì tắt.
 
 ### KB-6. Layer
 
@@ -156,9 +160,9 @@ Tiêu chí chấp nhận:
 - [ ] Khi muốn nhân bản 10 khung liền nhau thì người dùng làm được trong tối đa 3 thao tác: nhấn giữ khung đầu rồi kéo dọc dải để chọn cả dải, rồi bấm nhân bản (câu hỏi 9).
 - [ ] Khi chép một dải khung rồi dán thì cả dải được chèn sau khung hiện tại, đúng thứ tự, đủ mọi layer.
 - [ ] Khi đặt giữ khung cho một khung thì khung đó hiện lâu hơn đúng số nhịp đã chọn lúc phát.
-- [ ] Khi chạm chip tốc độ khung thì đổi được tốc độ trong khoảng 6 đến 30 khung/giây.
+- [ ] Khi chạm chip tốc độ khung thì bảng "Frame rate" mở với các mức 6, 8, 12, 15, 24, 30 khung/giây và dòng thời lượng (ví dụ "12 frames per second · 48 frames play in 4.0 s"); chọn một mức thì tốc độ của dự án đổi ngay.
+- [ ] Khi bấm giữ khung trên thanh chọn nhiều thì bảng "Hold frame" mở với các mức 1×, 2×, 3×, 4× cho các khung đang chọn.
 - [ ] Khi xóa khung thì có thể lấy lại bằng hoàn tác.
-- [ ] Khi thu gọn dòng thời gian thì dòng thời gian cao 56 dp và canvas lớn ra theo chỗ trống; khi mở lại thì dòng thời gian về 140 dp như thiết kế. Phần còn hiện khi thu gọn và chỗ nút thu gọn theo thiết kế bổ sung (câu hỏi 2).
 
 ### KB-10. Phát thử
 
@@ -186,6 +190,7 @@ Tiêu chí chấp nhận:
 - [ ] Khi chọn một ảnh thì ảnh hiện làm nền để vẽ theo, dưới các layer vẽ.
 - [ ] Khi chọn một video thì video được chia theo tốc độ khung của dự án và hiện làm nền theo từng khung; video dài hơn 10 giây thì chỉ lấy 10 giây đầu (câu hỏi 12).
 - [ ] Khi có ảnh hay video để vẽ theo thì lớp này hiện mờ, có công tắc ẩn hiện, và không có trong file xuất (câu hỏi 12).
+- [ ] Khi vừa chọn xong ảnh hay video, hoặc chọn lại mục nhập trong menu "thêm" khi đã có lớp vẽ theo, thì bảng "Reference" mở với "Opacity" (mặc định 40%), công tắc "Show reference" và nút "Remove reference"; bấm "Remove reference" thì lớp vẽ theo bị bỏ, nét vẽ không đổi.
 - [ ] Khi đóng bộ chọn mà không chọn gì thì màn vẽ không đổi.
 
 Trường hợp đặc biệt:
@@ -224,6 +229,7 @@ Tiêu chí chấp nhận:
 - [ ] Khi chọn công cụ camera ảo thì lia, phóng, xoay được cả cảnh ở từng khung, không đổi nét vẽ trên các layer.
 - [ ] Khi phát thì cảnh chuyển động theo camera ảo đã đặt.
 - [ ] Khi tắt camera ảo hay xóa điểm đặt thì cảnh về vị trí gốc.
+- [ ] Khi chạm công cụ camera ảo lần nữa thì bảng "Camera" mở với khung đang đặt, "Zoom" (thiết kế: 120%), "Rotate" (0°), công tắc "Camera on" và nút "Reset camera"; bấm "Reset camera" thì cảnh của khung đó về vị trí gốc.
 
 ### KB-16. Tự lưu và khôi phục
 
@@ -314,8 +320,18 @@ Tiêu chí chấp nhận:
 | `EditorScreen` | sound | Bảng âm thanh | KB-13 |
 | `EditorScreen` | sound-locked | Mời mở gói hiệu ứng | KB-14 |
 | `EditorScreen` | lesson-step | Chỉ dẫn bài học | KB-18 |
+| `EditorScreen` | more-menu | Menu của nút "thêm" | KB-2, KB-5, KB-12, KB-13, KB-17 |
+| `EditorScreen` | tool-eraser | Bảng tẩy | KB-2 |
+| `EditorScreen` | tool-shape | Bảng hình | KB-5 |
+| `EditorScreen` | color-picker | Bảng màu | KB-2 |
+| `EditorScreen` | camera | Bảng camera ảo | KB-15 |
+| `EditorScreen` | frame-rate | Chọn tốc độ khung | KB-9 |
+| `EditorScreen` | hold-frame | Giữ khung | KB-9 |
+| `EditorScreen` | reference | Lớp vẽ theo sau khi nhập ảnh, video | KB-12 |
+| `EditorScreen` | ruler | Thước đang bật | KB-5 |
+| `EditorScreen` | symmetry | Vẽ đối xứng đang bật | KB-5 |
 
-- Thiết kế chưa có bảng hay trạng thái cho: tẩy, hình, thước, vẽ đối xứng, hút màu, chọn màu, camera ảo, nhập ảnh và video, chọn tốc độ khung, giữ khung, dòng thời gian thu gọn, khung 360 × 640 (câu hỏi 1, 2, 18). Các bảng, menu "thêm" và trạng thái thu gọn được dựng bổ sung trên Figma bằng thành phần đã duyệt trước khi viết plan cho phần tương ứng; plan của phần chưa có thiết kế không chạy (câu hỏi 1, 2).
+- Thiết kế bổ sung ngày 2026-11-21, anh Nhật duyệt ngày 2026-11-21 (chọn "Duyệt" trong phiên): các trạng thái từ `more-menu` tới `symmetry` ở bảng trên (câu hỏi 1). Hút màu chọn từ menu "thêm" rồi chạm canvas, không có bảng riêng. Khung 360 × 640 không có frame, kiểm bằng screenshot test (câu hỏi 18).
 
 ## 5. Quảng cáo
 
@@ -391,7 +407,7 @@ Tham số Remote Config của màn vẽ (không phải cờ): `time_reload_edito
    - Trả lời: Menu "thêm", và dựng các bảng còn thiếu trên Figma trước khi viết plan, theo đề xuất của AI.
 2. **Dòng thời gian thu gọn:** bản đề xuất mục 4 ghi "dòng thời gian thu gọn được (dòng thời gian 56 dp)"; thiết kế chỉ có dòng thời gian 140 dp, không có trạng thái thu gọn, và canvas 9:16 vẫn đạt khoảng 57% chiều cao.
    - Đề xuất của AI: không làm thu gọn ở bản đầu vì thước đo canvas đã đạt; ghi lại để xét ở bản sau.
-   - Trả lời: Có làm dòng thời gian thu gọn 56 dp ở bản đầu (khác đề xuất của AI). Dựng trạng thái thu gọn trên Figma trước khi viết plan cho phần này.
+   - Trả lời: Ban đầu anh Nhật chọn có làm (khác đề xuất của AI). Sau khi dựng thử, canvas 9:16 ở khung 411 × 891 chỉ lớn từ 288 × 512 lên 296 × 526 dp, nên ngày 2026-11-21 anh đổi lại: không làm ở bản đầu, theo đề xuất của AI.
 3. **Lời mời mở layer 6 đến 10: thẻ nhỏ hay hộp thoại?** Bản đề xuất mục 4 ghi "mời rewarded bằng thẻ nhỏ trên màn vẽ" (học từ ZenByte: không chặn, không làm tối nền). Thiết kế `layer-locked` là hộp thoại giữa màn có nút "Not now" và "Watch ad". Hai trạng thái cọ và âm thanh dùng thẻ trong bảng công cụ.
    - Đề xuất của AI: giữ hộp thoại như thiết kế đã duyệt vì nó chỉ hiện sau khi người dùng bấm thêm layer, không phải màn toàn màn hình; hoặc đổi thành thẻ mời trong bảng "Layers" cho đồng bộ với cọ và âm thanh. Anh Nhật chọn.
    - Trả lời: Giữ hộp thoại như thiết kế.
@@ -453,9 +469,16 @@ Tham số Remote Config của màn vẽ (không phải cờ): `time_reload_edito
     - Đề xuất của AI: giữ cả hai. Công tắc ở Cài đặt là giá trị mặc định cho cọ chưa chỉnh; công tắc ở bảng "Brush" chỉnh riêng cọ đang chọn và thắng giá trị mặc định cho cọ đó. Phương án khác: bỏ công tắc ở bảng "Brush" (chỉ còn công tắc chung), hoặc bỏ dòng ở Cài đặt (chỉ còn theo cọ); cả hai cần sửa thiết kế. Trả lời chung với spec settings câu 7.
     - Trả lời: Giữ cả hai công tắc, theo đề xuất của AI.
 
+23. **Điều khiển có trên thiết kế bổ sung mà bản đề xuất không nói** (thêm ngày 2026-11-21 khi dựng thiết kế): "Softness" và "Erase on all layers" ở bảng tẩy, loại "Arrow" và "Fill shape" ở bảng hình, "Reset camera" ở bảng camera, các mức 1× đến 4× của giữ khung.
+    - Đề xuất của AI: giữ cả, vì làm thêm ít và hợp với app vẽ; nếu muốn gọn thì bỏ "Softness" và "Erase on all layers" (tẩy chỉ có "Size"), sửa frame `tool-eraser`.
+    - Trả lời: Giữ cả, theo đề xuất của AI.
+
 ## 10. Lịch sử
 
 | Ngày | Người | Nội dung |
 | --- | --- | --- |
 | 2026-11-21 | AI | Tạo bản đầu từ bản đề xuất đã duyệt (docs/research/proposal.md) và thiết kế đã duyệt |
 | 2026-11-21 | AI | Ghi câu trả lời của anh Nhật cho mọi câu hỏi ở mục 9 (anh chọn trong phiên ngày 2026-11-21) và sửa phần thân spec theo các câu trả lời; sửa các điểm nên sửa còn lại của lần rà soát cuối. Spec vẫn `draft` |
+| 2026-11-21 | AI | Ghi các frame thiết kế bổ sung, sửa theo câu trả lời (chờ anh Nhật duyệt) ở mục 4 và các tiêu chí liên quan |
+| 2026-11-21 | AI | Ghi câu trả lời của anh Nhật trong phiên: bỏ dòng thời gian thu gọn (câu hỏi 2, đổi lại câu trả lời trước), giữ các điều khiển mới (câu hỏi 23) |
+| 2026-11-21 | AI | Thiết kế bổ sung đã được anh Nhật duyệt trong phiên (chọn "Duyệt") |

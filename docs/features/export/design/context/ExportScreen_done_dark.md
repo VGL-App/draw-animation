@@ -6,7 +6,7 @@ Sinh bởi `scripts/figma-export.py`. Không sửa tay; thiết kế đổi thì
 
 - Link: https://www.figma.com/design/uDdqi9ojRvIy4689FvCh5O/?node-id=10-754
 - Frame: `10:754`, giao diện tối
-- Ngày lấy: 2026-11-20
+- Ngày lấy: 2026-11-21
 
 ## 2. Giá trị dùng
 
@@ -16,6 +16,8 @@ nào trùng; plan quyết định làm tròn về token gần nhất hay thêm t
 | Loại | Giá trị | Token |
 | --- | --- | --- |
 | instance ghi đè component | Icon | màu nền |
+| instance ghi đè component | Icon | màu nền, viền |
+| khoảng cách | 1 | ngoài hệ thống |
 | khoảng cách | 10 | ngoài hệ thống |
 | khoảng cách | 12 | ngoài hệ thống |
 | khoảng cách | 14 | ngoài hệ thống |
@@ -32,16 +34,20 @@ nào trùng; plan quyết định làm tròn về token gần nhất hay thêm t
 | kiểu chữ | 14/20, đậm 500 | titleSmall, labelLarge |
 | kiểu chữ | 14/20, đậm 600 | ngoài hệ thống |
 | kiểu chữ | 16/16, đậm 400 | ngoài hệ thống |
+| kiểu chữ | 2/3, đậm 600 | ngoài hệ thống |
 | kiểu chữ | 20/20, đậm 400 | ngoài hệ thống |
 | kiểu chữ | 22/28, đậm 500 | ngoài hệ thống |
 | kiểu chữ | 24/24, đậm 400 | ngoài hệ thống |
 | kiểu chữ | 24/32, đậm 700 | ngoài hệ thống |
+| kiểu chữ | 3/3, đậm 400 | ngoài hệ thống |
 | kiểu chữ | 40/40, đậm 400 | ngoài hệ thống |
 | màu chữ | #10140A | ngoài hệ thống |
 | màu chữ | #6EA8FF | ngoài hệ thống |
 | màu chữ | #8C93A3 | ngoài hệ thống |
 | màu chữ | #B6F35C | ngoài hệ thống |
 | màu chữ | #EEF0F4 | ngoài hệ thống |
+| màu chữ | #FFFFFF | ngoài hệ thống |
+| màu nền | #000000 (độ mờ 0.35, lớp tô 0.35) | ngoài hệ thống |
 | màu nền | #0E1014 | ngoài hệ thống |
 | màu nền | #171A20 | ngoài hệ thống |
 | màu nền | #1A1C22 | ngoài hệ thống |
@@ -75,6 +81,10 @@ Toạ độ và cỡ tính theo dp, gốc là góc trên trái của khung. Th�
     - Frame "Preview", vị trí 166,116, cỡ 80 x 142, nền #FAFAF7 (ngoài hệ thống), bo góc 6
       - Rectangle "Rectangle", vị trí 172,233, cỡ 67 x 2, nền #1A1C22 (ngoài hệ thống)
       - Ellipse "Ellipse", vị trí 196,214, cỡ 19 x 19, nền #6EA8FF (ngoài hệ thống)
+      - Frame "PreviewWatermark", vị trí 223,251, cỡ 20 x 5, nền #000000 (độ mờ 0.35, lớp tô 0.35) (ngoài hệ thống), bo góc 2, xếp ngang, cách nhau 1 (ngoài hệ thống), lề trên/phải/dưới/trái 1 (ngoài hệ thống)/2 (ngoài hệ thống)/1 (ngoài hệ thống)/2 (ngoài hệ thống), căn MIN/CENTER
+        - Instance "Icon", vị trí 224,252, cỡ 3 x 3, CHÚ Ý: ghi đè màu nền, viền của component gốc
+          - Text "glyph", vị trí 224,252, cỡ 3 x 3, chữ "animation", kiểu ngoài hệ thống (3/3, đậm 400), màu #FFFFFF (ngoài hệ thống)
+        - Text "Frameloop", vị trí 228,251, cỡ 13 x 4, chữ "Frameloop", kiểu ngoài hệ thống (2/3, đậm 600), màu #FFFFFF (ngoài hệ thống)
     - Instance "Icon", vị trí 186,270, cỡ 40 x 40, CHÚ Ý: ghi đè màu nền của component gốc
       - Text "glyph", vị trí 186,270, cỡ 40 x 40, chữ "check_circle", kiểu ngoài hệ thống (40/40, đậm 400), màu #B6F35C (ngoài hệ thống)
     - Text "Saved to Gallery", vị trí 24,322, cỡ 363 x 32, chữ "Saved to Gallery", kiểu ngoài hệ thống (24/32, đậm 700), màu #EEF0F4 (ngoài hệ thống)

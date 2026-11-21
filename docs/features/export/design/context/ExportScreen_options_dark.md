@@ -6,7 +6,7 @@ Sinh bởi `scripts/figma-export.py`. Không sửa tay; thiết kế đổi thì
 
 - Link: https://www.figma.com/design/uDdqi9ojRvIy4689FvCh5O/?node-id=10-626
 - Frame: `10:626`, giao diện tối
-- Ngày lấy: 2026-11-20
+- Ngày lấy: 2026-11-21
 
 ## 2. Giá trị dùng
 
@@ -15,6 +15,8 @@ nào trùng; plan quyết định làm tròn về token gần nhất hay thêm t
 
 | Loại | Giá trị | Token |
 | --- | --- | --- |
+| instance ghi đè component | Icon | màu nền, viền |
+| khoảng cách | 1 | ngoài hệ thống |
 | khoảng cách | 10 | ngoài hệ thống |
 | khoảng cách | 12 | ngoài hệ thống |
 | khoảng cách | 16 | md |
@@ -32,6 +34,8 @@ nào trùng; plan quyết định làm tròn về token gần nhất hay thêm t
 | kiểu chữ | 14/20, đậm 600 | ngoài hệ thống |
 | kiểu chữ | 16/16, đậm 400 | ngoài hệ thống |
 | kiểu chữ | 16/24, đậm 600 | titleMedium |
+| kiểu chữ | 2/2, đậm 400 | ngoài hệ thống |
+| kiểu chữ | 2/2, đậm 600 | ngoài hệ thống |
 | kiểu chữ | 20/20, đậm 400 | ngoài hệ thống |
 | kiểu chữ | 22/28, đậm 500 | ngoài hệ thống |
 | kiểu chữ | 24/24, đậm 400 | ngoài hệ thống |
@@ -40,6 +44,8 @@ nào trùng; plan quyết định làm tròn về token gần nhất hay thêm t
 | màu chữ | #B6F35C | ngoài hệ thống |
 | màu chữ | #D8FA9E | ngoài hệ thống |
 | màu chữ | #EEF0F4 | ngoài hệ thống |
+| màu chữ | #FFFFFF | ngoài hệ thống |
+| màu nền | #000000 (độ mờ 0.35, lớp tô 0.35) | ngoài hệ thống |
 | màu nền | #0E1014 | ngoài hệ thống |
 | màu nền | #10140A | ngoài hệ thống |
 | màu nền | #13161B | ngoài hệ thống |
@@ -77,6 +83,10 @@ Toạ độ và cỡ tính theo dp, gốc là góc trên trái của khung. Th�
       - Frame "Preview", vị trí 28,108, cỡ 54 x 96, nền #FAFAF7 (ngoài hệ thống), bo góc 8
         - Rectangle "Rectangle", vị trí 32,187, cỡ 45 x 2, nền #1A1C22 (ngoài hệ thống)
         - Ellipse "Ellipse", vị trí 49,174, cỡ 13 x 13, nền #6EA8FF (ngoài hệ thống)
+        - Frame "PreviewWatermark", vị trí 67,199, cỡ 14 x 4, nền #000000 (độ mờ 0.35, lớp tô 0.35) (ngoài hệ thống), bo góc 1, xếp ngang, cách nhau 1 (ngoài hệ thống), lề trên/phải/dưới/trái 0/1 (ngoài hệ thống)/0/1 (ngoài hệ thống), căn MIN/CENTER
+          - Instance "Icon", vị trí 68,199, cỡ 2 x 2, CHÚ Ý: ghi đè màu nền, viền của component gốc
+            - Text "glyph", vị trí 68,199, cỡ 2 x 2, chữ "animation", kiểu ngoài hệ thống (2/2, đậm 400), màu #FFFFFF (ngoài hệ thống)
+          - Text "Frameloop", vị trí 70,199, cỡ 9 x 3, chữ "Frameloop", kiểu ngoài hệ thống (2/2, đậm 600), màu #FFFFFF (ngoài hệ thống)
       - Frame "Text", vị trí 98,124, cỡ 285 x 64, xếp dọc, cách nhau 2 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
         - Text "Bouncing ball", vị trí 98,124, cỡ 105 x 24, chữ "Bouncing ball", kiểu titleMedium (16/24, đậm 600), màu #EEF0F4 (ngoài hệ thống)
         - Text "48 frames · 12 fps · 4.0", vị trí 98,150, cỡ 163 x 20, chữ "48 frames · 12 fps · 4.0 s", kiểu bodyMedium (14/20, đậm 400), màu #8C93A3 (ngoài hệ thống)
