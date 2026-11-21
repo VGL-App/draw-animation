@@ -24,7 +24,7 @@ Phiên tự chạy chỉ đọc thư mục này, không mở được Figma.
 
 Kịch bản: theo [spec của feature](../spec.md).
 
-Bổ sung ngày 2026-11-21 theo câu trả lời ở mục 9 của spec, chờ anh Nhật duyệt: `more-menu` (menu của nút "thêm": hút màu, thước, đối xứng, nhập ảnh hay video, âm thanh, xem lại hướng dẫn), `tool-eraser`, `tool-shape`, `color-picker`, `camera`, `frame-rate`, `hold-frame`, `reference` (lớp vẽ theo sau khi nhập), `ruler`, `symmetry`, `timeline-collapsed` (dòng thời gian 56 dp). Thu gọn: vuốt xuống trên dòng thời gian; mở lại bằng nút mũi tên ở cuối hàng điều khiển. Ở khung 411 × 891, canvas 9:16 bị giới hạn bởi bề ngang giữa thanh công cụ và cột tùy chọn, nên khi thu gọn chỉ lớn từ 288 × 512 lên 296 × 526 dp.
+Bổ sung ngày 2026-11-21 theo câu trả lời ở mục 9 của spec, chờ anh Nhật duyệt: `more-menu` (menu của nút "thêm": hút màu, thước, đối xứng, nhập ảnh hay video, âm thanh, xem lại hướng dẫn), `tool-eraser`, `tool-shape`, `color-picker`, `camera`, `frame-rate`, `hold-frame`, `reference` (lớp vẽ theo sau khi nhập), `ruler`, `symmetry`. Dòng thời gian thu gọn đã dựng thử rồi bỏ (spec editor câu 2).
 
 | Màn hình (composable) | Trạng thái | Ảnh trong `screens/`, số liệu trong `context/` | Kịch bản |
 | --- | --- | --- | --- |
@@ -66,8 +66,6 @@ Bổ sung ngày 2026-11-21 theo câu trả lời ở mục 9 của spec, chờ a
 | `EditorScreen` | sound | `EditorScreen_sound_light` | KB-13 |
 | `EditorScreen` | symmetry, chế độ tối | `EditorScreen_symmetry_dark` | KB-5 |
 | `EditorScreen` | symmetry | `EditorScreen_symmetry_light` | KB-5 |
-| `EditorScreen` | timeline-collapsed, chế độ tối | `EditorScreen_timeline-collapsed_dark` | KB-9 |
-| `EditorScreen` | timeline-collapsed | `EditorScreen_timeline-collapsed_light` | KB-9 |
 | `EditorScreen` | timeline-multiselect, chế độ tối | `EditorScreen_timeline-multiselect_dark` | KB-9 |
 | `EditorScreen` | timeline-multiselect | `EditorScreen_timeline-multiselect_light` | KB-9 |
 | `EditorScreen` | tool-brush, chế độ tối | `EditorScreen_tool-brush_dark` | KB-2 |
@@ -350,13 +348,6 @@ Chữ tiếng Anh như trên thiết kế (bản đề xuất Q9: tiếng Anh). 
 | `EditorScreen`, symmetry, chế độ tối | Chip | Onion 2 · 1 | labelMedium |
 | `EditorScreen`, symmetry, chế độ tối | Controls | 12 / 48 | labelMedium |
 | `EditorScreen`, symmetry, chế độ tối | Chip | 12 fps | labelMedium |
-| `EditorScreen`, timeline-collapsed, chế độ tối | Title | Bouncing ball | titleMedium |
-| `EditorScreen`, timeline-collapsed, chế độ tối | Title | Frame 12 / 48 · saved | bodySmall |
-| `EditorScreen`, timeline-collapsed, chế độ tối | Button | Export | labelLarge |
-| `EditorScreen`, timeline-collapsed, chế độ tối | ToolOptions | 8 | labelSmall |
-| `EditorScreen`, timeline-collapsed, chế độ tối | Chip | Onion 2 · 1 | labelMedium |
-| `EditorScreen`, timeline-collapsed, chế độ tối | Controls | 12 / 48 | labelMedium |
-| `EditorScreen`, timeline-collapsed, chế độ tối | Chip | 12 fps | labelMedium |
 | `EditorScreen`, timeline-multiselect, chế độ tối | Title | Bouncing ball | titleMedium |
 | `EditorScreen`, timeline-multiselect, chế độ tối | Title | Frames 3 to 6 selected | bodySmall |
 | `EditorScreen`, timeline-multiselect, chế độ tối | Button | Export | labelLarge |
@@ -493,7 +484,7 @@ Vai trò màu theo `tokens.json` (tên vai trò Material 3); giá trị Studio N
 
 ## 4. Luồng thao tác
 
-`ProjectsScreen` hay `NewProjectScreen` > `EditorScreen`. Lần đầu có tour (`tour`, bỏ qua được). Thanh công cụ trái chọn công cụ; chạm lại công cụ đang chọn mở bảng tùy chọn (bottom sheet: `tool-brush`, `tool-fill`, `tool-text`; `tool-select` là thanh thao tác nổi). Biểu tượng layers trên cột phải (vùng chạm 48 dp) mở bảng layer; thêm layer thứ 6 mở hộp thoại rewarded (`layer-locked`). Chip onion skin mở `onion-settings`. Nhấn giữ một khung trên dòng thời gian vào chọn nhiều (`timeline-multiselect`). Nút phát > `playing`. Nút nhạc > `sound`; chọn gói hiệu ứng khóa > `sound-locked`. Chọn cọ nâng cao > `brush-locked`. Bài học mở `lesson-step`. "Export" > `ExportScreen`. Back > `ProjectsScreen` (interstitial `editor_exit_inter`). Bổ sung 2026-11-21: chạm lại tẩy > `tool-eraser`, hình > `tool-shape`, camera ảo > `camera`; ô màu ở cột phải > `color-picker`; nút "thêm" (ba chấm) > `more-menu`, từ đó bật thước (`ruler`), đối xứng (`symmetry`), nhập ảnh hay video (sau khi chọn: `reference`), mở `sound`, xem lại `tour`; chip tốc độ khung > `frame-rate`; nút giữ khung trên thanh chọn nhiều > `hold-frame`; vuốt xuống trên dòng thời gian > `timeline-collapsed`, nút mũi tên ở cuối hàng điều khiển mở lại. Khi đã có lớp vẽ theo, mục nhập trong menu "thêm" mở lại `reference`. Thanh trượt ở các bảng mới là bản tách khỏi component `Slider`, để núm đứng đúng giá trị ghi bên cạnh (component không cho đổi vị trí núm trong instance).
+`ProjectsScreen` hay `NewProjectScreen` > `EditorScreen`. Lần đầu có tour (`tour`, bỏ qua được). Thanh công cụ trái chọn công cụ; chạm lại công cụ đang chọn mở bảng tùy chọn (bottom sheet: `tool-brush`, `tool-fill`, `tool-text`; `tool-select` là thanh thao tác nổi). Biểu tượng layers trên cột phải (vùng chạm 48 dp) mở bảng layer; thêm layer thứ 6 mở hộp thoại rewarded (`layer-locked`). Chip onion skin mở `onion-settings`. Nhấn giữ một khung trên dòng thời gian vào chọn nhiều (`timeline-multiselect`). Nút phát > `playing`. Nút nhạc > `sound`; chọn gói hiệu ứng khóa > `sound-locked`. Chọn cọ nâng cao > `brush-locked`. Bài học mở `lesson-step`. "Export" > `ExportScreen`. Back > `ProjectsScreen` (interstitial `editor_exit_inter`). Bổ sung 2026-11-21: chạm lại tẩy > `tool-eraser`, hình > `tool-shape`, camera ảo > `camera`; ô màu ở cột phải > `color-picker`; nút "thêm" (ba chấm) > `more-menu`, từ đó bật thước (`ruler`), đối xứng (`symmetry`), nhập ảnh hay video (sau khi chọn: `reference`), mở `sound`, xem lại `tour`; chip tốc độ khung > `frame-rate`; nút giữ khung trên thanh chọn nhiều > `hold-frame`. Khi đã có lớp vẽ theo, mục nhập trong menu "thêm" mở lại `reference`. Thanh trượt ở các bảng mới là bản tách khỏi component `Slider`, để núm đứng đúng giá trị ghi bên cạnh (component không cho đổi vị trí núm trong instance).
 
 ## 5. Vị trí quảng cáo
 

@@ -34,19 +34,19 @@ nào trùng; plan quyết định làm tròn về token gần nhất hay thêm t
 | kiểu chữ | 14/20, đậm 500 | titleSmall, labelLarge |
 | kiểu chữ | 14/20, đậm 600 | ngoài hệ thống |
 | kiểu chữ | 16/16, đậm 400 | ngoài hệ thống |
+| kiểu chữ | 2/3, đậm 600 | ngoài hệ thống |
 | kiểu chữ | 20/20, đậm 400 | ngoài hệ thống |
 | kiểu chữ | 22/28, đậm 500 | ngoài hệ thống |
 | kiểu chữ | 24/24, đậm 400 | ngoài hệ thống |
 | kiểu chữ | 24/32, đậm 700 | ngoài hệ thống |
-| kiểu chữ | 3/4, đậm 600 | ngoài hệ thống |
-| kiểu chữ | 4/4, đậm 400 | ngoài hệ thống |
+| kiểu chữ | 3/3, đậm 400 | ngoài hệ thống |
 | kiểu chữ | 40/40, đậm 400 | ngoài hệ thống |
 | màu chữ | #12141A | ngoài hệ thống |
 | màu chữ | #2F6FE0 | ngoài hệ thống |
 | màu chữ | #3D6A00 | ngoài hệ thống |
 | màu chữ | #5F6675 | ngoài hệ thống |
 | màu chữ | #FFFFFF | onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest |
-| màu chữ | #FFFFFF (độ mờ 0.90, lớp tô 0.90) | onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest |
+| màu nền | #000000 (độ mờ 0.35, lớp tô 0.35) | ngoài hệ thống |
 | màu nền | #1A1C22 | ngoài hệ thống |
 | màu nền | #2F6FE0 | ngoài hệ thống |
 | màu nền | #3D6A00 | ngoài hệ thống |
@@ -80,10 +80,10 @@ Toạ độ và cỡ tính theo dp, gốc là góc trên trái của khung. Th�
     - Frame "Preview", vị trí 166,116, cỡ 80 x 142, nền #FFFFFF (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest), bo góc 6
       - Rectangle "Rectangle", vị trí 172,233, cỡ 67 x 2, nền #1A1C22 (ngoài hệ thống)
       - Ellipse "Ellipse", vị trí 196,214, cỡ 19 x 19, nền #2F6FE0 (ngoài hệ thống)
-      - Frame "PreviewWatermark", vị trí 221,252, cỡ 22 x 4, xếp ngang, cách nhau 1 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/CENTER
-        - Instance "Icon", vị trí 221,252, cỡ 4 x 4, CHÚ Ý: ghi đè màu nền, viền của component gốc
-          - Text "glyph", vị trí 221,252, cỡ 4 x 4, chữ "animation", kiểu ngoài hệ thống (4/4, đậm 400), màu #FFFFFF (độ mờ 0.90, lớp tô 0.90) (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest)
-        - Text "Frameloop", vị trí 226,252, cỡ 17 x 4, chữ "Frameloop", kiểu ngoài hệ thống (3/4, đậm 600), màu #FFFFFF (độ mờ 0.90, lớp tô 0.90) (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest)
+      - Frame "PreviewWatermark", vị trí 223,251, cỡ 20 x 5, nền #000000 (độ mờ 0.35, lớp tô 0.35) (ngoài hệ thống), bo góc 2, xếp ngang, cách nhau 1 (ngoài hệ thống), lề trên/phải/dưới/trái 1 (ngoài hệ thống)/2 (ngoài hệ thống)/1 (ngoài hệ thống)/2 (ngoài hệ thống), căn MIN/CENTER
+        - Instance "Icon", vị trí 224,252, cỡ 3 x 3, CHÚ Ý: ghi đè màu nền, viền của component gốc
+          - Text "glyph", vị trí 224,252, cỡ 3 x 3, chữ "animation", kiểu ngoài hệ thống (3/3, đậm 400), màu #FFFFFF (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest)
+        - Text "Frameloop", vị trí 228,251, cỡ 13 x 4, chữ "Frameloop", kiểu ngoài hệ thống (2/3, đậm 600), màu #FFFFFF (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest)
     - Instance "Icon", vị trí 186,270, cỡ 40 x 40, CHÚ Ý: ghi đè màu nền của component gốc
       - Text "glyph", vị trí 186,270, cỡ 40 x 40, chữ "check_circle", kiểu ngoài hệ thống (40/40, đậm 400), màu #3D6A00 (ngoài hệ thống)
     - Text "Saved to Gallery", vị trí 24,322, cỡ 363 x 32, chữ "Saved to Gallery", kiểu ngoài hệ thống (24/32, đậm 700), màu #12141A (ngoài hệ thống)

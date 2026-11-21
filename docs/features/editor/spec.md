@@ -29,7 +29,7 @@ confirmed:
 - Chọn vùng, di chuyển, thu phóng, xoay, lật, chép, xóa vùng chọn; thu phóng, xoay canvas bằng hai ngón; thước, hình, chữ, vẽ đối xứng.
 - Layer: 5 miễn phí; layer 6 đến 10 mở cho cả dự án bằng một lượt xem quảng cáo có thưởng.
 - Onion skin: số khung trước, sau, độ mờ, màu, lặp ở hai đầu.
-- Dòng thời gian: thêm, xóa, nhân bản, chọn nhiều, chép và dán theo dải, giữ khung, đổi tốc độ khung, phát, lặp; thu gọn được còn 56 dp để canvas lớn hơn (câu hỏi 2).
+- Dòng thời gian: thêm, xóa, nhân bản, chọn nhiều, chép và dán theo dải, giữ khung, đổi tốc độ khung, phát, lặp.
 - Hoàn tác, làm lại nhiều bước, kể cả xóa khung, xóa layer.
 - Nhập ảnh, video làm nền vẽ theo qua bộ chọn ảnh của hệ thống.
 - Âm thanh: nhập nhạc miễn phí, bộ hiệu ứng cơ bản miễn phí, ghi âm giọng; gói hiệu ứng thêm mở 24 giờ bằng một lượt xem quảng cáo có thưởng.
@@ -44,6 +44,7 @@ confirmed:
 
 - Danh sách dự án, tạo dự án, sao lưu và khôi phục từ file (feature projects).
 - Màn Xuất và lưu file vào thư viện máy (feature export). Màn vẽ chỉ mở màn Xuất.
+- Dòng thời gian thu gọn: không làm ở bản đầu (câu hỏi 2).
 - Thư viện bài học, tải bài, màn Hoàn thành bài học (feature lessons).
 - Khẩu hình, khung xương người que, nội suy chuyển động, làm mờ, 60 khung/giây (bản đề xuất mục 5, nhóm "sau").
 - Máy tính bảng (Q6).
@@ -162,7 +163,6 @@ Tiêu chí chấp nhận:
 - [ ] Khi chạm chip tốc độ khung thì bảng "Frame rate" mở với các mức 6, 8, 12, 15, 24, 30 khung/giây và dòng thời lượng (ví dụ "12 frames per second · 48 frames play in 4.0 s"); chọn một mức thì tốc độ của dự án đổi ngay.
 - [ ] Khi bấm giữ khung trên thanh chọn nhiều thì bảng "Hold frame" mở với các mức 1×, 2×, 3×, 4× cho các khung đang chọn.
 - [ ] Khi xóa khung thì có thể lấy lại bằng hoàn tác.
-- [ ] Khi thu gọn dòng thời gian thì dòng thời gian cao 56 dp và canvas lớn ra theo chỗ trống; khi mở lại thì dòng thời gian về 140 dp như thiết kế. Khi thu gọn chỉ còn hàng điều khiển (onion skin, số khung, phát, tốc độ khung, nút mở rộng); vuốt xuống trên dòng thời gian để thu gọn, bấm nút mũi tên ở cuối hàng để mở lại (thiết kế `timeline-collapsed`, câu hỏi 2).
 
 ### KB-10. Phát thử
 
@@ -330,9 +330,8 @@ Tiêu chí chấp nhận:
 | `EditorScreen` | reference | Lớp vẽ theo sau khi nhập ảnh, video | KB-12 |
 | `EditorScreen` | ruler | Thước đang bật | KB-5 |
 | `EditorScreen` | symmetry | Vẽ đối xứng đang bật | KB-5 |
-| `EditorScreen` | timeline-collapsed | Dòng thời gian thu gọn 56 dp | KB-9 |
 
-- Thiết kế bổ sung ngày 2026-11-21, chờ anh Nhật duyệt: các trạng thái từ `more-menu` tới `timeline-collapsed` ở bảng trên (câu hỏi 1, 2). Hút màu chọn từ menu "thêm" rồi chạm canvas, không có bảng riêng. Khung 360 × 640 không có frame, kiểm bằng screenshot test (câu hỏi 18).
+- Thiết kế bổ sung ngày 2026-11-21, chờ anh Nhật duyệt: các trạng thái từ `more-menu` tới `symmetry` ở bảng trên (câu hỏi 1). Hút màu chọn từ menu "thêm" rồi chạm canvas, không có bảng riêng. Khung 360 × 640 không có frame, kiểm bằng screenshot test (câu hỏi 18).
 
 ## 5. Quảng cáo
 
@@ -408,7 +407,7 @@ Tham số Remote Config của màn vẽ (không phải cờ): `time_reload_edito
    - Trả lời: Menu "thêm", và dựng các bảng còn thiếu trên Figma trước khi viết plan, theo đề xuất của AI.
 2. **Dòng thời gian thu gọn:** bản đề xuất mục 4 ghi "dòng thời gian thu gọn được (dòng thời gian 56 dp)"; thiết kế chỉ có dòng thời gian 140 dp, không có trạng thái thu gọn, và canvas 9:16 vẫn đạt khoảng 57% chiều cao.
    - Đề xuất của AI: không làm thu gọn ở bản đầu vì thước đo canvas đã đạt; ghi lại để xét ở bản sau.
-   - Trả lời: Có làm dòng thời gian thu gọn 56 dp ở bản đầu (khác đề xuất của AI). Dựng trạng thái thu gọn trên Figma trước khi viết plan cho phần này.
+   - Trả lời: Ban đầu anh Nhật chọn có làm (khác đề xuất của AI). Sau khi dựng thử, canvas 9:16 ở khung 411 × 891 chỉ lớn từ 288 × 512 lên 296 × 526 dp, nên ngày 2026-11-21 anh đổi lại: không làm ở bản đầu, theo đề xuất của AI.
 3. **Lời mời mở layer 6 đến 10: thẻ nhỏ hay hộp thoại?** Bản đề xuất mục 4 ghi "mời rewarded bằng thẻ nhỏ trên màn vẽ" (học từ ZenByte: không chặn, không làm tối nền). Thiết kế `layer-locked` là hộp thoại giữa màn có nút "Not now" và "Watch ad". Hai trạng thái cọ và âm thanh dùng thẻ trong bảng công cụ.
    - Đề xuất của AI: giữ hộp thoại như thiết kế đã duyệt vì nó chỉ hiện sau khi người dùng bấm thêm layer, không phải màn toàn màn hình; hoặc đổi thành thẻ mời trong bảng "Layers" cho đồng bộ với cọ và âm thanh. Anh Nhật chọn.
    - Trả lời: Giữ hộp thoại như thiết kế.
@@ -472,7 +471,7 @@ Tham số Remote Config của màn vẽ (không phải cờ): `time_reload_edito
 
 23. **Điều khiển có trên thiết kế bổ sung mà bản đề xuất không nói** (thêm ngày 2026-11-21 khi dựng thiết kế): "Softness" và "Erase on all layers" ở bảng tẩy, loại "Arrow" và "Fill shape" ở bảng hình, "Reset camera" ở bảng camera, các mức 1× đến 4× của giữ khung.
     - Đề xuất của AI: giữ cả, vì làm thêm ít và hợp với app vẽ; nếu muốn gọn thì bỏ "Softness" và "Erase on all layers" (tẩy chỉ có "Size"), sửa frame `tool-eraser`.
-    - Trả lời:
+    - Trả lời: Giữ cả, theo đề xuất của AI.
 
 ## 10. Lịch sử
 
@@ -481,3 +480,4 @@ Tham số Remote Config của màn vẽ (không phải cờ): `time_reload_edito
 | 2026-11-21 | AI | Tạo bản đầu từ bản đề xuất đã duyệt (docs/research/proposal.md) và thiết kế đã duyệt |
 | 2026-11-21 | AI | Ghi câu trả lời của anh Nhật cho mọi câu hỏi ở mục 9 (anh chọn trong phiên ngày 2026-11-21) và sửa phần thân spec theo các câu trả lời; sửa các điểm nên sửa còn lại của lần rà soát cuối. Spec vẫn `draft` |
 | 2026-11-21 | AI | Ghi các frame thiết kế bổ sung, sửa theo câu trả lời (chờ anh Nhật duyệt) ở mục 4 và các tiêu chí liên quan |
+| 2026-11-21 | AI | Ghi câu trả lời của anh Nhật trong phiên: bỏ dòng thời gian thu gọn (câu hỏi 2, đổi lại câu trả lời trước), giữ các điều khiển mới (câu hỏi 23) |

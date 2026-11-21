@@ -149,9 +149,9 @@ Toạ độ và cỡ tính theo dp, gốc là góc trên trái của khung. Th�
     - Instance "ProgressBar", vị trí 56,333, cỡ 300 x 8, nền #E3E6EA (ngoài hệ thống), bo góc 999
       - Rectangle "Value", vị trí 56,333, cỡ 180 x 8, nền #3D6A00 (ngoài hệ thống), bo góc 4
     - Frame "Meta", vị trí 56,357, cỡ 300 x 16, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
-      - Text "48 of 120 frames", vị trí 56,357, cỡ 98 x 16, chữ "48 of 120 frames", kiểu labelMedium (12/16, đậm 500), màu #5F6675 (ngoài hệ thống)
-      - Frame "spacer", vị trí 154,357, cỡ 176 x 1, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
-      - Text "40%", vị trí 330,357, cỡ 26 x 16, chữ "40%", kiểu labelMedium (12/16, đậm 500), màu #12141A (ngoài hệ thống)
+      - Text "72 of 120 frames", vị trí 56,357, cỡ 97 x 16, chữ "72 of 120 frames", kiểu labelMedium (12/16, đậm 500), màu #5F6675 (ngoài hệ thống)
+      - Frame "spacer", vị trí 153,357, cỡ 177 x 1, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
+      - Text "60%", vị trí 330,357, cỡ 26 x 16, chữ "60%", kiểu labelMedium (12/16, đậm 500), màu #12141A (ngoài hệ thống)
     - Frame "restore_mrec", vị trí 56,389, cỡ 300 x 250, xếp ngang, cách nhau 0, lề trên/phải/dưới/trái 0/0/0/0, căn CENTER/MIN
       - Instance "MrecSlot", vị trí 56,389, cỡ 300 x 250, nền #F1F2F5 (ngoài hệ thống), viền #D2D6DC (ngoài hệ thống), dày 1.0, bo góc 4
         - Text "Label", vị trí 135,506, cỡ 142 x 16, chữ "Banner MREC 300 × 250", kiểu labelMedium (12/16, đậm 500), màu #5F6675 (ngoài hệ thống)

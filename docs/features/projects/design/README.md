@@ -163,8 +163,8 @@ Chữ tiếng Anh như trên thiết kế (bản đề xuất Q9: tiếng Anh). 
 | `ProjectsScreen`, restoring, chế độ tối | NavItem | Lessons | labelMedium |
 | `ProjectsScreen`, restoring, chế độ tối | RestoreProgress | Restoring “Walk cycle” | titleLarge |
 | `ProjectsScreen`, restoring, chế độ tối | RestoreProgress | Keep the app open. This takes a few seconds. | bodyMedium |
-| `ProjectsScreen`, restoring, chế độ tối | Meta | 48 of 120 frames | labelMedium |
-| `ProjectsScreen`, restoring, chế độ tối | Meta | 40% | labelMedium |
+| `ProjectsScreen`, restoring, chế độ tối | Meta | 72 of 120 frames | labelMedium |
+| `ProjectsScreen`, restoring, chế độ tối | Meta | 60% | labelMedium |
 | `ProjectsScreen`, restoring, chế độ tối | Button | Cancel | labelLarge |
 
 ## 3. Ánh xạ sang hệ thống thiết kế
