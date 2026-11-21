@@ -1,13 +1,13 @@
 ---
 feature: onboarding
-status: draft
+status: confirmed
 owner: Nhật
 product_owner: Nhật
 requests:
   - requests/2026-11-21-ban-dau.md
 design: design/README.md
 created: 2026-11-21
-confirmed:
+confirmed: 2026-11-21
 ---
 
 # SPEC: ONBOARDING
@@ -238,3 +238,4 @@ Không có. Hình minh họa của 4 trang vẽ trong app theo số liệu thi�
 | 2026-11-21 | AI | Ghi câu trả lời của anh Nhật cho mọi câu hỏi ở mục 9 (anh chọn trong phiên ngày 2026-11-21) và sửa phần thân spec theo các câu trả lời; sửa các điểm nên sửa còn lại của lần rà soát cuối. Spec vẫn `draft` |
 | 2026-11-21 | AI | Ghi các frame thiết kế bổ sung, sửa theo câu trả lời (chờ anh Nhật duyệt) ở mục 4 và các tiêu chí liên quan |
 | 2026-11-21 | AI | Thiết kế bổ sung đã được anh Nhật duyệt trong phiên (chọn "Duyệt") |
+| 2026-11-21 | AI | Chuyển `confirmed` theo lời anh Nhật (người phụ trách sản phẩm) trong phiên: "xác nhận 6 spec" |

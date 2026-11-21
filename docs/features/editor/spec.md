@@ -1,13 +1,13 @@
 ---
 feature: editor
-status: draft
+status: confirmed
 owner: Nhật
 product_owner: Nhật
 requests:
   - requests/2026-11-21-ban-dau.md
 design: design/README.md
 created: 2026-11-21
-confirmed:
+confirmed: 2026-11-21
 ---
 
 # SPEC: MÀN VẼ
@@ -482,3 +482,4 @@ Tham số Remote Config của màn vẽ (không phải cờ): `time_reload_edito
 | 2026-11-21 | AI | Ghi các frame thiết kế bổ sung, sửa theo câu trả lời (chờ anh Nhật duyệt) ở mục 4 và các tiêu chí liên quan |
 | 2026-11-21 | AI | Ghi câu trả lời của anh Nhật trong phiên: bỏ dòng thời gian thu gọn (câu hỏi 2, đổi lại câu trả lời trước), giữ các điều khiển mới (câu hỏi 23) |
 | 2026-11-21 | AI | Thiết kế bổ sung đã được anh Nhật duyệt trong phiên (chọn "Duyệt") |
+| 2026-11-21 | AI | Chuyển `confirmed` theo lời anh Nhật (người phụ trách sản phẩm) trong phiên: "xác nhận 6 spec" |
