@@ -24,7 +24,7 @@ Phiên tự chạy chỉ đọc thư mục này, không mở được Figma.
 
 Kịch bản: theo [spec của feature](../spec.md).
 
-Bổ sung ngày 2026-11-21 theo câu trả lời ở mục 9 của spec, chờ anh Nhật duyệt: `backing-up`, `no-projects`. Thông báo sao lưu xong hay lỗi dùng Snackbar chuẩn, không có frame riêng.
+Bổ sung ngày 2026-11-21 theo câu trả lời ở mục 9 của spec, anh Nhật duyệt ngày 2026-11-21 (chọn "Duyệt" trong phiên): `backing-up`, `no-projects`. Thông báo sao lưu xong hay lỗi dùng Snackbar chuẩn, không có frame riêng.
 
 | Màn hình (composable) | Trạng thái | Ảnh trong `screens/`, số liệu trong `context/` | Kịch bản |
 | --- | --- | --- | --- |

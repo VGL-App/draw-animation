@@ -202,7 +202,7 @@ Tiêu chí chấp nhận:
 | `ProjectsScreen` (feature projects) | Nút cài đặt trên thanh trên mở màn Cài đặt | KB-1, KB-10 |
 | `NewProjectScreen` (feature projects) | Chọn sẵn tốc độ khung và khung hình mặc định | KB-2, KB-3, KB-10 |
 
-Thiết kế bổ sung ngày 2026-11-21, chờ anh Nhật duyệt: `backing-up`, `no-projects` (câu hỏi 5). Thông báo sao lưu xong hay lỗi dùng Snackbar chuẩn, danh sách chọn tốc độ khung và khung hình dùng hộp thoại chọn chuẩn, không có frame riêng (câu hỏi 5, 9). Screenshot test ở khung thấp 360 × 640 dp cho trạng thái default.
+Thiết kế bổ sung ngày 2026-11-21, anh Nhật duyệt ngày 2026-11-21 (chọn "Duyệt" trong phiên): `backing-up`, `no-projects` (câu hỏi 5). Thông báo sao lưu xong hay lỗi dùng Snackbar chuẩn, danh sách chọn tốc độ khung và khung hình dùng hộp thoại chọn chuẩn, không có frame riêng (câu hỏi 5, 9). Screenshot test ở khung thấp 360 × 640 dp cho trạng thái default.
 
 ## 5. Quảng cáo
 
@@ -233,8 +233,8 @@ Theo bản đề xuất mục 9.2; danh sách và tham số đã được anh Nh
 
 | Tên sự kiện | Khi nào ghi | Tham số | Dùng để trả lời câu hỏi gì |
 | --- | --- | --- | --- |
-| `backup_export` | Khi sao lưu ghi file xong (chỉ khi thành công) | `scope` (`all` từ Cài đặt, `project` từ menu dự án), `project_count` | Bao nhiêu người sao lưu, sao lưu tất cả hay một dự án |
-| `backup_restore` | Khi khôi phục xong (chỉ khi thành công) | `scope` (`all` khi bấm "Restore from a file" ở Cài đặt, `project` khi bấm nút nhập file ở danh sách dự án), `project_count` (số dự án đã khôi phục) | Bao nhiêu người khôi phục, từ đâu, bao nhiêu dự án |
+| `backup_export` | Khi sao lưu ghi file xong (chỉ khi thành công) | `source` (`settings` khi bấm "Back up all projects" ở Cài đặt, `projects` khi bấm "Back up to a file" ở menu dự án), `project_count` | Bao nhiêu người sao lưu, bấm từ Cài đặt hay từ danh sách dự án |
+| `backup_restore` | Khi khôi phục xong (chỉ khi thành công) | `source` (`settings` khi bấm "Restore from a file" ở Cài đặt, `projects` khi bấm nút nhập file ở danh sách dự án), `project_count` (số dự án đã khôi phục) | Bao nhiêu người khôi phục, từ đâu, bao nhiêu dự án |
 
 Hai sự kiện này dùng chung với spec projects, cùng tên và tham số (spec projects, câu 17).
 
@@ -256,7 +256,7 @@ Không có.
 
 1. **Danh sách sự kiện và tham số:** bản đề xuất 9.2 là đề xuất, chưa có câu trả lời riêng. `backup_export`, `backup_restore` có ghi cho cả sao lưu tất cả (Cài đặt) và sao lưu một dự án (menu dự án) không? Có ghi lần thất bại không?
    - Đề xuất của AI: trả lời chung với câu 17 của spec projects, nơi ghi đề xuất duy nhất cho cả hai spec: dùng chung hai sự kiện cho cả hai nơi, cả hai có `scope` (`all`, `project`) và `project_count`, chỉ ghi khi thành công (9.2 không có sự kiện lỗi); phương án ghi cả lần lỗi, hủy cũng nêu ở câu đó.
-   - Trả lời: Theo spec projects câu 17: chỉ ghi khi thành công.
+   - Trả lời: Theo spec projects câu 17: chỉ ghi khi thành công. Sau đó (2026-11-21) tham số `scope` đổi thành `source` (`settings`, `projects`).
 2. **File sao lưu tất cả và file sao lưu một dự án có cùng loại không? "Restore from a file" ở Cài đặt nhận loại nào?**
    - Đề xuất của AI: một loại file chung, chứa một hay nhiều dự án; cả "Restore from a file" ở Cài đặt và "Nhập từ file" ở danh sách dự án nhận cả hai, đuôi ".frameloop" như spec projects. Trả lời chung với câu 19 của spec projects.
    - Trả lời: Đồng ý đề xuất của AI.
@@ -306,4 +306,5 @@ Không có.
 | --- | --- | --- |
 | 2026-11-21 | AI | Tạo bản đầu từ bản đề xuất đã duyệt (docs/research/proposal.md) và thiết kế đã duyệt |
 | 2026-11-21 | AI | Ghi câu trả lời của anh Nhật cho mọi câu hỏi ở mục 9 (anh chọn trong phiên ngày 2026-11-21) và sửa phần thân spec theo các câu trả lời; sửa các điểm nên sửa còn lại của lần rà soát cuối. Spec vẫn `draft` |
-| 2026-11-21 | AI | Ghi các frame thiết kế bổ sung, sửa theo câu trả lời (chờ anh Nhật duyệt) ở mục 4 và các tiêu chí liên quan |
+| 2026-11-21 | AI | Ghi các frame thiết kế bổ sung, sửa theo câu trả lời (anh Nhật duyệt ngày 2026-11-21 (chọn "Duyệt" trong phiên)) ở mục 4 và các tiêu chí liên quan |
+| 2026-11-21 | AI | Đổi tham số `scope` (`all`, `project`) của `backup_export`, `backup_restore` thành `source` (`settings`, `projects`), theo lời anh Nhật trong phiên; thiết kế bổ sung đã được anh duyệt |

@@ -203,7 +203,7 @@ Tiêu chí chấp nhận:
 | `LessonsScreen` | `open-failed` (tối, sáng) | Hộp thoại lỗi mở bài, "Cancel" và "Try again" | KB-3 |
 | `LessonDoneScreen` | `last-lesson` (tối, sáng) | Màn Hoàn thành của bài cuối, không có "Next lesson" | KB-5, KB-6 |
 
-- Thiết kế bổ sung ngày 2026-11-21, chờ anh Nhật duyệt: `LessonsScreen` `opening` và `open-failed` (câu hỏi 6), `LessonDoneScreen` `last-lesson` (câu hỏi 9). Bố cục màn gập mở ra không có frame (câu hỏi 16).
+- Thiết kế bổ sung ngày 2026-11-21, anh Nhật duyệt ngày 2026-11-21 (chọn "Duyệt" trong phiên): `LessonsScreen` `opening` và `open-failed` (câu hỏi 6), `LessonDoneScreen` `last-lesson` (câu hỏi 9). Bố cục màn gập mở ra không có frame (câu hỏi 16).
 
 ## 5. Quảng cáo
 
@@ -326,4 +326,5 @@ Khóa Remote Config khác (không phải cờ): `lessons_content_version`, thư 
 | --- | --- | --- |
 | 2026-11-21 | AI | Tạo bản đầu từ bản đề xuất đã duyệt (docs/research/proposal.md) và thiết kế đã duyệt |
 | 2026-11-21 | AI | Ghi câu trả lời của anh Nhật cho mọi câu hỏi ở mục 9 (anh chọn trong phiên ngày 2026-11-21) và sửa phần thân spec theo các câu trả lời; sửa các điểm nên sửa còn lại của lần rà soát cuối. Spec vẫn `draft` |
-| 2026-11-21 | AI | Ghi các frame thiết kế bổ sung, sửa theo câu trả lời (chờ anh Nhật duyệt) ở mục 4 và các tiêu chí liên quan |
+| 2026-11-21 | AI | Ghi các frame thiết kế bổ sung, sửa theo câu trả lời (anh Nhật duyệt ngày 2026-11-21 (chọn "Duyệt" trong phiên)) ở mục 4 và các tiêu chí liên quan |
+| 2026-11-21 | AI | Thiết kế bổ sung đã được anh Nhật duyệt trong phiên (chọn "Duyệt") |

@@ -236,7 +236,7 @@ Tiêu chí chấp nhận:
 ## 4. Giao diện
 
 - **Thiết kế:** [design/README.md](design/README.md), dựng trên Figma theo hướng Studio Night, có chế độ sáng và tối. Chữ theo bảng chữ của thiết kế (tiếng Anh, bản đề xuất Q9).
-- **Thiết kế đã sửa ngày 2026-11-21, chờ anh Nhật duyệt:** bỏ ô tỷ lệ 4:5 trên frame màn Tạo dự án (sáng, tối), ảnh và số liệu đã xuất lại (câu hỏi 1).
+- **Thiết kế đã sửa ngày 2026-11-21, anh Nhật duyệt ngày 2026-11-21 (chọn "Duyệt" trong phiên):** bỏ ô tỷ lệ 4:5 trên frame màn Tạo dự án (sáng, tối), ảnh và số liệu đã xuất lại (câu hỏi 1).
 - **Các màn hình:**
 
 | Màn hình | Trạng thái theo thiết kế | Mục đích | Kịch bản liên quan |
@@ -294,8 +294,8 @@ Chỉ các sự kiện của bản đề xuất mục 9.2 thuộc feature này; 
 | Tên sự kiện | Khi nào ghi | Tham số | Dùng để trả lời câu hỏi gì |
 | --- | --- | --- | --- |
 | `project_create` | Dự án được tạo xong ở màn Tạo dự án | `ratio` (9:16, 16:9, 1:1), `size` (720p, 1080p), `fps`, `background` (white, dark, blue, photo), `is_default` (người dùng không đổi lựa chọn nào) | Người dùng tạo bao nhiêu dự án, chọn khung và tốc độ nào, có giữ mặc định không |
-| `backup_export` | Sao lưu ghi file xong (chỉ khi thành công) | `scope` (`all` từ Cài đặt, `project` từ menu dự án), `project_count` | Bao nhiêu người sao lưu, sao lưu tất cả hay một dự án |
-| `backup_restore` | Khôi phục xong (chỉ khi thành công) | `scope` (`all` khi bấm "Restore from a file" ở Cài đặt, `project` khi bấm nút nhập file ở danh sách), `project_count` (số dự án đã khôi phục) | Bao nhiêu người khôi phục, từ đâu, bao nhiêu dự án |
+| `backup_export` | Sao lưu ghi file xong (chỉ khi thành công) | `source` (`settings` khi bấm "Back up all projects" ở Cài đặt, `projects` khi bấm "Back up to a file" ở menu dự án), `project_count` | Bao nhiêu người sao lưu, bấm từ Cài đặt hay từ danh sách dự án |
+| `backup_restore` | Khôi phục xong (chỉ khi thành công) | `source` (`settings` khi bấm "Restore from a file" ở Cài đặt, `projects` khi bấm nút nhập file ở danh sách dự án), `project_count` (số dự án đã khôi phục) | Bao nhiêu người khôi phục, từ đâu, bao nhiêu dự án |
 
 Hai sự kiện sao lưu và khôi phục dùng chung với spec `settings`, cùng tên và tham số. Lần mở một dự án (`project_open`) do màn vẽ ghi (spec editor, mục 6).
 
@@ -364,7 +364,7 @@ Không có.
 17. **Xác nhận danh sách sự kiện và tham số ở mục 6.** Bản đề xuất mục 9.2 là "đề xuất", chưa có câu trả lời riêng. Đổi tên, nhân bản, xóa dự án không có sự kiện nào trong 9.2. `backup_export`, `backup_restore` dùng chung cho sao lưu, khôi phục một dự án (feature này) và tất cả dự án (spec `settings`); câu này là chỗ trả lời chung cho hai spec (spec settings câu 1 trỏ về đây).
     - Đề xuất của AI: dùng ba sự kiện `project_create`, `backup_export`, `backup_restore` với tham số ở mục 6; không thêm sự kiện cho đổi tên, nhân bản, xóa ở bản đầu. Theo đề xuất, `project_open` do màn vẽ ghi (spec editor câu 5), feature này không ghi. Hai sự kiện sao lưu và khôi phục có `scope` (`all`, `project`) và `project_count`, chỉ ghi khi thành công, vì 9.2 không có sự kiện lỗi.
     - Phương án khác cho anh chọn: ghi cả lần lỗi và lần hủy bằng thêm tham số `result` (`success`, `fail`, `cancel`; `cancel` chỉ có ở khôi phục), có thể thêm `frame_count`. Phương án này đo được tỷ lệ khôi phục thành công (mục 1 của spec này và của spec settings) nhưng ghi cả lúc thất bại, ngoài những gì 9.2 nêu.
-    - Trả lời: Chỉ ghi khi thành công, theo đề xuất của AI. Duyệt danh sách sự kiện và tham số ở mục 6.
+    - Trả lời: Chỉ ghi khi thành công, theo đề xuất của AI. Duyệt danh sách sự kiện và tham số ở mục 6. Sau đó (2026-11-21) tham số `scope` đổi thành `source` (`settings`, `projects`).
 18. **Cờ `feature_projects_enabled` tắt thì app vào đâu?** Danh sách dự án là màn chính, mọi luồng (màn vẽ, bài học, cài đặt) đi qua nó.
     - Đề xuất của AI: cờ chỉ để giấu feature trong lúc làm; tắt thì app vào màn mẫu có sẵn từ dự án mẫu như hôm nay. Bản staging bật sẵn, bản production bật từ lần phát hành đầu và không tắt sau đó.
     - Trả lời: Đồng ý đề xuất của AI.
@@ -387,4 +387,5 @@ Không có.
 | --- | --- | --- |
 | 2026-11-21 | AI | Tạo bản đầu từ bản đề xuất đã duyệt (docs/research/proposal.md) và thiết kế đã duyệt |
 | 2026-11-21 | AI | Ghi câu trả lời của anh Nhật cho mọi câu hỏi ở mục 9 (anh chọn trong phiên ngày 2026-11-21) và sửa phần thân spec theo các câu trả lời; sửa các điểm nên sửa còn lại của lần rà soát cuối. Spec vẫn `draft` |
-| 2026-11-21 | AI | Ghi các frame thiết kế bổ sung, sửa theo câu trả lời (chờ anh Nhật duyệt) ở mục 4 và các tiêu chí liên quan |
+| 2026-11-21 | AI | Ghi các frame thiết kế bổ sung, sửa theo câu trả lời (anh Nhật duyệt ngày 2026-11-21 (chọn "Duyệt" trong phiên)) ở mục 4 và các tiêu chí liên quan |
+| 2026-11-21 | AI | Đổi tham số `scope` (`all`, `project`) của `backup_export`, `backup_restore` thành `source` (`settings`, `projects`), theo lời anh Nhật trong phiên; thiết kế bổ sung đã được anh duyệt |

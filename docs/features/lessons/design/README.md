@@ -24,7 +24,7 @@ Phiên tự chạy chỉ đọc thư mục này, không mở được Figma.
 
 Kịch bản: theo [spec của feature](../spec.md).
 
-Bổ sung ngày 2026-11-21 theo câu trả lời ở mục 9 của spec, chờ anh Nhật duyệt: `LessonDoneScreen_last-lesson`, `LessonsScreen_opening`, `LessonsScreen_open-failed`; dòng tóm tắt của màn Hoàn thành đổi thành "12 frames · 1.0 s · Next: Squash and stretch" (không khóa bài); số đếm nhóm theo 18 bài ("1 of 5", "0 of 4").
+Bổ sung ngày 2026-11-21 theo câu trả lời ở mục 9 của spec, anh Nhật duyệt ngày 2026-11-21 (chọn "Duyệt" trong phiên): `LessonDoneScreen_last-lesson`, `LessonsScreen_opening`, `LessonsScreen_open-failed`; dòng tóm tắt của màn Hoàn thành đổi thành "12 frames · 1.0 s · Next: Squash and stretch" (không khóa bài); số đếm nhóm theo 18 bài ("1 of 5", "0 of 4").
 
 | Màn hình (composable) | Trạng thái | Ảnh trong `screens/`, số liệu trong `context/` | Kịch bản |
 | --- | --- | --- | --- |

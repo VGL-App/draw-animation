@@ -24,7 +24,7 @@ Phiên tự chạy chỉ đọc thư mục này, không mở được Figma.
 
 Kịch bản: theo [spec của feature](../spec.md).
 
-Bổ sung ngày 2026-11-21 theo câu trả lời ở mục 9 của spec, chờ anh Nhật duyệt: `page-1-no-ad` (không có thẻ quảng cáo; nội dung trang căn giữa phần còn lại, nút vẫn ghim đáy). Các trang 2 đến 4 không có quảng cáo theo cùng cách.
+Bổ sung ngày 2026-11-21 theo câu trả lời ở mục 9 của spec, anh Nhật duyệt ngày 2026-11-21 (chọn "Duyệt" trong phiên): `page-1-no-ad` (không có thẻ quảng cáo; nội dung trang căn giữa phần còn lại, nút vẫn ghim đáy). Các trang 2 đến 4 không có quảng cáo theo cùng cách.
 
 | Màn hình (composable) | Trạng thái | Ảnh trong `screens/`, số liệu trong `context/` | Kịch bản |
 | --- | --- | --- | --- |
