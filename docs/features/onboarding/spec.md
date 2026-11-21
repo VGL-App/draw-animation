@@ -131,7 +131,7 @@ Tiêu chí chấp nhận:
 
 - [ ] Khi cờ của feature tắt thì sau Loading app mở thẳng danh sách dự án, không hiện onboarding và không ghi là đã xong.
 - [ ] Khi cờ bật lại thì người dùng chưa xong sẽ thấy onboarding ở lần mở sau, từ trang 1 (với người dùng đã có dự án, xem câu hỏi 6).
-- [ ] Khi cờ của danh sách dự án tắt thì sau "Start drawing" (hay khi cờ onboarding tắt) app mở vào màn thay cho danh sách dự án theo spec projects câu 18, chờ trả lời (đề xuất ở đó: màn hình chính hiện có của dự án mẫu).
+- [ ] Khi cờ của danh sách dự án tắt thì sau "Start drawing" (hay khi cờ onboarding tắt) app mở vào màn thay cho danh sách dự án theo spec projects câu 18, chờ trả lời (đề xuất ở đó: màn chờ có sẵn của app).
 
 ## 4. Giao diện
 

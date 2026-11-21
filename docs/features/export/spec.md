@@ -283,8 +283,8 @@ Không có.
     - Đề xuất của AI: mức chọn sẵn là độ phân giải của dự án; dự án 720p thì chip 1080p không có (không phóng to). "720p", "1080p" tính theo cạnh ngắn của khung với mọi tỷ lệ.
     - Trả lời:
 
-14. **Chưa có quảng cáo có thưởng để hiện thì `export_rw_extra` làm gì?** Mặc định của phần quảng cáo dùng chung là chặn, người dùng thử lại được (MC-05). Spec editor câu 4 hỏi cùng điều này cho ba vị trí rewarded của màn vẽ và đề xuất `allow_after_2`. Câu này để anh chọn một lần cho cả bốn vị trí rewarded của app.
-    - Đề xuất của AI: theo câu trả lời của spec editor câu 4, một chính sách cho cả bốn vị trí. AI đề xuất `allow_after_2`: sau 2 lần thử liên tiếp không có quảng cáo thì mở luôn tùy chọn cho lần xuất đó. Phương án khác: `block`, tùy chọn không mở tới khi có quảng cáo.
+14. **Chưa có quảng cáo có thưởng để hiện thì `export_rw_extra` làm gì?** Mặc định của phần quảng cáo dùng chung là chặn, người dùng thử lại được (MC-05). Spec editor câu 4 hỏi cùng điều này cho ba vị trí rewarded của màn vẽ và đề xuất `allow_after_2`. Câu trả lời ở spec editor câu 4, áp cho cả bốn vị trí rewarded; câu này chỉ trỏ về đó.
+    - Đề xuất của AI: trả lời chung với câu 4 của spec editor. AI đề xuất `allow_after_2`: sau 2 lần thử liên tiếp không có quảng cáo thì mở luôn tùy chọn cho lần xuất đó. Phương án khác: `block`, tùy chọn không mở tới khi có quảng cáo.
     - Trả lời:
 
 ## 10. Lịch sử

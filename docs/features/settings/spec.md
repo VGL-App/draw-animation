@@ -92,7 +92,7 @@ Người dùng vẽ bằng bút cảm ứng, muốn nét đậm nhạt theo lự
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi bấm dòng "Stylus pressure" lúc đang "On" thì dòng chuyển sang "Off", và trên màn vẽ nét vẽ bằng bút cảm ứng có độ dày đều, không theo lực nhấn.
+- [ ] Khi bấm dòng "Stylus pressure" lúc đang "On" thì dòng chuyển sang "Off", và trên màn vẽ, với cọ chưa chỉnh riêng lực bút trong bảng "Brush", nét vẽ bằng bút cảm ứng có độ dày đều, không theo lực nhấn (quan hệ với bảng "Brush": câu hỏi 7 và spec editor câu 22).
 - [ ] Khi bấm lại thì dòng về "On" và nét vẽ bằng bút cảm ứng lại theo lực nhấn ở các cọ có lực bút.
 - [ ] Khi tắt app rồi mở lại thì lựa chọn vẫn còn.
 
@@ -271,7 +271,7 @@ Không có.
    - Đề xuất của AI: không; bản sao lưu chỉ gồm dự án của người dùng.
    - Trả lời:
 7. **"Stylus pressure" có trên thiết kế, bản đề xuất không có mục cài đặt này** (chỉ có "lực bút" trong cọ của màn vẽ). Có giữ không, chọn thế nào, áp cho đâu?
-   - Đề xuất của AI: giữ; chạm dòng để bật tắt (có thể thay chữ "On" bằng công tắc nếu anh muốn sửa thiết kế); mặc định bật; áp cho mọi cọ có lực bút, chỉ khi vẽ bằng bút cảm ứng. Quan hệ với công tắc "Pressure from stylus" trong bảng "Brush" của màn vẽ (bên nào thắng, có bỏ một bên không): trả lời chung với câu 22 của spec editor.
+   - Đề xuất của AI: giữ; chạm dòng để bật tắt (có thể thay chữ "On" bằng công tắc nếu anh muốn sửa thiết kế); mặc định bật; là giá trị mặc định cho mọi cọ có lực bút mà người dùng chưa chỉnh riêng trong bảng "Brush", chỉ khi vẽ bằng bút cảm ứng (khớp đề xuất của spec editor câu 22). Quan hệ với công tắc "Pressure from stylus" trong bảng "Brush" của màn vẽ (bên nào thắng, có bỏ một bên không): trả lời chung với câu 22 của spec editor.
    - Trả lời:
 8. **"Autosave, Every 30 s" chỉ để xem hay người dùng chọn được chu kỳ?** Bản đề xuất chỉ cam kết mất tối đa 30 giây công.
    - Đề xuất của AI: chỉ để xem, không bấm được, để giữ cam kết 30 giây.

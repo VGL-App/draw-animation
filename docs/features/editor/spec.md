@@ -173,7 +173,7 @@ Tiêu chí chấp nhận:
 - [ ] Khi bấm làm lại thì thao tác vừa hoàn tác được làm lại; khi đã có thao tác mới sau hoàn tác thì làm lại không còn.
 - [ ] Khi không còn gì để hoàn tác hay làm lại thì nút tương ứng mờ đi và không làm gì.
 
-### KB-12. Nhập ảnh, video làm nền
+### KB-12. Nhập ảnh, video để vẽ theo
 
 Tiêu chí chấp nhận:
 
@@ -234,7 +234,7 @@ Trường hợp đặc biệt:
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi lần đầu vào một dự án thường (không phải bài học, xem câu hỏi 15) thì hướng dẫn 9 bước hiện: thẻ chỉ dẫn có số bước "1 / 9", tiêu đề, lời chỉ dẫn (ví dụ "Draw on the canvas", "Pick a brush on the left, then draw with one finger. Two fingers move and zoom."), nút "Skip tour" và "Next"; lớp tối phủ phần màn vẽ dưới dải quảng cáo, không phủ thanh tiêu đề và dải quảng cáo.
+- [ ] Khi lần đầu vào một dự án thường (không phải bài học; theo đề xuất câu hỏi 15, chờ trả lời) thì hướng dẫn 9 bước hiện: thẻ chỉ dẫn có số bước "1 / 9", tiêu đề, lời chỉ dẫn (ví dụ "Draw on the canvas", "Pick a brush on the left, then draw with one finger. Two fingers move and zoom."), nút "Skip tour" và "Next"; lớp tối phủ phần màn vẽ dưới dải quảng cáo, không phủ thanh tiêu đề và dải quảng cáo.
 - [ ] Khi bấm "Skip tour" ở bất kỳ bước nào thì hướng dẫn đóng ngay và không tự hiện lại.
 - [ ] Khi qua hết 9 bước thì hướng dẫn đóng và không tự hiện lại.
 - [ ] Khi người dùng muốn xem lại thì mở lại được hướng dẫn từ màn vẽ (chỗ mở: câu hỏi 15).
@@ -266,7 +266,7 @@ Tiêu chí chấp nhận:
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi bấm quay lại (nút trên thanh tiêu đề hay nút back của máy) ở một dự án thường thì app tự lưu xong, có thể hiện một quảng cáo xen giữa theo khoảng cách tối thiểu giữa hai lần, rồi về danh sách dự án. Rời bài học giữa chừng thì về màn Bài học (KB-18).
+- [ ] Khi bấm quay lại (nút trên thanh tiêu đề hay nút back của máy) ở một dự án thường thì app tự lưu xong, có thể hiện một quảng cáo xen giữa theo khoảng cách tối thiểu giữa hai lần, rồi về danh sách dự án. Rời bài học giữa chừng thì về màn Bài học (KB-18, câu hỏi 17).
 - [ ] Khi người dùng chưa vẽ nét đầu tiên nào trên máy thì rời màn vẽ không có quảng cáo xen giữa.
 - [ ] Khi bấm "Export" thì app tự lưu xong rồi mở màn Xuất của dự án.
 
@@ -281,7 +281,7 @@ Tiêu chí chấp nhận:
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi cờ của feature tắt mà người dùng chạm một dự án hay bấm "Create" thì app hiện thông báo ngắn "coming soon" và ở lại danh sách dự án, không mở màn vẽ (theo đề xuất câu hỏi 20, chờ trả lời).
+- [ ] Khi cờ của feature tắt mà người dùng chạm một dự án, bấm "Create", chạm một thẻ bài học hay bấm "Next lesson" thì app hiện thông báo ngắn "coming soon" và ở lại màn đang đứng, không mở màn vẽ, không tạo dự án (theo đề xuất câu hỏi 20, chờ trả lời).
 
 ## 4. Giao diện
 
@@ -420,7 +420,7 @@ Tham số Remote Config của màn vẽ (không phải cờ): `time_reload_edito
 14. **Dung lượng và đường dẫn của bộ hiệu ứng cơ bản và các gói trên R2:** chưa có số. R2 staging tạm dùng `https://draw-animation-staging.vgl.io.vn/`.
     - Đề xuất của AI: bộ cơ bản khoảng 10 hiệu ứng, dưới 2 MB; mỗi gói tải riêng, dưới 5 MB; đường dẫn có phiên bản, ví dụ `sounds/basic/v1/`, `sounds/cartoon/v1/`. Nhóm chọn nguồn CC0 và ghi giấy phép.
     - Trả lời:
-15. **Chỗ xem lại hướng dẫn trên màn vẽ** ("xem lại được" ở bản đề xuất mục 5; thiết kế không có).
+15. **Chỗ xem lại hướng dẫn trên màn vẽ, và hướng dẫn có tự hiện khi vào qua bài học không** ("xem lại được" ở bản đề xuất mục 5; thiết kế không có).
     - Đề xuất của AI: một mục trong menu của nút "thêm" trên thanh công cụ (cùng câu hỏi 1). Hướng dẫn không tự hiện khi vào màn vẽ qua bài học; hiện ở lần đầu vào một dự án thường. Spec settings câu 14 đề xuất thêm một dòng trong Cài đặt; trả lời chung hai câu, có thể chọn một hay cả hai lối vào.
     - Trả lời:
 16. **Nút "Show me" của chỉ dẫn bài học làm gì, và nội dung bài đưa sang màn vẽ gồm gì?**
@@ -436,7 +436,7 @@ Tham số Remote Config của màn vẽ (không phải cờ): `time_reload_edito
     - Đề xuất của AI: thêm cờ phụ `feature_editor_camera_enabled` (mặc định tắt) để phát hành màn vẽ trước nếu camera ảo chưa xong.
     - Trả lời:
 20. **Cờ `feature_editor_enabled` tắt thì sao?** Màn vẽ là lõi của app, không có màn cũ để thay.
-    - Đề xuất của AI: cờ chỉ để giữ màn vẽ khỏi bản phát hành khi chưa xong; khi tắt, chạm dự án hay tạo dự án xong hiện thông báo ngắn "coming soon" và ở lại danh sách dự án. Bản staging bật sẵn.
+    - Đề xuất của AI: cờ chỉ để giữ màn vẽ khỏi bản phát hành khi chưa xong; khi tắt, chạm thẻ dự án, bấm "Create" (không tạo dự án), chạm thẻ bài học hay bấm "Next lesson" thì hiện thông báo ngắn "coming soon" và ở lại màn đang đứng. Bản staging bật sẵn.
     - Trả lời:
 21. **Vùng chạm của thanh công cụ trái:** thiết kế ghi nút 44 dp, cách nhau 4 dp; bảng tiêu chí duyệt của thiết kế đòi vùng chạm ít nhất 48 dp.
     - Đề xuất của AI: giữ hình nút 44 dp như thiết kế, vùng chạm mở rộng tới 48 dp (dùng khoảng cách giữa các nút), như tiêu chí 48 dp của cột phải ở KB-1.

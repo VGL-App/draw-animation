@@ -77,6 +77,7 @@ Tiêu chí chấp nhận:
 - [ ] Khi xem một thẻ thì thẻ có ảnh thu nhỏ của dự án, tên dự án và dòng "<số khung> frames · <tốc độ> fps" (ví dụ "48 frames · 12 fps").
 - [ ] Khi danh sách có nhiều dự án thì dự án sửa gần nhất đứng đầu; dự án vừa tạo, vừa nhân bản hay vừa khôi phục đứng đầu.
 - [ ] Khi chạm một thẻ thì dự án đó mở trong màn vẽ.
+- [ ] Khi cờ của màn vẽ tắt mà chạm một thẻ hay bấm "Create" thì app hiện thông báo ngắn và ở lại màn đang đứng, không mở màn vẽ; bấm "Create" lúc đó không tạo dự án (theo spec editor câu 20, chờ trả lời).
 - [ ] Khi từ màn vẽ quay về danh sách thì thẻ của dự án đó đứng đầu, ảnh thu nhỏ và số khung đúng với nội dung vừa vẽ.
 - [ ] Khi danh sách dài hơn màn thì cuộn được; thanh trên và thanh điều hướng giữ nguyên chỗ.
 - [ ] Khi tên dự án dài hơn bề rộng thẻ thì tên cắt bằng dấu "…" trên một dòng, không đè lên dòng số khung.
@@ -226,7 +227,7 @@ Tiêu chí chấp nhận:
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi cờ của feature tắt thì app mở vào màn hình chính hiện có của dự án mẫu, người dùng không vào được danh sách dự án và màn Tạo dự án (theo đề xuất câu hỏi 18, chờ trả lời).
+- [ ] Khi cờ của feature tắt thì app mở vào màn chờ có sẵn của app, người dùng không vào được danh sách dự án và màn Tạo dự án (theo đề xuất câu hỏi 18, chờ trả lời).
 
 ## 4. Giao diện
 
@@ -356,7 +357,7 @@ Không có.
     - Đề xuất của AI: tính theo số dự án đã từng tạo bằng màn Tạo dự án (không giảm khi xóa, không tính bài học, khôi phục hay nhân bản): lần bấm "Create" đầu tiên trong đời app không có interstitial, các lần sau theo `ads_interval` và luật trước nét vẽ đầu tiên.
     - Trả lời:
 17. **Xác nhận danh sách sự kiện và tham số ở mục 6.** Bản đề xuất mục 9.2 là "đề xuất", chưa có câu trả lời riêng. Đổi tên, nhân bản, xóa dự án không có sự kiện nào trong 9.2. `backup_export`, `backup_restore` dùng chung cho sao lưu, khôi phục một dự án (feature này) và tất cả dự án (spec `settings`); câu này là chỗ trả lời chung cho hai spec (spec settings câu 1 trỏ về đây).
-    - Đề xuất của AI: dùng ba sự kiện `project_create`, `backup_export`, `backup_restore` với tham số ở mục 6; không thêm sự kiện cho đổi tên, nhân bản, xóa ở bản đầu. `project_open` do màn vẽ ghi (spec editor câu 5), feature này không ghi. Hai sự kiện sao lưu và khôi phục có `scope` (`all`, `project`) và `project_count`, chỉ ghi khi thành công, vì 9.2 không có sự kiện lỗi.
+    - Đề xuất của AI: dùng ba sự kiện `project_create`, `backup_export`, `backup_restore` với tham số ở mục 6; không thêm sự kiện cho đổi tên, nhân bản, xóa ở bản đầu. Theo đề xuất, `project_open` do màn vẽ ghi (spec editor câu 5, chờ trả lời), feature này không ghi. Hai sự kiện sao lưu và khôi phục có `scope` (`all`, `project`) và `project_count`, chỉ ghi khi thành công, vì 9.2 không có sự kiện lỗi.
     - Phương án khác cho anh chọn: ghi cả lần lỗi và lần hủy bằng thêm tham số `result` (`success`, `fail`, `cancel`; `cancel` chỉ có ở khôi phục), có thể thêm `frame_count`. Phương án này đo được tỉ lệ khôi phục thành công (mục 1 của spec này và của spec settings) nhưng ghi cả lúc thất bại, ngoài những gì 9.2 nêu.
     - Trả lời:
 18. **Cờ `feature_projects_enabled` tắt thì app vào đâu?** Danh sách dự án là màn chính, mọi luồng (màn vẽ, bài học, cài đặt) đi qua nó.
