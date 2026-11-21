@@ -16,7 +16,7 @@ confirmed:
 
 - **Người dùng được gì:** một chỗ để chọn giá trị mặc định cho dự án mới, sao lưu cả kho dự án ra một file và khôi phục lại, xem lại lựa chọn quyền riêng tư quảng cáo, đọc chính sách quyền riêng tư và biết phiên bản app.
 - **Vì sao làm bây giờ:** mất bài là nỗi sợ lớn nhất của người dùng app vẽ hoạt hình (bản đề xuất mục 4). Sao lưu tất cả dự án ra một file giúp người dùng chuyển máy hay cài lại app mà không mất gì, khi app không có tài khoản hay đám mây (mục 9.4). Màn này cũng là lối vào lựa chọn quyền riêng tư quảng cáo mà người dùng cần để rút hay cho lại đồng ý.
-- **Đo kết quả bằng gì:** số lần sao lưu tất cả và số lần khôi phục thành công mỗi tuần, so với số người dùng hoạt động; tỷ lệ khôi phục thành công trên số lần thử (mục 6).
+- **Đo kết quả bằng gì:** số lần sao lưu tất cả và số lần khôi phục thành công mỗi tuần, so với số người dùng hoạt động (mục 6); tỷ lệ khôi phục thành công trên số lần thử chỉ đo được khi chọn phương án ghi cả lần lỗi, hủy (câu hỏi 1).
 
 ## 2. Phạm vi
 
@@ -118,7 +118,7 @@ Trường hợp đặc biệt:
 - [ ] Khi người dùng đóng bộ chọn file mà không chọn chỗ lưu thì không có file nào được ghi, không báo lỗi.
 - [ ] Khi chưa có dự án nào thì app không mở bộ chọn file và báo không có dự án để sao lưu (câu hỏi 5).
 - [ ] Khi ghi file thất bại (hết chỗ, mất quyền ghi, Google Drive lỗi) thì app báo sao lưu không thành công, có thể thử lại, các dự án trên máy không bị đổi, và file dở dang không được để lại như một bản sao lưu dùng được.
-- [ ] Khi dự án đang mở trên màn vẽ có thay đổi chưa tự lưu thì bản sao lưu chứa trạng thái đã tự lưu gần nhất (màn vẽ tự lưu khi rời màn).
+- [ ] Khi sao lưu thì app đọc các dự án từ bản đã lưu trên máy; bản sao lưu chứa đúng nội dung mà mở dự án trên màn vẽ sẽ thấy (màn vẽ tự lưu xong trước khi người dùng rời màn).
 
 ### KB-6. Khôi phục dự án từ một file
 
@@ -231,8 +231,10 @@ Theo bản đề xuất mục 9.2; danh sách và tham số chờ xác nhận (c
 
 | Tên sự kiện | Khi nào ghi | Tham số | Dùng để trả lời câu hỏi gì |
 | --- | --- | --- | --- |
-| `backup_export` | Khi sao lưu ghi file xong | Đề xuất: `scope` (`all` từ Cài đặt, `project` từ menu dự án), `project_count` | Bao nhiêu người sao lưu, sao lưu tất cả hay một dự án |
-| `backup_restore` | Khi khôi phục xong | Đề xuất: `source` (`settings`, `projects`), `project_count` | Bao nhiêu người khôi phục, từ đâu |
+| `backup_export` | Khi sao lưu ghi file xong (chỉ khi thành công) | Đề xuất: `scope` (`all` từ Cài đặt, `project` từ menu dự án), `project_count` | Bao nhiêu người sao lưu, sao lưu tất cả hay một dự án |
+| `backup_restore` | Khi khôi phục xong (chỉ khi thành công) | Đề xuất: `scope` (`all` khi bấm "Restore from a file" ở Cài đặt, `project` khi bấm nút nhập file ở danh sách dự án), `project_count` (số dự án đã khôi phục) | Bao nhiêu người khôi phục, từ đâu, bao nhiêu dự án |
+
+Hai sự kiện này dùng chung với spec projects, cùng tên và tham số (spec projects, câu 17).
 
 Không ghi tên dự án, tên file hay nội dung tranh.
 
@@ -251,7 +253,7 @@ Không có.
 ## 9. Câu hỏi còn mở
 
 1. **Danh sách sự kiện và tham số:** bản đề xuất 9.2 là đề xuất, chưa có câu trả lời riêng. `backup_export`, `backup_restore` có ghi cho cả sao lưu tất cả (Cài đặt) và sao lưu một dự án (menu dự án) không? Có ghi lần thất bại không?
-   - Đề xuất của AI: dùng chung hai sự kiện cho cả hai nơi, phân biệt bằng tham số: `backup_export` có `scope` (`all`, `project`) và `project_count`; `backup_restore` có `source` (`settings`, `projects`) và `project_count`. Chỉ ghi khi thành công; không thêm sự kiện thất bại (9.2 không có).
+   - Đề xuất của AI: trả lời chung với câu 17 của spec projects, nơi ghi đề xuất duy nhất cho cả hai spec: dùng chung hai sự kiện cho cả hai nơi, cả hai có `scope` (`all`, `project`) và `project_count`, chỉ ghi khi thành công (9.2 không có sự kiện lỗi); phương án ghi cả lần lỗi, hủy cũng nêu ở câu đó.
    - Trả lời:
 2. **File sao lưu tất cả và file sao lưu một dự án có cùng loại không? "Restore from a file" ở Cài đặt nhận loại nào?**
    - Đề xuất của AI: một loại file chung, chứa một hay nhiều dự án; cả "Restore from a file" ở Cài đặt và "Nhập từ file" ở danh sách dự án nhận cả hai, đuôi ".frameloop" như spec projects. Trả lời chung với câu 19 của spec projects.
@@ -269,7 +271,7 @@ Không có.
    - Đề xuất của AI: không; bản sao lưu chỉ gồm dự án của người dùng.
    - Trả lời:
 7. **"Stylus pressure" có trên thiết kế, bản đề xuất không có mục cài đặt này** (chỉ có "lực bút" trong cọ của màn vẽ). Có giữ không, chọn thế nào, áp cho đâu?
-   - Đề xuất của AI: giữ; chạm dòng để bật tắt (có thể thay chữ "On" bằng công tắc nếu anh muốn sửa thiết kế); mặc định bật; áp cho mọi cọ có lực bút, chỉ khi vẽ bằng bút cảm ứng. Cần thống nhất với spec editor.
+   - Đề xuất của AI: giữ; chạm dòng để bật tắt (có thể thay chữ "On" bằng công tắc nếu anh muốn sửa thiết kế); mặc định bật; áp cho mọi cọ có lực bút, chỉ khi vẽ bằng bút cảm ứng. Quan hệ với công tắc "Pressure from stylus" trong bảng "Brush" của màn vẽ (bên nào thắng, có bỏ một bên không): trả lời chung với câu 22 của spec editor.
    - Trả lời:
 8. **"Autosave, Every 30 s" chỉ để xem hay người dùng chọn được chu kỳ?** Bản đề xuất chỉ cam kết mất tối đa 30 giây công.
    - Đề xuất của AI: chỉ để xem, không bấm được, để giữ cam kết 30 giây.

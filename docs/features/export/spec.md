@@ -63,7 +63,7 @@ Trường hợp đặc biệt:
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi màn Xuất mở thì MP4 video được chọn sẵn, chất lượng 1080p được chọn sẵn, watermark bật; nút ghim đáy ghi "Export MP4".
+- [ ] Khi màn Xuất mở thì MP4 video được chọn sẵn, chất lượng 1080p được chọn sẵn (câu hỏi 13), watermark bật; nút ghim đáy ghi "Export MP4".
 - [ ] Khi chạm một thẻ định dạng miễn phí (MP4 video, GIF) thì thẻ đó được chọn, có viền nhấn, các thẻ khác bỏ chọn; nút ghim đáy đổi chữ theo định dạng (câu hỏi 6).
 - [ ] Khi chạm 720p hay 1080p thì chỉ một mức được chọn.
 - [ ] Khi tùy chọn thêm chưa mở thì thẻ chuỗi PNG và thẻ GIF trong suốt có nhãn "Ad", và dòng watermark ghi "Turn off by watching one ad".
@@ -78,7 +78,8 @@ Tiêu chí chấp nhận:
 - [ ] Khi chạm thẻ chuỗi PNG, thẻ GIF trong suốt, hay gạt tắt watermark lúc tùy chọn thêm chưa mở thì app hỏi người dùng có muốn xem một quảng cáo không; chưa đổi lựa chọn nào.
 - [ ] Khi người dùng xem hết quảng cáo và được thưởng thì cả ba tùy chọn mở cho lần xuất này của dự án: nhãn "Ad" biến mất, lựa chọn vừa chạm được áp dụng (thẻ được chọn, hay watermark tắt), các tùy chọn còn lại chọn được không cần xem thêm.
 - [ ] Khi đã mở thì đổi qua lại giữa các định dạng, chất lượng, bật tắt watermark nhiều lần không cần xem thêm quảng cáo nào trong lần xuất đó.
-- [ ] Khi người dùng từ chối xem, đóng quảng cáo trước khi được thưởng, hay chưa có quảng cáo để xem thì tùy chọn không mở, lựa chọn trước đó giữ nguyên, watermark vẫn bật.
+- [ ] Khi người dùng từ chối xem hay đóng quảng cáo trước khi được thưởng thì tùy chọn không mở, lựa chọn trước đó giữ nguyên, watermark vẫn bật.
+- [ ] Khi chưa có quảng cáo để xem thì app làm theo chính sách chung của quảng cáo có thưởng (câu hỏi 14, chờ trả lời): theo đề xuất, tùy chọn chưa mở ở lần thử đầu và mở luôn sau 2 lần thử liên tiếp không có quảng cáo.
 - [ ] Khi quảng cáo có thưởng của màn Xuất đang tắt từ xa thì ba tùy chọn chọn được ngay, không hỏi xem quảng cáo, không có nhãn "Ad".
 - [ ] Khi tùy chọn đã mở thì phạm vi "lần xuất đó" giữ đúng như trả lời ở câu hỏi 2 (thử lại sau lỗi, hủy rồi xuất lại, rời màn Xuất).
 
@@ -144,7 +145,7 @@ Tiêu chí chấp nhận:
 - [ ] Khi máy gập mở ra (673 × 841) thì mọi trạng thái vẫn dùng được: nội dung không bị cắt, nút chính thấy được, quảng cáo giữ đúng chỗ như mục 5 (câu hỏi 12).
 - [ ] Khi máy để chế độ tối thì màn Xuất dùng màu tối như thiết kế; chế độ sáng dùng màu sáng.
 - [ ] Khi đặt cỡ chữ lớn của hệ thống thì nút và nhãn không bị cắt chữ.
-- [ ] Mọi nút và vùng chạm (thẻ định dạng, chip chất lượng, công tắc watermark, nút đóng) cao ít nhất 48 dp.
+- [ ] Khi đo vùng chạm của mọi nút (thẻ định dạng, chip chất lượng, công tắc watermark, nút đóng) thì vùng chạm cao ít nhất 48 dp.
 
 ### KB-10. Tắt feature từ xa
 
@@ -179,11 +180,11 @@ Chép từ bảng 9.1 của bản đề xuất. Mọi vị trí mặc định t�
 | `export_wait_mrec` | Banner MREC | Xuất, trạng thái exporting | Chỗ trống cố định 300 × 250 dưới nút "Cancel", cách nút ít nhất 24 dp. Nhóm A | Nạp lại theo luật chung của MREC | `is_show_export_wait_mrec` |
 | `export_done_native` | Native medium | Xuất, trạng thái done | Dưới ảnh xem trước và dòng kết quả; các nút ghim đáy, cách quảng cáo ít nhất 24 dp. Nhóm A | Không làm mới | `is_show_export_done_native` |
 | `export_interstitial` | Interstitial | Rời màn Xuất ở trạng thái done ("Back to editor", nút đóng, nút quay lại) | Chỉ sau khi file đã lưu vào thư viện; ở hành động rời màn của người dùng. Không hiện khi rời trạng thái options hay error, hay khi bấm "Share", "Open in Gallery". Nhóm A | Theo `ads_interval` (30 giây, Q16) | `is_show_export_interstitial` |
-| `export_rw_extra` | Rewarded | Xuất, trạng thái options | Khi người dùng chạm chuỗi PNG, GIF trong suốt hay gạt tắt watermark lúc chưa mở: một lượt xem mở bỏ watermark, chuỗi PNG, nền trong cho lần xuất đó của dự án (KB-3). Không có quảng cáo hay đóng trước khi được thưởng thì không mở. Khóa tắt thì tùy chọn mở thẳng. Nhóm A | Không qua `ads_interval` | `is_show_export_rw_extra` |
+| `export_rw_extra` | Rewarded | Xuất, trạng thái options | Khi người dùng chạm chuỗi PNG, GIF trong suốt hay gạt tắt watermark lúc chưa mở: một lượt xem mở bỏ watermark, chuỗi PNG, nền trong cho lần xuất đó của dự án (KB-3). Đóng trước khi được thưởng thì không mở; chưa có quảng cáo thì theo câu hỏi 14. Khóa tắt thì tùy chọn mở thẳng. Nhóm A | Không qua `ads_interval` | `is_show_export_rw_extra` |
 
 Ghi chú:
 
-- **Trước nét vẽ đầu tiên** (bản đề xuất, đoạn dưới bảng 9.1): tới khi người dùng vẽ nét đầu tiên ở bất kỳ dự án hay bài học nào, `export_options_mrec`, `export_wait_mrec`, `export_done_native` và `export_interstitial` không hiện; `export_rw_extra` vẫn hiện vì người dùng tự chọn. Trường hợp này xảy ra khi người dùng xuất một dự án khôi phục từ file mà chưa từng vẽ nét nào trên máy.
+- **Trước nét vẽ đầu tiên** (bản đề xuất, đoạn dưới bảng 9.1): tới khi người dùng vẽ nét đầu tiên ở bất kỳ dự án hay bài học nào, `export_options_mrec`, `export_wait_mrec`, `export_done_native` và `export_interstitial` không hiện; `export_rw_extra` vẫn hiện vì người dùng tự chọn. Trường hợp này xảy ra, ví dụ, khi người dùng xuất một dự án khôi phục từ file mà chưa từng vẽ nét nào trên máy.
 - Sau `export_interstitial` có thể có native toàn màn hình `native_combo` theo vị trí toàn app (bản đề xuất 9.1); spec này không thêm vị trí đó.
 - Quảng cáo khi quay lại app (`resume`, `resume_inter`) hiện ở mọi màn, kể cả màn chờ xuất (Q4); theo luật của vị trí toàn app, không thuộc spec này.
 - Màn Xuất có quảng cáo trong nội dung (MREC, native medium), nên lớp nổi của quảng cáo không hiện cạnh chúng (luật chung của quảng cáo).
@@ -226,7 +227,7 @@ Không có.
 
 | Tên cờ | Mặc định | Ý nghĩa |
 | --- | --- | --- |
-| `feature_export_enabled` | tắt | Bật để hiện nút xuất trên màn vẽ và màn Hoàn thành bài học, mở màn Xuất cho người dùng |
+| `feature_export_enabled` | tắt | Bật để hiện nút xuất trên màn vẽ và màn Hoàn thành bài học, mở màn Xuất cho người dùng. Bản staging bật sẵn |
 
 ## 9. Câu hỏi còn mở
 
@@ -280,6 +281,10 @@ Không có.
 
 13. **Chất lượng khi dự án nhỏ hơn 1080p.** Bản đề xuất cho dự án tối đa 1080p; thiết kế luôn có hai chip 720p và 1080p, chọn sẵn 1080p.
     - Đề xuất của AI: mức chọn sẵn là độ phân giải của dự án; dự án 720p thì chip 1080p không có (không phóng to). "720p", "1080p" tính theo cạnh ngắn của khung với mọi tỷ lệ.
+    - Trả lời:
+
+14. **Chưa có quảng cáo có thưởng để hiện thì `export_rw_extra` làm gì?** Mặc định của phần quảng cáo dùng chung là chặn, người dùng thử lại được (MC-05). Spec editor câu 4 hỏi cùng điều này cho ba vị trí rewarded của màn vẽ và đề xuất `allow_after_2`. Câu này để anh chọn một lần cho cả bốn vị trí rewarded của app.
+    - Đề xuất của AI: theo câu trả lời của spec editor câu 4, một chính sách cho cả bốn vị trí. AI đề xuất `allow_after_2`: sau 2 lần thử liên tiếp không có quảng cáo thì mở luôn tùy chọn cho lần xuất đó. Phương án khác: `block`, tùy chọn không mở tới khi có quảng cáo.
     - Trả lời:
 
 ## 10. Lịch sử

@@ -30,8 +30,8 @@ Kịch bản: theo [spec của feature](../spec.md).
 | `LessonDoneScreen` | default | `LessonDoneScreen_default_light` | KB-5, KB-6, KB-7, KB-9 |
 | `LessonsScreen` | error, chế độ tối | `LessonsScreen_error_dark` | KB-2 |
 | `LessonsScreen` | error | `LessonsScreen_error_light` | KB-2 |
-| `LessonsScreen` | list, chế độ tối | `LessonsScreen_list_dark` | KB-1, KB-3, KB-4, KB-9 |
-| `LessonsScreen` | list | `LessonsScreen_list_light` | KB-1, KB-3, KB-4, KB-9 |
+| `LessonsScreen` | list, chế độ tối | `LessonsScreen_list_dark` | KB-1, KB-3, KB-4, KB-8, KB-9 |
+| `LessonsScreen` | list | `LessonsScreen_list_light` | KB-1, KB-3, KB-4, KB-8, KB-9 |
 | `LessonsScreen` | loading, chế độ tối | `LessonsScreen_loading_dark` | KB-2 |
 | `LessonsScreen` | loading | `LessonsScreen_loading_light` | KB-2 |
 

@@ -30,9 +30,9 @@ Kịch bản: theo [spec của feature](../spec.md).
 | `EditorScreen` | brush-locked | `EditorScreen_brush-locked_light` | KB-3 |
 | `EditorScreen` | drawing-no-ad, chế độ tối | `EditorScreen_drawing-no-ad_dark` | KB-1, KB-19 |
 | `EditorScreen` | drawing-no-ad | `EditorScreen_drawing-no-ad_light` | KB-1, KB-19 |
-| `EditorScreen` | drawing, chế độ tối | `EditorScreen_drawing_dark` | KB-1, KB-2, KB-19 |
+| `EditorScreen` | drawing, chế độ tối | `EditorScreen_drawing_dark` | KB-1, KB-2, KB-6, KB-9, KB-11, KB-12, KB-15, KB-16, KB-19, KB-20 |
 | `EditorScreen` | drawing, chế độ tối, điện thoại gập mở ra | `EditorScreen_drawing_dark_unfolded` | KB-21 |
-| `EditorScreen` | drawing | `EditorScreen_drawing_light` | KB-1, KB-2, KB-19 |
+| `EditorScreen` | drawing | `EditorScreen_drawing_light` | KB-1, KB-2, KB-6, KB-9, KB-11, KB-12, KB-15, KB-16, KB-19, KB-20 |
 | `EditorScreen` | drawing, điện thoại gập mở ra | `EditorScreen_drawing_light_unfolded` | KB-21 |
 | `EditorScreen` | layer-locked, chế độ tối | `EditorScreen_layer-locked_dark` | KB-7 |
 | `EditorScreen` | layer-locked | `EditorScreen_layer-locked_light` | KB-7 |

@@ -18,16 +18,16 @@ confirmed:
 - **Vì sao làm bây giờ:** đây là màn chính của app, nằm trên đường từ lần mở đầu tới nét vẽ đầu tiên. App mẫu bắt người mới qua 10 thao tác và màn trả phí; người dùng của app mẫu phàn nàn nhiều nhất về mất bài (bản đề xuất, mục 4).
 - **Đo kết quả bằng gì:**
   - Từ lần mở đầu tới nét vẽ đầu tiên không quá 7 thao tác; phần của feature này là 2 thao tác ("New animation", "Create").
-  - Số dự án được tạo và được mở lại mỗi ngày (sự kiện ở mục 6).
-  - Số lần sao lưu và khôi phục, tỉ lệ khôi phục thành công (sự kiện ở mục 6).
+  - Số dự án được tạo và được mở lại mỗi ngày (sự kiện ở mục 6; lần mở lại do màn vẽ ghi, spec editor câu 5).
+  - Số lần sao lưu và khôi phục thành công (sự kiện ở mục 6); tỉ lệ khôi phục thành công chỉ đo được khi chọn phương án ghi cả lần lỗi, hủy ở câu hỏi 17.
 
 ## 2. Phạm vi
 
 **Trong phạm vi:**
 
-- Màn danh sách dự án: trạng thái trống (lời mời, nút "New animation", nút "Try a free lesson" dẫn sang danh sách bài học) và trạng thái có dự án (lưới thẻ dự án, mới sửa gần nhất ở đầu).
-- Thanh trên của danh sách: tên app, nút nhập dự án từ file, nút cài đặt mở màn Cài đặt.
-- Thanh điều hướng hai mục "Projects" và "Lessons" ở đáy màn (cột bên trái khi điện thoại gập mở ra).
+- Màn danh sách dự án: trạng thái trống (lời mời, nút "New animation", nút "Try a free lesson" dẫn sang danh sách bài học, chỉ khi feature Bài học bật) và trạng thái có dự án (lưới thẻ dự án, mới sửa gần nhất ở đầu).
+- Thanh trên của danh sách: tên app, nút nhập dự án từ file, nút cài đặt mở màn Cài đặt (chỉ khi feature Cài đặt bật).
+- Thanh điều hướng hai mục "Projects" và "Lessons" ở đáy màn (cột bên trái khi điện thoại gập mở ra); mục "Lessons" chỉ có khi feature Bài học bật.
 - Mở một dự án vào màn vẽ.
 - Menu dự án khi nhấn giữ thẻ: mở, đổi tên, nhân bản, sao lưu ra file, xóa.
 - Sao lưu một dự án ra một file qua bộ chọn file của hệ thống; người dùng chọn được thư mục trên máy hay Google Drive.
@@ -54,9 +54,10 @@ Người mới vừa qua onboarding, hoặc người dùng đã xóa hết dự 
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi chưa có dự án nào thì màn hiện hình minh họa, tiêu đề "Make your first animation", lời giới thiệu "Draw frame by frame, add sound, then export a video or GIF. Everything saves on your phone as you go.", nút chính "New animation" và nút phụ "Try a free lesson", đúng thiết kế `ProjectsScreen_empty`.
+- [ ] Khi chưa có dự án nào thì màn hiện hình minh họa, tiêu đề "Make your first animation", lời giới thiệu "Draw frame by frame, add sound, then export a video or GIF. Everything saves on your phone as you go.", nút chính "New animation" và nút phụ "Try a free lesson" (chữ "free": câu hỏi 22), đúng thiết kế màn trống.
 - [ ] Khi bấm "New animation" thì màn Tạo dự án mở ra (KB-3).
 - [ ] Khi bấm "Try a free lesson" thì danh sách bài học mở ra (feature `lessons`).
+- [ ] Khi cờ của feature Bài học tắt thì màn trống không có nút "Try a free lesson" và thanh điều hướng không có mục "Lessons"; thanh còn một mục thì ẩn cả thanh (xem spec lessons KB-10, câu 14).
 - [ ] Khi người dùng xóa dự án cuối cùng thì màn chuyển về trạng thái trống ngay, không cần mở lại.
 - [ ] Khi người dùng đã làm bài học nhưng chưa tạo dự án nào thì màn vẫn ở trạng thái trống.
 - [ ] Khi bấm nút quay lại của máy ở danh sách dự án thì app đóng.
@@ -72,7 +73,7 @@ Người dùng đã có dự án.
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi có ít nhất một dự án thì màn hiện nút "New animation" ở đầu, tiêu đề "Your projects" với nhãn "Recent", và lưới thẻ dự án hai cột, đúng thiết kế `ProjectsScreen_list`.
+- [ ] Khi có ít nhất một dự án thì màn hiện nút "New animation" ở đầu, tiêu đề "Your projects" với nhãn "Recent", và lưới thẻ dự án hai cột, đúng thiết kế màn danh sách.
 - [ ] Khi xem một thẻ thì thẻ có ảnh thu nhỏ của dự án, tên dự án và dòng "<số khung> frames · <tốc độ> fps" (ví dụ "48 frames · 12 fps").
 - [ ] Khi danh sách có nhiều dự án thì dự án sửa gần nhất đứng đầu; dự án vừa tạo, vừa nhân bản hay vừa khôi phục đứng đầu.
 - [ ] Khi chạm một thẻ thì dự án đó mở trong màn vẽ.
@@ -91,7 +92,7 @@ Người dùng bấm "New animation" ở danh sách.
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi màn Tạo dự án mở thì có tiêu đề "New animation", nút đóng, ô "Name", nhóm "Canvas" (9:16, 16:9, 1:1), nhóm "Size" (720p, 1080p), nhóm "Frame rate" (6, 8, 12 fps, 15, 24, 30), nhóm "Background" (trắng, xám đậm, xanh, "Photo") và nút "Create" ghim ở đáy, đúng thiết kế `NewProjectScreen_default`.
+- [ ] Khi màn Tạo dự án mở thì có tiêu đề "New animation", nút đóng, ô "Name", nhóm "Canvas" (9:16, 16:9, 1:1), nhóm "Size" (720p, 1080p), nhóm "Frame rate" (6, 8, 12 fps, 15, 24, 30), nhóm "Background" (trắng, xám đậm, xanh, "Photo") và nút "Create" ghim ở đáy, đúng thiết kế màn Tạo dự án.
 - [ ] Khi màn mở thì mỗi nhóm đã có sẵn một lựa chọn: khung hình và tốc độ khung lấy theo "Default canvas" và "Default frame rate" của màn Cài đặt (chưa đổi thì 9:16 và 12 khung/giây); độ phân giải 1080p; nền trắng; tên "My animation <số>" (cách đánh số: câu hỏi 4).
 - [ ] Khi bấm "Create" mà không đổi gì thì dự án được tạo với các giá trị mặc định trên và mở ngay trong màn vẽ. Từ danh sách trống tới màn vẽ là đúng 2 lần chạm.
 - [ ] Khi chọn một lựa chọn khác trong một nhóm thì lựa chọn đó sáng lên, lựa chọn cũ của nhóm tắt; mỗi nhóm luôn có đúng một lựa chọn.
@@ -112,7 +113,7 @@ Trường hợp đặc biệt:
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi nhấn giữ một thẻ dự án thì menu trượt lên từ đáy, nền phía sau tối đi; đầu menu có ảnh thu nhỏ, tên dự án và dòng "<số khung> frames · <tốc độ> fps · edited <thời điểm>"; các mục "Open", "Rename", "Duplicate", "Back up to a file" (kèm chú thích ".frameloop"), "Delete" (màu báo lỗi), đúng thiết kế `ProjectsScreen_menu`.
+- [ ] Khi nhấn giữ một thẻ dự án thì menu trượt lên từ đáy, nền phía sau tối đi; đầu menu có ảnh thu nhỏ, tên dự án và dòng "<số khung> frames · <tốc độ> fps · edited <thời điểm>"; các mục "Open", "Rename", "Duplicate", "Back up to a file" (kèm chú thích ".frameloop"), "Delete" (màu báo lỗi), đúng thiết kế menu dự án.
 - [ ] Khi bấm "Open" thì dự án mở trong màn vẽ.
 - [ ] Khi chạm ra ngoài menu, kéo menu xuống hay bấm nút quay lại của máy thì menu đóng, danh sách giữ nguyên.
 
@@ -177,7 +178,7 @@ Người dùng có file ".frameloop" đã sao lưu trước đó.
 Tiêu chí chấp nhận:
 
 - [ ] Khi bấm nút nhập file trên thanh trên thì bộ chọn file của hệ thống mở ra để chọn file; người dùng chọn được file trên máy hay trên Google Drive; app không hỏi quyền nào.
-- [ ] Khi chọn một file sao lưu hợp lệ thì hộp thoại đang khôi phục hiện ra với tiêu đề "Restoring “<tên dự án>”", lời "Keep the app open. This takes a few seconds.", thanh tiến độ, dòng "<số khung đã xong> of <tổng số khung> frames" và phần trăm, nút "Cancel", đúng thiết kế `ProjectsScreen_restoring`.
+- [ ] Khi chọn một file sao lưu hợp lệ thì hộp thoại đang khôi phục hiện ra với tiêu đề "Restoring “<tên dự án>”", lời "Keep the app open. This takes a few seconds.", thanh tiến độ, dòng "<số khung đã xong> of <tổng số khung> frames" và phần trăm, nút "Cancel", đúng thiết kế hộp thoại đang khôi phục.
 - [ ] Khi khôi phục xong thì hộp thoại đóng, dự án mới đứng đầu danh sách và mở được trong màn vẽ, giống hệt dự án lúc sao lưu.
 - [ ] Khi bấm "Cancel" thì việc khôi phục dừng, hộp thoại đóng, về danh sách như trước khi khôi phục; không có dự án dở nào trong danh sách hay trên máy.
 - [ ] Khi đóng bộ chọn file mà không chọn thì không có gì xảy ra.
@@ -195,7 +196,7 @@ Trường hợp đặc biệt:
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi file chọn không phải file sao lưu của app, hay file bị hỏng, thì hộp thoại lỗi hiện tiêu đề "Can't open this file", lời "This file is not a Frameloop backup, or it is damaged. Your other projects are safe.", hai nút "Close" và "Choose another file", đúng thiết kế `ProjectsScreen_restore-error`.
+- [ ] Khi file chọn không phải file sao lưu của app, hay file bị hỏng, thì hộp thoại lỗi hiện tiêu đề "Can't open this file", lời "This file is not a Frameloop backup, or it is damaged. Your other projects are safe.", hai nút "Close" và "Choose another file", đúng thiết kế hộp thoại lỗi khôi phục.
 - [ ] Khi bấm "Close" thì hộp thoại đóng, danh sách giữ nguyên.
 - [ ] Khi bấm "Choose another file" thì bộ chọn file mở lại.
 - [ ] Khi khôi phục thất bại giữa chừng thì không có dự án dở trong danh sách và các dự án khác không đổi.
@@ -211,12 +212,13 @@ Tiêu chí chấp nhận:
 - [ ] Khi bấm nút cài đặt trên thanh trên thì màn Cài đặt mở ra (feature `settings`).
 - [ ] Khi từ Cài đặt quay lại thì về danh sách, đúng chỗ đang cuộn.
 - [ ] Khi đổi "Default canvas" hay "Default frame rate" trong Cài đặt rồi mở màn Tạo dự án thì lựa chọn sẵn theo giá trị mới.
+- [ ] Khi cờ của feature Cài đặt tắt thì thanh trên không có nút cài đặt, và màn Tạo dự án chọn sẵn 12 khung/giây, 9:16 (xem spec settings KB-10, câu 15).
 
 ### KB-12. Dùng trên điện thoại gập khi mở ra
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi màn hình rộng như điện thoại gập mở ra (673 × 841) thì thanh điều hướng thành cột bên trái, nút "New animation" nằm trên thanh trên cạnh nút nhập file và nút cài đặt, lưới thẻ có ba cột, đúng thiết kế `ProjectsScreen_list_unfolded`.
+- [ ] Khi màn hình rộng như điện thoại gập mở ra (673 × 841) thì thanh điều hướng thành cột bên trái, nút "New animation" nằm trên thanh trên cạnh nút nhập file và nút cài đặt, lưới thẻ có ba cột, đúng thiết kế danh sách khi điện thoại gập mở ra.
 - [ ] Khi gập hay mở máy trong lúc dùng thì màn đổi bố cục, giữ dự án đang xem, menu hay hộp thoại đang mở, và việc khôi phục đang chạy.
 - [ ] Khi xoay máy hay gập mở máy trong lúc ở màn Tạo dự án thì các lựa chọn đã chọn giữ nguyên.
 
@@ -224,7 +226,7 @@ Tiêu chí chấp nhận:
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi cờ của feature tắt thì người dùng không vào được danh sách dự án mới (hành vi thay thế: câu hỏi 18).
+- [ ] Khi cờ của feature tắt thì app mở vào màn hình chính hiện có của dự án mẫu, người dùng không vào được danh sách dự án và màn Tạo dự án (theo đề xuất câu hỏi 18, chờ trả lời).
 
 ## 4. Giao diện
 
@@ -286,9 +288,10 @@ Chỉ các sự kiện của bản đề xuất mục 9.2 thuộc feature này; 
 | Tên sự kiện | Khi nào ghi | Tham số | Dùng để trả lời câu hỏi gì |
 | --- | --- | --- | --- |
 | `project_create` | Dự án được tạo xong ở màn Tạo dự án | `ratio` (9:16, 16:9, 1:1), `size` (720p, 1080p), `fps`, `background` (white, dark, blue, photo), `is_default` (người dùng không đổi lựa chọn nào) | Người dùng tạo bao nhiêu dự án, chọn khung và tốc độ nào, có giữ mặc định không |
-| `project_open` | Mở một dự án có sẵn từ danh sách (chạm thẻ hay "Open") | `frame_count` | Người dùng có quay lại vẽ tiếp không |
-| `backup_export` | Sao lưu ra file xong hay thất bại | `result` (success, fail), `frame_count` | Bao nhiêu người sao lưu, có lỗi không |
-| `backup_restore` | Khôi phục xong, thất bại hay bị hủy | `result` (success, fail, cancel), `frame_count` | Khôi phục có hay lỗi không, người dùng có bỏ giữa chừng không |
+| `backup_export` | Sao lưu ghi file xong (chỉ khi thành công) | Đề xuất: `scope` (`all` từ Cài đặt, `project` từ menu dự án), `project_count` | Bao nhiêu người sao lưu, sao lưu tất cả hay một dự án |
+| `backup_restore` | Khôi phục xong (chỉ khi thành công) | Đề xuất: `scope` (`all` khi bấm "Restore from a file" ở Cài đặt, `project` khi bấm nút nhập file ở danh sách), `project_count` (số dự án đã khôi phục) | Bao nhiêu người khôi phục, từ đâu, bao nhiêu dự án |
+
+Hai sự kiện sao lưu và khôi phục dùng chung với spec `settings`, cùng tên và tham số. Lần mở một dự án (`project_open`) do màn vẽ ghi (spec editor, mục 6).
 
 **Quyền của app và dịch vụ bên ngoài:** Không có quyền mới. Sao lưu và khôi phục dùng bộ chọn file của hệ thống, không cần quyền đọc ghi bộ nhớ ở mọi phiên bản Android từ 8.0; Google Drive chỉ hiện trong bộ chọn đó nếu máy có ứng dụng Drive, app không đăng nhập Google và không dùng thư viện của Drive. Chọn ảnh nền dùng bộ chọn ảnh của hệ thống, không cần quyền. Quyền `WRITE_EXTERNAL_STORAGE` (Android 9 trở xuống, bản đề xuất Q5) chỉ dùng cho việc lưu file xuất vào thư viện máy của feature `export`, feature này không cần.
 
@@ -352,8 +355,9 @@ Không có.
 16. **"Từ dự án thứ 2" của `create_inter` tính thế nào?** Theo số dự án đã từng tạo hay số dự án đang có? Dự án khôi phục, nhân bản có tính không?
     - Đề xuất của AI: tính theo số dự án đã từng tạo bằng màn Tạo dự án (không giảm khi xóa, không tính bài học, khôi phục hay nhân bản): lần bấm "Create" đầu tiên trong đời app không có interstitial, các lần sau theo `ads_interval` và luật trước nét vẽ đầu tiên.
     - Trả lời:
-17. **Xác nhận danh sách sự kiện và tham số ở mục 6.** Bản đề xuất mục 9.2 là "đề xuất", chưa có câu trả lời riêng. Đổi tên, nhân bản, xóa dự án không có sự kiện nào trong 9.2.
-    - Đề xuất của AI: dùng đúng bốn sự kiện `project_create`, `project_open`, `backup_export`, `backup_restore` với tham số ở mục 6; không thêm sự kiện cho đổi tên, nhân bản, xóa ở bản đầu.
+17. **Xác nhận danh sách sự kiện và tham số ở mục 6.** Bản đề xuất mục 9.2 là "đề xuất", chưa có câu trả lời riêng. Đổi tên, nhân bản, xóa dự án không có sự kiện nào trong 9.2. `backup_export`, `backup_restore` dùng chung cho sao lưu, khôi phục một dự án (feature này) và tất cả dự án (spec `settings`); câu này là chỗ trả lời chung cho hai spec (spec settings câu 1 trỏ về đây).
+    - Đề xuất của AI: dùng ba sự kiện `project_create`, `backup_export`, `backup_restore` với tham số ở mục 6; không thêm sự kiện cho đổi tên, nhân bản, xóa ở bản đầu. `project_open` do màn vẽ ghi (spec editor câu 5), feature này không ghi. Hai sự kiện sao lưu và khôi phục có `scope` (`all`, `project`) và `project_count`, chỉ ghi khi thành công, vì 9.2 không có sự kiện lỗi.
+    - Phương án khác cho anh chọn: ghi cả lần lỗi và lần hủy bằng thêm tham số `result` (`success`, `fail`, `cancel`; `cancel` chỉ có ở khôi phục), có thể thêm `frame_count`. Phương án này đo được tỉ lệ khôi phục thành công (mục 1 của spec này và của spec settings) nhưng ghi cả lúc thất bại, ngoài những gì 9.2 nêu.
     - Trả lời:
 18. **Cờ `feature_projects_enabled` tắt thì app vào đâu?** Danh sách dự án là màn chính, mọi luồng (màn vẽ, bài học, cài đặt) đi qua nó.
     - Đề xuất của AI: cờ chỉ để giấu feature trong lúc làm; tắt thì app vào màn hình chính hiện có của dự án mẫu như hôm nay. Bản staging bật sẵn, bản production bật từ lần phát hành đầu và không tắt sau đó.
@@ -366,6 +370,9 @@ Không có.
     - Trả lời:
 21. **Bố cục điện thoại gập cho trạng thái trống, menu, hộp thoại khôi phục và màn Tạo dự án** chưa có trên thiết kế (chỉ có `list_unfolded`).
     - Đề xuất của AI: trạng thái trống và màn Tạo dự án giữ một cột, căn giữa, rộng tối đa bằng bố cục điện thoại; menu và hộp thoại như trên điện thoại. Chỉ `ProjectsScreen_list_unfolded` có screenshot so với ảnh thiết kế.
+    - Trả lời:
+22. **Chữ "free" trong nút "Try a free lesson" ở màn trống.** Mọi bài học đều miễn phí, nên chữ "free" có thể làm người dùng nghĩ có bài trả phí. Bản đề xuất mục 6 gọi lối vào này là thẻ "Học bài đầu tiên"; thiết kế đã duyệt ghi "Try a free lesson". Spec lessons câu 15 giao quyết định về chữ cho câu này.
+    - Đề xuất của AI: giữ chữ theo thiết kế đã duyệt. Nếu muốn tránh hiểu nhầm thì đổi thành "Try a lesson" hay "Start your first lesson", cần sửa thiết kế và bảng chữ. Nút mở màn Bài học theo spec lessons câu 15.
     - Trả lời:
 
 ## 10. Lịch sử

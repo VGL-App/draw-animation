@@ -1,6 +1,6 @@
 ---
 feature: lessons
-status: draft            # draft | confirmed | changed
+status: draft
 owner: Nhật
 product_owner: Nhật
 requests:
@@ -123,6 +123,7 @@ Tiêu chí chấp nhận:
 - [ ] Khi màn Hoàn thành bài học hiện thì bài được đánh dấu đã xong; quay về màn Bài học thì thẻ của bài có nhãn "Done", không còn thanh tiến độ, và số đếm ở tiêu đề nhóm cập nhật (câu hỏi 2).
 - [ ] Khi bài hoàn thành thì app ghi nhận một lần hoàn thành bài, kèm mã bài, chỉ một lần cho mỗi lần làm xong.
 - [ ] Khi bấm nút đóng hay nút quay lại của hệ thống ở màn Hoàn thành bài học thì app về màn Bài học, không quay lại màn vẽ của bài.
+- [ ] Khi cờ của feature Xuất tắt thì màn Hoàn thành bài học không có nút "Export my animation" (xem spec export KB-10).
 
 Trường hợp đặc biệt:
 
@@ -180,6 +181,7 @@ Tiêu chí chấp nhận:
 - [ ] Khi cờ bài học tắt thì thanh điều hướng không có mục "Lessons", màn dự án trống không có nút "Try a free lesson", và không đường nào mở được màn Bài học (câu hỏi 14).
 - [ ] Khi cờ tắt lúc người dùng đang ở màn Bài học hay đang làm bài thì người dùng làm tiếp được tới khi rời màn; lần mở sau không còn lối vào (câu hỏi 14).
 - [ ] Khi cờ bật lại thì bài đã xong và tiến độ bài dở trước đó vẫn còn.
+- [ ] Khi cờ của màn vẽ tắt thì chạm thẻ bài hay bấm "Next lesson" không mở được bài; hành vi thay thế (ví dụ thông báo ngắn "coming soon", ở lại màn đang đứng) theo spec editor câu 20, chờ trả lời.
 
 ## 4. Giao diện
 
@@ -202,7 +204,7 @@ Tiêu chí chấp nhận:
 
 Chép từ bảng 9.1 của bản đề xuất. Mọi vị trí mặc định tắt, bật bằng khóa Remote Config `is_show_<mã vị trí>`. Nhóm A bật khi phát hành, nhóm B dựng sẵn và bật dần (Q15). Định dạng và hành vi theo `:core:ads` (bộ PARTNER, ADR-0045) và bảng "Luôn giữ" của `docs/ops/ads-guide.md`. Màn Bài học và màn Hoàn thành bài học có vị trí trong nội dung (ô trong lưới, native medium), nên mỗi màn khai các vị trí đó cho lớp quảng cáo nổi không hiện cạnh chúng.
 
-**Màn hình không có quảng cáo:** trạng thái đang tải và lỗi của màn Bài học (thiết kế không có thanh đáy hay ô lưới); chỉ dẫn bài học trong màn vẽ chỉ có dải trên của màn vẽ (`editor_top_native`, thuộc spec editor), không có vị trí riêng của bài học.
+**Màn hình không có quảng cáo:** trạng thái đang tải và lỗi của màn Bài học (thiết kế không có thanh đáy hay ô lưới); chỉ dẫn bài học trong màn vẽ chỉ có dải trên của màn vẽ (`editor_top_native`, thuộc spec editor), không có vị trí riêng của bài học. Đóng bài giữa chừng thì có thể hiện `editor_exit_inter` của màn vẽ trước khi về màn Bài học, nếu anh chọn theo đề xuất ở spec editor câu 17 (đang là câu hỏi); vị trí đó thuộc spec editor.
 
 | Vị trí | Định dạng | Màn hình | Khi nào hiển thị | Giới hạn tần suất | Khóa bật tắt |
 | --- | --- | --- | --- | --- | --- |
@@ -250,7 +252,7 @@ Nội dung bài do nhóm tự làm (bản đề xuất mục 11: AI soạn kịc
 | --- | --- | --- | --- |
 | Danh sách bài (nhóm, thứ tự, tên, thời lượng, số khung, số bước, đường dẫn nội dung từng bài), ví dụ `lessons/v1/index.json` | Vài KB | Lần đầu mở màn Bài học; lần sau dùng bản trên máy, kiểm bản mới ở nền | Trạng thái lỗi, "Try again" (KB-2) |
 | Ảnh nhỏ của từng bài, ví dụ `lessons/v1/<mã bài>/thumb.webp` | Khoảng 10 đến 30 KB mỗi ảnh, 15 đến 20 ảnh | Cùng lúc hiện danh sách | Thẻ hiện nền trống, vẫn chạm được |
-| Gói nội dung từng bài (khung dựng sẵn, nét dẫn, chữ của các bước, tốc độ khung), ví dụ `lessons/v1/<mã bài>/lesson.zip` | Đề xuất tối đa 2 MB mỗi bài, cả thư viện dưới 40 MB | Khi chạm thẻ bài lần đầu; lần sau dùng bản trên máy | Báo lỗi, cho thử lại, ở lại màn Bài học (KB-3) |
+| Gói nội dung từng bài (khung dựng sẵn, nét dẫn, chữ của các bước, tốc độ khung, đoạn mẫu cho nút "Show me" theo spec editor câu 16), ví dụ `lessons/v1/<mã bài>/lesson.zip` | Đề xuất tối đa 2 MB mỗi bài, cả thư viện dưới 40 MB | Khi chạm thẻ bài lần đầu; lần sau dùng bản trên máy | Báo lỗi, cho thử lại, ở lại màn Bài học (KB-3) |
 
 R2 staging của app chưa có, tạm dùng tên miền staging ghi ở bản đề xuất mục 1. Thiếu file bắt buộc thì ghi vào `docs/ops/required-assets.txt` khi có nội dung (câu hỏi 4).
 
@@ -305,7 +307,7 @@ R2 staging của app chưa có, tạm dùng tên miền staging ghi ở bản đ
     - Đề xuất của AI: ẩn mục "Lessons" trên thanh điều hướng (thanh còn một mục thì ẩn cả thanh) và ẩn nút "Try a free lesson" ở màn dự án trống (cần ghi ở spec projects); người đang ở trong bài làm tiếp được tới khi rời màn.
     - Trả lời:
 15. **Lối vào từ màn dự án trống mở danh sách hay mở thẳng bài đầu?** Bản đề xuất mục 6 gọi là thẻ "Học bài đầu tiên"; thiết kế (projects) là nút "Try a free lesson" mở màn Bài học. Chữ "free" có thể làm người dùng nghĩ có bài trả phí, trong khi mọi bài đều miễn phí.
-    - Đề xuất của AI: theo thiết kế, mở màn Bài học. Giữ chữ "Try a free lesson" (giữ quyết định về chữ cho spec projects).
+    - Đề xuất của AI: theo thiết kế, mở màn Bài học. Quyết định về chữ "free" trả lời ở câu 22 của spec projects.
     - Trả lời:
 16. **Màn gập mở ra:** bản đề xuất mục 7 chỉ dựng frame `_unfolded` cho Màn vẽ và Danh sách dự án; thiết kế bài học không có. Thiết kế ghi thanh điều hướng thành thanh bên khi màn rộng.
     - Đề xuất của AI: ở màn rộng, lưới bài học giãn thành 3 cột, màn Hoàn thành giữ nội dung ở giữa với bề rộng tối đa như khung 411 dp; không thêm ảnh thiết kế, có một screenshot test ở khung `w673dp-h841dp` cho mỗi màn.
