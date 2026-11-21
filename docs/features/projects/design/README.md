@@ -22,24 +22,24 @@ Phiên tự chạy chỉ đọc thư mục này, không mở được Figma.
 
 ## 1. Các màn hình và trạng thái
 
-Kịch bản: theo spec của feature (spec chưa có; bản đề xuất mục 5, 6).
+Kịch bản: theo [spec của feature](../spec.md).
 
 | Màn hình (composable) | Trạng thái | Ảnh trong `screens/`, số liệu trong `context/` | Kịch bản |
 | --- | --- | --- | --- |
-| `NewProjectScreen` | default, chế độ tối | `NewProjectScreen_default_dark` | chờ spec |
-| `NewProjectScreen` | default | `NewProjectScreen_default_light` | chờ spec |
-| `ProjectsScreen` | empty, chế độ tối | `ProjectsScreen_empty_dark` | chờ spec |
-| `ProjectsScreen` | empty | `ProjectsScreen_empty_light` | chờ spec |
-| `ProjectsScreen` | list, chế độ tối | `ProjectsScreen_list_dark` | chờ spec |
-| `ProjectsScreen` | list, chế độ tối, điện thoại gập mở ra | `ProjectsScreen_list_dark_unfolded` | chờ spec |
-| `ProjectsScreen` | list | `ProjectsScreen_list_light` | chờ spec |
-| `ProjectsScreen` | list, điện thoại gập mở ra | `ProjectsScreen_list_light_unfolded` | chờ spec |
-| `ProjectsScreen` | menu, chế độ tối | `ProjectsScreen_menu_dark` | chờ spec |
-| `ProjectsScreen` | menu | `ProjectsScreen_menu_light` | chờ spec |
-| `ProjectsScreen` | restore-error, chế độ tối | `ProjectsScreen_restore-error_dark` | chờ spec |
-| `ProjectsScreen` | restore-error | `ProjectsScreen_restore-error_light` | chờ spec |
-| `ProjectsScreen` | restoring, chế độ tối | `ProjectsScreen_restoring_dark` | chờ spec |
-| `ProjectsScreen` | restoring | `ProjectsScreen_restoring_light` | chờ spec |
+| `NewProjectScreen` | default, chế độ tối | `NewProjectScreen_default_dark` | KB-3 |
+| `NewProjectScreen` | default | `NewProjectScreen_default_light` | KB-3 |
+| `ProjectsScreen` | empty, chế độ tối | `ProjectsScreen_empty_dark` | KB-1, KB-11 |
+| `ProjectsScreen` | empty | `ProjectsScreen_empty_light` | KB-1, KB-11 |
+| `ProjectsScreen` | list, chế độ tối | `ProjectsScreen_list_dark` | KB-2, KB-11 |
+| `ProjectsScreen` | list, chế độ tối, điện thoại gập mở ra | `ProjectsScreen_list_dark_unfolded` | KB-12 |
+| `ProjectsScreen` | list | `ProjectsScreen_list_light` | KB-2, KB-11 |
+| `ProjectsScreen` | list, điện thoại gập mở ra | `ProjectsScreen_list_light_unfolded` | KB-12 |
+| `ProjectsScreen` | menu, chế độ tối | `ProjectsScreen_menu_dark` | KB-4, KB-5, KB-6, KB-7, KB-8 |
+| `ProjectsScreen` | menu | `ProjectsScreen_menu_light` | KB-4, KB-5, KB-6, KB-7, KB-8 |
+| `ProjectsScreen` | restore-error, chế độ tối | `ProjectsScreen_restore-error_dark` | KB-10 |
+| `ProjectsScreen` | restore-error | `ProjectsScreen_restore-error_light` | KB-10 |
+| `ProjectsScreen` | restoring, chế độ tối | `ProjectsScreen_restoring_dark` | KB-9 |
+| `ProjectsScreen` | restoring | `ProjectsScreen_restoring_light` | KB-9 |
 
 ## 2. Bảng chữ
 

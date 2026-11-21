@@ -22,18 +22,18 @@ Phiên tự chạy chỉ đọc thư mục này, không mở được Figma.
 
 ## 1. Các màn hình và trạng thái
 
-Kịch bản: theo spec của feature (spec chưa có; bản đề xuất mục 6, Q19).
+Kịch bản: theo [spec của feature](../spec.md).
 
 | Màn hình (composable) | Trạng thái | Ảnh trong `screens/`, số liệu trong `context/` | Kịch bản |
 | --- | --- | --- | --- |
-| `OnboardingScreen` | page-1, chế độ tối | `OnboardingScreen_page-1_dark` | chờ spec |
-| `OnboardingScreen` | page-1 | `OnboardingScreen_page-1_light` | chờ spec |
-| `OnboardingScreen` | page-2, chế độ tối | `OnboardingScreen_page-2_dark` | chờ spec |
-| `OnboardingScreen` | page-2 | `OnboardingScreen_page-2_light` | chờ spec |
-| `OnboardingScreen` | page-3, chế độ tối | `OnboardingScreen_page-3_dark` | chờ spec |
-| `OnboardingScreen` | page-3 | `OnboardingScreen_page-3_light` | chờ spec |
-| `OnboardingScreen` | page-4, chế độ tối | `OnboardingScreen_page-4_dark` | chờ spec |
-| `OnboardingScreen` | page-4 | `OnboardingScreen_page-4_light` | chờ spec |
+| `OnboardingScreen` | page-1, chế độ tối | `OnboardingScreen_page-1_dark` | KB-1, KB-2, KB-3, KB-4, KB-6 |
+| `OnboardingScreen` | page-1 | `OnboardingScreen_page-1_light` | KB-1, KB-2, KB-3, KB-4, KB-6 |
+| `OnboardingScreen` | page-2, chế độ tối | `OnboardingScreen_page-2_dark` | KB-1, KB-2, KB-4, KB-6 |
+| `OnboardingScreen` | page-2 | `OnboardingScreen_page-2_light` | KB-1, KB-2, KB-4, KB-6 |
+| `OnboardingScreen` | page-3, chế độ tối | `OnboardingScreen_page-3_dark` | KB-1, KB-2, KB-4, KB-6 |
+| `OnboardingScreen` | page-3 | `OnboardingScreen_page-3_light` | KB-1, KB-2, KB-4, KB-6 |
+| `OnboardingScreen` | page-4, chế độ tối | `OnboardingScreen_page-4_dark` | KB-1, KB-2, KB-3, KB-4, KB-6 |
+| `OnboardingScreen` | page-4 | `OnboardingScreen_page-4_light` | KB-1, KB-2, KB-3, KB-4, KB-6 |
 
 ## 2. Bảng chữ
 

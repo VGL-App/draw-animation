@@ -22,44 +22,44 @@ Phiên tự chạy chỉ đọc thư mục này, không mở được Figma.
 
 ## 1. Các màn hình và trạng thái
 
-Kịch bản: theo spec của feature (spec chưa có; bản đề xuất mục 5, 6, 7).
+Kịch bản: theo [spec của feature](../spec.md).
 
 | Màn hình (composable) | Trạng thái | Ảnh trong `screens/`, số liệu trong `context/` | Kịch bản |
 | --- | --- | --- | --- |
-| `EditorScreen` | brush-locked, chế độ tối | `EditorScreen_brush-locked_dark` | chờ spec |
-| `EditorScreen` | brush-locked | `EditorScreen_brush-locked_light` | chờ spec |
-| `EditorScreen` | drawing-no-ad, chế độ tối | `EditorScreen_drawing-no-ad_dark` | chờ spec |
-| `EditorScreen` | drawing-no-ad | `EditorScreen_drawing-no-ad_light` | chờ spec |
-| `EditorScreen` | drawing, chế độ tối | `EditorScreen_drawing_dark` | chờ spec |
-| `EditorScreen` | drawing, chế độ tối, điện thoại gập mở ra | `EditorScreen_drawing_dark_unfolded` | chờ spec |
-| `EditorScreen` | drawing | `EditorScreen_drawing_light` | chờ spec |
-| `EditorScreen` | drawing, điện thoại gập mở ra | `EditorScreen_drawing_light_unfolded` | chờ spec |
-| `EditorScreen` | layer-locked, chế độ tối | `EditorScreen_layer-locked_dark` | chờ spec |
-| `EditorScreen` | layer-locked | `EditorScreen_layer-locked_light` | chờ spec |
-| `EditorScreen` | layers, chế độ tối | `EditorScreen_layers_dark` | chờ spec |
-| `EditorScreen` | layers | `EditorScreen_layers_light` | chờ spec |
-| `EditorScreen` | lesson-step, chế độ tối | `EditorScreen_lesson-step_dark` | chờ spec |
-| `EditorScreen` | lesson-step | `EditorScreen_lesson-step_light` | chờ spec |
-| `EditorScreen` | onion-settings, chế độ tối | `EditorScreen_onion-settings_dark` | chờ spec |
-| `EditorScreen` | onion-settings | `EditorScreen_onion-settings_light` | chờ spec |
-| `EditorScreen` | playing, chế độ tối | `EditorScreen_playing_dark` | chờ spec |
-| `EditorScreen` | playing | `EditorScreen_playing_light` | chờ spec |
-| `EditorScreen` | sound-locked, chế độ tối | `EditorScreen_sound-locked_dark` | chờ spec |
-| `EditorScreen` | sound-locked | `EditorScreen_sound-locked_light` | chờ spec |
-| `EditorScreen` | sound, chế độ tối | `EditorScreen_sound_dark` | chờ spec |
-| `EditorScreen` | sound | `EditorScreen_sound_light` | chờ spec |
-| `EditorScreen` | timeline-multiselect, chế độ tối | `EditorScreen_timeline-multiselect_dark` | chờ spec |
-| `EditorScreen` | timeline-multiselect | `EditorScreen_timeline-multiselect_light` | chờ spec |
-| `EditorScreen` | tool-brush, chế độ tối | `EditorScreen_tool-brush_dark` | chờ spec |
-| `EditorScreen` | tool-brush | `EditorScreen_tool-brush_light` | chờ spec |
-| `EditorScreen` | tool-fill, chế độ tối | `EditorScreen_tool-fill_dark` | chờ spec |
-| `EditorScreen` | tool-fill | `EditorScreen_tool-fill_light` | chờ spec |
-| `EditorScreen` | tool-select, chế độ tối | `EditorScreen_tool-select_dark` | chờ spec |
-| `EditorScreen` | tool-select | `EditorScreen_tool-select_light` | chờ spec |
-| `EditorScreen` | tool-text, chế độ tối | `EditorScreen_tool-text_dark` | chờ spec |
-| `EditorScreen` | tool-text | `EditorScreen_tool-text_light` | chờ spec |
-| `EditorScreen` | tour, chế độ tối | `EditorScreen_tour_dark` | chờ spec |
-| `EditorScreen` | tour | `EditorScreen_tour_light` | chờ spec |
+| `EditorScreen` | brush-locked, chế độ tối | `EditorScreen_brush-locked_dark` | KB-3 |
+| `EditorScreen` | brush-locked | `EditorScreen_brush-locked_light` | KB-3 |
+| `EditorScreen` | drawing-no-ad, chế độ tối | `EditorScreen_drawing-no-ad_dark` | KB-1, KB-19 |
+| `EditorScreen` | drawing-no-ad | `EditorScreen_drawing-no-ad_light` | KB-1, KB-19 |
+| `EditorScreen` | drawing, chế độ tối | `EditorScreen_drawing_dark` | KB-1, KB-2, KB-19 |
+| `EditorScreen` | drawing, chế độ tối, điện thoại gập mở ra | `EditorScreen_drawing_dark_unfolded` | KB-21 |
+| `EditorScreen` | drawing | `EditorScreen_drawing_light` | KB-1, KB-2, KB-19 |
+| `EditorScreen` | drawing, điện thoại gập mở ra | `EditorScreen_drawing_light_unfolded` | KB-21 |
+| `EditorScreen` | layer-locked, chế độ tối | `EditorScreen_layer-locked_dark` | KB-7 |
+| `EditorScreen` | layer-locked | `EditorScreen_layer-locked_light` | KB-7 |
+| `EditorScreen` | layers, chế độ tối | `EditorScreen_layers_dark` | KB-6 |
+| `EditorScreen` | layers | `EditorScreen_layers_light` | KB-6 |
+| `EditorScreen` | lesson-step, chế độ tối | `EditorScreen_lesson-step_dark` | KB-18 |
+| `EditorScreen` | lesson-step | `EditorScreen_lesson-step_light` | KB-18 |
+| `EditorScreen` | onion-settings, chế độ tối | `EditorScreen_onion-settings_dark` | KB-8 |
+| `EditorScreen` | onion-settings | `EditorScreen_onion-settings_light` | KB-8 |
+| `EditorScreen` | playing, chế độ tối | `EditorScreen_playing_dark` | KB-10 |
+| `EditorScreen` | playing | `EditorScreen_playing_light` | KB-10 |
+| `EditorScreen` | sound-locked, chế độ tối | `EditorScreen_sound-locked_dark` | KB-14 |
+| `EditorScreen` | sound-locked | `EditorScreen_sound-locked_light` | KB-14 |
+| `EditorScreen` | sound, chế độ tối | `EditorScreen_sound_dark` | KB-13 |
+| `EditorScreen` | sound | `EditorScreen_sound_light` | KB-13 |
+| `EditorScreen` | timeline-multiselect, chế độ tối | `EditorScreen_timeline-multiselect_dark` | KB-9 |
+| `EditorScreen` | timeline-multiselect | `EditorScreen_timeline-multiselect_light` | KB-9 |
+| `EditorScreen` | tool-brush, chế độ tối | `EditorScreen_tool-brush_dark` | KB-2 |
+| `EditorScreen` | tool-brush | `EditorScreen_tool-brush_light` | KB-2 |
+| `EditorScreen` | tool-fill, chế độ tối | `EditorScreen_tool-fill_dark` | KB-4 |
+| `EditorScreen` | tool-fill | `EditorScreen_tool-fill_light` | KB-4 |
+| `EditorScreen` | tool-select, chế độ tối | `EditorScreen_tool-select_dark` | KB-5 |
+| `EditorScreen` | tool-select | `EditorScreen_tool-select_light` | KB-5 |
+| `EditorScreen` | tool-text, chế độ tối | `EditorScreen_tool-text_dark` | KB-5 |
+| `EditorScreen` | tool-text | `EditorScreen_tool-text_light` | KB-5 |
+| `EditorScreen` | tour, chế độ tối | `EditorScreen_tour_dark` | KB-17 |
+| `EditorScreen` | tour | `EditorScreen_tour_light` | KB-17 |
 
 ## 2. Bảng chữ
 

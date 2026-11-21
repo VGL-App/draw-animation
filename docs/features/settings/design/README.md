@@ -22,12 +22,12 @@ Phiên tự chạy chỉ đọc thư mục này, không mở được Figma.
 
 ## 1. Các màn hình và trạng thái
 
-Kịch bản: theo spec của feature (spec chưa có; bản đề xuất mục 6, 7).
+Kịch bản: theo [spec của feature](../spec.md).
 
 | Màn hình (composable) | Trạng thái | Ảnh trong `screens/`, số liệu trong `context/` | Kịch bản |
 | --- | --- | --- | --- |
-| `SettingsScreen` | default, chế độ tối | `SettingsScreen_default_dark` | chờ spec |
-| `SettingsScreen` | default | `SettingsScreen_default_light` | chờ spec |
+| `SettingsScreen` | default, chế độ tối | `SettingsScreen_default_dark` | KB-1, KB-2, KB-3, KB-4, KB-5, KB-6, KB-7, KB-8, KB-9 |
+| `SettingsScreen` | default | `SettingsScreen_default_light` | KB-1, KB-2, KB-3, KB-4, KB-5, KB-6, KB-7, KB-8, KB-9 |
 
 ## 2. Bảng chữ
 
