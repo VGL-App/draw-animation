@@ -22,18 +22,18 @@ Phiên tự chạy chỉ đọc thư mục này, không mở được Figma.
 
 ## 1. Các màn hình và trạng thái
 
-Kịch bản: theo spec của feature (spec chưa có; bản đề xuất mục 6, 9.1).
+Kịch bản: theo [spec của feature](../spec.md).
 
 | Màn hình (composable) | Trạng thái | Ảnh trong `screens/`, số liệu trong `context/` | Kịch bản |
 | --- | --- | --- | --- |
-| `ExportScreen` | done, chế độ tối | `ExportScreen_done_dark` | chờ spec |
-| `ExportScreen` | done | `ExportScreen_done_light` | chờ spec |
-| `ExportScreen` | error, chế độ tối | `ExportScreen_error_dark` | chờ spec |
-| `ExportScreen` | error | `ExportScreen_error_light` | chờ spec |
-| `ExportScreen` | exporting, chế độ tối | `ExportScreen_exporting_dark` | chờ spec |
-| `ExportScreen` | exporting | `ExportScreen_exporting_light` | chờ spec |
-| `ExportScreen` | options, chế độ tối | `ExportScreen_options_dark` | chờ spec |
-| `ExportScreen` | options | `ExportScreen_options_light` | chờ spec |
+| `ExportScreen` | done, chế độ tối | `ExportScreen_done_dark` | KB-5, KB-9 |
+| `ExportScreen` | done | `ExportScreen_done_light` | KB-5, KB-9 |
+| `ExportScreen` | error, chế độ tối | `ExportScreen_error_dark` | KB-6, KB-9 |
+| `ExportScreen` | error | `ExportScreen_error_light` | KB-6, KB-9 |
+| `ExportScreen` | exporting, chế độ tối | `ExportScreen_exporting_dark` | KB-4, KB-7, KB-9 |
+| `ExportScreen` | exporting | `ExportScreen_exporting_light` | KB-4, KB-7, KB-9 |
+| `ExportScreen` | options, chế độ tối | `ExportScreen_options_dark` | KB-1, KB-2, KB-3, KB-8, KB-9 |
+| `ExportScreen` | options | `ExportScreen_options_light` | KB-1, KB-2, KB-3, KB-8, KB-9 |
 
 ## 2. Bảng chữ
 
