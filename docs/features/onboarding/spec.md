@@ -138,7 +138,7 @@ Tiêu chí chấp nhận:
 
 ## 4. Giao diện
 
-- **Thiết kế:** [design/README.md](design/README.md), Figma, đã duyệt 2026-11-20. 4 trang, mỗi trang bản sáng và tối. Thiết kế không có trạng thái không có quảng cáo, khung thấp 360 × 640 hay khung máy gập mở (câu hỏi 3, 7, 8).
+- **Thiết kế:** [design/README.md](design/README.md), Figma, đã duyệt 2026-11-20. 4 trang, mỗi trang bản sáng và tối. Trạng thái không có quảng cáo có frame `page-1-no-ad` (bổ sung ngày 2026-11-21, chờ anh Nhật duyệt; các trang khác theo cùng cách). Thiết kế không có khung thấp 360 × 640 hay khung máy gập mở (câu hỏi 3, 7, 8).
 - **Các màn hình:**
 
 | Màn hình | Trạng thái theo thiết kế | Mục đích | Kịch bản liên quan |
@@ -147,6 +147,7 @@ Tiêu chí chấp nhận:
 | `OnboardingScreen` | page-2, sáng và tối | Trang 2 "See the frame before and after", nút "Next" | KB-1, KB-2, KB-4, KB-6 |
 | `OnboardingScreen` | page-3, sáng và tối | Trang 3 "Add sound, share a video", nút "Next" | KB-1, KB-2, KB-4, KB-6 |
 | `OnboardingScreen` | page-4, sáng và tối | Trang 4 "Never lose your work", nút "Start drawing" | KB-1, KB-2, KB-3, KB-4, KB-6 |
+| `OnboardingScreen` | page-1-no-ad, sáng và tối | Trang 1 khi không có thẻ quảng cáo; nút vẫn ghim đáy | KB-4 |
 | Danh sách dự án (feature projects) | Trống | Đích sau khi bấm "Start drawing", và khi đã xong hay cờ tắt | KB-1, KB-5, KB-7 |
 
 Số liệu chính của thiết kế (khung 411 × 891 dp): thanh trên cao 48 dp có số trang; hình minh họa 300 × 190 dp; thẻ quảng cáo cao 250 dp, lề hai bên 16 dp; nút cao 48 dp, rộng 379 dp, lề hai bên 16 dp; mép dưới thẻ cách mép trên nút 24 dp. Hình minh họa vẽ trong app, không tải về.
@@ -235,3 +236,4 @@ Không có. Hình minh họa của 4 trang vẽ trong app theo số liệu thi�
 | --- | --- | --- |
 | 2026-11-21 | AI | Tạo bản đầu từ bản đề xuất đã duyệt (docs/research/proposal.md) và thiết kế đã duyệt |
 | 2026-11-21 | AI | Ghi câu trả lời của anh Nhật cho mọi câu hỏi ở mục 9 (anh chọn trong phiên ngày 2026-11-21) và sửa phần thân spec theo các câu trả lời; sửa các điểm nên sửa còn lại của lần rà soát cuối. Spec vẫn `draft` |
+| 2026-11-21 | AI | Ghi các frame thiết kế bổ sung, sửa theo câu trả lời (chờ anh Nhật duyệt) ở mục 4 và các tiêu chí liên quan |

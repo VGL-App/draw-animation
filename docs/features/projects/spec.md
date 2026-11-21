@@ -236,7 +236,7 @@ Tiêu chí chấp nhận:
 ## 4. Giao diện
 
 - **Thiết kế:** [design/README.md](design/README.md), dựng trên Figma theo hướng Studio Night, có chế độ sáng và tối. Chữ theo bảng chữ của thiết kế (tiếng Anh, bản đề xuất Q9).
-- **Sửa thiết kế trước khi viết plan:** bỏ ô tỷ lệ 4:5 trên frame màn Tạo dự án (sáng, tối) và xuất lại ảnh, bảng số liệu (câu hỏi 1); không thì screenshot test cùng tên lệch ảnh thiết kế.
+- **Thiết kế đã sửa ngày 2026-11-21, chờ anh Nhật duyệt:** bỏ ô tỷ lệ 4:5 trên frame màn Tạo dự án (sáng, tối), ảnh và số liệu đã xuất lại (câu hỏi 1).
 - **Các màn hình:**
 
 | Màn hình | Trạng thái theo thiết kế | Mục đích | Kịch bản liên quan |
@@ -387,3 +387,4 @@ Không có.
 | --- | --- | --- |
 | 2026-11-21 | AI | Tạo bản đầu từ bản đề xuất đã duyệt (docs/research/proposal.md) và thiết kế đã duyệt |
 | 2026-11-21 | AI | Ghi câu trả lời của anh Nhật cho mọi câu hỏi ở mục 9 (anh chọn trong phiên ngày 2026-11-21) và sửa phần thân spec theo các câu trả lời; sửa các điểm nên sửa còn lại của lần rà soát cuối. Spec vẫn `draft` |
+| 2026-11-21 | AI | Ghi các frame thiết kế bổ sung, sửa theo câu trả lời (chờ anh Nhật duyệt) ở mục 4 và các tiêu chí liên quan |

@@ -6,7 +6,7 @@ Sinh bởi `scripts/figma-export.py`. Không sửa tay; thiết kế đổi thì
 
 - Link: https://www.figma.com/design/uDdqi9ojRvIy4689FvCh5O/?node-id=23-3298
 - Frame: `23:3298`, giao diện sáng
-- Ngày lấy: 2026-11-20
+- Ngày lấy: 2026-11-21
 
 ## 2. Giá trị dùng
 
@@ -15,6 +15,8 @@ nào trùng; plan quyết định làm tròn về token gần nhất hay thêm t
 
 | Loại | Giá trị | Token |
 | --- | --- | --- |
+| instance ghi đè component | Icon | màu nền, viền |
+| khoảng cách | 1 | ngoài hệ thống |
 | khoảng cách | 10 | ngoài hệ thống |
 | khoảng cách | 12 | ngoài hệ thống |
 | khoảng cách | 16 | md |
@@ -32,14 +34,17 @@ nào trùng; plan quyết định làm tròn về token gần nhất hay thêm t
 | kiểu chữ | 14/20, đậm 600 | ngoài hệ thống |
 | kiểu chữ | 16/16, đậm 400 | ngoài hệ thống |
 | kiểu chữ | 16/24, đậm 600 | titleMedium |
+| kiểu chữ | 2/3, đậm 600 | ngoài hệ thống |
 | kiểu chữ | 20/20, đậm 400 | ngoài hệ thống |
 | kiểu chữ | 22/28, đậm 500 | ngoài hệ thống |
 | kiểu chữ | 24/24, đậm 400 | ngoài hệ thống |
+| kiểu chữ | 3/3, đậm 400 | ngoài hệ thống |
 | màu chữ | #12141A | ngoài hệ thống |
 | màu chữ | #1C2C05 | ngoài hệ thống |
 | màu chữ | #3D6A00 | ngoài hệ thống |
 | màu chữ | #5F6675 | ngoài hệ thống |
 | màu chữ | #FFFFFF | onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest |
+| màu chữ | #FFFFFF (độ mờ 0.90, lớp tô 0.90) | onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest |
 | màu nền | #1A1C22 | ngoài hệ thống |
 | màu nền | #2F6FE0 | ngoài hệ thống |
 | màu nền | #3D6A00 | ngoài hệ thống |
@@ -76,6 +81,10 @@ Toạ độ và cỡ tính theo dp, gốc là góc trên trái của khung. Th�
       - Frame "Preview", vị trí 28,108, cỡ 54 x 96, nền #FFFFFF (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest), bo góc 8
         - Rectangle "Rectangle", vị trí 32,187, cỡ 45 x 2, nền #1A1C22 (ngoài hệ thống)
         - Ellipse "Ellipse", vị trí 49,174, cỡ 13 x 13, nền #2F6FE0 (ngoài hệ thống)
+        - Frame "Watermark", vị trí 65,199, cỡ 16 x 3, xếp ngang, cách nhau 1 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/CENTER
+          - Instance "Icon", vị trí 65,200, cỡ 3 x 3, CHÚ Ý: ghi đè màu nền, viền của component gốc
+            - Text "glyph", vị trí 65,200, cỡ 3 x 3, chữ "animation", kiểu ngoài hệ thống (3/3, đậm 400), màu #FFFFFF (độ mờ 0.90, lớp tô 0.90) (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest)
+          - Text "Frameloop", vị trí 68,199, cỡ 12 x 3, chữ "Frameloop", kiểu ngoài hệ thống (2/3, đậm 600), màu #FFFFFF (độ mờ 0.90, lớp tô 0.90) (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest)
       - Frame "Text", vị trí 98,124, cỡ 285 x 64, xếp dọc, cách nhau 2 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
         - Text "Bouncing ball", vị trí 98,124, cỡ 105 x 24, chữ "Bouncing ball", kiểu titleMedium (16/24, đậm 600), màu #12141A (ngoài hệ thống)
         - Text "48 frames · 12 fps · 4.0", vị trí 98,150, cỡ 163 x 20, chữ "48 frames · 12 fps · 4.0 s", kiểu bodyMedium (14/20, đậm 400), màu #5F6675 (ngoài hệ thống)

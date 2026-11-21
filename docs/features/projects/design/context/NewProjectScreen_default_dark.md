@@ -6,7 +6,7 @@ Sinh bởi `scripts/figma-export.py`. Không sửa tay; thiết kế đổi thì
 
 - Link: https://www.figma.com/design/uDdqi9ojRvIy4689FvCh5O/?node-id=10-447
 - Frame: `10:447`, giao diện tối
-- Ngày lấy: 2026-11-20
+- Ngày lấy: 2026-11-21
 
 ## 2. Giá trị dùng
 
@@ -76,18 +76,15 @@ Toạ độ và cỡ tính theo dp, gốc là góc trên trái của khung. Th�
     - Frame "Canvas", vị trí 16,186, cỡ 379 x 114, xếp dọc, cách nhau 10 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
       - Text "Canvas", vị trí 16,186, cỡ 50 x 20, chữ "Canvas", kiểu titleSmall, labelLarge (14/20, đậm 500), màu #EEF0F4 (ngoài hệ thống)
       - Frame "Ratios", vị trí 16,216, cỡ 379 x 84, xếp ngang, cách nhau 8 (sm), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
-        - Frame "Ratio 9:16", vị trí 16,216, cỡ 92 x 84, nền #2E3D17 (ngoài hệ thống), viền #B6F35C (ngoài hệ thống), dày 2.0, bo góc 14, xếp dọc, cách nhau 8 (sm), lề trên/phải/dưới/trái 12 (ngoài hệ thống)/0/10 (ngoài hệ thống)/0, căn MAX/CENTER
-          - Rectangle "Rectangle", vị trí 53,228, cỡ 18 x 32, viền #D8FA9E (ngoài hệ thống), dày 2.0, bo góc 3
-          - Text "9:16", vị trí 47,268, cỡ 29 x 20, chữ "9:16", kiểu ngoài hệ thống (14/20, đậm 600), màu #D8FA9E (ngoài hệ thống)
-        - Frame "Ratio 16:9", vị trí 116,216, cỡ 88 x 84, nền #171A20 (ngoài hệ thống), bo góc 14, xếp dọc, cách nhau 8 (sm), lề trên/phải/dưới/trái 12 (ngoài hệ thống)/0/10 (ngoài hệ thống)/0, căn MAX/CENTER
-          - Rectangle "Rectangle", vị trí 144,244, cỡ 32 x 18, viền #8C93A3 (ngoài hệ thống), dày 2.0, bo góc 3
-          - Text "16:9", vị trí 145,270, cỡ 29 x 20, chữ "16:9", kiểu ngoài hệ thống (14/20, đậm 600), màu #EEF0F4 (ngoài hệ thống)
-        - Frame "Ratio 1:1", vị trí 212,216, cỡ 88 x 84, nền #171A20 (ngoài hệ thống), bo góc 14, xếp dọc, cách nhau 8 (sm), lề trên/phải/dưới/trái 12 (ngoài hệ thống)/0/10 (ngoài hệ thống)/0, căn MAX/CENTER
-          - Rectangle "Rectangle", vị trí 242,236, cỡ 26 x 26, viền #8C93A3 (ngoài hệ thống), dày 2.0, bo góc 3
-          - Text "1:1", vị trí 246,270, cỡ 18 x 20, chữ "1:1", kiểu ngoài hệ thống (14/20, đậm 600), màu #EEF0F4 (ngoài hệ thống)
-        - Frame "Ratio 4:5", vị trí 307,216, cỡ 88 x 84, nền #171A20 (ngoài hệ thống), bo góc 14, xếp dọc, cách nhau 8 (sm), lề trên/phải/dưới/trái 12 (ngoài hệ thống)/0/10 (ngoài hệ thống)/0, căn MAX/CENTER
-          - Rectangle "Rectangle", vị trí 339,232, cỡ 24 x 30, viền #8C93A3 (ngoài hệ thống), dày 2.0, bo góc 3
-          - Text "4:5", vị trí 340,270, cỡ 23 x 20, chữ "4:5", kiểu ngoài hệ thống (14/20, đậm 600), màu #EEF0F4 (ngoài hệ thống)
+        - Frame "Ratio 9:16", vị trí 16,216, cỡ 124 x 84, nền #2E3D17 (ngoài hệ thống), viền #B6F35C (ngoài hệ thống), dày 2.0, bo góc 14, xếp dọc, cách nhau 8 (sm), lề trên/phải/dưới/trái 12 (ngoài hệ thống)/0/10 (ngoài hệ thống)/0, căn MAX/CENTER
+          - Rectangle "Rectangle", vị trí 69,228, cỡ 18 x 32, viền #D8FA9E (ngoài hệ thống), dày 2.0, bo góc 3
+          - Text "9:16", vị trí 63,268, cỡ 29 x 20, chữ "9:16", kiểu ngoài hệ thống (14/20, đậm 600), màu #D8FA9E (ngoài hệ thống)
+        - Frame "Ratio 16:9", vị trí 148,216, cỡ 120 x 84, nền #171A20 (ngoài hệ thống), bo góc 14, xếp dọc, cách nhau 8 (sm), lề trên/phải/dưới/trái 12 (ngoài hệ thống)/0/10 (ngoài hệ thống)/0, căn MAX/CENTER
+          - Rectangle "Rectangle", vị trí 192,244, cỡ 32 x 18, viền #8C93A3 (ngoài hệ thống), dày 2.0, bo góc 3
+          - Text "16:9", vị trí 193,270, cỡ 29 x 20, chữ "16:9", kiểu ngoài hệ thống (14/20, đậm 600), màu #EEF0F4 (ngoài hệ thống)
+        - Frame "Ratio 1:1", vị trí 275,216, cỡ 120 x 84, nền #171A20 (ngoài hệ thống), bo góc 14, xếp dọc, cách nhau 8 (sm), lề trên/phải/dưới/trái 12 (ngoài hệ thống)/0/10 (ngoài hệ thống)/0, căn MAX/CENTER
+          - Rectangle "Rectangle", vị trí 322,236, cỡ 26 x 26, viền #8C93A3 (ngoài hệ thống), dày 2.0, bo góc 3
+          - Text "1:1", vị trí 326,270, cỡ 18 x 20, chữ "1:1", kiểu ngoài hệ thống (14/20, đậm 600), màu #EEF0F4 (ngoài hệ thống)
     - Frame "Size", vị trí 16,324, cỡ 379 x 58, xếp dọc, cách nhau 10 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN
       - Text "Size", vị trí 16,324, cỡ 29 x 20, chữ "Size", kiểu titleSmall, labelLarge (14/20, đậm 500), màu #EEF0F4 (ngoài hệ thống)
       - Frame "Sizes", vị trí 16,354, cỡ 123 x 28, xếp ngang, cách nhau 8 (sm), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/MIN

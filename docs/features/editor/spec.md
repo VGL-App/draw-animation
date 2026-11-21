@@ -158,7 +158,7 @@ Tiêu chí chấp nhận:
 - [ ] Khi đặt giữ khung cho một khung thì khung đó hiện lâu hơn đúng số nhịp đã chọn lúc phát.
 - [ ] Khi chạm chip tốc độ khung thì đổi được tốc độ trong khoảng 6 đến 30 khung/giây.
 - [ ] Khi xóa khung thì có thể lấy lại bằng hoàn tác.
-- [ ] Khi thu gọn dòng thời gian thì dòng thời gian cao 56 dp và canvas lớn ra theo chỗ trống; khi mở lại thì dòng thời gian về 140 dp như thiết kế. Phần còn hiện khi thu gọn và chỗ nút thu gọn theo thiết kế bổ sung (câu hỏi 2).
+- [ ] Khi thu gọn dòng thời gian thì dòng thời gian cao 56 dp và canvas lớn ra theo chỗ trống; khi mở lại thì dòng thời gian về 140 dp như thiết kế. Khi thu gọn chỉ còn hàng điều khiển (onion skin, số khung, phát, tốc độ khung, nút mở rộng); vuốt xuống trên dòng thời gian để thu gọn, bấm nút mũi tên ở cuối hàng để mở lại (thiết kế `timeline-collapsed`, câu hỏi 2).
 
 ### KB-10. Phát thử
 
@@ -314,8 +314,19 @@ Tiêu chí chấp nhận:
 | `EditorScreen` | sound | Bảng âm thanh | KB-13 |
 | `EditorScreen` | sound-locked | Mời mở gói hiệu ứng | KB-14 |
 | `EditorScreen` | lesson-step | Chỉ dẫn bài học | KB-18 |
+| `EditorScreen` | more-menu | Menu của nút "thêm" | KB-2, KB-5, KB-12, KB-13, KB-17 |
+| `EditorScreen` | tool-eraser | Bảng tẩy | KB-2 |
+| `EditorScreen` | tool-shape | Bảng hình | KB-5 |
+| `EditorScreen` | color-picker | Bảng màu | KB-2 |
+| `EditorScreen` | camera | Bảng camera ảo | KB-15 |
+| `EditorScreen` | frame-rate | Chọn tốc độ khung | KB-9 |
+| `EditorScreen` | hold-frame | Giữ khung | KB-9 |
+| `EditorScreen` | reference | Lớp vẽ theo sau khi nhập ảnh, video | KB-12 |
+| `EditorScreen` | ruler | Thước đang bật | KB-5 |
+| `EditorScreen` | symmetry | Vẽ đối xứng đang bật | KB-5 |
+| `EditorScreen` | timeline-collapsed | Dòng thời gian thu gọn 56 dp | KB-9 |
 
-- Thiết kế chưa có bảng hay trạng thái cho: tẩy, hình, thước, vẽ đối xứng, hút màu, chọn màu, camera ảo, nhập ảnh và video, chọn tốc độ khung, giữ khung, dòng thời gian thu gọn, khung 360 × 640 (câu hỏi 1, 2, 18). Các bảng, menu "thêm" và trạng thái thu gọn được dựng bổ sung trên Figma bằng thành phần đã duyệt trước khi viết plan cho phần tương ứng; plan của phần chưa có thiết kế không chạy (câu hỏi 1, 2).
+- Thiết kế bổ sung ngày 2026-11-21, chờ anh Nhật duyệt: các trạng thái từ `more-menu` tới `timeline-collapsed` ở bảng trên (câu hỏi 1, 2). Hút màu chọn từ menu "thêm" rồi chạm canvas, không có bảng riêng. Khung 360 × 640 không có frame, kiểm bằng screenshot test (câu hỏi 18).
 
 ## 5. Quảng cáo
 
@@ -459,3 +470,4 @@ Tham số Remote Config của màn vẽ (không phải cờ): `time_reload_edito
 | --- | --- | --- |
 | 2026-11-21 | AI | Tạo bản đầu từ bản đề xuất đã duyệt (docs/research/proposal.md) và thiết kế đã duyệt |
 | 2026-11-21 | AI | Ghi câu trả lời của anh Nhật cho mọi câu hỏi ở mục 9 (anh chọn trong phiên ngày 2026-11-21) và sửa phần thân spec theo các câu trả lời; sửa các điểm nên sửa còn lại của lần rà soát cuối. Spec vẫn `draft` |
+| 2026-11-21 | AI | Ghi các frame thiết kế bổ sung, sửa theo câu trả lời (chờ anh Nhật duyệt) ở mục 4 và các tiêu chí liên quan |

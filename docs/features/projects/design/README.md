@@ -24,6 +24,8 @@ Phiên tự chạy chỉ đọc thư mục này, không mở được Figma.
 
 Kịch bản: theo [spec của feature](../spec.md).
 
+Sửa ngày 2026-11-21 theo câu trả lời ở mục 9 của spec, chờ anh Nhật duyệt: bỏ ô tỷ lệ 4:5 ở `NewProjectScreen_default` (spec projects câu 1).
+
 | Màn hình (composable) | Trạng thái | Ảnh trong `screens/`, số liệu trong `context/` | Kịch bản |
 | --- | --- | --- | --- |
 | `NewProjectScreen` | default, chế độ tối | `NewProjectScreen_default_dark` | KB-3 |
@@ -54,7 +56,6 @@ Chữ tiếng Anh như trên thiết kế (bản đề xuất Q9: tiếng Anh). 
 | `NewProjectScreen`, default, chế độ tối | Ratio 9:16 | 9:16 | labelLarge |
 | `NewProjectScreen`, default, chế độ tối | Ratio 16:9 | 16:9 | labelLarge |
 | `NewProjectScreen`, default, chế độ tối | Ratio 1:1 | 1:1 | labelLarge |
-| `NewProjectScreen`, default, chế độ tối | Ratio 4:5 | 4:5 | labelLarge |
 | `NewProjectScreen`, default, chế độ tối | Size | Size | titleSmall |
 | `NewProjectScreen`, default, chế độ tối | Chip | 720p | labelMedium |
 | `NewProjectScreen`, default, chế độ tối | Chip | 1080p | labelMedium |

@@ -6,7 +6,7 @@ Sinh bởi `scripts/figma-export.py`. Không sửa tay; thiết kế đổi thì
 
 - Link: https://www.figma.com/design/uDdqi9ojRvIy4689FvCh5O/?node-id=10-717
 - Frame: `10:717`, giao diện tối
-- Ngày lấy: 2026-11-20
+- Ngày lấy: 2026-11-21
 
 ## 2. Giá trị dùng
 
@@ -15,6 +15,7 @@ nào trùng; plan quyết định làm tròn về token gần nhất hay thêm t
 
 | Loại | Giá trị | Token |
 | --- | --- | --- |
+| instance ghi đè component | Icon | màu nền, viền |
 | khoảng cách | 12 | ngoài hệ thống |
 | khoảng cách | 16 | md |
 | khoảng cách | 2 | ngoài hệ thống |
@@ -29,9 +30,12 @@ nào trùng; plan quyết định làm tròn về token gần nhất hay thêm t
 | kiểu chữ | 16/16, đậm 400 | ngoài hệ thống |
 | kiểu chữ | 22/28, đậm 500 | ngoài hệ thống |
 | kiểu chữ | 24/32, đậm 700 | ngoài hệ thống |
+| kiểu chữ | 6/8, đậm 600 | ngoài hệ thống |
+| kiểu chữ | 8/8, đậm 400 | ngoài hệ thống |
 | màu chữ | #8C93A3 | ngoài hệ thống |
 | màu chữ | #B6F35C | ngoài hệ thống |
 | màu chữ | #EEF0F4 | ngoài hệ thống |
+| màu chữ | #FFFFFF (độ mờ 0.90, lớp tô 0.90) | ngoài hệ thống |
 | màu nền | #0E1014 | ngoài hệ thống |
 | màu nền | #13161B | ngoài hệ thống |
 | màu nền | #1A1C22 | ngoài hệ thống |
@@ -62,6 +66,10 @@ Toạ độ và cỡ tính theo dp, gốc là góc trên trái của khung. Th�
     - Frame "Preview", vị trí 126,116, cỡ 160 x 284, nền #FAFAF7 (ngoài hệ thống), bo góc 8
       - Rectangle "Rectangle", vị trí 138,349, cỡ 134 x 2, nền #1A1C22 (ngoài hệ thống)
       - Ellipse "Ellipse", vị trí 186,310, cỡ 38 x 38, nền #6EA8FF (ngoài hệ thống)
+      - Frame "Watermark", vị trí 237,387, cỡ 43 x 8, xếp ngang, cách nhau 2 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/CENTER
+        - Instance "Icon", vị trí 237,387, cỡ 8 x 8, CHÚ Ý: ghi đè màu nền, viền của component gốc
+          - Text "glyph", vị trí 237,387, cỡ 8 x 8, chữ "animation", kiểu ngoài hệ thống (8/8, đậm 400), màu #FFFFFF (độ mờ 0.90, lớp tô 0.90) (ngoài hệ thống)
+        - Text "Frameloop", vị trí 248,387, cỡ 33 x 8, chữ "Frameloop", kiểu ngoài hệ thống (6/8, đậm 600), màu #FFFFFF (độ mờ 0.90, lớp tô 0.90) (ngoài hệ thống)
     - Text "Making your video…", vị trí 24,416, cỡ 363 x 28, chữ "Making your video…", kiểu ngoài hệ thống (22/28, đậm 500), màu #EEF0F4 (ngoài hệ thống)
     - Instance "ProgressBar", vị trí 24,460, cỡ 363 x 8, nền #22262E (ngoài hệ thống), bo góc 999
       - Rectangle "Value", vị trí 24,460, cỡ 168 x 8, nền #B6F35C (ngoài hệ thống), bo góc 4

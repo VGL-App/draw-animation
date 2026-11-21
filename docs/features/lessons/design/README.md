@@ -24,16 +24,24 @@ Phiên tự chạy chỉ đọc thư mục này, không mở được Figma.
 
 Kịch bản: theo [spec của feature](../spec.md).
 
+Bổ sung ngày 2026-11-21 theo câu trả lời ở mục 9 của spec, chờ anh Nhật duyệt: `LessonDoneScreen_last-lesson`, `LessonsScreen_opening`, `LessonsScreen_open-failed`; dòng tóm tắt của màn Hoàn thành đổi thành "12 frames · 1.0 s · Next: Squash and stretch" (không khóa bài); số đếm nhóm theo 18 bài ("1 of 5", "0 of 4").
+
 | Màn hình (composable) | Trạng thái | Ảnh trong `screens/`, số liệu trong `context/` | Kịch bản |
 | --- | --- | --- | --- |
 | `LessonDoneScreen` | default, chế độ tối | `LessonDoneScreen_default_dark` | KB-5, KB-6, KB-7, KB-9 |
 | `LessonDoneScreen` | default | `LessonDoneScreen_default_light` | KB-5, KB-6, KB-7, KB-9 |
+| `LessonDoneScreen` | last-lesson, chế độ tối | `LessonDoneScreen_last-lesson_dark` | KB-5, KB-6 |
+| `LessonDoneScreen` | last-lesson | `LessonDoneScreen_last-lesson_light` | KB-5, KB-6 |
 | `LessonsScreen` | error, chế độ tối | `LessonsScreen_error_dark` | KB-2 |
 | `LessonsScreen` | error | `LessonsScreen_error_light` | KB-2 |
 | `LessonsScreen` | list, chế độ tối | `LessonsScreen_list_dark` | KB-1, KB-3, KB-4, KB-8, KB-9 |
 | `LessonsScreen` | list | `LessonsScreen_list_light` | KB-1, KB-3, KB-4, KB-8, KB-9 |
 | `LessonsScreen` | loading, chế độ tối | `LessonsScreen_loading_dark` | KB-2 |
 | `LessonsScreen` | loading | `LessonsScreen_loading_light` | KB-2 |
+| `LessonsScreen` | open-failed, chế độ tối | `LessonsScreen_open-failed_dark` | KB-3 |
+| `LessonsScreen` | open-failed | `LessonsScreen_open-failed_light` | KB-3 |
+| `LessonsScreen` | opening, chế độ tối | `LessonsScreen_opening_dark` | KB-3 |
+| `LessonsScreen` | opening | `LessonsScreen_opening_light` | KB-3 |
 
 ## 2. Bảng chữ
 
@@ -43,9 +51,13 @@ Chữ tiếng Anh như trên thiết kế (bản đề xuất Q9: tiếng Anh). 
 | --- | --- | --- | --- |
 | `LessonDoneScreen`, default, chế độ tối | TopBar | Lesson 1 · Bouncing ball | titleMedium |
 | `LessonDoneScreen`, default, chế độ tối | Content | Lesson complete! | headlineSmall |
-| `LessonDoneScreen`, default, chế độ tối | Content | 12 frames · 1.0 s · Squash and stretch unlocked next | bodyMedium |
+| `LessonDoneScreen`, default, chế độ tối | Content | 12 frames · 1.0 s · Next: Squash and stretch | bodyMedium |
 | `LessonDoneScreen`, default, chế độ tối | Button | Next lesson | labelLarge |
 | `LessonDoneScreen`, default, chế độ tối | Button | Export my animation | labelLarge |
+| `LessonDoneScreen`, last-lesson, chế độ tối | TopBar | Lesson 18 · Fireworks | titleMedium |
+| `LessonDoneScreen`, last-lesson, chế độ tối | Content | Lesson complete! | headlineSmall |
+| `LessonDoneScreen`, last-lesson, chế độ tối | Content | 36 frames · 3.0 s · You finished every lesson | bodyMedium |
+| `LessonDoneScreen`, last-lesson, chế độ tối | Button | Export my animation | labelLarge |
 | `LessonsScreen`, error, chế độ tối | TopBar | Lessons | headlineSmall |
 | `LessonsScreen`, error, chế độ tối | Content | Lessons didn't load | headlineSmall |
 | `LessonsScreen`, error, chế độ tối | Content | The lesson server is not responding. Your projects still work. | bodyLarge |
@@ -59,7 +71,7 @@ Chữ tiếng Anh như trên thiết kế (bản đề xuất Q9: tiếng Anh). 
 | `LessonsScreen`, list, chế độ tối | Chip | Characters | labelMedium |
 | `LessonsScreen`, list, chế độ tối | Chip | Effects | labelMedium |
 | `LessonsScreen`, list, chế độ tối | SectionHeader | Basics | titleLarge |
-| `LessonsScreen`, list, chế độ tối | SectionHeader | 2 of 6 | labelLarge |
+| `LessonsScreen`, list, chế độ tối | SectionHeader | 1 of 5 | labelLarge |
 | `LessonsScreen`, list, chế độ tối | Done badge | Done | labelSmall |
 | `LessonsScreen`, list, chế độ tối | LessonCard | Basics · 1 | labelSmall |
 | `LessonsScreen`, list, chế độ tối | LessonCard | Bouncing ball | titleSmall |
@@ -68,6 +80,7 @@ Chữ tiếng Anh như trên thiết kế (bản đề xuất Q9: tiếng Anh). 
 | `LessonsScreen`, list, chế độ tối | LessonCard | Squash and stretch | titleSmall |
 | `LessonsScreen`, list, chế độ tối | LessonCard | 6 min · 16 frames | bodySmall |
 | `LessonsScreen`, list, chế độ tối | SectionHeader | Motion | titleLarge |
+| `LessonsScreen`, list, chế độ tối | SectionHeader | 0 of 4 | labelLarge |
 | `LessonsScreen`, list, chế độ tối | LessonCard | Motion · 1 | labelSmall |
 | `LessonsScreen`, list, chế độ tối | LessonCard | Stick figure walk | titleSmall |
 | `LessonsScreen`, list, chế độ tối | LessonCard | 8 min · 24 frames | bodySmall |
@@ -84,6 +97,62 @@ Chữ tiếng Anh như trên thiết kế (bản đề xuất Q9: tiếng Anh). 
 | `LessonsScreen`, loading, chế độ tối | Chip | Effects | labelMedium |
 | `LessonsScreen`, loading, chế độ tối | NavItem | Projects | labelMedium |
 | `LessonsScreen`, loading, chế độ tối | NavItem | Lessons | labelMedium |
+| `LessonsScreen`, open-failed, chế độ tối | TopBar | Lessons | headlineSmall |
+| `LessonsScreen`, open-failed, chế độ tối | Chip | All | labelMedium |
+| `LessonsScreen`, open-failed, chế độ tối | Chip | Basics | labelMedium |
+| `LessonsScreen`, open-failed, chế độ tối | Chip | Motion | labelMedium |
+| `LessonsScreen`, open-failed, chế độ tối | Chip | Characters | labelMedium |
+| `LessonsScreen`, open-failed, chế độ tối | Chip | Effects | labelMedium |
+| `LessonsScreen`, open-failed, chế độ tối | SectionHeader | Basics | titleLarge |
+| `LessonsScreen`, open-failed, chế độ tối | SectionHeader | 1 of 5 | labelLarge |
+| `LessonsScreen`, open-failed, chế độ tối | Done badge | Done | labelSmall |
+| `LessonsScreen`, open-failed, chế độ tối | LessonCard | Basics · 1 | labelSmall |
+| `LessonsScreen`, open-failed, chế độ tối | LessonCard | Bouncing ball | titleSmall |
+| `LessonsScreen`, open-failed, chế độ tối | LessonCard | 5 min · 12 frames | bodySmall |
+| `LessonsScreen`, open-failed, chế độ tối | LessonCard | Basics · 2 | labelSmall |
+| `LessonsScreen`, open-failed, chế độ tối | LessonCard | Squash and stretch | titleSmall |
+| `LessonsScreen`, open-failed, chế độ tối | LessonCard | 6 min · 16 frames | bodySmall |
+| `LessonsScreen`, open-failed, chế độ tối | SectionHeader | Motion | titleLarge |
+| `LessonsScreen`, open-failed, chế độ tối | SectionHeader | 0 of 4 | labelLarge |
+| `LessonsScreen`, open-failed, chế độ tối | LessonCard | Motion · 1 | labelSmall |
+| `LessonsScreen`, open-failed, chế độ tối | LessonCard | Stick figure walk | titleSmall |
+| `LessonsScreen`, open-failed, chế độ tối | LessonCard | 8 min · 24 frames | bodySmall |
+| `LessonsScreen`, open-failed, chế độ tối | LessonCard | Motion · 2 | labelSmall |
+| `LessonsScreen`, open-failed, chế độ tối | LessonCard | Blink and look | titleSmall |
+| `LessonsScreen`, open-failed, chế độ tối | LessonCard | 4 min · 10 frames | bodySmall |
+| `LessonsScreen`, open-failed, chế độ tối | NavItem | Projects | labelMedium |
+| `LessonsScreen`, open-failed, chế độ tối | NavItem | Lessons | labelMedium |
+| `LessonsScreen`, open-failed, chế độ tối | Dialog | Couldn't open the lesson | titleLarge |
+| `LessonsScreen`, open-failed, chế độ tối | Dialog | Check your connection and try again. Your other lessons are safe. | bodyMedium |
+| `LessonsScreen`, open-failed, chế độ tối | Button | Cancel | labelLarge |
+| `LessonsScreen`, open-failed, chế độ tối | Button | Try again | labelLarge |
+| `LessonsScreen`, opening, chế độ tối | TopBar | Lessons | headlineSmall |
+| `LessonsScreen`, opening, chế độ tối | Chip | All | labelMedium |
+| `LessonsScreen`, opening, chế độ tối | Chip | Basics | labelMedium |
+| `LessonsScreen`, opening, chế độ tối | Chip | Motion | labelMedium |
+| `LessonsScreen`, opening, chế độ tối | Chip | Characters | labelMedium |
+| `LessonsScreen`, opening, chế độ tối | Chip | Effects | labelMedium |
+| `LessonsScreen`, opening, chế độ tối | SectionHeader | Basics | titleLarge |
+| `LessonsScreen`, opening, chế độ tối | SectionHeader | 1 of 5 | labelLarge |
+| `LessonsScreen`, opening, chế độ tối | Done badge | Done | labelSmall |
+| `LessonsScreen`, opening, chế độ tối | LessonCard | Basics · 1 | labelSmall |
+| `LessonsScreen`, opening, chế độ tối | LessonCard | Bouncing ball | titleSmall |
+| `LessonsScreen`, opening, chế độ tối | LessonCard | 5 min · 12 frames | bodySmall |
+| `LessonsScreen`, opening, chế độ tối | LessonCard | Basics · 2 | labelSmall |
+| `LessonsScreen`, opening, chế độ tối | LessonCard | Squash and stretch | titleSmall |
+| `LessonsScreen`, opening, chế độ tối | LessonCard | 6 min · 16 frames | bodySmall |
+| `LessonsScreen`, opening, chế độ tối | SectionHeader | Motion | titleLarge |
+| `LessonsScreen`, opening, chế độ tối | SectionHeader | 0 of 4 | labelLarge |
+| `LessonsScreen`, opening, chế độ tối | LessonCard | Motion · 1 | labelSmall |
+| `LessonsScreen`, opening, chế độ tối | LessonCard | Stick figure walk | titleSmall |
+| `LessonsScreen`, opening, chế độ tối | LessonCard | 8 min · 24 frames | bodySmall |
+| `LessonsScreen`, opening, chế độ tối | LessonCard | Motion · 2 | labelSmall |
+| `LessonsScreen`, opening, chế độ tối | LessonCard | Blink and look | titleSmall |
+| `LessonsScreen`, opening, chế độ tối | LessonCard | 4 min · 10 frames | bodySmall |
+| `LessonsScreen`, opening, chế độ tối | NavItem | Projects | labelMedium |
+| `LessonsScreen`, opening, chế độ tối | NavItem | Lessons | labelMedium |
+| `LessonsScreen`, opening, chế độ tối | Dialog | Opening lesson… | titleLarge |
+| `LessonsScreen`, opening, chế độ tối | Dialog | Bouncing ball | bodyMedium |
 
 ## 3. Ánh xạ sang hệ thống thiết kế
 

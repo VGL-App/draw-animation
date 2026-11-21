@@ -24,38 +24,62 @@ Phiên tự chạy chỉ đọc thư mục này, không mở được Figma.
 
 Kịch bản: theo [spec của feature](../spec.md).
 
+Bổ sung ngày 2026-11-21 theo câu trả lời ở mục 9 của spec, chờ anh Nhật duyệt: `more-menu` (menu của nút "thêm": hút màu, thước, đối xứng, nhập ảnh hay video, âm thanh, xem lại hướng dẫn), `tool-eraser`, `tool-shape`, `color-picker`, `camera`, `frame-rate`, `hold-frame`, `reference` (lớp vẽ theo sau khi nhập), `ruler`, `symmetry`, `timeline-collapsed` (dòng thời gian 56 dp). Thu gọn: vuốt xuống trên dòng thời gian; mở lại bằng nút mũi tên ở cuối hàng điều khiển. Ở khung 411 × 891, canvas 9:16 bị giới hạn bởi bề ngang giữa thanh công cụ và cột tùy chọn, nên khi thu gọn chỉ lớn từ 288 × 512 lên 296 × 526 dp.
+
 | Màn hình (composable) | Trạng thái | Ảnh trong `screens/`, số liệu trong `context/` | Kịch bản |
 | --- | --- | --- | --- |
 | `EditorScreen` | brush-locked, chế độ tối | `EditorScreen_brush-locked_dark` | KB-3 |
 | `EditorScreen` | brush-locked | `EditorScreen_brush-locked_light` | KB-3 |
+| `EditorScreen` | camera, chế độ tối | `EditorScreen_camera_dark` | KB-15 |
+| `EditorScreen` | camera | `EditorScreen_camera_light` | KB-15 |
+| `EditorScreen` | color-picker, chế độ tối | `EditorScreen_color-picker_dark` | KB-2 |
+| `EditorScreen` | color-picker | `EditorScreen_color-picker_light` | KB-2 |
 | `EditorScreen` | drawing-no-ad, chế độ tối | `EditorScreen_drawing-no-ad_dark` | KB-1, KB-19 |
 | `EditorScreen` | drawing-no-ad | `EditorScreen_drawing-no-ad_light` | KB-1, KB-19 |
 | `EditorScreen` | drawing, chế độ tối | `EditorScreen_drawing_dark` | KB-1, KB-2, KB-6, KB-9, KB-11, KB-12, KB-15, KB-16, KB-19, KB-20 |
 | `EditorScreen` | drawing, chế độ tối, điện thoại gập mở ra | `EditorScreen_drawing_dark_unfolded` | KB-21 |
 | `EditorScreen` | drawing | `EditorScreen_drawing_light` | KB-1, KB-2, KB-6, KB-9, KB-11, KB-12, KB-15, KB-16, KB-19, KB-20 |
 | `EditorScreen` | drawing, điện thoại gập mở ra | `EditorScreen_drawing_light_unfolded` | KB-21 |
+| `EditorScreen` | frame-rate, chế độ tối | `EditorScreen_frame-rate_dark` | KB-9 |
+| `EditorScreen` | frame-rate | `EditorScreen_frame-rate_light` | KB-9 |
+| `EditorScreen` | hold-frame, chế độ tối | `EditorScreen_hold-frame_dark` | KB-9 |
+| `EditorScreen` | hold-frame | `EditorScreen_hold-frame_light` | KB-9 |
 | `EditorScreen` | layer-locked, chế độ tối | `EditorScreen_layer-locked_dark` | KB-7 |
 | `EditorScreen` | layer-locked | `EditorScreen_layer-locked_light` | KB-7 |
 | `EditorScreen` | layers, chế độ tối | `EditorScreen_layers_dark` | KB-6 |
 | `EditorScreen` | layers | `EditorScreen_layers_light` | KB-6 |
 | `EditorScreen` | lesson-step, chế độ tối | `EditorScreen_lesson-step_dark` | KB-18 |
 | `EditorScreen` | lesson-step | `EditorScreen_lesson-step_light` | KB-18 |
+| `EditorScreen` | more-menu, chế độ tối | `EditorScreen_more-menu_dark` | KB-2, KB-5, KB-12, KB-13, KB-17 |
+| `EditorScreen` | more-menu | `EditorScreen_more-menu_light` | KB-2, KB-5, KB-12, KB-13, KB-17 |
 | `EditorScreen` | onion-settings, chế độ tối | `EditorScreen_onion-settings_dark` | KB-8 |
 | `EditorScreen` | onion-settings | `EditorScreen_onion-settings_light` | KB-8 |
 | `EditorScreen` | playing, chế độ tối | `EditorScreen_playing_dark` | KB-10 |
 | `EditorScreen` | playing | `EditorScreen_playing_light` | KB-10 |
+| `EditorScreen` | reference, chế độ tối | `EditorScreen_reference_dark` | KB-12 |
+| `EditorScreen` | reference | `EditorScreen_reference_light` | KB-12 |
+| `EditorScreen` | ruler, chế độ tối | `EditorScreen_ruler_dark` | KB-5 |
+| `EditorScreen` | ruler | `EditorScreen_ruler_light` | KB-5 |
 | `EditorScreen` | sound-locked, chế độ tối | `EditorScreen_sound-locked_dark` | KB-14 |
 | `EditorScreen` | sound-locked | `EditorScreen_sound-locked_light` | KB-14 |
 | `EditorScreen` | sound, chế độ tối | `EditorScreen_sound_dark` | KB-13 |
 | `EditorScreen` | sound | `EditorScreen_sound_light` | KB-13 |
+| `EditorScreen` | symmetry, chế độ tối | `EditorScreen_symmetry_dark` | KB-5 |
+| `EditorScreen` | symmetry | `EditorScreen_symmetry_light` | KB-5 |
+| `EditorScreen` | timeline-collapsed, chế độ tối | `EditorScreen_timeline-collapsed_dark` | KB-9 |
+| `EditorScreen` | timeline-collapsed | `EditorScreen_timeline-collapsed_light` | KB-9 |
 | `EditorScreen` | timeline-multiselect, chế độ tối | `EditorScreen_timeline-multiselect_dark` | KB-9 |
 | `EditorScreen` | timeline-multiselect | `EditorScreen_timeline-multiselect_light` | KB-9 |
 | `EditorScreen` | tool-brush, chế độ tối | `EditorScreen_tool-brush_dark` | KB-2 |
 | `EditorScreen` | tool-brush | `EditorScreen_tool-brush_light` | KB-2 |
+| `EditorScreen` | tool-eraser, chế độ tối | `EditorScreen_tool-eraser_dark` | KB-2 |
+| `EditorScreen` | tool-eraser | `EditorScreen_tool-eraser_light` | KB-2 |
 | `EditorScreen` | tool-fill, chế độ tối | `EditorScreen_tool-fill_dark` | KB-4 |
 | `EditorScreen` | tool-fill | `EditorScreen_tool-fill_light` | KB-4 |
 | `EditorScreen` | tool-select, chế độ tối | `EditorScreen_tool-select_dark` | KB-5 |
 | `EditorScreen` | tool-select | `EditorScreen_tool-select_light` | KB-5 |
+| `EditorScreen` | tool-shape, chế độ tối | `EditorScreen_tool-shape_dark` | KB-5 |
+| `EditorScreen` | tool-shape | `EditorScreen_tool-shape_light` | KB-5 |
 | `EditorScreen` | tool-text, chế độ tối | `EditorScreen_tool-text_dark` | KB-5 |
 | `EditorScreen` | tool-text | `EditorScreen_tool-text_light` | KB-5 |
 | `EditorScreen` | tour, chế độ tối | `EditorScreen_tour_dark` | KB-17 |
@@ -93,6 +117,33 @@ Chữ tiếng Anh như trên thiết kế (bản đề xuất Q9: tiếng Anh). 
 | `EditorScreen`, brush-locked, chế độ tối | Slider | Size | labelLarge |
 | `EditorScreen`, brush-locked, chế độ tối | Slider | 8 px | labelLarge |
 | `EditorScreen`, brush-locked, chế độ tối | Pressure from stylus | Pressure from stylus | bodyLarge |
+| `EditorScreen`, camera, chế độ tối | Title | Bouncing ball | titleMedium |
+| `EditorScreen`, camera, chế độ tối | Title | Frame 12 / 48 · saved | bodySmall |
+| `EditorScreen`, camera, chế độ tối | Button | Export | labelLarge |
+| `EditorScreen`, camera, chế độ tối | ToolOptions | 8 | labelSmall |
+| `EditorScreen`, camera, chế độ tối | Chip | Onion 2 · 1 | labelMedium |
+| `EditorScreen`, camera, chế độ tối | Controls | 12 / 48 | labelMedium |
+| `EditorScreen`, camera, chế độ tối | Chip | 12 fps | labelMedium |
+| `EditorScreen`, camera, chế độ tối | Camera sheet | Camera | titleLarge |
+| `EditorScreen`, camera, chế độ tối | Body | Frame 12 · Drag on the canvas to pan. Pinch to zoom. | bodySmall |
+| `EditorScreen`, camera, chế độ tối | Zoom | Zoom | labelLarge |
+| `EditorScreen`, camera, chế độ tối | Zoom | 120% | labelLarge |
+| `EditorScreen`, camera, chế độ tối | Rotate | Rotate | labelLarge |
+| `EditorScreen`, camera, chế độ tối | Rotate | 0° | labelLarge |
+| `EditorScreen`, camera, chế độ tối | Camera on | Camera on | bodyLarge |
+| `EditorScreen`, camera, chế độ tối | Camera on | The scene moves as the camera moves between frames. | bodySmall |
+| `EditorScreen`, camera, chế độ tối | Reset camera | Reset camera | labelLarge |
+| `EditorScreen`, color-picker, chế độ tối | Title | Bouncing ball | titleMedium |
+| `EditorScreen`, color-picker, chế độ tối | Title | Frame 12 / 48 · saved | bodySmall |
+| `EditorScreen`, color-picker, chế độ tối | Button | Export | labelLarge |
+| `EditorScreen`, color-picker, chế độ tối | ToolOptions | 8 | labelSmall |
+| `EditorScreen`, color-picker, chế độ tối | Chip | Onion 2 · 1 | labelMedium |
+| `EditorScreen`, color-picker, chế độ tối | Controls | 12 / 48 | labelMedium |
+| `EditorScreen`, color-picker, chế độ tối | Chip | 12 fps | labelMedium |
+| `EditorScreen`, color-picker, chế độ tối | Color sheet | Color | titleLarge |
+| `EditorScreen`, color-picker, chế độ tối | Opacity | Opacity | labelLarge |
+| `EditorScreen`, color-picker, chế độ tối | Opacity | 100% | labelLarge |
+| `EditorScreen`, color-picker, chế độ tối | Body | Tip: use the eyedropper in the More menu to pick a color from the canvas. | bodySmall |
 | `EditorScreen`, drawing-no-ad, chế độ tối | Title | Bouncing ball | titleMedium |
 | `EditorScreen`, drawing-no-ad, chế độ tối | Title | Frame 12 / 48 · saved | bodySmall |
 | `EditorScreen`, drawing-no-ad, chế độ tối | Button | Export | labelLarge |
@@ -122,6 +173,35 @@ Chữ tiếng Anh như trên thiết kế (bản đề xuất Q9: tiếng Anh). 
 | `EditorScreen`, drawing, chế độ tối, điện thoại gập mở ra | Chip | Onion 2 · 1 | labelMedium |
 | `EditorScreen`, drawing, chế độ tối, điện thoại gập mở ra | Controls | 12 / 48 | labelMedium |
 | `EditorScreen`, drawing, chế độ tối, điện thoại gập mở ra | Chip | 12 fps | labelMedium |
+| `EditorScreen`, frame-rate, chế độ tối | Title | Bouncing ball | titleMedium |
+| `EditorScreen`, frame-rate, chế độ tối | Title | Frame 12 / 48 · saved | bodySmall |
+| `EditorScreen`, frame-rate, chế độ tối | Button | Export | labelLarge |
+| `EditorScreen`, frame-rate, chế độ tối | ToolOptions | 8 | labelSmall |
+| `EditorScreen`, frame-rate, chế độ tối | Chip | Onion 2 · 1 | labelMedium |
+| `EditorScreen`, frame-rate, chế độ tối | Controls | 12 / 48 | labelMedium |
+| `EditorScreen`, frame-rate, chế độ tối | Chip | 12 fps | labelMedium |
+| `EditorScreen`, frame-rate, chế độ tối | Frame rate sheet | Frame rate | titleLarge |
+| `EditorScreen`, frame-rate, chế độ tối | 6 | 6 | labelMedium |
+| `EditorScreen`, frame-rate, chế độ tối | 8 | 8 | labelMedium |
+| `EditorScreen`, frame-rate, chế độ tối | 12 | 12 | labelMedium |
+| `EditorScreen`, frame-rate, chế độ tối | 15 | 15 | labelMedium |
+| `EditorScreen`, frame-rate, chế độ tối | 24 | 24 | labelMedium |
+| `EditorScreen`, frame-rate, chế độ tối | 30 | 30 | labelMedium |
+| `EditorScreen`, frame-rate, chế độ tối | Body | 12 frames per second · 48 frames play in 4.0 s | bodySmall |
+| `EditorScreen`, hold-frame, chế độ tối | Title | Bouncing ball | titleMedium |
+| `EditorScreen`, hold-frame, chế độ tối | Title | Frame 12 / 48 · saved | bodySmall |
+| `EditorScreen`, hold-frame, chế độ tối | Button | Export | labelLarge |
+| `EditorScreen`, hold-frame, chế độ tối | ToolOptions | 8 | labelSmall |
+| `EditorScreen`, hold-frame, chế độ tối | Chip | Onion 2 · 1 | labelMedium |
+| `EditorScreen`, hold-frame, chế độ tối | Controls | 12 / 48 | labelMedium |
+| `EditorScreen`, hold-frame, chế độ tối | Chip | 12 fps | labelMedium |
+| `EditorScreen`, hold-frame, chế độ tối | Hold frame sheet | Hold frame | titleLarge |
+| `EditorScreen`, hold-frame, chế độ tối | Body | Frame 12 stays on screen for | bodySmall |
+| `EditorScreen`, hold-frame, chế độ tối | 1× | 1× | labelMedium |
+| `EditorScreen`, hold-frame, chế độ tối | 2× | 2× | labelMedium |
+| `EditorScreen`, hold-frame, chế độ tối | 3× | 3× | labelMedium |
+| `EditorScreen`, hold-frame, chế độ tối | 4× | 4× | labelMedium |
+| `EditorScreen`, hold-frame, chế độ tối | Body | A held frame plays longer without drawing it again. | bodySmall |
 | `EditorScreen`, layer-locked, chế độ tối | Title | Bouncing ball | titleMedium |
 | `EditorScreen`, layer-locked, chế độ tối | Title | Frame 12 / 48 · saved | bodySmall |
 | `EditorScreen`, layer-locked, chế độ tối | Button | Export | labelLarge |
@@ -158,6 +238,25 @@ Chữ tiếng Anh như trên thiết kế (bản đề xuất Q9: tiếng Anh). 
 | `EditorScreen`, lesson-step, chế độ tối | LessonStep | Draw the ball a little flatter where it hits the ground. Follow the red guide, then press Next. | bodyMedium |
 | `EditorScreen`, lesson-step, chế độ tối | Button | Show me | labelLarge |
 | `EditorScreen`, lesson-step, chế độ tối | Button | Next step | labelLarge |
+| `EditorScreen`, more-menu, chế độ tối | Title | Bouncing ball | titleMedium |
+| `EditorScreen`, more-menu, chế độ tối | Title | Frame 12 / 48 · saved | bodySmall |
+| `EditorScreen`, more-menu, chế độ tối | Button | Export | labelLarge |
+| `EditorScreen`, more-menu, chế độ tối | ToolOptions | 8 | labelSmall |
+| `EditorScreen`, more-menu, chế độ tối | Chip | Onion 2 · 1 | labelMedium |
+| `EditorScreen`, more-menu, chế độ tối | Controls | 12 / 48 | labelMedium |
+| `EditorScreen`, more-menu, chế độ tối | Chip | 12 fps | labelMedium |
+| `EditorScreen`, more-menu, chế độ tối | Eyedropper | Eyedropper | titleSmall |
+| `EditorScreen`, more-menu, chế độ tối | Eyedropper | Pick a color from the canvas | bodySmall |
+| `EditorScreen`, more-menu, chế độ tối | Ruler | Ruler | titleSmall |
+| `EditorScreen`, more-menu, chế độ tối | Ruler | Lines follow a straight edge | bodySmall |
+| `EditorScreen`, more-menu, chế độ tối | Symmetry | Symmetry | titleSmall |
+| `EditorScreen`, more-menu, chế độ tối | Symmetry | Mirror strokes left to right | bodySmall |
+| `EditorScreen`, more-menu, chế độ tối | Import photo or video | Import photo or video | titleSmall |
+| `EditorScreen`, more-menu, chế độ tối | Import photo or video | Trace over it, not exported | bodySmall |
+| `EditorScreen`, more-menu, chế độ tối | Sound | Sound | titleSmall |
+| `EditorScreen`, more-menu, chế độ tối | Sound | Music, voice and effects | bodySmall |
+| `EditorScreen`, more-menu, chế độ tối | Replay tour | Replay tour | titleSmall |
+| `EditorScreen`, more-menu, chế độ tối | Replay tour | Show the drawing tips again | bodySmall |
 | `EditorScreen`, onion-settings, chế độ tối | Title | Bouncing ball | titleMedium |
 | `EditorScreen`, onion-settings, chế độ tối | Title | Frame 12 / 48 · saved | bodySmall |
 | `EditorScreen`, onion-settings, chế độ tối | Button | Export | labelLarge |
@@ -182,6 +281,27 @@ Chữ tiếng Anh như trên thiết kế (bản đề xuất Q9: tiếng Anh). 
 | `EditorScreen`, playing, chế độ tối | Chip | Loop | labelMedium |
 | `EditorScreen`, playing, chế độ tối | Controls | 24 / 48 | labelMedium |
 | `EditorScreen`, playing, chế độ tối | Chip | 12 fps | labelMedium |
+| `EditorScreen`, reference, chế độ tối | Title | Bouncing ball | titleMedium |
+| `EditorScreen`, reference, chế độ tối | Title | Frame 12 / 48 · saved | bodySmall |
+| `EditorScreen`, reference, chế độ tối | Button | Export | labelLarge |
+| `EditorScreen`, reference, chế độ tối | ToolOptions | 8 | labelSmall |
+| `EditorScreen`, reference, chế độ tối | Chip | Onion 2 · 1 | labelMedium |
+| `EditorScreen`, reference, chế độ tối | Controls | 12 / 48 | labelMedium |
+| `EditorScreen`, reference, chế độ tối | Chip | 12 fps | labelMedium |
+| `EditorScreen`, reference, chế độ tối | Reference sheet | Reference | titleLarge |
+| `EditorScreen`, reference, chế độ tối | Opacity | Opacity | labelLarge |
+| `EditorScreen`, reference, chế độ tối | Opacity | 40% | labelLarge |
+| `EditorScreen`, reference, chế độ tối | Show reference | Show reference | bodyLarge |
+| `EditorScreen`, reference, chế độ tối | Show reference | Trace over a photo or video. It is not exported. | bodySmall |
+| `EditorScreen`, reference, chế độ tối | Remove reference | Remove reference | labelLarge |
+| `EditorScreen`, ruler, chế độ tối | Title | Bouncing ball | titleMedium |
+| `EditorScreen`, ruler, chế độ tối | Title | Frame 12 / 48 · saved | bodySmall |
+| `EditorScreen`, ruler, chế độ tối | Button | Export | labelLarge |
+| `EditorScreen`, ruler, chế độ tối | ToolOptions | 8 | labelSmall |
+| `EditorScreen`, ruler, chế độ tối | Ruler on · tap to turn off | Ruler on · tap to turn off | labelMedium |
+| `EditorScreen`, ruler, chế độ tối | Chip | Onion 2 · 1 | labelMedium |
+| `EditorScreen`, ruler, chế độ tối | Controls | 12 / 48 | labelMedium |
+| `EditorScreen`, ruler, chế độ tối | Chip | 12 fps | labelMedium |
 | `EditorScreen`, sound-locked, chế độ tối | Title | Bouncing ball | titleMedium |
 | `EditorScreen`, sound-locked, chế độ tối | Title | Frame 12 / 48 · saved | bodySmall |
 | `EditorScreen`, sound-locked, chế độ tối | Button | Export | labelLarge |
@@ -222,6 +342,21 @@ Chữ tiếng Anh như trên thiết kế (bản đề xuất Q9: tiếng Anh). 
 | `EditorScreen`, sound, chế độ tối | Button | Music | labelLarge |
 | `EditorScreen`, sound, chế độ tối | Button | Record | labelLarge |
 | `EditorScreen`, sound, chế độ tối | Button | Effects | labelLarge |
+| `EditorScreen`, symmetry, chế độ tối | Title | Bouncing ball | titleMedium |
+| `EditorScreen`, symmetry, chế độ tối | Title | Frame 12 / 48 · saved | bodySmall |
+| `EditorScreen`, symmetry, chế độ tối | Button | Export | labelLarge |
+| `EditorScreen`, symmetry, chế độ tối | ToolOptions | 8 | labelSmall |
+| `EditorScreen`, symmetry, chế độ tối | Symmetry on · tap to turn off | Symmetry on · tap to turn off | labelMedium |
+| `EditorScreen`, symmetry, chế độ tối | Chip | Onion 2 · 1 | labelMedium |
+| `EditorScreen`, symmetry, chế độ tối | Controls | 12 / 48 | labelMedium |
+| `EditorScreen`, symmetry, chế độ tối | Chip | 12 fps | labelMedium |
+| `EditorScreen`, timeline-collapsed, chế độ tối | Title | Bouncing ball | titleMedium |
+| `EditorScreen`, timeline-collapsed, chế độ tối | Title | Frame 12 / 48 · saved | bodySmall |
+| `EditorScreen`, timeline-collapsed, chế độ tối | Button | Export | labelLarge |
+| `EditorScreen`, timeline-collapsed, chế độ tối | ToolOptions | 8 | labelSmall |
+| `EditorScreen`, timeline-collapsed, chế độ tối | Chip | Onion 2 · 1 | labelMedium |
+| `EditorScreen`, timeline-collapsed, chế độ tối | Controls | 12 / 48 | labelMedium |
+| `EditorScreen`, timeline-collapsed, chế độ tối | Chip | 12 fps | labelMedium |
 | `EditorScreen`, timeline-multiselect, chế độ tối | Title | Bouncing ball | titleMedium |
 | `EditorScreen`, timeline-multiselect, chế độ tối | Title | Frames 3 to 6 selected | bodySmall |
 | `EditorScreen`, timeline-multiselect, chế độ tối | Button | Export | labelLarge |
@@ -250,6 +385,20 @@ Chữ tiếng Anh như trên thiết kế (bản đề xuất Q9: tiếng Anh). 
 | `EditorScreen`, tool-brush, chế độ tối | Slider | Stabilizer | labelLarge |
 | `EditorScreen`, tool-brush, chế độ tối | Slider | 30% | labelLarge |
 | `EditorScreen`, tool-brush, chế độ tối | Pressure from stylus | Pressure from stylus | bodyLarge |
+| `EditorScreen`, tool-eraser, chế độ tối | Title | Bouncing ball | titleMedium |
+| `EditorScreen`, tool-eraser, chế độ tối | Title | Frame 12 / 48 · saved | bodySmall |
+| `EditorScreen`, tool-eraser, chế độ tối | Button | Export | labelLarge |
+| `EditorScreen`, tool-eraser, chế độ tối | ToolOptions | 8 | labelSmall |
+| `EditorScreen`, tool-eraser, chế độ tối | Chip | Onion 2 · 1 | labelMedium |
+| `EditorScreen`, tool-eraser, chế độ tối | Controls | 12 / 48 | labelMedium |
+| `EditorScreen`, tool-eraser, chế độ tối | Chip | 12 fps | labelMedium |
+| `EditorScreen`, tool-eraser, chế độ tối | Eraser sheet | Eraser | titleLarge |
+| `EditorScreen`, tool-eraser, chế độ tối | Size | Size | labelLarge |
+| `EditorScreen`, tool-eraser, chế độ tối | Size | 24 px | labelLarge |
+| `EditorScreen`, tool-eraser, chế độ tối | Softness | Softness | labelLarge |
+| `EditorScreen`, tool-eraser, chế độ tối | Softness | 0% | labelLarge |
+| `EditorScreen`, tool-eraser, chế độ tối | Erase on all layers | Erase on all layers | bodyLarge |
+| `EditorScreen`, tool-eraser, chế độ tối | Erase on all layers | Off erases only the selected layer. | bodySmall |
 | `EditorScreen`, tool-fill, chế độ tối | Title | Bouncing ball | titleMedium |
 | `EditorScreen`, tool-fill, chế độ tối | Title | Frame 12 / 48 · saved | bodySmall |
 | `EditorScreen`, tool-fill, chế độ tối | Button | Export | labelLarge |
@@ -272,6 +421,22 @@ Chữ tiếng Anh như trên thiết kế (bản đề xuất Q9: tiếng Anh). 
 | `EditorScreen`, tool-select, chế độ tối | Chip | Onion 2 · 1 | labelMedium |
 | `EditorScreen`, tool-select, chế độ tối | Controls | 12 / 48 | labelMedium |
 | `EditorScreen`, tool-select, chế độ tối | Chip | 12 fps | labelMedium |
+| `EditorScreen`, tool-shape, chế độ tối | Title | Bouncing ball | titleMedium |
+| `EditorScreen`, tool-shape, chế độ tối | Title | Frame 12 / 48 · saved | bodySmall |
+| `EditorScreen`, tool-shape, chế độ tối | Button | Export | labelLarge |
+| `EditorScreen`, tool-shape, chế độ tối | ToolOptions | 8 | labelSmall |
+| `EditorScreen`, tool-shape, chế độ tối | Chip | Onion 2 · 1 | labelMedium |
+| `EditorScreen`, tool-shape, chế độ tối | Controls | 12 / 48 | labelMedium |
+| `EditorScreen`, tool-shape, chế độ tối | Chip | 12 fps | labelMedium |
+| `EditorScreen`, tool-shape, chế độ tối | Shape sheet | Shape | titleLarge |
+| `EditorScreen`, tool-shape, chế độ tối | Line | Line | labelMedium |
+| `EditorScreen`, tool-shape, chế độ tối | Rectangle | Rectangle | labelMedium |
+| `EditorScreen`, tool-shape, chế độ tối | Ellipse | Ellipse | labelMedium |
+| `EditorScreen`, tool-shape, chế độ tối | Arrow | Arrow | labelMedium |
+| `EditorScreen`, tool-shape, chế độ tối | Stroke | Stroke | labelLarge |
+| `EditorScreen`, tool-shape, chế độ tối | Stroke | 6 px | labelLarge |
+| `EditorScreen`, tool-shape, chế độ tối | Fill shape | Fill shape | bodyLarge |
+| `EditorScreen`, tool-shape, chế độ tối | Fill shape | Use the selected color inside the shape. | bodySmall |
 | `EditorScreen`, tool-text, chế độ tối | Title | Bouncing ball | titleMedium |
 | `EditorScreen`, tool-text, chế độ tối | Title | Frame 12 / 48 · saved | bodySmall |
 | `EditorScreen`, tool-text, chế độ tối | Button | Export | labelLarge |
@@ -328,7 +493,7 @@ Vai trò màu theo `tokens.json` (tên vai trò Material 3); giá trị Studio N
 
 ## 4. Luồng thao tác
 
-`ProjectsScreen` hay `NewProjectScreen` > `EditorScreen`. Lần đầu có tour (`tour`, bỏ qua được). Thanh công cụ trái chọn công cụ; chạm lại công cụ đang chọn mở bảng tùy chọn (bottom sheet: `tool-brush`, `tool-fill`, `tool-text`; `tool-select` là thanh thao tác nổi). Biểu tượng layers trên cột phải (vùng chạm 48 dp) mở bảng layer; thêm layer thứ 6 mở hộp thoại rewarded (`layer-locked`). Chip onion skin mở `onion-settings`. Nhấn giữ một khung trên dòng thời gian vào chọn nhiều (`timeline-multiselect`). Nút phát > `playing`. Nút nhạc > `sound`; chọn gói hiệu ứng khóa > `sound-locked`. Chọn cọ nâng cao > `brush-locked`. Bài học mở `lesson-step`. "Export" > `ExportScreen`. Back > `ProjectsScreen` (interstitial `editor_exit_inter`).
+`ProjectsScreen` hay `NewProjectScreen` > `EditorScreen`. Lần đầu có tour (`tour`, bỏ qua được). Thanh công cụ trái chọn công cụ; chạm lại công cụ đang chọn mở bảng tùy chọn (bottom sheet: `tool-brush`, `tool-fill`, `tool-text`; `tool-select` là thanh thao tác nổi). Biểu tượng layers trên cột phải (vùng chạm 48 dp) mở bảng layer; thêm layer thứ 6 mở hộp thoại rewarded (`layer-locked`). Chip onion skin mở `onion-settings`. Nhấn giữ một khung trên dòng thời gian vào chọn nhiều (`timeline-multiselect`). Nút phát > `playing`. Nút nhạc > `sound`; chọn gói hiệu ứng khóa > `sound-locked`. Chọn cọ nâng cao > `brush-locked`. Bài học mở `lesson-step`. "Export" > `ExportScreen`. Back > `ProjectsScreen` (interstitial `editor_exit_inter`). Bổ sung 2026-11-21: chạm lại tẩy > `tool-eraser`, hình > `tool-shape`, camera ảo > `camera`; ô màu ở cột phải > `color-picker`; nút "thêm" (ba chấm) > `more-menu`, từ đó bật thước (`ruler`), đối xứng (`symmetry`), nhập ảnh hay video (sau khi chọn: `reference`), mở `sound`, xem lại `tour`; chip tốc độ khung > `frame-rate`; nút giữ khung trên thanh chọn nhiều > `hold-frame`; vuốt xuống trên dòng thời gian > `timeline-collapsed`, nút mũi tên ở cuối hàng điều khiển mở lại.
 
 ## 5. Vị trí quảng cáo
 

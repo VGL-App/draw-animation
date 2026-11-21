@@ -197,10 +197,12 @@ Tiêu chí chấp nhận:
 | Màn hình | Mục đích | Kịch bản liên quan |
 | --- | --- | --- |
 | `SettingsScreen`, default (sáng, tối) | Cài đặt mặc định khi tạo dự án, sao lưu và khôi phục, quyền riêng tư quảng cáo, thông tin app | KB-1, KB-2, KB-3, KB-4, KB-5, KB-6, KB-7, KB-8, KB-9 |
+| `SettingsScreen`, backing-up (sáng, tối) | Đang sao lưu tất cả: vòng chờ thay cho "To a file" | KB-5 |
+| `SettingsScreen`, no-projects (sáng, tối) | Chưa có dự án: dòng sao lưu mờ, "No projects yet" | KB-5 |
 | `ProjectsScreen` (feature projects) | Nút cài đặt trên thanh trên mở màn Cài đặt | KB-1, KB-10 |
 | `NewProjectScreen` (feature projects) | Chọn sẵn tốc độ khung và khung hình mặc định | KB-2, KB-3, KB-10 |
 
-Thiết kế chưa có: danh sách chọn tốc độ khung và khung hình, trạng thái đang sao lưu, thông báo sao lưu xong hay lỗi, thông báo chưa có dự án (câu hỏi 5, 9). Screenshot test ở khung thấp 360 × 640 dp cho trạng thái default.
+Thiết kế bổ sung ngày 2026-11-21, chờ anh Nhật duyệt: `backing-up`, `no-projects` (câu hỏi 5). Thông báo sao lưu xong hay lỗi dùng Snackbar chuẩn, danh sách chọn tốc độ khung và khung hình dùng hộp thoại chọn chuẩn, không có frame riêng (câu hỏi 5, 9). Screenshot test ở khung thấp 360 × 640 dp cho trạng thái default.
 
 ## 5. Quảng cáo
 
@@ -304,3 +306,4 @@ Không có.
 | --- | --- | --- |
 | 2026-11-21 | AI | Tạo bản đầu từ bản đề xuất đã duyệt (docs/research/proposal.md) và thiết kế đã duyệt |
 | 2026-11-21 | AI | Ghi câu trả lời của anh Nhật cho mọi câu hỏi ở mục 9 (anh chọn trong phiên ngày 2026-11-21) và sửa phần thân spec theo các câu trả lời; sửa các điểm nên sửa còn lại của lần rà soát cuối. Spec vẫn `draft` |
+| 2026-11-21 | AI | Ghi các frame thiết kế bổ sung, sửa theo câu trả lời (chờ anh Nhật duyệt) ở mục 4 và các tiêu chí liên quan |

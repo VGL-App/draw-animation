@@ -6,7 +6,7 @@ Sinh bởi `scripts/figma-export.py`. Không sửa tay; thiết kế đổi thì
 
 - Link: https://www.figma.com/design/uDdqi9ojRvIy4689FvCh5O/?node-id=23-3352
 - Frame: `23:3352`, giao diện sáng
-- Ngày lấy: 2026-11-20
+- Ngày lấy: 2026-11-21
 
 ## 2. Giá trị dùng
 
@@ -16,6 +16,8 @@ nào trùng; plan quyết định làm tròn về token gần nhất hay thêm t
 | Loại | Giá trị | Token |
 | --- | --- | --- |
 | instance ghi đè component | Icon | màu nền |
+| instance ghi đè component | Icon | màu nền, viền |
+| khoảng cách | 1 | ngoài hệ thống |
 | khoảng cách | 10 | ngoài hệ thống |
 | khoảng cách | 12 | ngoài hệ thống |
 | khoảng cách | 14 | ngoài hệ thống |
@@ -36,12 +38,15 @@ nào trùng; plan quyết định làm tròn về token gần nhất hay thêm t
 | kiểu chữ | 22/28, đậm 500 | ngoài hệ thống |
 | kiểu chữ | 24/24, đậm 400 | ngoài hệ thống |
 | kiểu chữ | 24/32, đậm 700 | ngoài hệ thống |
+| kiểu chữ | 3/4, đậm 600 | ngoài hệ thống |
+| kiểu chữ | 4/4, đậm 400 | ngoài hệ thống |
 | kiểu chữ | 40/40, đậm 400 | ngoài hệ thống |
 | màu chữ | #12141A | ngoài hệ thống |
 | màu chữ | #2F6FE0 | ngoài hệ thống |
 | màu chữ | #3D6A00 | ngoài hệ thống |
 | màu chữ | #5F6675 | ngoài hệ thống |
 | màu chữ | #FFFFFF | onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest |
+| màu chữ | #FFFFFF (độ mờ 0.90, lớp tô 0.90) | onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest |
 | màu nền | #1A1C22 | ngoài hệ thống |
 | màu nền | #2F6FE0 | ngoài hệ thống |
 | màu nền | #3D6A00 | ngoài hệ thống |
@@ -75,6 +80,10 @@ Toạ độ và cỡ tính theo dp, gốc là góc trên trái của khung. Th�
     - Frame "Preview", vị trí 166,116, cỡ 80 x 142, nền #FFFFFF (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest), bo góc 6
       - Rectangle "Rectangle", vị trí 172,233, cỡ 67 x 2, nền #1A1C22 (ngoài hệ thống)
       - Ellipse "Ellipse", vị trí 196,214, cỡ 19 x 19, nền #2F6FE0 (ngoài hệ thống)
+      - Frame "Watermark", vị trí 221,252, cỡ 22 x 4, xếp ngang, cách nhau 1 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/CENTER
+        - Instance "Icon", vị trí 221,252, cỡ 4 x 4, CHÚ Ý: ghi đè màu nền, viền của component gốc
+          - Text "glyph", vị trí 221,252, cỡ 4 x 4, chữ "animation", kiểu ngoài hệ thống (4/4, đậm 400), màu #FFFFFF (độ mờ 0.90, lớp tô 0.90) (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest)
+        - Text "Frameloop", vị trí 226,252, cỡ 17 x 4, chữ "Frameloop", kiểu ngoài hệ thống (3/4, đậm 600), màu #FFFFFF (độ mờ 0.90, lớp tô 0.90) (onPrimary, onSecondary, onTertiary, onError, surfaceContainerLowest)
     - Instance "Icon", vị trí 186,270, cỡ 40 x 40, CHÚ Ý: ghi đè màu nền của component gốc
       - Text "glyph", vị trí 186,270, cỡ 40 x 40, chữ "check_circle", kiểu ngoài hệ thống (40/40, đậm 400), màu #3D6A00 (ngoài hệ thống)
     - Text "Saved to Gallery", vị trí 24,322, cỡ 363 x 32, chữ "Saved to Gallery", kiểu ngoài hệ thống (24/32, đậm 700), màu #12141A (ngoài hệ thống)

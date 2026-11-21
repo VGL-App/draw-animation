@@ -24,6 +24,8 @@ Phiên tự chạy chỉ đọc thư mục này, không mở được Figma.
 
 Kịch bản: theo [spec của feature](../spec.md).
 
+Sửa ngày 2026-11-21 theo câu trả lời ở mục 9 của spec, chờ anh Nhật duyệt: ảnh xem trước ở `options`, `exporting`, `done` có watermark đúng tỷ lệ. Mẫu watermark: frame `Watermark_reference` trên trang Screens/Export & Lessons (https://www.figma.com/design/uDdqi9ojRvIy4689FvCh5O/?node-id=33-8115), không xuất ảnh vì không phải màn hình. Số đo: biểu tượng app và chữ "Frameloop" (Inter Semi Bold), trắng 90% có viền tối 0,5 px (đen 45%); cao bằng 5% cạnh ngắn của khung (54 px ở 1080 × 1920, 36 px ở 720p); góc dưới phải, cách mép 3% cạnh ngắn; giống nhau ở MP4, GIF, chuỗi PNG, GIF trong suốt.
+
 | Màn hình (composable) | Trạng thái | Ảnh trong `screens/`, số liệu trong `context/` | Kịch bản |
 | --- | --- | --- | --- |
 | `ExportScreen` | done, chế độ tối | `ExportScreen_done_dark` | KB-5, KB-9 |
@@ -42,6 +44,7 @@ Chữ tiếng Anh như trên thiết kế (bản đề xuất Q9: tiếng Anh). 
 | Màn hình, trạng thái | Vị trí (phần tử cha trong `context/`) | Chữ | Kiểu chữ (text style trên Figma) |
 | --- | --- | --- | --- |
 | `ExportScreen`, done, chế độ tối | TopBar | Export | titleLarge |
+| `ExportScreen`, done, chế độ tối | Watermark | Frameloop | 3/4, đậm 600 |
 | `ExportScreen`, done, chế độ tối | Content | Saved to Gallery | headlineSmall |
 | `ExportScreen`, done, chế độ tối | Content | Movies/Frameloop/Bouncing ball.mp4 · 2.4 MB | bodyMedium |
 | `ExportScreen`, done, chế độ tối | Button | Share | labelLarge |
@@ -53,11 +56,13 @@ Chữ tiếng Anh như trên thiết kế (bản đề xuất Q9: tiếng Anh). 
 | `ExportScreen`, error, chế độ tối | Button | Try again | labelLarge |
 | `ExportScreen`, error, chế độ tối | Button | Back to editor | labelLarge |
 | `ExportScreen`, exporting, chế độ tối | TopBar | Exporting | headlineSmall |
+| `ExportScreen`, exporting, chế độ tối | Watermark | Frameloop | 6/8, đậm 600 |
 | `ExportScreen`, exporting, chế độ tối | Content | Making your video… | titleLarge |
 | `ExportScreen`, exporting, chế độ tối | Meta | Frame 30 of 48 | labelMedium |
 | `ExportScreen`, exporting, chế độ tối | Meta | 62% · about 5 s left | labelMedium |
 | `ExportScreen`, exporting, chế độ tối | Button | Cancel | labelLarge |
 | `ExportScreen`, options, chế độ tối | TopBar | Export | titleLarge |
+| `ExportScreen`, options, chế độ tối | Watermark | Frameloop | 2/3, đậm 600 |
 | `ExportScreen`, options, chế độ tối | ProjectSummary | Bouncing ball | titleMedium |
 | `ExportScreen`, options, chế độ tối | ProjectSummary | 48 frames · 12 fps · 4.0 s | bodyMedium |
 | `ExportScreen`, options, chế độ tối | ProjectSummary | 9:16 · 1080 × 1920 | bodySmall |

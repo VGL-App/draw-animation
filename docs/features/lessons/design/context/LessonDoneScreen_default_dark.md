@@ -6,7 +6,7 @@ Sinh bởi `scripts/figma-export.py`. Không sửa tay; thiết kế đổi thì
 
 - Link: https://www.figma.com/design/uDdqi9ojRvIy4689FvCh5O/?node-id=15-773
 - Frame: `15:773`, giao diện tối
-- Ngày lấy: 2026-11-20
+- Ngày lấy: 2026-11-21
 
 ## 2. Giá trị dùng
 
@@ -77,7 +77,7 @@ Toạ độ và cỡ tính theo dp, gốc là góc trên trái của khung. Th�
     - Instance "Icon", vị trí 190,282, cỡ 32 x 32, CHÚ Ý: ghi đè màu nền của component gốc
       - Text "glyph", vị trí 190,282, cỡ 32 x 32, chữ "celebration", kiểu ngoài hệ thống (32/32, đậm 400), màu #B6F35C (ngoài hệ thống)
     - Text "Lesson complete!", vị trí 104,326, cỡ 204 x 32, chữ "Lesson complete!", kiểu ngoài hệ thống (24/32, đậm 700), màu #EEF0F4 (ngoài hệ thống)
-    - Text "12 frames · 1.0 s · Squa", vị trí 16,370, cỡ 379 x 20, chữ "12 frames · 1.0 s · Squash and stretch unlocked next", kiểu bodyMedium (14/20, đậm 400), màu #8C93A3 (ngoài hệ thống)
+    - Text "Summary", vị trí 16,370, cỡ 379 x 20, chữ "12 frames · 1.0 s · Next: Squash and stretch", kiểu bodyMedium (14/20, đậm 400), màu #8C93A3 (ngoài hệ thống)
     - Instance "lesson_done_native (NativeAdMedium)", vị trí 16,402, cỡ 379 x 250, nền #171A20 (ngoài hệ thống), viền #2C313B (ngoài hệ thống), dày 1.0, bo góc 14, xếp dọc, cách nhau 8 (sm), lề trên/phải/dưới/trái 12 (ngoài hệ thống)/12 (ngoài hệ thống)/12 (ngoài hệ thống)/12 (ngoài hệ thống), căn MIN/MIN
       - Frame "Header", vị trí 29,415, cỡ 353 x 36, xếp ngang, cách nhau 10 (ngoài hệ thống), lề trên/phải/dưới/trái 0/0/0/0, căn MIN/CENTER
         - Rectangle "Ad icon", vị trí 29,415, cỡ 36 x 36, nền #2B303A (ngoài hệ thống), bo góc 8
