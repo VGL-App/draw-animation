@@ -75,7 +75,7 @@ Bài học trước ngày 2026-11-20 nằm trong sổ bài học của repo dự
 
 ### L-006. Mục 3.1 của `auto-run.md` chưa nói rõ plan phiên bản mới khi task dừng nằm ở đâu
 
-- **Trạng thái:** proposed. **Loại:** tài liệu. **Phạm vi:** chung.
+- **Trạng thái:** proposed. **Loại:** quy trình. **Phạm vi:** chung.
 - **Nguồn:** RUN-20261122-02, T-007.
 - **Chuyện gì:** mục Chuẩn bị cho người khi task dừng nói plan phiên bản mới ở trạng thái `draft` nằm "ngay sau mục nhật ký của lần dừng", nhưng cũng nói "plan vẫn ở trạng thái `stopped` cho tới khi người duyệt phiên bản mới". Phiên phải đoán: sửa ngay trong file plan (tăng `version`, giữ `status: stopped`, mục 9 tách khối "Phiên bản 1:", "Phiên bản 2:" như `plan-check.py` đọc), không tạo file mới. Chưa có tiền lệ trong repo.
 - **Bằng chứng:** plan T-007 phiên bản 2 trên nhánh báo cáo của RUN-20261122-02.
