@@ -300,7 +300,7 @@ lessons/v1/squash-and-stretch/thumb.webp
 lessons/v1/squash-and-stretch/lesson.zip
 ```
 
-**Điều kiện trước phiên** (dev kiểm trước phiên, không phải lệnh `curl` trong phiên: proxy của `claude --cloud` chặn R2): dev đưa nội dung mẫu `lessons/v1/...` (năm tệp trên, đúng hợp đồng ở mục này) lên R2 staging, chạy `scripts/setup-check.sh` trên máy dev thấy cả năm dòng `ok`, rồi ghi kết quả vào danh sách chạy, trước khi phiên chạy T-048 bắt đầu. Lý do: `setup-check.sh` chạy trước mỗi phiên (`start-run.yml`) và mỗi sáng (`env-canary.yml`); PR của T-048 merge mà tệp chưa có thì kiểm tra đỏ, mở issue `setup-broken` và mọi phiên sau bị từ chối. Tệp trên R2 không bao giờ bị ghi đè (ADR-0015), nên nội dung đưa lên `v1` là bản `v1` mãi mãi: nên đưa hai bài mẫu thật đã duyệt; bản sửa sau đi vào `v2`.
+**Điều kiện trước phiên** (dev kiểm trước phiên, không phải lệnh `curl` trong phiên: proxy của `claude --cloud` chặn R2): dev đưa nội dung mẫu `lessons/v1/...` (năm tệp trên, đúng hợp đồng ở mục này) lên R2 staging, chạy `scripts/setup-check.sh` trên máy dev thấy cả năm dòng `ok`, rồi ghi kết quả vào danh sách chạy, trước khi phiên chạy T-048 bắt đầu. Lý do: `setup-check.sh` chạy trước mỗi phiên (`start-run.yml`) và mỗi sáng (`env-canary.yml`); PR của T-048 merge mà tệp chưa có thì kiểm tra đỏ, mở issue `setup-broken` và mọi phiên sau bị từ chối. Tệp trên R2 không bao giờ bị ghi đè (ADR-0015), nên nội dung đưa lên `v1` là bản `v1` mãi mãi: nên đưa hai bài mẫu thật đã duyệt (hay ghi rõ đây là bản mẫu của staging); bản sửa sau đi vào `v2`. Nội dung phải đúng hợp đồng: `index.json` chỉ gồm các bài có gói trong năm tệp (bỏ bài `walk-in-place` của tệp mẫu test), mỗi `lesson.zip` có `lesson.json` qua luật của `LessonPackFormat`, số bước và số khung khớp danh sách; đóng gói bằng lệnh ở mục này.
 
 **Không làm trong ticket:** dọn thư mục phiên bản cũ (câu hỏi 6); dựng dự án từ gói (T-052).
 
@@ -368,7 +368,9 @@ Nơi đọc các file có sẵn mà plan sửa (`grep -rln` trên `scripts/ .git
 
 ### 3.4. Phương án dự phòng
 
-Không có. Giải nén bằng `ZipInputStream`, JSON với kotlinx.serialization, DataStore thật trên tệp tạm và module mới trong bản release đã chạy thử (mục 4.1); các phần khác lặp mẫu có sẵn.
+- **Điểm chưa chắc:** DataStore thật dựng trên `backgroundScope` của `runTest` (mục 4) chưa được thử đúng cách đó; `reopen_keepsProgress` cần một scope hủy được.
+- **Điều kiện chuyển:** DataStore trên `backgroundScope` treo, báo lỗi scheduler, hay không đóng được để mở lại cùng tệp.
+- **Cách làm thay:** dùng mẫu đã chạy được của T-005 trên nhánh chính: `CoroutineScope(Dispatchers.IO + Job())`, `cancelAndJoin()` trong `finally` trước khi mở lại tệp. Chỉ đổi phần dựng test, câu khẳng định giữ nguyên.
 
 ### 3.5. Hành vi đã có bị đổi
 
@@ -456,7 +458,7 @@ Thứ tự commit: bước 3 commit các tệp test, `TestDoubles.kt`, ba tệp 
 | A. Phạm vi thay đổi | 3 | Module mới với nhiều giao diện công khai (`LessonContent`, `LessonProgressStore`, mô hình), cộng sửa `:app` (`AppRemoteKeys`, file build), `settings.gradle.kts`, `CLAUDE.md` và hai bảng khóa sinh tự động |
 | B. Độ rõ của yêu cầu | 1 | Spec đã xác nhận phần lớn (đường dẫn có phiên bản, khóa, bài dở giữ bản cũ). Bố cục trong gói bài, cách tính thanh tiến độ, chỗ nhớ bước (kho tiến độ hay dự án), việc đăng tệp bắt buộc, mã dự án của lần xong và trần layer là AI đề xuất, đã được anh Nhật trả lời ngày 2026-11-22 (mục 8, câu 1 tới 5, 8, 9); thêm điều kiện trước phiên về tệp trên R2 staging |
 | C. Khả năng kiểm chứng tự động | 0 | Mọi hành vi có unit test JVM với tệp mẫu, zip dựng trong test và DataStore thật; chỉ dòng tài liệu cần người đọc |
-| D. Ảnh hưởng chéo | 2 | Chưa feature nào dùng, nhưng T-039, T-050, T-052, T-053 và nội dung của T-049 dựa vào định dạng và giao diện này; hai bảng khóa cũng bị T-006 (đang chạy), T-007 (cùng đợt) sinh lại; `settings.gradle.kts` cũng bị T-001 và T-044 (cùng đợt) sửa; `CLAUDE.md` cũng bị T-001, T-004 sửa |
+| D. Ảnh hưởng chéo | 2 | Chưa feature nào dùng, nhưng T-039, T-050, T-052, T-053 và nội dung của T-049 dựa vào định dạng và giao diện này; hai bảng khóa cũng bị T-006 (đã merge), T-007 (cùng đợt) sinh lại; `settings.gradle.kts` cũng bị T-001 và T-044 (cùng đợt) sửa; `CLAUDE.md` cũng bị T-001, T-004 sửa |
 | E. Độ mới của kỹ thuật | 2 | Giải nén zip an toàn (`ZipInputStream`, chống đường dẫn ra ngoài, giới hạn byte) chưa có trong dự án nhưng phổ biến; phần còn lại là biến thể của mẫu có sẵn. Đã chạy thử bằng `scripts/check.sh` (mục 4.1) |
 | **Tổng** | 8 | **Mức: Cao** (chạm điểm chặn 7, 8) |
 
@@ -464,9 +466,9 @@ Thứ tự commit: bước 3 commit các tệp test, `TestDoubles.kt`, ba tệp 
 
 - File hoặc thành phần dùng chung bị chạm: `settings.gradle.kts`, `CLAUDE.md` (bảng module), `app/build.gradle.kts`, `AppRemoteKeys.kt`, `RemoteConfigKeysTest.kt`, `docs/remote-config-keys.md`, `docs/remote-config-template.json` (`scripts/ads-plan.py` đọc), tệp DataStore `app_preferences` (hai khóa mới). Module mới `:core:lessons`.
 - Task khác có thể xung đột:
-  - T-001 (RUN-20261122-01, đang chạy) thêm `include(":core:project")` vào `settings.gradle.kts` và một dòng vào bảng module của `CLAUDE.md`. T-048 chạy sau T-001 (`depends_on`), thêm dòng của mình sau dòng của T-001; xung đột chỉ là chữ, giải bằng cách thêm lại dòng trên nhánh mới nhất. T-004 (đang chạy) sửa dòng `:core:project` của bảng module; T-044 (cùng đợt) cũng thêm dòng vào `settings.gradle.kts`: cùng cách giải.
-  - T-006 (đang chạy) và T-007 (cùng đợt 20261122-02) sinh lại hai bảng khóa. Hai tệp sinh từ code nên xung đột giải bằng lệnh sinh lại trên nhánh mới nhất; danh sách chạy xếp tuần tự các task này.
-  - T-005 (đang chạy) thêm khóa vào `app_preferences` và sửa `core/data/build.gradle.kts`; T-048 không sửa `:core:data`, tên khóa không trùng (mục 3.1).
+  - T-001 (RUN-20261122-01, đã merge) thêm `include(":core:project")` vào `settings.gradle.kts` và một dòng vào bảng module của `CLAUDE.md`. T-048 chạy sau T-001 (`depends_on`), thêm dòng của mình sau dòng của T-001; xung đột chỉ là chữ, giải bằng cách thêm lại dòng trên nhánh mới nhất. T-004 (đang chạy) sửa dòng `:core:project` của bảng module; T-044 (cùng đợt) cũng thêm dòng vào `settings.gradle.kts`: cùng cách giải.
+  - T-006 (đã merge) và T-007 (cùng đợt 20261122-02) sinh lại hai bảng khóa. Hai tệp sinh từ code nên xung đột giải bằng lệnh sinh lại trên nhánh mới nhất; danh sách chạy xếp tuần tự các task này.
+  - T-005 (đã merge) thêm khóa vào `app_preferences` và sửa `core/data/build.gradle.kts`; T-048 không sửa `:core:data`, tên khóa không trùng (mục 3.1).
   - T-002 có thể cho `:core:project` phụ thuộc `:core:data`; `:core:lessons` không phụ thuộc `:core:project`, nên không có vòng nếu về sau `:core:project` cần `:core:lessons`.
   - T-039 (màn vẽ) đọc `LessonPack` và gọi `setStep`; tiêu đề "Lesson 1 · Bouncing ball" của màn vẽ cần tên bài và `libraryNumber` từ `LessonIndex`, nên T-039 và T-052 dùng cả danh sách lẫn gói; T-050 thu `library()`, đọc `progress`, gọi `thumbnail`; T-052 gọi `packVersionFor`, `loadPack`, `start`, dựng dự án `ProjectKind.Lesson` từ gói (đổi giá trị thô sang kiểu của `:core:project`); T-053 gọi `complete` và dùng giá trị trả về cho `duration_ms`, `next` cho "Next lesson", `completed[id].projectId` cho "Export my animation". T-052 xóa dự án của lần xong trước khi bắt đầu làm lại bài đã xong. Giới hạn 15 giây tổng cho lần tải (spec KB-2, KB-3) nằm ở ViewModel của T-050, T-052 nếu cần hơn giới hạn từng lần kết nối của `RemoteAssets`.
   - T-049 làm nội dung thật của thư viện theo đúng hợp đồng ở mục 3.1 (đường dẫn R2, `index.json`, bố cục và `lesson.json` của gói), nén zip bằng đúng lệnh ở mục 3.1. Năm tệp `lessons/v1/...` mà T-048 đăng vào `docs/ops/required-assets.txt` phải luôn trả `200` trên R2 staging: `v1` giữ nguyên, không xóa hay đổi tên; nội dung mới đi vào `v2` và đổi `lessons_content_version`. Hai bài mẫu đưa lên trước phiên của T-048 (điều kiện trước phiên, mục 3.1) nên là bản T-049 đã duyệt, vì `v1` không sửa được về sau.
