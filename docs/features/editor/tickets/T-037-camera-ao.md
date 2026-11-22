@@ -23,7 +23,7 @@ Công cụ camera ảo theo từng khung; bảng "Camera" (Zoom, Rotate, Camera 
 
 ## Phạm vi
 
-- Trạng thái `camera`. Cần sửa phần vẽ khung của `:core:project` thì nâng risk lên cao khi viết plan.
+- Trạng thái `camera`. Khung không có điểm đặt được nội suy theo thời gian giữa hai điểm gần nhất (T-004). "Reset camera" ghi điểm gốc cho khung đó, không xóa điểm đặt; xóa điểm đặt chỉ về gốc khi không còn điểm nào (cách hiểu spec editor KB-15, lời anh Nhật trong phiên 2026-11-22, câu hỏi 3 của plan T-004). Cần sửa phần vẽ khung của `:core:project` thì nâng risk lên cao khi viết plan.
 
 **Không bao gồm:**
 

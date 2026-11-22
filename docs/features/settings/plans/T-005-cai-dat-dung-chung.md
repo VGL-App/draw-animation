@@ -201,12 +201,19 @@ Không cần (E dưới 2). Để chắc phần ít gặp nhất (DataStore trê
 ## 8. Câu hỏi cho người duyệt
 
 1. **Ghi mốc nét vẽ đầu tiên lỗi thì sao?** Ba hàm ghi cài đặt ném `IOException` cho ViewModel báo người dùng, còn `markFirstStrokeDrawn()` tự bắt lỗi, ghi log, trả `false`, để màn vẽ không phải xử lý lỗi giữa lúc vẽ; màn vẽ gọi lại ở lần mở màn vẽ sau (mỗi lần mở gọi tối đa một lần, mục 3.1). Đề xuất của AI: giữ cách này.
+   - Trả lời (anh Nhật, 2026-11-22, chọn trong phiên): Đồng ý đề xuất.
 2. **Đọc lỗi thì mốc coi là chưa có.** Khi tệp đọc lỗi, `firstStrokeDrawn` ra `false` tới lần đọc được, nên luật quảng cáo tạm hiện ít quảng cáo hơn; tốc độ, khung hình, lực bút ra giá trị mặc định. Đề xuất của AI: giữ, vì đây là phía an toàn với người dùng.
+   - Trả lời (anh Nhật, 2026-11-22, chọn trong phiên): Đồng ý đề xuất.
 3. **Giá trị lạ đã lưu** (ví dụ `"4:5"` hay 10 fps) đọc ra giá trị mặc định, không báo lỗi, không tự sửa tệp. Đề xuất của AI: giữ.
+   - Trả lời (anh Nhật, 2026-11-22, chọn trong phiên): Đồng ý đề xuất.
 4. **Tên khóa và tệp.** Bốn khóa `settings_default_frame_rate`, `settings_default_aspect_ratio`, `settings_stylus_pressure`, `first_stroke_drawn` trong tệp `app_preferences` dùng chung, không tạo tệp DataStore riêng (tệp riêng cần thêm một bản cấp phát Hilt có định danh). Đề xuất của AI: giữ; mốc không mang tiền tố `settings_` vì là của màn vẽ.
+   - Trả lời (anh Nhật, 2026-11-22, chọn trong phiên): Đồng ý đề xuất.
 5. **`:core:data` thêm phụ thuộc `:core:logging`** để ghi log lần thử lại và lỗi ghi mốc (ADR-0019). Phương án khác: không ghi log trong kho, như `DataStoreCounterRepository`, khi đó lỗi đọc không để lại dấu vết. Đề xuất của AI: thêm phụ thuộc.
+   - Trả lời (anh Nhật, 2026-11-22, chọn trong phiên): Đồng ý đề xuất.
 6. **Bảng module của `CLAUDE.md`** vẫn ghi `:core:data` là "DataStore dùng chung". Đề xuất của AI: không sửa trong ticket này, để không cùng sửa `CLAUDE.md` với plan khác trong đợt; tên `DeviceSettingsRepository` và ticket đủ để các plan sau tìm.
+   - Trả lời (anh Nhật, 2026-11-22, chọn trong phiên): Đồng ý đề xuất.
 7. **Duyệt chéo khi nhóm một dev.** Plan rủi ro Cao cần duyệt chéo; nếu nhóm chỉ có anh, mục 9 ghi anh vừa duyệt vừa duyệt chéo kèm lý do (risk-scoring.md, mục 3).
+   - Trả lời (anh Nhật, 2026-11-22, chọn trong phiên): Anh Nhật vừa duyệt vừa duyệt chéo, vì nhóm hiện chỉ có một dev.
 
 ## 9. Quyết định duyệt
 

@@ -19,7 +19,7 @@ created: 2026-11-22
 
 ## Mô tả
 
-Khai báo một lần trong `:core:config` 6 cờ `feature_<f>_enabled` (mặc định tắt), khóa `lessons_content_version` và `time_reload_editor_top_native` (mặc định 120 giây), để các plan sau không cùng sửa `FeatureFlag.kt` và `docs/remote-config-keys.md`.
+Khai báo một lần trong `:core:config` 6 cờ `feature_<f>_enabled` (mặc định tắt), để các plan sau không cùng sửa `FeatureFlag.kt` và `docs/remote-config-keys.md`. Khóa `time_reload_editor_top_native` chuyển sang T-008, khóa `lessons_content_version` chuyển sang T-048, vì khóa nằm ở module sở hữu (ADR-0046, quyết định 3), theo lời anh Nhật trong phiên 2026-11-22 (câu hỏi của plan T-006).
 
 ## Phạm vi
 

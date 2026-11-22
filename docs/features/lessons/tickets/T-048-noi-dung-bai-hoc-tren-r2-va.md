@@ -8,7 +8,7 @@ owner: Nhật
 status: backlog
 risk: high
 size: M
-depends_on: [T-001, T-006]
+depends_on: [T-001]
 sprint:
 plan:
 auto_run:
@@ -24,6 +24,7 @@ created: 2026-11-22
 ## Phạm vi
 
 - Mô hình nội dung bài ở core (plan chọn module); bài dở giữ bản nội dung cũ tới khi xong.
+- Khai báo khóa `lessons_content_version` trong module core chứa nội dung bài, thêm module vào `AppRemoteKeys` (chuyển từ T-006, theo lời anh Nhật trong phiên 2026-11-22 (câu hỏi của plan T-006); bỏ T-006 khỏi phụ thuộc).
 - Đăng file vào `docs/ops/required-assets.txt`. Unit test với file mẫu.
 
 **Không bao gồm:**
