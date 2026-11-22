@@ -1,6 +1,6 @@
 ---
 feature: export
-status: confirmed
+status: changed
 owner: Nhật
 product_owner: Nhật
 requests:
@@ -185,7 +185,7 @@ Chép từ bảng 9.1 của bản đề xuất. Mọi vị trí mặc định t�
 
 Ghi chú:
 
-- **Trước nét vẽ đầu tiên** (bản đề xuất, đoạn dưới bảng 9.1): tới khi người dùng vẽ nét đầu tiên ở bất kỳ dự án hay bài học nào, `export_options_mrec`, `export_wait_mrec`, `export_done_native` và `export_interstitial` không hiện; `export_rw_extra` vẫn hiện vì người dùng tự chọn. Trường hợp này xảy ra, ví dụ, khi người dùng xuất một dự án khôi phục từ file mà chưa từng vẽ nét nào trên máy.
+- **Không có luật trước nét vẽ đầu tiên** (bỏ ngày 2026-11-22, câu hỏi 15): mỗi vị trí chỉ theo khóa `is_show_<mã>` và các tham số Remote Config ở bảng, kể cả khi người dùng chưa từng vẽ nét nào trên máy.
 - Sau `export_interstitial` có thể có native toàn màn hình `native_combo` theo vị trí toàn app (bản đề xuất 9.1); spec này không thêm vị trí đó.
 - Quảng cáo khi quay lại app (`resume`, `resume_inter`) hiện ở mọi màn, kể cả màn chờ xuất (Q4); theo luật của vị trí toàn app, không thuộc spec này.
 - Màn Xuất có quảng cáo trong nội dung (MREC, native medium), nên lớp nổi của quảng cáo không hiện cạnh chúng (luật chung của quảng cáo).
@@ -200,7 +200,7 @@ Ghi chú:
 | File tạm trong lúc xuất | Dựng file trước khi lưu vào thư viện | Xóa ngay khi lưu xong, khi hủy, lỗi hay dừng |
 | Trạng thái đã mở tùy chọn thêm của lần xuất | Không bắt xem lại quảng cáo trong cùng lần xuất | Chỉ trong lần xuất đó (câu hỏi 2), không ghi lâu dài |
 
-Feature đọc mốc "nét vẽ đầu tiên" mà feature editor lưu trên máy, để áp luật ở mục 5; không ghi mốc này. Không tài khoản, không gửi tranh hay file đi đâu ngoài khi người dùng tự chia sẻ (bản đề xuất 9.4).
+Feature không đọc, không ghi mốc "nét vẽ đầu tiên" (câu hỏi 15). Không tài khoản, không gửi tranh hay file đi đâu ngoài khi người dùng tự chia sẻ (bản đề xuất 9.4).
 
 **Sự kiện phân tích** (từ danh sách đề xuất ở bản đề xuất 9.2; danh sách và tham số đã được anh Nhật duyệt ở câu hỏi 11):
 
@@ -288,6 +288,9 @@ Không có.
     - Đề xuất của AI: trả lời chung với câu 4 của spec editor. AI đề xuất `allow_after_2`: sau 2 lần thử liên tiếp không có quảng cáo thì mở luôn tùy chọn cho lần xuất đó. Phương án khác: `block`, tùy chọn không mở tới khi có quảng cáo.
     - Trả lời: Theo spec editor câu 4: `allow_after_2`.
 
+15. **Bỏ luật "trước nét vẽ đầu tiên"** (yêu cầu thay đổi của anh Nhật ngày 2026-11-22: "Việc thiết lập quảng cáo sẽ cần linh hoạt tuỳ theo kịch bản kinh doanh"). Luật này giữ `export_options_mrec`, `export_wait_mrec`, `export_done_native` và `export_interstitial` tới khi người dùng vẽ nét đầu tiên. Bỏ luật thì mỗi vị trí chỉ theo khóa `is_show_<mã>` và các tham số Remote Config, luật kinh doanh sẵn có.
+    - Trả lời: Bỏ hẳn luật, giữ mốc nét vẽ đầu tiên làm dữ liệu dự phòng (anh Nhật, 2026-11-22, trong phiên).
+
 ## 10. Lịch sử
 
 | Ngày | Người | Nội dung |
@@ -298,3 +301,4 @@ Không có.
 | 2026-11-21 | AI | Watermark đổi sang chữ trắng trên viên thuốc nền đen mờ, theo lời anh Nhật trong phiên (dễ thấy trên nền trắng) |
 | 2026-11-21 | AI | Thiết kế bổ sung đã được anh Nhật duyệt trong phiên (chọn "Duyệt") |
 | 2026-11-21 | AI | Chuyển `confirmed` theo lời anh Nhật (người phụ trách sản phẩm) trong phiên: "xác nhận 6 spec" |
+| 2026-11-22 | AI | Bỏ luật quảng cáo trước nét vẽ đầu tiên: sửa ghi chú ở mục 5, bỏ việc đọc mốc ở mục 6, thêm câu hỏi 15; chuyển `changed`. Theo lời anh Nhật trong phiên: bỏ luật trước nét vẽ đầu tiên, giữ mốc làm dữ liệu dự phòng; chờ xác nhận lại |

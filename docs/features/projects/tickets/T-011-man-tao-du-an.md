@@ -26,7 +26,7 @@ Màn Tạo dự án: tên (mặc định "My animation <số>", tối đa 40 ký
 - `NewProjectScreen` theo thiết kế (đã bỏ 4:5). Giá trị chọn sẵn lấy từ T-005; khi cờ Cài đặt tắt thì dùng 12 fps, 9:16 (settings câu 15).
 - Ô chọn nền dùng ba màu cố định `#FFFFFF`, `#22262E`, `#2F6FE0` của `ProjectBackgroundColors` (T-004), giống nhau ở chế độ sáng và tối, dù ảnh thiết kế `NewProjectScreen` tô theo theme; người sửa Figma cho khớp (lời anh Nhật trong phiên 2026-11-22, câu hỏi 1 của plan T-004).
 - Ảnh nền "Photo" chép vào dự án đã xoay theo EXIF và thu nhỏ tới khoảng 3840 điểm ảnh cạnh dài (hợp đồng với T-004).
-- `create_inter` từ dự án thứ 2 theo `ads_interval` và luật trước nét vẽ đầu tiên.
+- `create_inter` từ dự án thứ 2 theo `ads_interval`. Bỏ luật trước nét vẽ đầu tiên ngày 2026-11-22, vì anh Nhật bỏ hẳn luật đó (spec projects câu hỏi 24).
 - Cờ màn vẽ tắt: "Coming soon", không tạo dự án. Mở màn vẽ kiểm đầy đủ sau T-018. Cùng sửa `AppNavHost` của `:app` với các ticket màn hình khác: danh sách chạy xếp tuần tự các ticket này (run-check.py báo cùng sửa file).
 
 **Không bao gồm:**

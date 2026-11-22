@@ -311,10 +311,15 @@ Trong phiên, sau `scripts/check.sh` chạy thêm `./gradlew :feature:export:lin
 ## 8. Câu hỏi cho người duyệt
 
 1. **Phần làm ra file đặt ở module nào?** Ticket T-042 ghi nó tạo `:feature:export`, nhưng T-044 chỉ phụ thuộc T-004 và có thể chạy trước T-042. Đề xuất của AI: T-044 tạo `:feature:export` (chỉ màn Xuất cần mã hóa file; màn Hoàn thành bài học mở màn Xuất chứ không tự xuất), T-042 nhận module có sẵn và ghi Sửa. Phương án khác: đặt vào `:core:project` gói `export` cạnh phần vẽ của T-004; khi đó không tạo module, nhưng `:core:project` thêm chữ hiển thị và phần mã hóa vốn chỉ màn Xuất dùng. Cả hai phương án đều chạm điểm chặn 7 vì màu watermark ở `:core:designsystem`.
+   - Trả lời (anh Nhật, 2026-11-22, chọn trong phiên): T-044 tạo `:feature:export`, theo đề xuất của AI (ticket T-042 đã sửa trong PR này).
 2. **Viên thuốc của watermark trong GIF trong suốt.** GIF chỉ có trong suốt một bit; viên thuốc đen 35% (alpha 89) dưới ngưỡng 128 nên sẽ biến mất, chỉ còn chữ trắng, không đọc được trên nền trắng của app khác. Đề xuất của AI: trong GIF trong suốt, viên thuốc vẽ đen đặc (`#000000`), chữ và biểu tượng giữ trắng; MP4, GIF thường và chuỗi PNG giữ đen 35% như mẫu. Ngưỡng 128 cũng áp cho mép nét vẽ (mép khử răng cưa nửa trong trở lên thành đặc). Phương án khác: viên thuốc xám đặc `#A6A6A6` (màu của đen 35% trên nền trắng), giống mẫu khi đặt trên nền trắng nhưng chữ trắng kém nổi.
+   - Trả lời (anh Nhật, 2026-11-22, chọn trong phiên): Viên thuốc đen đặc trong GIF trong suốt, theo đề xuất của AI.
 3. **Chuỗi PNG với khung giữ 2× tới 4×.** Spec ghi "đúng một ảnh cho mỗi khung của dự án". Đề xuất của AI: làm đúng như spec, khung giữ 3× vẫn là một ảnh; app chỉnh sửa khác sẽ không biết khung đó đứng lâu hơn. Phương án khác: lặp ảnh theo `hold` (khung giữ 3× thành 3 ảnh giống nhau), giữ đúng nhịp khi nhập vào app khác nhưng trái chữ của spec, cần sửa spec.
+   - Trả lời (anh Nhật, 2026-11-22, chọn trong phiên): Một ảnh cho mỗi khung, đúng spec, theo đề xuất của AI.
 4. **GIF ở độ phân giải đã chọn, không dithering.** Spec cho chọn 720p hay 1080p với mọi định dạng. GIF 1080 × 1920 của tranh nét đặc nhỏ (bảng màu đúng, nén tốt), nhưng tranh nhiều màu (ảnh nền "Photo") có thể khoảng 340 KB mỗi khung (mục 4.1), tức vài chục MB cho 48 khung. Đề xuất của AI: giữ đúng độ phân giải đã chọn, không dithering (vùng màu phẳng giữ phẳng); ảnh nền "Photo" trong GIF bị dồn màu là giới hạn của GIF, người dùng muốn đẹp thì chọn MP4. Phương án khác: thêm dithering Floyd-Steinberg cho khung vượt 256 màu (ảnh nền đẹp hơn, file lớn hơn, nét đặc có thể lấm tấm).
+   - Trả lời (anh Nhật, 2026-11-22, chọn trong phiên): Giữ đúng độ phân giải, không dithering, theo đề xuất của AI.
 5. **Duyệt chéo khi nhóm một dev.** Plan rủi ro Cao cần duyệt chéo; nếu nhóm vẫn chỉ có anh, mục 9 ghi anh vừa duyệt vừa duyệt chéo kèm lý do (risk-scoring.md, mục 3).
+   - Trả lời (anh Nhật, 2026-11-22, chọn trong phiên): Anh Nhật vừa duyệt vừa duyệt chéo, vì nhóm hiện chỉ có một dev.
 
 ## 9. Quyết định duyệt
 

@@ -1,6 +1,6 @@
 ---
 feature: lessons
-status: confirmed
+status: changed
 owner: Nhật
 product_owner: Nhật
 requests:
@@ -92,7 +92,6 @@ Tiêu chí chấp nhận:
 - [ ] Khi đang tải nội dung của bài thì người dùng thấy bài đang được mở và không chạm được thẻ khác (hộp thoại nhỏ "Opening lesson…" có vòng chờ, chạm ngoài không đóng, nút quay lại hủy việc mở; câu hỏi 6); tải lỗi hay không có phản hồi sau 15 giây thì app báo lỗi, có nút thử lại, người dùng vẫn ở màn Bài học.
 - [ ] Khi bài đã mở trong màn vẽ thì danh sách dự án không có thêm dự án nào và số dự án của người dùng không đổi; điều kiện "từ dự án thứ 2" của quảng cáo khi tạo dự án không tính bài học.
 - [ ] Khi bài đã mở trong màn vẽ thì app ghi nhận một lần bắt đầu bài, kèm mã bài.
-- [ ] Khi người dùng chưa từng vẽ nét nào ở bất kỳ dự án hay bài học nào thì lúc vào bài không có quảng cáo toàn màn hình (mục 5).
 
 Trường hợp đặc biệt:
 
@@ -167,10 +166,9 @@ Quảng cáo theo mục 5; mọi vị trí mặc định tắt và bật từ xa
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi vị trí quảng cáo thanh đáy của màn Bài học bật và người dùng đã vẽ nét đầu tiên thì thanh quảng cáo nằm ngay trên thanh điều hướng ở trạng thái danh sách, không che thẻ bài nào (danh sách cuộn được tới thẻ cuối).
-- [ ] Khi vị trí ô quảng cáo trong lưới bật và người dùng đã vẽ nét đầu tiên thì danh sách có một ô quảng cáo sau mỗi 4 thẻ bài, ô quảng cáo tách bạch với thẻ bài (câu hỏi 11).
-- [ ] Khi vị trí quảng cáo ở màn Hoàn thành bài học bật và người dùng đã vẽ nét đầu tiên thì quảng cáo nằm dưới dòng tóm tắt, cách nút "Next lesson" ít nhất 24 dp ở mọi cỡ chữ.
-- [ ] Khi người dùng chưa vẽ nét nào ở bất kỳ dự án hay bài học nào thì màn Bài học, lúc vào bài, màn Hoàn thành bài học và lúc bấm "Next lesson" không có quảng cáo nào.
+- [ ] Khi vị trí quảng cáo thanh đáy của màn Bài học bật thì thanh quảng cáo nằm ngay trên thanh điều hướng ở trạng thái danh sách, không che thẻ bài nào (danh sách cuộn được tới thẻ cuối).
+- [ ] Khi vị trí ô quảng cáo trong lưới bật thì danh sách có một ô quảng cáo sau mỗi 4 thẻ bài, ô quảng cáo tách bạch với thẻ bài (câu hỏi 11).
+- [ ] Khi vị trí quảng cáo ở màn Hoàn thành bài học bật thì quảng cáo nằm dưới dòng tóm tắt, cách nút "Next lesson" ít nhất 24 dp ở mọi cỡ chữ.
 - [ ] Khi một vị trí tắt từ xa thì chỗ của nó không còn, không để khoảng trống; thẻ bài và nút không đổi chỗ khi quảng cáo nạp xong hay nạp lỗi ở màn Hoàn thành bài học (nút ghim đáy).
 - [ ] Khi đang ở trạng thái đang tải hay lỗi của màn Bài học thì không có thanh quảng cáo đáy và ô quảng cáo trong lưới (thiết kế hai trạng thái này không có, câu hỏi 11).
 
@@ -222,7 +220,7 @@ Chép từ bảng 9.1 của bản đề xuất. Mọi vị trí mặc định t�
 - Sau mỗi interstitial của feature, `native_combo` (vị trí toàn app) có thể hiện theo `is_show_native_after_inter`; không phải vị trí của spec này.
 - Bấm "Next lesson" mở thẳng bài tiếp, nên chỉ `lesson_next_inter` được gọi, không gọi thêm `lesson_start_inter` cho bài đó (câu hỏi 12).
 
-**Trước nét vẽ đầu tiên (bản đề xuất, đoạn dưới bảng 9.1):** tới khi người dùng vẽ nét đầu tiên ở bất kỳ dự án hay bài học nào, app chỉ hiện `native_onboarding`, `projects_empty_native` trên màn trống và `editor_top_native` khi đã vào màn vẽ. Vì vậy cả năm vị trí trên không hiện trước nét vẽ đầu tiên: không có `lesson_start_inter` lúc vào bài, không có thanh đáy, ô lưới ở màn Bài học, không có native medium hay `lesson_next_inter` ở màn Hoàn thành. Mốc "nét vẽ đầu tiên" app nhớ trên máy, dùng chung với các feature khác.
+**Không có luật trước nét vẽ đầu tiên** (bỏ ngày 2026-11-22, câu hỏi 17): cả năm vị trí trên chỉ theo khóa `is_show_<mã>` và các tham số Remote Config ở bảng, kể cả khi người dùng chưa vẽ nét nào.
 
 **Không đặt quảng cáo ở** (bản đề xuất 9.1): canvas, dòng thời gian, các bảng công cụ của màn vẽ, kể cả khi làm bài; không làm quảng cáo giống nút của app hay sát nút.
 
@@ -236,7 +234,7 @@ Chép từ bảng 9.1 của bản đề xuất. Mọi vị trí mặc định t�
 | Bài đã hoàn thành (mã bài) | Hiện nhãn "Done", số đếm của nhóm | Đến khi người dùng xóa dữ liệu app |
 | Tiến độ bài đang làm (mã bài, bước đang làm) | Thanh tiến độ trên thẻ, mở lại đúng bước | Đến khi bài hoàn thành hay người dùng làm lại, hoặc xóa dữ liệu app |
 | Hoạt hình người dùng vẽ trong bài | Mở lại bài dở, xem trước ở màn Hoàn thành, xuất | Đến khi người dùng làm lại bài, hoặc xóa dữ liệu app (câu hỏi 8) |
-| Mốc "đã vẽ nét đầu tiên" (dùng chung, không riêng feature này) | Luật quảng cáo trước nét vẽ đầu tiên | Đến khi người dùng xóa dữ liệu app |
+| Mốc "đã vẽ nét đầu tiên" (dùng chung, không riêng feature này) | Dữ liệu dự phòng cho kịch bản kinh doanh sau, không luật nào đọc (câu hỏi 17) | Đến khi người dùng xóa dữ liệu app |
 
 **Sự kiện phân tích:** (từ danh sách đề xuất ở bản đề xuất 9.2; danh sách và tham số đã được anh Nhật duyệt ở câu hỏi 13)
 
@@ -319,6 +317,8 @@ Khóa Remote Config khác (không phải cờ): `lessons_content_version`, thư 
 16. **Màn gập mở ra:** bản đề xuất mục 7 chỉ dựng frame `_unfolded` cho Màn vẽ và Danh sách dự án; thiết kế bài học không có. Thiết kế ghi thanh điều hướng thành thanh bên khi màn rộng.
     - Đề xuất của AI: ở màn rộng, lưới bài học giãn thành 3 cột, màn Hoàn thành giữ nội dung ở giữa với bề rộng tối đa như khung 411 dp; không thêm ảnh thiết kế, có một screenshot test ở khung `w673dp-h841dp` cho mỗi màn.
     - Trả lời: Đồng ý đề xuất của AI.
+17. **Bỏ luật "trước nét vẽ đầu tiên"** (yêu cầu thay đổi của anh Nhật ngày 2026-11-22: "Việc thiết lập quảng cáo sẽ cần linh hoạt tuỳ theo kịch bản kinh doanh"). Luật này giữ cả năm vị trí của bài học tới khi người dùng vẽ nét đầu tiên. Bỏ luật thì mỗi vị trí chỉ theo khóa `is_show_<mã>` và các tham số Remote Config, luật kinh doanh sẵn có.
+    - Trả lời: Bỏ hẳn luật, giữ mốc nét vẽ đầu tiên làm dữ liệu dự phòng (anh Nhật, 2026-11-22, trong phiên).
 
 ## 10. Lịch sử
 
@@ -329,3 +329,4 @@ Khóa Remote Config khác (không phải cờ): `lessons_content_version`, thư 
 | 2026-11-21 | AI | Ghi các frame thiết kế bổ sung, sửa theo câu trả lời (chờ anh Nhật duyệt) ở mục 4 và các tiêu chí liên quan |
 | 2026-11-21 | AI | Thiết kế bổ sung đã được anh Nhật duyệt trong phiên (chọn "Duyệt") |
 | 2026-11-21 | AI | Chuyển `confirmed` theo lời anh Nhật (người phụ trách sản phẩm) trong phiên: "xác nhận 6 spec" |
+| 2026-11-22 | AI | Bỏ luật quảng cáo trước nét vẽ đầu tiên: bỏ một tiêu chí ở KB-3 và một ở KB-9, bỏ điều kiện "đã vẽ nét đầu tiên" ở ba tiêu chí của KB-9, sửa mục 5, mục đích của mốc ở mục 6, thêm câu hỏi 17; chuyển `changed`. Theo lời anh Nhật trong phiên: bỏ luật trước nét vẽ đầu tiên, giữ mốc làm dữ liệu dự phòng; chờ xác nhận lại |
