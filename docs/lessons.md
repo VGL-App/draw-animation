@@ -52,3 +52,33 @@ Bài học trước ngày 2026-11-20 nằm trong sổ bài học của repo dự
 - **Đề xuất:** `docs/ops/staging-and-runs.md`, mục dựng routine: sau khi dựng, chạy một phiên thử đẩy một nhánh tạm để thấy lỗi quyền GitHub App trước lần kích hoạt thật; hoặc `start-run.yml` thêm bước kiểm tương đương nếu làm được.
 - **Áp dụng:**
 - **Kiểm chứng:**
+
+### L-004. Thêm vị trí quảng cáo làm test JVM của `:core:ads` hết bộ nhớ trên CI
+
+- **Trạng thái:** proposed. **Loại:** môi trường. **Phạm vi:** chung.
+- **Nguồn:** RUN-20261122-02, T-007 (PR #20).
+- **Chuyện gì:** T-007 thêm 22 vị trí vào `AdPlacement`. `scripts/check.sh` qua trên máy của phiên (Java 21), nhưng `pr-check` (Java 17) đỏ hai lần ở `:core:ads:testDebugUnitTest`: mỗi lần một hay hai screenshot test có sẵn khác nhau ném `java.lang.OutOfMemoryError at DataBufferInt.java:75`. `AdsController` dựng chỗ nạp sẵn cho mọi vị trí, nên mỗi controller của hàng trăm test giữ thêm đối tượng; mọi test của module chạy trong một JVM với heap mặc định (không có `maxHeapSize` trong `build-logic/`); screenshot test có hiệu ứng chạy mãi vẽ tới sát giới hạn bộ nhớ rồi mới chụp. Cách sửa nằm ở `build-logic/` nên phiên dừng task. Bảng tra lỗi không có dòng cho mẫu này (`khong-co`), và máy của phiên không có Java 17 để tái hiện.
+- **Bằng chứng:** lần chạy 45043991143 của `pr-check` (lần 1 và lần chạy lại đều đỏ); nhật ký plan T-007; T-048, T-044, T-002 cùng phiên xanh trên `pr-check` với `:core:ads` của nhánh chính.
+- **Đề xuất:** dự án mẫu đặt `maxHeapSize` cho task `Test` trong convention plugin và đổi các screenshot test có hiệu ứng chạy mãi của `:core:ads` sang dừng đồng hồ; `docs/ops/ads-guide.md`, mục thêm vị trí: chạy test `:core:ads` với Java của CI khi thêm nhiều vị trí; thêm dòng `OutOfMemoryError` của test JVM vào `docs/ops/failure-playbook.md` (loại `that`, gợi ý xem heap của test), kèm tệp log trong `scripts/tests/playbook/`. Cân nhắc cho `scripts/cloud-setup.sh` cài JDK cùng phiên bản với CI để `check.sh` của phiên giống CI.
+- **Áp dụng:**
+- **Kiểm chứng:**
+
+### L-005. Plan ghi `advanceUntilIdle()` cho luồng thu trong `backgroundScope`
+
+- **Trạng thái:** proposed. **Loại:** plan. **Phạm vi:** chung.
+- **Nguồn:** RUN-20261122-02, T-002 (PR #23).
+- **Chuyện gì:** mục 4 của plan T-002 viết hai test thu danh sách dự án trong `backgroundScope` rồi chờ bằng `advanceUntilIdle()`. Với kotlinx-coroutines-test 1.10, `advanceUntilIdle()` dừng khi chỉ còn việc nền, nên lần đọc đĩa không chạy và hai test đỏ cả khi code đúng. Phiên con đổi sang `runCurrent()` sau commit test (bước 4, chi tiết test), giữ mọi câu khẳng định, kèm lần chạy trên khung rỗng.
+- **Bằng chứng:** nhật ký plan T-002, dòng Lệch so với plan; mô tả PR #23.
+- **Đề xuất:** `CLAUDE.md`, mục Viết một feature mới, ý Test: luồng thu trong `backgroundScope` thì chờ bằng `runCurrent()` (hay `advanceTimeBy` khi có `delay`), không bằng `advanceUntilIdle()`. `docs/CLAUDE.md`, mục Khi viết plan: test dạng này chạy thử bằng một test tạm.
+- **Áp dụng:**
+- **Kiểm chứng:**
+
+### L-006. Mục 3.1 của `auto-run.md` chưa nói rõ plan phiên bản mới khi task dừng nằm ở đâu
+
+- **Trạng thái:** proposed. **Loại:** tài liệu. **Phạm vi:** chung.
+- **Nguồn:** RUN-20261122-02, T-007.
+- **Chuyện gì:** mục Chuẩn bị cho người khi task dừng nói plan phiên bản mới ở trạng thái `draft` nằm "ngay sau mục nhật ký của lần dừng", nhưng cũng nói "plan vẫn ở trạng thái `stopped` cho tới khi người duyệt phiên bản mới". Phiên phải đoán: sửa ngay trong file plan (tăng `version`, giữ `status: stopped`, mục 9 tách khối "Phiên bản 1:", "Phiên bản 2:" như `plan-check.py` đọc), không tạo file mới. Chưa có tiền lệ trong repo.
+- **Bằng chứng:** plan T-007 phiên bản 2 trên nhánh báo cáo của RUN-20261122-02.
+- **Đề xuất:** `docs/auto-run.md`, mục Chuẩn bị cho người khi task dừng: ghi rõ phiên bản mới sửa ngay trong file plan, `status` giữ `stopped`, mục nào thêm (đoạn "Phiên bản N" ở mục 1, "Cách tiếp tục" ở mục 3.1, khối "Phiên bản N:" ở mục 9); `docs/templates/plan.md` có ví dụ.
+- **Áp dụng:**
+- **Kiểm chứng:**
