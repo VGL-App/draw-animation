@@ -12,10 +12,12 @@ import com.vgl.draw.animation.core.designsystem.theme.DarkColors
 import com.vgl.draw.animation.core.designsystem.theme.InterFamily
 import com.vgl.draw.animation.core.designsystem.theme.LightAppColors
 import com.vgl.draw.animation.core.designsystem.theme.LightColors
+import com.vgl.draw.animation.core.designsystem.theme.ProjectBackgroundColors
 import com.vgl.draw.animation.core.designsystem.theme.SpaceGroteskFamily
 import com.vgl.draw.animation.core.designsystem.theme.Spacing
 import java.io.File
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
@@ -69,6 +71,17 @@ class DesignTokensTest {
             appColorRoles(LightAppColors).map { it.first }.sorted(),
         )
     }
+
+    @Test
+    fun projectBackgroundColors_listedInTokens() {
+        val lines = tokensJson().lines()
+        val line = "  \"projectBackground\": {\"white\": \"#FFFFFF\", \"dark\": \"#22262E\", \"blue\": \"#2F6FE0\"},"
+        val index = lines.indexOf(line)
+        assertTrue("tokens.json must list the project background colors at the top level: $line", index >= 0)
+        // Right after the "color" group closes, outside it: figma-export.py reads every key of "color" as a theme.
+        assertEquals("  },", lines[index - 1])
+        assertEquals("    \"dark\": ${colors(DarkColors, DarkAppColors)}", lines[index - 2])
+    }
 }
 
 internal fun tokensJson(): String = buildString {
@@ -77,6 +90,7 @@ internal fun tokensJson(): String = buildString {
     appendLine("    \"light\": ${colors(LightColors, LightAppColors)},")
     appendLine("    \"dark\": ${colors(DarkColors, DarkAppColors)}")
     appendLine("  },")
+    appendLine("  \"projectBackground\": ${projectBackground()},")
     val styles = typographyStyles(AppTypography)
     appendLine("  \"typography\": {")
     styles.forEachIndexed { index, (name, style) ->
@@ -92,6 +106,13 @@ internal fun tokensJson(): String = buildString {
 // Material 3 roles first, then the app roles without a Material 3 slot (AppColors), so designers find both.
 private fun colors(scheme: ColorScheme, app: AppColors): String = (colorRoles(scheme) + appColorRoles(app))
     .joinToString(prefix = "{", postfix = "}", separator = ", ") { (name, color) -> "\"$name\": \"${hex(color)}\"" }
+
+// Not under "color": these colors do not follow the theme, and every key of "color" is a theme for figma-export.py.
+private fun projectBackground(): String = listOf(
+    "white" to ProjectBackgroundColors.WHITE,
+    "dark" to ProjectBackgroundColors.DARK,
+    "blue" to ProjectBackgroundColors.BLUE,
+).joinToString(prefix = "{", postfix = "}", separator = ", ") { (name, argb) -> "\"$name\": \"${hex(argb)}\"" }
 
 internal fun colorRoles(scheme: ColorScheme): List<Pair<String, Color>> = listOf(
     "primary" to scheme.primary,
@@ -138,7 +159,9 @@ internal fun appColorRoles(app: AppColors): List<Pair<String, Color>> = listOf(
     "onionNext" to app.onionNext,
 )
 
-private fun hex(color: Color): String = "#%06X".format(color.toArgb() and 0xFFFFFF)
+private fun hex(color: Color): String = hex(color.toArgb())
+
+private fun hex(argb: Int): String = "#%06X".format(argb and 0xFFFFFF)
 
 private fun typographyStyles(type: Typography): List<Pair<String, TextStyle>> = listOf(
     "displayLarge" to type.displayLarge,

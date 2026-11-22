@@ -21,6 +21,7 @@
 | `:core:assets` | Tải file tĩnh từ R2, giữ trên máy để dùng khi mất mạng (ADR-0006, ADR-0015) |
 | `:core:logging` | Ghi log hành vi của app vào logcat và Crashlytics để phân tích khi có lỗi (ADR-0019) |
 | `:core:network` | Theo dõi có Internet dùng được, popup mất mạng (ADR-0024) |
+| `:core:project` | Mô hình dự án và kho lưu dự án trên máy: mỗi dự án một thư mục, `project.json` có phiên bản định dạng, tệp ảnh và âm thanh nằm cạnh; vẽ khung ra ảnh (gộp layer, nền, camera ảo, ảnh thu nhỏ) cho màn vẽ, ảnh thu nhỏ, màn Xuất và bài học |
 | `:feature:<ten>` | Mỗi feature một module |
 | `build-logic` | Convention plugin dùng chung cho mọi module |
 

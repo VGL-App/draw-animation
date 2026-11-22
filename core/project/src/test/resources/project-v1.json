@@ -1,0 +1,70 @@
+{
+  "formatVersion": 1,
+  "project": {
+    "id": "6f1c2a3e-0000-4000-8000-000000000001",
+    "kind": { "type": "lesson", "lessonId": "walk-cycle", "step": 3 },
+    "name": "My animation 3",
+    "aspectRatio": "16:9",
+    "resolution": "720p",
+    "frameRate": 24,
+    "background": { "type": "photo", "fileExtension": "jpg" },
+    "layers": [
+      { "id": "6f1c2a3e-0000-4000-8000-0000000000a1", "name": "Layer 1", "visible": true },
+      { "id": "6f1c2a3e-0000-4000-8000-0000000000a2", "name": "Sketch", "visible": false },
+      { "id": "6f1c2a3e-0000-4000-8000-0000000000a3", "name": "Layer 3", "visible": true }
+    ],
+    "frames": [
+      { "id": "6f1c2a3e-0000-4000-8000-0000000000b1", "hold": 1, "cameraKey": null },
+      { "id": "6f1c2a3e-0000-4000-8000-0000000000b2", "hold": 3, "cameraKey": null },
+      {
+        "id": "6f1c2a3e-0000-4000-8000-0000000000b3",
+        "hold": 1,
+        "cameraKey": { "panX": 0.1, "panY": -0.2, "zoom": 1.2, "rotationDegrees": 15.0 }
+      },
+      { "id": "6f1c2a3e-0000-4000-8000-0000000000b4", "hold": 1, "cameraKey": null }
+    ],
+    "sounds": [
+      {
+        "id": "6f1c2a3e-0000-4000-8000-0000000000c1",
+        "type": "music",
+        "title": "Track 1",
+        "fileExtension": "mp3",
+        "startFrameId": null,
+        "durationMillis": 4000,
+        "effectSource": null
+      },
+      {
+        "id": "6f1c2a3e-0000-4000-8000-0000000000c2",
+        "type": "voice",
+        "title": "Recording 1",
+        "fileExtension": "m4a",
+        "startFrameId": "6f1c2a3e-0000-4000-8000-0000000000b2",
+        "durationMillis": 2500,
+        "effectSource": null
+      },
+      {
+        "id": "6f1c2a3e-0000-4000-8000-0000000000c3",
+        "type": "effect",
+        "title": "Pop",
+        "fileExtension": "ogg",
+        "startFrameId": "6f1c2a3e-0000-4000-8000-0000000000b3",
+        "durationMillis": 300,
+        "effectSource": { "packId": "cartoon", "soundId": "pop" }
+      }
+    ],
+    "camera": { "enabled": true },
+    "onionSkin": {
+      "enabled": true,
+      "framesBefore": 3,
+      "framesAfter": 2,
+      "opacityPercent": 60,
+      "beforeColorArgb": -65536,
+      "afterColorArgb": -16776961,
+      "loop": true
+    },
+    "reference": { "type": "video", "fileExtension": "jpg", "frameCount": 120, "opacityPercent": 40, "visible": true },
+    "extraLayersUnlocked": true,
+    "createdAtMillis": 1763769600000,
+    "updatedAtMillis": 1763773200000
+  }
+}
