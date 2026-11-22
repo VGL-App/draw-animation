@@ -19,7 +19,8 @@ import com.vgl.draw.animation.core.project.model.ProjectId
  *
  * Write order callers must follow, also when creating a project: write the files first, `project.json` next, and
  * delete files no longer used last. A failure part way (for example a full disk) then leaves either the previous
- * project or a folder without `project.json`, which [ids] does not list. A creator calls [delete] when creating fails.
+ * project or a folder without `project.json`, which [ids] does not list. A creator calls [delete] when creating fails;
+ * folders left by a creator that stopped (the app was killed) are removed later by [deleteIncomplete].
  * Files not referenced by the project (cells of a deleted frame, a removed sound) are ignored when reading.
  *
  * Every file is written atomically, so a reader always sees a whole version. Writes to the same project are
@@ -53,4 +54,12 @@ interface ProjectStore {
      * project. Throws [java.io.IOException] when the folder cannot be renamed or deleted.
      */
     suspend fun delete(id: ProjectId)
+
+    /**
+     * Deletes every project folder whose name is a valid id but which has no `project.json`: a create or a duplicate
+     * that stopped part way. Folders whose name starts with `.` are never touched. Returns how many folders were
+     * deleted. Throws [java.io.IOException] when a folder cannot be deleted. Callers must not run it while a project
+     * is being created or duplicated.
+     */
+    suspend fun deleteIncomplete(): Int
 }

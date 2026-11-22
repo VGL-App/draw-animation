@@ -78,6 +78,26 @@ internal class FileProjectStore(
         root.listFiles().orEmpty().filter { it.name.startsWith(DELETING_PREFIX) }.forEach { it.deleteRecursively() }
     }
 
+    override suspend fun deleteIncomplete(): Int = withContext(ioDispatcher) {
+        val children = root.listFiles() ?: return@withContext 0
+        // Names starting with "." never parse as an id, so `.deleting-*` and restore staging folders stay untouched.
+        val incomplete = children
+            .filter { it.isDirectory && !File(it, METADATA_FILE).exists() }
+            .mapNotNull { ProjectId.parseOrNull(it.name) }
+        var deleted = 0
+        for (id in incomplete) {
+            locks.computeIfAbsent(id) { Mutex() }.withLock {
+                val dir = projectDir(id)
+                // Checked again under the lock: the project may have been completed meanwhile.
+                if (dir.isDirectory && !File(dir, METADATA_FILE).exists()) {
+                    deleteRecursively(dir)
+                    deleted++
+                }
+            }
+        }
+        deleted
+    }
+
     private fun decode(id: ProjectId, text: String): ProjectReadResult {
         val result = ProjectFormat.decode(text)
         if (result is ProjectReadResult.Ok && result.project.id != id) {
