@@ -28,7 +28,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertArrayEquals
@@ -184,28 +183,30 @@ class DefaultProjectRepositoryTest {
     fun projects_reemitsAfterEachChange() = runTest {
         val repo = repo(fileStore())
         val values = mutableListOf<List<ProjectListItem>>()
+        // runCurrent(), not advanceUntilIdle(): the list loads in backgroundScope, whose tasks advanceUntilIdle()
+        // does not wait for. Nothing here is delayed, so every task is due at the current virtual time.
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { repo.projects.toList(values) }
-        advanceUntilIdle()
+        runCurrent()
         assertEquals(listOf(emptyList<ProjectListItem>()), values)
 
         val created = repo.create(request()).successValue()
-        advanceUntilIdle()
+        runCurrent()
         assertEquals(1, values.last().size)
 
         repo.rename(created.id, "New name").successValue()
-        advanceUntilIdle()
+        runCurrent()
         assertEquals(listOf("New name"), values.last().names())
 
         val copy = repo.duplicate(created.id).successValue()
-        advanceUntilIdle()
+        runCurrent()
         assertEquals(2, values.last().size)
 
         repo.delete(copy.id).successValue()
-        advanceUntilIdle()
+        runCurrent()
         assertEquals(1, values.last().size)
 
         repo.refresh()
-        advanceUntilIdle()
+        runCurrent()
         assertEquals(1, values.last().size)
         assertEquals(6, values.size)
     }
@@ -216,15 +217,15 @@ class DefaultProjectRepositoryTest {
         val repo = repo(store)
         val values = mutableListOf<List<ProjectListItem>>()
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { repo.projects.toList(values) }
-        advanceUntilIdle()
+        runCurrent()
 
         val external = project("Restored")
         store.write(external)
-        advanceUntilIdle()
+        runCurrent()
         assertFalse(values.last().any { it.id == external.id })
 
         repo.refresh()
-        advanceUntilIdle()
+        runCurrent()
         assertEquals(listOf(ProjectListItem.Readable(external)), values.last())
     }
 
