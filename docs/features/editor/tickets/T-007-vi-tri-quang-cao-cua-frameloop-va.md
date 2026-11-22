@@ -5,7 +5,7 @@ feature: editor
 spec: features/editor/spec.md
 scenarios: [KB-3, KB-7, KB-14]
 owner: Nhật
-status: approved
+status: stopped 
 risk: high
 size: M
 depends_on: [T-006]

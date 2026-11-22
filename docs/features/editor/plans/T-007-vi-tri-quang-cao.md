@@ -1,7 +1,7 @@
 ---
 ticket: T-007
 title: Vị trí quảng cáo của Frameloop
-status: approved                # draft | approved | stopped | done
+status: stopped                 # draft | approved | stopped | done
 version: 1                   # tăng khi plan được sửa lại sau phản hồi hoặc sau khi dừng
 risk_score:                  # tổng điểm theo risk-scoring.md, để trống nếu chạm điểm chặn
 risk_level: high             # low | medium | high
@@ -217,3 +217,16 @@ Còn mở:
 - **Ghi chú:** Duyệt cả đợt 20261122-02 ngày 2026-11-22, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261122-02: plan T-007, T-048, T-044, T-002, T-003 và danh sách RUN-20261122-02, bắt đầu phiên khi merge; xác nhận sáu spec editor, export, lessons, onboarding, projects, settings. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
 
 ## 10. Nhật ký thực hiện
+
+### RUN-20261122-02, phiên bản plan 1
+
+- **Kết quả:** dừng ở bước 8 (CI đỏ), điều kiện dừng 1 của `risk-scoring.md` mục 4: cách sửa nằm ở `build-logic/`, plan chưa nêu.
+- **Nhánh, PR:** `claude/T-007-vi-tri-quang-cao`, PR #20 (để mở, không merge).
+- **Đã làm:** 22 dòng vị trí trong `AdPlacement.kt` đúng mục 3.1; dữ liệu của 5 test có sẵn theo mục 3.5; sinh lại hai file bảng khóa (chỉ thêm 22 khóa `is_show_*` và 2 khóa `native_every_*`).
+- **Test viết trước:** 7 test trong `FrameloopPlacementsTest` (commit d2faad9), đỏ vì chưa biên dịch được khi chưa có 22 hằng, đúng mục 3.1. Commit code c76d8bf.
+- **Rà soát độc lập:** 0 chặn, 0 nên sửa, 3 ghi chú (KDoc của `EXPORT_RW_EXTRA` ghi "(q. 14)" chưa nói spec export; KDoc cũ của `AdsControllerFirstOpenOnlyTest`, `AdsSettingsTest.placementEnabled_firstOpenOnly_saysSo` giữ theo mục 3.5; tiêu chí đóng sớm, khóa tắt dựa vào test có sẵn như mục 4).
+- **Kết quả CI:** `scripts/check.sh` trên máy (Java 21) qua: 2554 test JVM, 0 lỗi. `pr-check` lần chạy 45043991143 đỏ hai lần ở `:core:ads:testDebugUnitTest`, mỗi lần một hay hai screenshot test có sẵn khác nhau ném `java.lang.OutOfMemoryError at DataBufferInt.java:75`: lần 1 `NativeFullScreenAdScreenScreenshotTest.default_dark`, `NativeFullScreenOverlayScreenshotTest.loading_light`; lần chạy lại (job đỏ, một lần như lỗi chập chờn) `NativeFlowStepScreenshotTest.fullPage_placeholder_light`. `failure-kind.sh --playbook`: `khong-co`.
+- **Nguyên nhân (giả thuyết có căn cứ, chưa đo trên Java 17):** `AdsController` dựng chỗ nạp sẵn cho mọi vị trí (`fullScreenPlacements()`, `pooledPlacements()`, `stockPlacements()` đọc `AdPlacement.entries`), nên 22 vị trí mới (9 toàn màn hình, 8 dùng pool) làm mỗi controller trong hàng trăm test của `:core:ads` giữ nhiều đối tượng hơn. Mọi test của module chạy trong một JVM với heap mặc định của Gradle (không có `maxHeapSize` trong `build-logic/`); screenshot test có hiệu ứng chạy mãi vẽ tới sát giới hạn bộ nhớ rồi mới chụp, nên lần chụp hết chỗ. Trên nhánh chính (cùng các test đó) `pr-check` và `main-guard` vẫn xanh. Máy phiên chỉ có Java 21 nên không tái hiện được; không tự tải JDK 17.
+- **Lệch so với plan:** Không có.
+- **Việc còn lại:** nâng heap của test JVM (ví dụ `maxHeapSize` cho `Test` trong convention plugin của `build-logic/`) hay đổi các screenshot test có hiệu ứng chạy mãi của `:core:ads` sang dừng đồng hồ, rồi chạy lại PR #20. Cả hai nằm ngoài plan; `build-logic/` thuộc mục "Không được làm" của `CLAUDE.md` và là phần dùng chung nên đề xuất về dự án mẫu (`docs/ops/from-app.md`).
+- **Cần người xem:** quyết cách sửa bộ nhớ test của `:core:ads` (plan riêng rủi ro cao cho `build-logic/` hay sửa ở dự án mẫu), rồi cho PR #20 chạy lại CI; mọi ticket thêm vị trí quảng cáo sau này (T-008) gặp cùng giới hạn.
