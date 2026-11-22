@@ -36,7 +36,7 @@ Ticket xử lý các kịch bản sau trong `features/projects/spec.md`. Ticket 
 | KB-3 | Khi máy không đủ chỗ thì báo lỗi dễ hiểu, không tạo dự án dở | Lỗi ghi hết chỗ trả `Failure(NO_SPACE)`; mọi lỗi ghi khi tạo đều xóa thư mục dự án mới (`ProjectStore.delete`), không tăng bộ đếm |
 | KB-5 | Nhập tên mới và xác nhận thì thẻ hiện tên mới ngay; mở lại app vẫn giữ; tên trùng vẫn cho lưu | `rename(id, name)` ghi `project.json` và phát lại danh sách; không kiểm trùng. Đổi tên không đổi `updatedAtMillis` (câu hỏi 2) |
 | KB-5 | Ô nhập trống hay chỉ khoảng trắng thì nút xác nhận tắt | Phần nút là T-012; kho từ chối tên trống sau khi bỏ khoảng trắng (`IllegalArgumentException`) để không bao giờ lưu tên trống |
-| KB-6 | Nhân bản có cùng khung, layer, âm thanh, khung hình, độ phân giải, tốc độ, nền; ở đầu danh sách; tên "<tên> copy", lần sau "<tên> copy 2", cắt tên gốc khi vượt 40 ký tự; gốc không đổi | `duplicate(id)`: mã dự án mới, chép `project.json` (đổi `id`, `name`, `createdAtMillis`, `updatedAtMillis`, `kind = Regular` giữ nguyên vì chỉ dự án thường có trong danh sách) và mọi tệp mà dự án tham chiếu (ảnh thu nhỏ, nền ảnh, từng ô khung × layer, âm thanh, ảnh lớp vẽ theo). Tên theo `ProjectNames.copyName` (mục 3.1) |
+| KB-6 | Nhân bản có cùng khung, layer, âm thanh, khung hình, độ phân giải, tốc độ, nền; ở đầu danh sách; tên "<tên> copy", lần sau "<tên> copy 2", cắt tên gốc khi vượt 40 ký tự; gốc không đổi | `duplicate(id)`: mã dự án mới, chép `project.json` (đổi `id`, `name`, `createdAtMillis`, `updatedAtMillis`; mọi trường khác giữ nguyên) và mọi tệp mà dự án tham chiếu (ảnh thu nhỏ, nền ảnh, từng ô khung × layer, âm thanh, ảnh lớp vẽ theo). Tên theo `ProjectNames.copyName` (mục 3.1) |
 | KB-6 | Vẽ trên bản sao thì gốc không đổi, và ngược lại | Bản sao có thư mục riêng, tệp chép từng byte, không dùng liên kết |
 | KB-6 | Máy không đủ chỗ thì báo lỗi và không để lại bản sao dở | Lỗi ghi ở bất kỳ tệp nào: xóa thư mục bản sao, trả `Failure(NO_SPACE)` hay `Failure(WRITE_FAILED)`; `project.json` ghi sau cùng nên bản dở không bao giờ có trong `ids()` |
 | KB-6 | Dự án lớn: có dấu hiệu đang làm, không bấm nhân bản lần nữa được | Phần giao diện là T-012. Kho chạy mọi lần tạo, nhân bản, dọn dẹp tuần tự (một `Mutex` của kho), nên hai lần nhân bản chồng nhau vẫn cho hai tên khác nhau |
@@ -147,9 +147,16 @@ enum class ProjectFailure { NO_SPACE, WRITE_FAILED, NOT_FOUND, UNREADABLE }
 | Tạo | `core/project/src/test/kotlin/com/vgl/draw/animation/core/project/repository/ProjectNamesTest.kt` | Test tên |
 | Tạo | `core/project/src/test/kotlin/com/vgl/draw/animation/core/project/repository/StorageErrorsTest.kt` | Test nhận biết hết chỗ |
 | Tạo | `core/project/src/test/kotlin/com/vgl/draw/animation/core/project/repository/CreatedProjectsCounterTest.kt` | Test bộ đếm |
-| Tạo | `core/project/src/test/kotlin/com/vgl/draw/animation/core/project/repository/RepositoryTestDoubles.kt` | `MemoryPreferencesDataStore`, `UnreadablePreferencesDataStore`, `UnwritablePreferencesDataStore`, `FailingProjectStore` (bọc `FileProjectStore` bằng `ProjectStore by delegate`, ném `IOException(message)` ở lượt ghi thứ N của `writeFile`/`write`), `MemoryCounter` (bộ đếm giả, có cờ ném khi `increment`), đồng hồ giả |
+| Tạo | `core/project/src/test/kotlin/com/vgl/draw/animation/core/project/repository/RepositoryTestDoubles.kt` | `MemoryPreferencesDataStore`, `UnreadablePreferencesDataStore`, `UnwritablePreferencesDataStore`, `FailingProjectStore` (bọc `FileProjectStore` bằng `ProjectStore by delegate`; tùy chọn: ném `IOException(message)` ở lượt thứ N của `writeFile` hay của `write`, ném khi `delete`, ném khi `deleteIncomplete`; đếm số lần gọi `deleteIncomplete`), `MemoryCounter` (bộ đếm giả, có cờ ném khi `increment`), đồng hồ giả |
 
 | Sửa | `CLAUDE.md` | Dòng `:core:project` của bảng module: thêm "kho dự án cho mọi feature (danh sách, tạo, lưu, đổi tên, nhân bản, xóa, số dự án đã từng tạo)", như T-001, T-004 đã ghi phần của mình; không sửa dòng khác |
+
+Nơi khác đọc tệp mà plan sửa (`grep -rln "CLAUDE.md" scripts/ .github/ */src/test */src/androidTest core/*/src/test`):
+
+- `CLAUDE.md`:
+  - `app/src/androidTest/kotlin/com/vgl/draw/animation/AppLaunchTest.kt`, `core/ads/src/test/kotlin/com/vgl/draw/animation/core/ads/NativeFullScreenOverlayScreenshotTest.kt`, `scripts/local-setup.sh`, `scripts/run-watchdog.py`: chỉ nhắc tên file trong chú thích hay lời nhắn; không ảnh hưởng.
+  - `scripts/tests/run.sh`: đọc dòng lệnh `git status --short -- '...'` ở mục Lệnh và dòng `export ANDROID_HOME`; plan chỉ sửa một dòng của bảng module, không đổi hai dòng đó.
+- `ProjectStore.kt`: mọi lớp cài đặt hay bọc nó (`grep -rn "ProjectStore" --include=*.kt`) là `FileProjectStore` (sửa trong plan) và lớp bọc `object : ProjectStore by fileStore` trong `ProjectThumbnailsTest.kt` (ủy quyền bằng `by`, tự có hàm mới, không phải sửa).
 
 ### 3.3. Cờ tính năng, quảng cáo, dữ liệu, quyền, thư viện
 
@@ -167,7 +174,7 @@ Không có. Mọi kỹ thuật đã có trong dự án (tệp qua `FileProjectSt
 
 ### 3.5. Hành vi đã có bị đổi
 
-`scripts/existing-tests.py` liệt kê các test của `FileProjectStoreTest` và các test dùng `ProjectStore` (kết quả ở mục 4.1). Plan chỉ thêm một hàm vào `ProjectStore` và `FileProjectStore`; không đổi hàm nào đã có.
+`scripts/existing-tests.py` báo 123 test dùng tên của hai tệp plan sửa (`ProjectStore.kt`, `FileProjectStore.kt`): 8 ở nhóm "Cần xem trước", 105 ở nhóm "Nên xem". Hầu hết khớp chỉ vì tên chung `read`, `write` (test quảng cáo, cấu hình build, cài đặt), không dùng kho dự án. Các test thật sự dùng kho: `FileProjectStoreTest` (mọi test), `ProjectThumbnailsTest` (gồm `update_sizeFollowsAspectRatio` của nhóm Cần xem trước, `update_writeFails_returnsFailedAndLogs` với lớp bọc `ProjectStore by fileStore`), `StoreFrameRendererTest` (gồm `export720pOf1080pProject_scalesCells` của nhóm Cần xem trước, `storeIoError_propagates`). Chúng gọi `ids`, `read`, `write`, `readFile`, `writeFile`, `deleteFile`, `delete`; plan không đổi hàm nào trong số đó, chỉ thêm `deleteIncomplete()`, nên mọi câu khẳng định giữ nguyên.
 
 | Hành vi cũ | Hành vi mới (câu của mục 3.1) | Test có sẵn khẳng định hành vi cũ | Giữ, hay câu khẳng định mới |
 | --- | --- | --- | --- |
@@ -186,8 +193,8 @@ Mọi test là unit test JVM trong `:core:project`, chạy bằng `runTest`. Kho
 | KB-2: lưu từ màn vẽ đưa dự án lên đầu | Unit test | `save_setsUpdatedAtAndMovesFirst`: hai dự án 100, 200; `now = 500`, `save(dựÁn100.copy(frames = thêm một khung))` trả `Success` có `updatedAtMillis == 500`; danh sách đầu là dự án đó với 2 khung; `store.read` trả cùng dự án |
 | KB-2: danh sách phát lại sau mỗi thay đổi | Unit test | `projects_reemitsAfterEachChange`: thu `projects` vào danh sách giá trị bằng `backgroundScope.launch` (dispatcher `UnconfinedTestDispatcher(testScheduler)`), `create`, `rename`, `duplicate`, `delete`, `refresh()` lần lượt, `advanceUntilIdle()` sau mỗi bước; số phần tử của giá trị cuối sau mỗi bước là 1, 1 (tên mới), 2, 1, 1 và tổng số lần phát là 6 (lần đầu cộng 5) |
 | KB-2: `refresh()` thấy thay đổi từ bên ngoài | Unit test | `refresh_picksUpExternalWrite`: thu như trên; ghi thẳng `store.write(dựÁnMới)`, giá trị cuối chưa có nó; `refresh()`, `advanceUntilIdle()` thì có |
-| KB-2: 100 dự án, một hỏng | Unit test | `projects_hundredWithOneCorrupt_allListed`: 99 dự án hợp lệ qua `store.write`, một thư mục mã hợp lệ có `project.json` là `{"formatVersion":1,"name":"Broken"` (JSON hỏng, tên không đọc được) ; danh sách có 100 mục, 99 `Readable` rồi 1 `Unreadable(name = null, newerVersion = false)` ở cuối; thư mục hỏng vẫn còn trên đĩa |
-| KB-2: dự án hỏng có tên, bản mới hơn | Unit test | `projects_unreadableKeepsNameAndNewerFlag`: một `project.json` hợp lệ JSON có `"formatVersion":1,"name":"Kept"` nhưng thiếu trường bắt buộc (kết quả `Corrupt(name = "Kept")`), một có `"formatVersion":99,"name":"Future"`; danh sách có `Unreadable(name = "Kept", newerVersion = false)` và `Unreadable(name = "Future", newerVersion = true)`, sắp theo `id.value`. Câu khẳng định đọc kết quả `ProjectFormat.decode` thật, nên trước khi viết, phiên chạy `store.read` trên hai chuỗi này trong test và dùng đúng nội dung khiến `read` trả hai kết quả trên |
+| KB-2: 100 dự án, một hỏng | Unit test | `projects_hundredWithOneCorrupt_allListed`: 99 dự án hợp lệ qua `store.write`, một thư mục mã hợp lệ có `project.json` là `{"formatVersion":1,"project":{"name":"Broken"` (JSON hỏng nên `ProjectFormat.decode` trả `Corrupt(name = null, INVALID_JSON)`); danh sách có 100 mục, 99 `Readable` rồi 1 `Unreadable(name = null, newerVersion = false)` ở cuối; thư mục hỏng vẫn còn trên đĩa |
+| KB-2: dự án hỏng có tên, bản mới hơn | Unit test | `projects_unreadableKeepsNameAndNewerFlag`: một `project.json` là `{"formatVersion":1,"project":{"name":"Kept"}}` (JSON đúng, thiếu trường bắt buộc: `ProjectFormat.decode` đọc tên ở `project.name` rồi trả `Corrupt(name = "Kept", INVALID_CONTENT)`), một là `{"formatVersion":99,"project":{"name":"Future"}}` (trả `NewerVersion(99, "Future")`); danh sách có `Unreadable(name = "Kept", newerVersion = false)` và `Unreadable(name = "Future", newerVersion = true)`, sắp theo `id.value`. Test kiểm thêm `store.read` của hai mã trả đúng hai kết quả trên, để thấy dữ liệu dựng đúng trước khi kiểm kho |
 | Bài học không có trong danh sách | Unit test | `projects_excludesLessonProjects`: một dự án thường và một `kind = ProjectKind.Lesson("walk", 0)`; danh sách chỉ có dự án thường |
 | KB-3: tạo với nền màu | Unit test | `create_solid_writesProjectAndReturnsIt`: `create(NewProject("My animation 1", PORTRAIT_9_16, P1080, FPS_12, Solid(WHITE), "Layer 1"))` trả `Success(p)`; `store.read(p.id)` là `Ok(p)`; `p.name == "My animation 1"`, 1 khung, 1 layer tên "Layer 1", `background == Background.Solid(WHITE)`, `kind == Regular` |
 | KB-3: tạo với ảnh nền | Unit test | `create_photo_copiesBackgroundBytes`: `Photo(byteArrayOf(1,2,3), "jpg")`; `p.background == Background.Photo("jpg")`; `store.readFile(p.id, ProjectFile.Background("jpg"))` là `[1,2,3]` |
@@ -195,7 +202,7 @@ Mọi test là unit test JVM trong `:core:project`, chạy bằng `runTest`. Kho
 | KB-3: tên trống bị từ chối, không chạm đĩa | Unit test | `create_blankName_throwsWithoutWriting`: `assertThrows(IllegalArgumentException)` với tên `"  "`; `store.ids()` rỗng, thư mục `root` không có con nào (hay không tồn tại), `createdCount.first() == 0` |
 | KB-3: hết chỗ, không tạo dự án dở | Unit test | `create_noSpace_returnsNoSpaceAndLeavesNothing`: `FailingProjectStore` ném `IOException("write failed: ENOSPC (No space left on device)")` ở lượt `write` đầu (ảnh nền đã ghi xong ở `writeFile`); kết quả `Failure(NO_SPACE)`; `store.ids()` rỗng; `root` không còn thư mục mã nào (đã xóa cả tệp nền); `createdCount.first() == 0`; danh sách rỗng |
 | Lỗi ghi khác | Unit test | `create_otherIoError_returnsWriteFailed`: ném `IOException("Could not replace a project file")` ở `writeFile` đầu; `Failure(WRITE_FAILED)`, không có thư mục dở, bộ đếm 0 |
-| KB-3 câu 4: bộ đếm tăng khi tạo, mặc định 0 | Unit test | `createdCount_startsAtZero_thenCountsCreates`: `createdCount.first() == 0` khi chưa ghi gì (đối chứng ở bước kế: ) ; hai lần `create` thường thì `== 2` |
+| KB-3 câu 4: bộ đếm tăng khi tạo, mặc định 0 | Unit test | `createdCount_startsAtZero_thenCountsCreates`: `createdCount.first() == 0` khi chưa ghi gì; đối chứng trong cùng test: hai lần `create` thường thì `== 2` |
 | Bộ đếm không giảm khi xóa | Unit test | `createdCount_notDecreasedByDelete`: tạo 2, xóa cả 2, `createdCount.first() == 2`, danh sách rỗng |
 | Bộ đếm không tính nhân bản, bài học, ghi từ ngoài | Unit test | `createdCount_ignoresDuplicateLessonAndExternalWrites`: tạo 1 thường (đếm 1); `duplicate` nó; `create` với `kind = Lesson("walk", 0)`; ghi thẳng `store.write` một dự án thường (như khôi phục của T-003); `refresh()`; `createdCount.first() == 1` |
 | Hai lần tạo chồng nhau | Unit test | `create_concurrent_bothCountedAndListed`: hai `async { repo.create(...) }` cùng lúc, `awaitAll()`; cả hai `Success` với mã khác nhau; danh sách 2 mục; `createdCount.first() == 2` |
@@ -232,7 +239,7 @@ Mọi test là unit test JVM trong `:core:project`, chạy bằng `runTest`. Kho
 
 - **Đã chạy thử:** Không cần (E dưới 2): DataStore Preferences, tệp qua `FileProjectStore`, `Flow` và `runTest` đều đã dùng trong dự án (T-001, T-005).
 - **Lệnh:** `python3 scripts/existing-tests.py docs/features/projects/plans/T-002-kho-du-an.md` (cho mục 3.5); `python3 scripts/token-usage.py estimate` (cỡ M, gợi ý 15.0M).
-- **Kết quả:** existing-tests.py: chưa chạy xong (đang cập nhật). token-usage.py: cỡ M trung vị 13.3M trên 2 task, gợi ý 15.0M (tạm, chưa đủ 5 task). `./gradlew :app:assembleStagingRelease` là bước của phiên (mục 4), không chạy lúc lập plan vì chưa có code thêm phụ thuộc.
+- **Kết quả:** existing-tests.py (2026-11-22, nhánh `claude/plan-T-002-kho-du-an` từ commit da87fc5): 123 test, 8 Cần xem trước, 105 Nên xem; đã đọc và ghi ở mục 3.5. token-usage.py: cỡ M trung vị 13.3M trên 2 task, gợi ý 15.0M (tạm, chưa đủ 5 task). `./gradlew :app:assembleStagingRelease` là bước của phiên (mục 4), không chạy lúc lập plan vì chưa có code thêm phụ thuộc.
 
 ## 5. Chấm rủi ro
 
@@ -240,7 +247,7 @@ Mọi test là unit test JVM trong `:core:project`, chạy bằng `runTest`. Kho
 
 | Tiêu chí | Điểm (0 đến 3) | Lý do |
 | --- | --- | --- |
-| A. Phạm vi thay đổi | 2 | Một module (`:core:project`): 6 tệp mới, sửa 2 tệp của gói `storage` (thêm một hàm vào interface công khai) và `build.gradle.kts`; dùng DataStore dùng chung của `:core:data` mà không sửa `:core:data` |
+| A. Phạm vi thay đổi | 2 | Một module (`:core:project`): 6 tệp mới, sửa 2 tệp của gói `storage` (thêm một hàm vào interface công khai), `build.gradle.kts` và một dòng của bảng module trong `CLAUDE.md`; dùng DataStore dùng chung của `:core:data` mà không sửa `:core:data` |
 | B. Độ rõ của yêu cầu | 1 | Spec và ticket rõ về tên, bộ đếm, dự án hỏng, lỗi hết chỗ; còn vài chọn lựa nhỏ không đổi tiêu chí: vị trí của mục hỏng (câu 1), đổi tên có đưa lên đầu không (câu 2), tên bản sao của bản sao (câu 3), bộ đếm khi ghi lỗi (câu 4) |
 | C. Khả năng kiểm chứng tự động | 1 | Mọi hành vi có unit test trên thư mục tạm và DataStore giả; lỗi hết chỗ thật của Android chỉ giả lập bằng chuỗi lỗi (nhận biết theo nội dung thông báo), chưa thấy trên máy thật |
 | D. Ảnh hưởng chéo | 2 | Interface công khai mà T-003, T-009, T-011, T-012, T-018 và bài học dựa vào; thêm khóa vào tệp `app_preferences` dùng chung với T-005; thêm hàm vào `ProjectStore` mà các lớp bọc trong test dùng (`by` nên vẫn biên dịch) |
@@ -249,7 +256,7 @@ Mọi test là unit test JVM trong `:core:project`, chạy bằng `runTest`. Kho
 
 ## 6. Ảnh hưởng chéo
 
-- File hoặc thành phần dùng chung bị chạm: `core/project/build.gradle.kts`, `ProjectStore.kt`, `FileProjectStore.kt`, `FileProjectStoreTest.kt` (T-001, T-004 đã merge); tệp DataStore `app_preferences` (khóa mới `projects_created_count`, không trùng khóa của T-005).
+- File hoặc thành phần dùng chung bị chạm: `core/project/build.gradle.kts`, `ProjectStore.kt`, `FileProjectStore.kt`, `FileProjectStoreTest.kt` (T-001, T-004 đã merge); `CLAUDE.md` (bảng module, mà plan thêm module feature như T-009 cũng sửa: danh sách chạy xếp tuần tự, mỗi plan chỉ sửa dòng của mình); tệp DataStore `app_preferences` (khóa mới `projects_created_count`, không trùng khóa của T-005).
 - Task khác trong sprint có thể xung đột: T-003 (tệp sao lưu) phụ thuộc T-002 và có thể sửa `FileProjectStore.kt`, `ProjectStore.kt` (chỗ chuẩn bị khôi phục bắt đầu bằng `.`): chạy sau T-002, giữ `deleteIncomplete` không chạm thư mục bắt đầu bằng `.`. T-009, T-011, T-012, T-018 dùng interface của plan này: chạy sau. Không plan `approved` nào chưa chạy cùng sửa các tệp của mục 3.2 (T-001, T-004, T-005, T-006 đã merge).
 - Đề xuất thứ tự chạy: sau T-001 (đã merge); trước T-003, T-009, T-011, T-012, T-018.
 
@@ -265,7 +272,6 @@ Mọi test là unit test JVM trong `:core:project`, chạy bằng `runTest`. Kho
 3. **Tên bản sao của một bản sao:** spec ghi "<tên> copy" (lần sau "<tên> copy 2"). Đề xuất của AI: làm đúng chữ, nhân bản "Cat copy" cho "Cat copy copy". Phương án khác: bỏ hậu tố " copy"/" copy N" của tên gốc trước, nên nhân bản "Cat copy" cho "Cat copy 2".
 4. **Ghi bộ đếm lỗi sau khi dự án đã tạo xong:** đề xuất của AI: vẫn báo tạo thành công (dự án đã có trên máy), chỉ ghi log; hệ quả là lần sau tên mặc định có thể trùng số, và `create_inter` có thể chậm một lần. Phương án khác: tăng bộ đếm trước khi ghi dự án (ghi dự án lỗi thì số bị nhảy một).
 5. **Nhận biết hết chỗ theo nội dung thông báo lỗi** (`ENOSPC`, "No space left on device"): đây là cách Android và JVM báo, nhưng chưa thử trên máy thật hết chỗ. Đề xuất của AI: chấp nhận; lỗi không nhận ra vẫn là `WRITE_FAILED` (báo lỗi chung, vẫn không để bản dở). Kiểm trên máy thật hết chỗ khi có T-011, T-012 (dev).
-6. **`existing-tests.py` chưa chạy xong lúc soạn bản đầu** (mục 4.1): phiên con sẽ cập nhật; nếu mục 4.1 vẫn ghi "chưa chạy xong" thì người duyệt yêu cầu chạy lại trước khi duyệt.
 
 ## 9. Quyết định duyệt
 
