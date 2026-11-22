@@ -98,6 +98,10 @@ internal class FileProjectStore(
         deleted
     }
 
+    override suspend fun beginImport(): ProjectImport = TODO()
+
+    override suspend fun deleteAbandonedImports(): Int = TODO()
+
     private fun decode(id: ProjectId, text: String): ProjectReadResult {
         val result = ProjectFormat.decode(text)
         if (result is ProjectReadResult.Ok && result.project.id != id) {
