@@ -22,3 +22,33 @@ Bài học `chung` ghi ở app thì được đưa về dự án mẫu qua issue
 <!-- Các bài học ghi dưới dòng này. -->
 
 Bài học trước ngày 2026-11-20 nằm trong sổ bài học của repo dự án mẫu (commit 936eb3dc).
+
+### L-001. Test "chạy trên dispatcher được tiêm" không dùng scheduler riêng bên trong `runTest`
+
+- **Trạng thái:** proposed. **Loại:** plan. **Phạm vi:** chung.
+- **Nguồn:** RUN-20261122-01, T-001 (PR #14) và T-004 (PR #15).
+- **Chuyện gì:** hai plan viết test kiểm thao tác chạy trên dispatcher được tiêm bằng một `StandardTestDispatcher()` có scheduler riêng, gọi bên trong `runTest`. kotlinx-coroutines-test từ chối: `IllegalStateException: Detected use of different schedulers`. Test không chạy được như plan viết; phiên sửa test sau commit test ở cả hai task (bước 4, chi tiết test), giữ câu khẳng định, kèm lần đối chứng.
+- **Bằng chứng:** nhật ký plan T-001 và T-004, dòng Lệch so với plan; mô tả PR #14, #15.
+- **Đề xuất:** `CLAUDE.md`, mục Viết một feature mới, ý Test: test kiểm việc chạy trên dispatcher được tiêm dùng `StandardTestDispatcher(testScheduler)` của chính `runTest`, hoặc một dispatcher hàng đợi tự viết; không dùng dispatcher có scheduler riêng bên trong `runTest`. `docs/CLAUDE.md`, mục Khi viết plan: test dạng này chạy thử bằng một test tạm trước khi duyệt.
+- **Áp dụng:**
+- **Kiểm chứng:**
+
+### L-002. Bảng tra lỗi chưa có dòng cho lỗi Robolectric không tải được android-all
+
+- **Trạng thái:** proposed. **Loại:** môi trường. **Phạm vi:** chung.
+- **Nguồn:** RUN-20261122-01, T-001 (PR #14).
+- **Chuyện gì:** `pr-check` đỏ ở `build-and-test`. Nhiều lớp test Robolectric của nhiều module báo `java.lang.AssertionError at MavenArtifactFetcher.java:130`, gây bởi `java.io.IOException at HttpURLConnection.java:2059`. `scripts/failure-kind.sh --playbook` trả `khong-co`; phiên tự xếp là chập chờn, chạy lại job đỏ một lần thì xanh.
+- **Bằng chứng:** lần chạy 45008324763 của `pr-check` (lần đầu đỏ, lần chạy lại xanh), 2026-11-22.
+- **Đề xuất:** thêm dòng vào `docs/ops/failure-playbook.md` cho mẫu `MavenArtifactFetcher` cùng `IOException`, loại `chay-lai`, kèm tệp log trong `scripts/tests/playbook/`.
+- **Áp dụng:**
+- **Kiểm chứng:**
+
+### L-003. Lỗi quyền GitHub App của routine chỉ lộ ra khi phiên đẩy lần đầu
+
+- **Trạng thái:** proposed. **Loại:** quy trình. **Phạm vi:** chung.
+- **Nguồn:** RUN-20261122-01, đầu phiên.
+- **Chuyện gì:** `start-run` kích hoạt routine thành công, nhưng lần đẩy nhánh báo cáo đầu tiên bị từ chối 403 ("Claude doesn't have GitHub access to VGL-App/draw-animation for your organization"), dù `gh api` vẫn báo quyền push. Phiên dừng, báo người; người cấu hình lại GitHub, phiên chạy tiếp sau khoảng 6 phút.
+- **Bằng chứng:** dòng thời gian của RUN-20261122-01, 07:27 tới 07:33.
+- **Đề xuất:** `docs/ops/staging-and-runs.md`, mục dựng routine: sau khi dựng, chạy một phiên thử đẩy một nhánh tạm để thấy lỗi quyền GitHub App trước lần kích hoạt thật; hoặc `start-run.yml` thêm bước kiểm tương đương nếu làm được.
+- **Áp dụng:**
+- **Kiểm chứng:**
