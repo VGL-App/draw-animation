@@ -24,6 +24,7 @@ created: 2026-11-22
 ## Phạm vi
 
 - Sự kiện `backup_export`, `backup_restore` với `source` = `settings`.
+- "Restore from a file" đi qua điều hướng của `:app` sang danh sách dự án, không import `:feature:projects`.
 
 **Không bao gồm:**
 

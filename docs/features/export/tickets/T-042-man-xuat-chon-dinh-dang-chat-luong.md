@@ -19,11 +19,12 @@ created: 2026-11-22
 
 ## Mô tả
 
-Tạo `:feature:export` với trạng thái chọn (MP4, GIF, chuỗi PNG, GIF trong suốt; 720p/1080p theo dự án; watermark); một lượt `export_rw_extra` mở cả ba tùy chọn trong một lần mở màn; `export_options_mrec`; `:app` nối màn vẽ và màn Hoàn thành bài học tới màn này.
+Tạo `:feature:export` với trạng thái chọn (MP4, GIF, chuỗi PNG, GIF trong suốt; 720p/1080p theo dự án; watermark); một lượt `export_rw_extra` mở cả ba tùy chọn trong một lần mở màn; `export_options_mrec`. Tạo đích điều hướng của màn Xuất; nối nút "Export" của màn vẽ trong `:app` nếu T-040 đã xong (không thì T-040 nối).
 
 ## Phạm vi
 
-- `ExportScreen` `options`; screenshot, 360 × 640, máy gập. Sự kiện `export_option_unlock_rewarded`. Cùng sửa `AppNavHost` của `:app` với các ticket màn hình khác: danh sách chạy xếp tuần tự các ticket này (run-check.py báo cùng sửa file).
+- `ExportScreen` `options`; screenshot, 360 × 640, máy gập. Sự kiện `export_option_unlock_rewarded`.
+- Mở từ màn vẽ kiểm đầy đủ sau T-040; lối từ màn Hoàn thành bài học do T-053 nối. Cùng sửa `AppNavHost` của `:app` với các ticket màn hình khác: danh sách chạy xếp tuần tự các ticket này (run-check.py báo cùng sửa file).
 
 **Không bao gồm:**
 

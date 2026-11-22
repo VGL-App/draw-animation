@@ -23,7 +23,7 @@ Bảng "Brush" 8 cọ (Size, Opacity, Stabilizer, Pressure from stylus riêng t�
 
 ## Phạm vi
 
-- Trạng thái `tool-brush`, `tool-eraser`, `color-picker`; lực bút riêng từng cọ lưu trong dự án hay trên máy (plan chọn).
+- Trạng thái `tool-brush`, `tool-eraser`, `color-picker`; lực bút riêng từng cọ lưu trên máy trong DataStore riêng của module editor (editor mục 6); đặt ở module core thì nâng rủi ro lên cao.
 
 **Không bao gồm:**
 

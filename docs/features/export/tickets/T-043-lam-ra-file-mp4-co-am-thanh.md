@@ -6,9 +6,9 @@ spec: features/export/spec.md
 scenarios: [KB-4]
 owner: Nhật
 status: backlog
-risk: high
+risk: medium
 size: M
-depends_on: [T-004, T-032]
+depends_on: [T-004, T-032, T-044]
 sprint:
 plan:
 auto_run:
@@ -19,7 +19,7 @@ created: 2026-11-22
 
 ## Mô tả
 
-Mã hóa MP4 bằng `MediaCodec`, `MediaMuxer` có âm thanh của dự án, kèm watermark; báo tiến độ theo khung, hủy được.
+Mã hóa MP4 bằng `MediaCodec`, `MediaMuxer` có âm thanh của dự án, kèm watermark vẽ bằng phần của T-044; báo tiến độ theo khung, hủy được.
 
 ## Phạm vi
 
@@ -31,7 +31,7 @@ Mã hóa MP4 bằng `MediaCodec`, `MediaMuxer` có âm thanh của dự án, kè
 
 ## Rủi ro sơ bộ
 
-Kỹ thuật mới (tiêu chí E); module feature, không SDK mới.
+Không chạm điểm chặn (module feature, không SDK mới); kỹ thuật mới (tiêu chí C, E) nên khoảng mức trung bình.
 
 ## Định nghĩa hoàn thành
 

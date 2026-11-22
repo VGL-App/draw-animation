@@ -23,7 +23,8 @@ Hiện ở lần đầu vào dự án thường (không khi vào qua bài học)
 
 ## Phạm vi
 
-- Trạng thái `tour`.
+- Trạng thái `tour`; "đã xem" lưu trong DataStore riêng của module editor.
+- Lớp tối không phủ dải quảng cáo kiểm đầy đủ sau T-040.
 
 **Không bao gồm:**
 

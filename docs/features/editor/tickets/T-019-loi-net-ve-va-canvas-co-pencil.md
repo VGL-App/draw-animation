@@ -6,7 +6,7 @@ spec: features/editor/spec.md
 scenarios: [KB-1, KB-2]
 owner: Nhật
 status: backlog
-risk: low
+risk: medium
 size: M
 depends_on: [T-004, T-005, T-018]
 sprint:
@@ -32,7 +32,7 @@ Vẽ nét một ngón bằng cọ Pencil trên khung và layer đang chọn, hai
 
 ## Rủi ro sơ bộ
 
-Kỹ thuật vẽ bằng ngón và bút mới (tiêu chí E).
+Kỹ thuật vẽ bằng ngón và bút mới (tiêu chí E); ghi mốc mà luật quảng cáo đọc (tiêu chí D).
 
 ## Định nghĩa hoàn thành
 

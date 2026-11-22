@@ -23,7 +23,8 @@ Gói "Cartoon", "Ambience" có khóa; `editor_rw_sounds` mở 24 giờ; hiệu �
 
 ## Phạm vi
 
-- Trạng thái `sound-locked`; gói tải từ `sounds/<gói>/v1/`.
+- Trạng thái `sound-locked`; gói tải từ `sounds/<gói>/v1/` (file thật chờ T-055).
+- Mốc mở 24 giờ lưu trong DataStore riêng của module editor.
 
 **Không bao gồm:**
 

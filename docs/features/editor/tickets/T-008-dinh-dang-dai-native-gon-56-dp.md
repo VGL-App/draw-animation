@@ -25,6 +25,7 @@ App tự làm trong `:core:ads` định dạng native banner gọn khoảng 56 d
 
 - Composable theo thiết kế `NativeAdStrip`; không có quảng cáo do khóa tắt thì không giữ chỗ.
 - ADR của app (dải 1001 trở lên) ghi ngoại lệ với MC-02; ghi `hold=core/ads` cho lần chạy `template-sync.sh`; mở issue `from-app` sau khi chạy ổn trên staging (editor mục 5).
+- Đưa `editor_top_native` vào luật trước nét vẽ đầu tiên của T-007, kèm test.
 - Test: nhãn "Ad" và chữ nút không bị cắt ở cỡ chữ lớn nhất; screenshot với thẻ giả; tải lại theo thời gian.
 
 **Không bao gồm:**

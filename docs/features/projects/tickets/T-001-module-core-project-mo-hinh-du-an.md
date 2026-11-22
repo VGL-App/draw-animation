@@ -23,7 +23,7 @@ Tạo module `:core:project` với mô hình dự án đầy đủ mà các feat
 
 ## Phạm vi
 
-- Mô hình: tên, tỷ lệ, độ phân giải, tốc độ khung, nền (màu hay ảnh "Photo" đã chép vào dự án), khung, layer (tên, thứ tự, ẩn hiện), nét, giữ khung 1× đến 4×, âm thanh đã đặt (nhạc, giọng, hiệu ứng), camera ảo theo khung, cài đặt onion skin, lớp vẽ theo, quyền mở layer 6 đến 10, mốc sửa gần nhất.
+- Mô hình: tên, tỷ lệ, độ phân giải, tốc độ khung, nền (màu hay ảnh "Photo" đã chép vào dự án), khung, layer (tên, thứ tự, ẩn hiện), nội dung mỗi layer ở mỗi khung lưu dạng ảnh điểm (nét, tô, hình, chữ vẽ vào ảnh khi xác nhận; hình, chữ, vùng chọn đang sửa chỉ là trạng thái tạm của màn vẽ), giữ khung 1× đến 4×, âm thanh đã đặt (nhạc, giọng, hiệu ứng), camera ảo theo khung, cài đặt onion skin, lớp vẽ theo, quyền mở layer 6 đến 10, mốc sửa gần nhất.
 - Loại dự án "bài học" (mã bài, bước đang làm): không hiện trong danh sách, không tính vào số dự án đã tạo, không vào bản sao lưu (settings câu 6, lessons mục 6).
 - Định dạng lưu: mỗi dự án một thư mục, có số phiên bản; đọc lỗi thì trả kết quả "hỏng", không ném lỗi ra ngoài.
 - Unit test cho đọc, ghi, phiên bản.

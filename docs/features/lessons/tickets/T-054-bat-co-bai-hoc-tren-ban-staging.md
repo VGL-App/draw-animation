@@ -6,7 +6,7 @@ spec: features/lessons/spec.md
 scenarios: [KB-10]
 owner: Nhật
 status: backlog
-risk: high
+risk: low
 size: S
 depends_on: [T-049, T-053]
 sprint:
@@ -30,7 +30,7 @@ Thêm `feature_lessons_enabled` vào `StagingFeatureFlagsModule` khi đã có 2 
 
 ## Rủi ro sơ bộ
 
-Sửa cấu hình staging của `:app`.
+Không chạm điểm chặn; chỉ sửa cấu hình staging của `:app`.
 
 ## Định nghĩa hoàn thành
 

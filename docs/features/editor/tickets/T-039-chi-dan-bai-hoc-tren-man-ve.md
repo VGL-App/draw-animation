@@ -27,7 +27,7 @@ Màn vẽ ở chế độ bài học: thẻ bước, nét dẫn, "Show me", "Nex
 
 **Không bao gồm:**
 
-- Màn Hoàn thành (T-052).
+- Màn Hoàn thành (T-053). Đóng giữa chừng về màn Bài học kiểm đầy đủ sau T-050, T-052.
 
 ## Rủi ro sơ bộ
 

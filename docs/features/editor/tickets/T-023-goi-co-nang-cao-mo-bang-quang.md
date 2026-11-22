@@ -23,7 +23,7 @@ created: 2026-11-22
 
 ## Phạm vi
 
-- Trạng thái `brush-locked`.
+- Trạng thái `brush-locked`; mốc mở 24 giờ lưu trong DataStore riêng của module editor.
 
 **Không bao gồm:**
 

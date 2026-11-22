@@ -24,6 +24,7 @@ Màn Hoàn thành: ảnh xem trước, tóm tắt "<khung> frames · <giây> s �
 ## Phạm vi
 
 - `LessonDoneScreen` `default`, `last-lesson`.
+- Nối "Export my animation" tới màn Xuất trong `:app`; rời màn Xuất về màn Hoàn thành. Cùng sửa `AppNavHost` của `:app` với các ticket màn hình khác: danh sách chạy xếp tuần tự các ticket này (run-check.py báo cùng sửa file).
 
 **Không bao gồm:**
 

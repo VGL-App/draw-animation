@@ -28,7 +28,7 @@ Khai báo một lần trong `:core:config` 6 cờ `feature_<f>_enabled` (mặc �
 
 **Không bao gồm:**
 
-- Hành vi khi cờ tắt ở từng màn (ticket của màn).
+- Hành vi khi cờ tắt ở từng màn (KB tắt từ xa của từng feature, ticket của màn).
 
 ## Rủi ro sơ bộ
 

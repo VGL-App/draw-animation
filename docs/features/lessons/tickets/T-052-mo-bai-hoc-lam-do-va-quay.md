@@ -8,7 +8,7 @@ owner: Nhật
 status: backlog
 risk: high
 size: M
-depends_on: [T-039, T-050]
+depends_on: [T-007, T-039, T-050]
 sprint:
 plan:
 auto_run:

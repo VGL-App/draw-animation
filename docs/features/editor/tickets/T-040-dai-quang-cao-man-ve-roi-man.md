@@ -19,7 +19,7 @@ created: 2026-11-22
 
 ## Mô tả
 
-Đặt `editor_top_native` cách hàng nút và canvas ≥ 16 dp, giữ chỗ khi nạp hay lỗi; rời màn tự lưu xong rồi có thể hiện `editor_exit_inter`; nút "Export" (ẩn khi cờ Xuất tắt) gọi callback, `:app` nối tới màn Xuất ở T-042. Sự kiện `frame_add` (gom theo phiên, ghi khi rời màn).
+Đặt `editor_top_native` cách hàng nút và canvas ≥ 16 dp, giữ chỗ khi nạp hay lỗi; rời màn tự lưu xong rồi có thể hiện `editor_exit_inter`; nút "Export" (ẩn khi cờ Xuất tắt) gọi callback; nếu màn Xuất (T-042) đã có thì nối trong `:app`, không thì T-042 nối. Sự kiện `frame_add` (gom theo phiên, ghi khi rời màn).
 
 ## Phạm vi
 

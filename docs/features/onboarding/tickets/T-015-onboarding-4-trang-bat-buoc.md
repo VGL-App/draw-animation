@@ -24,7 +24,7 @@ Tạo `:feature:onboarding`: 4 trang sau Loading ở lần mở đầu, "Next" h
 ## Phạm vi
 
 - Trang 1 đến 4 và `page-1-no-ad` theo thiết kế; nút cách thẻ ≥ 24 dp ở mọi cỡ chữ; screenshot 360 × 640.
-- Lỗi ghi "đã xong" vẫn đi tiếp, ghi log (onboarding câu 9); cờ tắt thì mở thẳng danh sách dự án. Cùng sửa `AppNavHost` của `:app` với các ticket màn hình khác: danh sách chạy xếp tuần tự các ticket này (run-check.py báo cùng sửa file).
+- "Đã xong" lưu trong DataStore riêng của module onboarding; lỗi ghi vẫn đi tiếp, ghi log (onboarding câu 9); cờ tắt thì mở thẳng danh sách dự án. Cùng sửa `AppNavHost` của `:app` với các ticket màn hình khác: danh sách chạy xếp tuần tự các ticket này (run-check.py báo cùng sửa file).
 
 **Không bao gồm:**
 

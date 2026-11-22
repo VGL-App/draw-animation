@@ -23,7 +23,8 @@ Nút "Effects" tải bộ cơ bản (khoảng 10 hiệu ứng, dưới 2 MB) t�
 
 ## Phạm vi
 
-- Đăng file vào `docs/ops/required-assets.txt` khi có file.
+- Đăng file vào `docs/ops/required-assets.txt` khi có file. File thật chờ T-055 (người làm); test dùng file mẫu.
+- Nếu T-035 (phát thử) xong trước thì kiểm thêm hiệu ứng đã đặt phát đúng khung.
 
 **Không bao gồm:**
 
