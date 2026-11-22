@@ -78,6 +78,8 @@ internal class FileProjectStore(
         root.listFiles().orEmpty().filter { it.name.startsWith(DELETING_PREFIX) }.forEach { it.deleteRecursively() }
     }
 
+    override suspend fun deleteIncomplete(): Int = TODO()
+
     private fun decode(id: ProjectId, text: String): ProjectReadResult {
         val result = ProjectFormat.decode(text)
         if (result is ProjectReadResult.Ok && result.project.id != id) {

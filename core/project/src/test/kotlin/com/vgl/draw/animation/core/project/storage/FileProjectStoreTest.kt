@@ -425,6 +425,39 @@ class FileProjectStoreTest {
         assertTrue(d.getCompleted() is ProjectReadResult.Ok)
     }
 
+    @Test
+    fun deleteIncomplete_removesOnlyUuidDirsWithoutMetadata() = runTest {
+        val store = store()
+        val complete = newProject()
+        store.write(complete)
+        val incomplete = ProjectId.random()
+        store.writeFile(incomplete, ProjectFile.Background("jpg"), byteArrayOf(1))
+        val deleting = File(root, ".deleting-${ProjectId.random().value}").apply { assertTrue(mkdirs()) }
+        val restoring = File(root, ".restoring-x").apply { assertTrue(mkdirs()) }
+        val notAnId = File(root, "not-a-uuid").apply { assertTrue(mkdirs()) }
+        val plainFile = File(root, ProjectId.random().value).apply { writeText("x") }
+        assertTrue(File(projectDir(incomplete), "background.jpg").isFile)
+
+        assertEquals(1, store.deleteIncomplete())
+
+        assertFalse(projectDir(incomplete).exists())
+        assertTrue(File(projectDir(complete.id), "project.json").isFile)
+        assertEquals(ProjectReadResult.Ok(complete), store.read(complete.id))
+        assertTrue(deleting.isDirectory)
+        assertTrue(restoring.isDirectory)
+        assertTrue(notAnId.isDirectory)
+        assertTrue(plainFile.isFile)
+    }
+
+    @Test
+    fun deleteIncomplete_noRoot_returnsZero() = runTest {
+        val store = store()
+
+        assertEquals(0, store.deleteIncomplete())
+
+        assertFalse(root.exists())
+    }
+
     private fun writeRaw(id: ProjectId, text: String) {
         val dir = projectDir(id)
         assertTrue(dir.mkdirs())
