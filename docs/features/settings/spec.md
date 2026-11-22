@@ -1,13 +1,13 @@
 ---
 feature: settings
-status: changed
+status: confirmed
 owner: Nhật
 product_owner: Nhật
 requests:
   - requests/2026-11-21-ban-dau.md
 design: design/README.md
 created: 2026-11-21
-confirmed: 2026-11-21
+confirmed: 2026-11-22
 ---
 
 # SPEC: CÀI ĐẶT
@@ -311,3 +311,4 @@ Không có.
 | 2026-11-21 | AI | Đổi tham số `scope` (`all`, `project`) của `backup_export`, `backup_restore` thành `source` (`settings`, `projects`), theo lời anh Nhật trong phiên; thiết kế bổ sung đã được anh duyệt |
 | 2026-11-21 | AI | Chuyển `confirmed` theo lời anh Nhật (người phụ trách sản phẩm) trong phiên: "xác nhận 6 spec" |
 | 2026-11-22 | AI | Bỏ luật quảng cáo trước nét vẽ đầu tiên: bỏ điều kiện nét vẽ đầu tiên ở tiêu chí đầu của KB-9 và bỏ tiêu chí thứ ba của KB-9, sửa dòng `settings_bottom` và ghi chú ở mục 5, thêm câu hỏi 16; chuyển `changed`. Theo lời anh Nhật trong phiên: bỏ luật trước nét vẽ đầu tiên, giữ mốc làm dữ liệu dự phòng; chờ xác nhận lại |
+| 2026-11-22 | AI | Chuyển `confirmed` theo lời anh Nhật (người phụ trách sản phẩm) trong phiên: "Duyệt đợt 20261122-02: plan T-007, T-048, T-044, T-002, T-003 và danh sách RUN-20261122-02, bắt đầu phiên khi merge; xác nhận sáu spec editor, export, lessons, onboarding, projects, settings. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." |

@@ -1,13 +1,13 @@
 ---
 feature: projects
-status: changed
+status: confirmed
 owner: Nhật
 product_owner: Nhật
 requests:
   - requests/2026-11-21-ban-dau.md
 design: design/README.md
 created: 2026-11-21
-confirmed: 2026-11-21
+confirmed: 2026-11-22
 ---
 
 # SPEC: DANH SÁCH DỰ ÁN VÀ TẠO DỰ ÁN
@@ -399,3 +399,4 @@ Không có.
 | 2026-11-21 | AI | Chuyển `confirmed` theo lời anh Nhật (người phụ trách sản phẩm) trong phiên: "xác nhận 6 spec" |
 | 2026-11-22 | AI | Thêm tiêu chí vào KB-11 và câu hỏi 23: nút lựa chọn quyền riêng tư quảng cáo trên thanh trên khi cờ Cài đặt tắt, theo câu trả lời của anh Nhật trong phiên. Spec `changed`, chờ xác nhận lại |
 | 2026-11-22 | AI | Bỏ luật quảng cáo trước nét vẽ đầu tiên: sửa dòng `projects_empty_native` và ghi chú ở mục 5, mục đích của mốc ở mục 6, ghi chú dưới câu hỏi 16, thêm câu hỏi 24. Theo lời anh Nhật trong phiên: bỏ luật trước nét vẽ đầu tiên, giữ mốc làm dữ liệu dự phòng; chờ xác nhận lại |
+| 2026-11-22 | AI | Chuyển `confirmed` theo lời anh Nhật (người phụ trách sản phẩm) trong phiên: "Duyệt đợt 20261122-02: plan T-007, T-048, T-044, T-002, T-003 và danh sách RUN-20261122-02, bắt đầu phiên khi merge; xác nhận sáu spec editor, export, lessons, onboarding, projects, settings. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." |

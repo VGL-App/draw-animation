@@ -5,7 +5,7 @@ feature: export
 spec: features/export/spec.md
 scenarios: [KB-4]
 owner: Nhật
-status: planned
+status: approved
 risk: medium
 size: M
 depends_on: [T-004]
