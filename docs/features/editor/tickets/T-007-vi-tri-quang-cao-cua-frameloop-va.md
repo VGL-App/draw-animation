@@ -5,12 +5,12 @@ feature: editor
 spec: features/editor/spec.md
 scenarios: [KB-3, KB-7, KB-14]
 owner: Nhật
-status: backlog
+status: planned
 risk: high
 size: M
 depends_on: [T-005, T-006]
 sprint:
-plan:
+plan: features/editor/plans/T-007-vi-tri-quang-cao.md
 auto_run:
 created: 2026-11-22
 ---

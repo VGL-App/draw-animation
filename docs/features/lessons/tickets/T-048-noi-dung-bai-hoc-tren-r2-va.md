@@ -5,12 +5,12 @@ feature: lessons
 spec: features/lessons/spec.md
 scenarios: [KB-2, KB-3, KB-4]
 owner: Nhật
-status: backlog
+status: planned
 risk: high
 size: M
 depends_on: [T-001]
 sprint:
-plan:
+plan: features/lessons/plans/T-048-core-lessons.md
 auto_run:
 created: 2026-11-22
 ---
