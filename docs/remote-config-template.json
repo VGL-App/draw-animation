@@ -1,14 +1,44 @@
 {
   "conditions": [],
   "parameters": {
+    "feature_editor_enabled": {
+      "defaultValue": { "value": "false" },
+      "description": "Lets users open the drawing screen, virtual camera included.",
+      "valueType": "BOOLEAN"
+    },
+    "feature_export_enabled": {
+      "defaultValue": { "value": "false" },
+      "description": "Shows the export button on the drawing and lesson complete screens and opens the Export screen.",
+      "valueType": "BOOLEAN"
+    },
+    "feature_lessons_enabled": {
+      "defaultValue": { "value": "false" },
+      "description": "Shows the Lessons tab, the free lesson button on the empty project list and the Lessons screen.",
+      "valueType": "BOOLEAN"
+    },
     "feature_loading_enabled": {
       "defaultValue": { "value": "false" },
       "description": "Shows the loading screen that prepares the app before the start screen.",
       "valueType": "BOOLEAN"
     },
+    "feature_onboarding_enabled": {
+      "defaultValue": { "value": "false" },
+      "description": "Shows onboarding to users who have not finished it; off opens the project list directly.",
+      "valueType": "BOOLEAN"
+    },
+    "feature_projects_enabled": {
+      "defaultValue": { "value": "false" },
+      "description": "Opens the project list and the Create project screen.",
+      "valueType": "BOOLEAN"
+    },
     "feature_sample_enabled": {
       "defaultValue": { "value": "false" },
       "description": "Shows the sample feature screen, the reference pattern for new features.",
+      "valueType": "BOOLEAN"
+    },
+    "feature_settings_enabled": {
+      "defaultValue": { "value": "false" },
+      "description": "Shows the settings button on the project list and opens the Settings screen, where users withdraw ad consent.",
       "valueType": "BOOLEAN"
     },
     "ads_interval": {
