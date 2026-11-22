@@ -165,10 +165,15 @@ class AdPlacementTest {
         assertEquals(8, AdPlacement.GALLERY_INLIST_MEDIUM.nativeEvery)
         // The cards of the grid and pager pages (plan T-036).
         assertEquals(4, AdPlacement.GALLERY_IN_COLLECTION.nativeEvery)
+        // The grids of Frameloop (plan T-007).
+        assertEquals(6, AdPlacement.PROJECTS_GRID.nativeEvery)
+        assertEquals(4, AdPlacement.LESSONS_GRID.nativeEvery)
         val inList = setOf(
             AdPlacement.GALLERY_INLIST_SMALL,
             AdPlacement.GALLERY_INLIST_MEDIUM,
             AdPlacement.GALLERY_IN_COLLECTION,
+            AdPlacement.PROJECTS_GRID,
+            AdPlacement.LESSONS_GRID,
         )
         AdPlacement.entries.filterNot { it in inList }
             .forEach { assertNull(it.key, it.nativeEvery) }

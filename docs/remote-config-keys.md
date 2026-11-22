@@ -20,6 +20,16 @@ Mọi khóa Remote Config của bản app hiện tại (ADR-0046). File mẫu đ
 | `is_log_ad_fullscreen_events` | boolean | `false` | `:core:ads` | Logs the Firebase lifecycle events of full-screen ads. Name set by the template, not an AdsKit key. |
 | `is_log_ad_slot_events` | boolean | `false` | `:core:ads` | Logs the Firebase lifecycle events of ad slots (banner, native). Name set by the template, not an AdsKit key. |
 | `is_show_ads` | boolean | `true` | `:core:ads` | Master switch for every ad. When false, the app loads and shows no ad at all. Name set by the template, not an AdsKit key. |
+| `is_show_create_inter` | boolean | `false` | `:core:ads` | Shows ads in this placement. Off by default. Derived key of placement create_inter (interstitial). |
+| `is_show_editor_exit_inter` | boolean | `false` | `:core:ads` | Shows ads in this placement. Off by default. Derived key of placement editor_exit_inter (interstitial). |
+| `is_show_editor_rw_brushes` | boolean | `false` | `:core:ads` | Shows ads in this placement. Off by default. Derived key of placement editor_rw_brushes (rewarded). |
+| `is_show_editor_rw_layer` | boolean | `false` | `:core:ads` | Shows ads in this placement. Off by default. Derived key of placement editor_rw_layer (rewarded). |
+| `is_show_editor_rw_sounds` | boolean | `false` | `:core:ads` | Shows ads in this placement. Off by default. Derived key of placement editor_rw_sounds (rewarded). |
+| `is_show_export_done_native` | boolean | `false` | `:core:ads` | Shows ads in this placement. Off by default. Derived key of placement export_done_native (native_medium). |
+| `is_show_export_interstitial` | boolean | `false` | `:core:ads` | Shows ads in this placement. Off by default. Derived key of placement export_interstitial (interstitial). |
+| `is_show_export_options_mrec` | boolean | `false` | `:core:ads` | Shows ads in this placement. Off by default. Derived key of placement export_options_mrec (banner_mrec). |
+| `is_show_export_rw_extra` | boolean | `false` | `:core:ads` | Shows ads in this placement. Off by default. Derived key of placement export_rw_extra (rewarded). |
+| `is_show_export_wait_mrec` | boolean | `false` | `:core:ads` | Shows ads in this placement. Off by default. Derived key of placement export_wait_mrec (banner_mrec). |
 | `is_show_gallery_app_open` | boolean | `false` | `:core:ads` | Shows ads in this placement. Off by default. Staging ad gallery only. Derived key of placement gallery_app_open (app_open). |
 | `is_show_gallery_banner` | boolean | `false` | `:core:ads` | Shows ads in this placement. Off by default. Staging ad gallery only. Derived key of placement gallery_banner (banner). |
 | `is_show_gallery_banner_collapsible` | boolean | `false` | `:core:ads` | Shows ads in this placement. Off by default. Staging ad gallery only. Derived key of placement gallery_banner_collapsible (banner_collapsible). |
@@ -34,13 +44,27 @@ Mọi khóa Remote Config của bản app hiện tại (ADR-0046). File mẫu đ
 | `is_show_gallery_native_step` | boolean | `false` | `:core:ads` | Shows ads in this placement. Off by default. Staging ad gallery only. Derived key of placement gallery_native_step (native_step). |
 | `is_show_gallery_native_step_full` | boolean | `false` | `:core:ads` | Shows ads in this placement. Off by default. Staging ad gallery only. Derived key of placement gallery_native_step_full (native_fullscreen). |
 | `is_show_gallery_rw_action` | boolean | `false` | `:core:ads` | Shows ads in this placement. Off by default. Staging ad gallery only. Derived key of placement gallery_rw_action (rewarded). |
+| `is_show_lesson_done_native` | boolean | `false` | `:core:ads` | Shows ads in this placement. Off by default. Derived key of placement lesson_done_native (native_medium). |
+| `is_show_lesson_next_inter` | boolean | `false` | `:core:ads` | Shows ads in this placement. Off by default. Derived key of placement lesson_next_inter (interstitial). |
+| `is_show_lesson_start_inter` | boolean | `false` | `:core:ads` | Shows ads in this placement. Off by default. Derived key of placement lesson_start_inter (interstitial). |
+| `is_show_lessons_bottom` | boolean | `false` | `:core:ads` | Shows ads in this placement. Off by default. Derived key of placement lessons_bottom (native_small). |
+| `is_show_lessons_grid` | boolean | `false` | `:core:ads` | Shows ads in this placement. Off by default. Derived key of placement lessons_grid (native_in_collection). |
 | `is_show_native_after_inter` | boolean | `false` | `:core:ads` | Shows a full-screen native ad right after the interstitial of an in-app placement (combo); never after the startup or resume interstitial. |
 | `is_show_native_bottom` | boolean | `false` | `:core:ads` | Bottom slot of every bottom ad bar: a small native ad when true, a banner when false. |
 | `is_show_native_collap` | boolean | `true` | `:core:ads` | Collapsible native layer on the bottom ad bar, only when is_show_native_bottom is also true. Name set by the template, not an AdsKit key. |
+| `is_show_native_onboarding` | boolean | `false` | `:core:ads` | Shows ads in this placement. Off by default. First open since install only. Derived key of placement native_onboarding (native_step). |
+| `is_show_new_project_native` | boolean | `false` | `:core:ads` | Shows ads in this placement. Off by default. Derived key of placement new_project_native (native_medium). |
+| `is_show_projects_bottom` | boolean | `false` | `:core:ads` | Shows ads in this placement. Off by default. Derived key of placement projects_bottom (native_small). |
+| `is_show_projects_empty_native` | boolean | `false` | `:core:ads` | Shows ads in this placement. Off by default. Derived key of placement projects_empty_native (native_medium). |
+| `is_show_projects_grid` | boolean | `false` | `:core:ads` | Shows ads in this placement. Off by default. Derived key of placement projects_grid (native_in_collection). |
+| `is_show_restore_mrec` | boolean | `false` | `:core:ads` | Shows ads in this placement. Off by default. Derived key of placement restore_mrec (banner_mrec). |
 | `is_show_sample_native_small` | boolean | `false` | `:core:ads` | Shows ads in this placement. Off by default. Derived key of placement sample_native_small (native_small). |
+| `is_show_settings_bottom` | boolean | `false` | `:core:ads` | Shows ads in this placement. Off by default. Derived key of placement settings_bottom (native_small). |
 | `native_every_gallery_in_collection` | long | `4` | `:core:ads` | Number of items between two native ads of this placement, in items. Derived key of placement gallery_in_collection (native_in_collection). |
 | `native_every_gallery_inlist_medium` | long | `8` | `:core:ads` | Number of items between two native ads of this placement, in items. Derived key of placement gallery_inlist_medium (native_medium). |
 | `native_every_gallery_inlist_small` | long | `8` | `:core:ads` | Number of items between two native ads of this placement, in items. Derived key of placement gallery_inlist_small (native_small). |
+| `native_every_lessons_grid` | long | `4` | `:core:ads` | Number of items between two native ads of this placement, in items. Derived key of placement lessons_grid (native_in_collection). |
+| `native_every_projects_grid` | long | `6` | `:core:ads` | Number of items between two native ads of this placement, in items. Derived key of placement projects_grid (native_in_collection). |
 | `open_ad_type` | string | `"aoa"` | `:core:ads` | Ad shown when the app opens: inter for an interstitial, any other value for an app open ad. |
 | `resume_ad_type` | string | `"aoa"` | `:core:ads` | Ad shown when the user comes back: only inter gives an interstitial, any other value an app open ad. |
 | `show_open_ads` | boolean | `false` | `:core:ads` | Shows the ad when the app opens, from the second open on. |

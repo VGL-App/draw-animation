@@ -71,6 +71,56 @@
       "description": "Master switch for every ad. When false, the app loads and shows no ad at all. Name set by the template, not an AdsKit key.",
       "valueType": "BOOLEAN"
     },
+    "is_show_create_inter": {
+      "defaultValue": { "value": "false" },
+      "description": "Shows ads in this placement. Off by default. Derived key of placement create_inter (interstitial).",
+      "valueType": "BOOLEAN"
+    },
+    "is_show_editor_exit_inter": {
+      "defaultValue": { "value": "false" },
+      "description": "Shows ads in this placement. Off by default. Derived key of placement editor_exit_inter (interstitial).",
+      "valueType": "BOOLEAN"
+    },
+    "is_show_editor_rw_brushes": {
+      "defaultValue": { "value": "false" },
+      "description": "Shows ads in this placement. Off by default. Derived key of placement editor_rw_brushes (rewarded).",
+      "valueType": "BOOLEAN"
+    },
+    "is_show_editor_rw_layer": {
+      "defaultValue": { "value": "false" },
+      "description": "Shows ads in this placement. Off by default. Derived key of placement editor_rw_layer (rewarded).",
+      "valueType": "BOOLEAN"
+    },
+    "is_show_editor_rw_sounds": {
+      "defaultValue": { "value": "false" },
+      "description": "Shows ads in this placement. Off by default. Derived key of placement editor_rw_sounds (rewarded).",
+      "valueType": "BOOLEAN"
+    },
+    "is_show_export_done_native": {
+      "defaultValue": { "value": "false" },
+      "description": "Shows ads in this placement. Off by default. Derived key of placement export_done_native (native_medium).",
+      "valueType": "BOOLEAN"
+    },
+    "is_show_export_interstitial": {
+      "defaultValue": { "value": "false" },
+      "description": "Shows ads in this placement. Off by default. Derived key of placement export_interstitial (interstitial).",
+      "valueType": "BOOLEAN"
+    },
+    "is_show_export_options_mrec": {
+      "defaultValue": { "value": "false" },
+      "description": "Shows ads in this placement. Off by default. Derived key of placement export_options_mrec (banner_mrec).",
+      "valueType": "BOOLEAN"
+    },
+    "is_show_export_rw_extra": {
+      "defaultValue": { "value": "false" },
+      "description": "Shows ads in this placement. Off by default. Derived key of placement export_rw_extra (rewarded).",
+      "valueType": "BOOLEAN"
+    },
+    "is_show_export_wait_mrec": {
+      "defaultValue": { "value": "false" },
+      "description": "Shows ads in this placement. Off by default. Derived key of placement export_wait_mrec (banner_mrec).",
+      "valueType": "BOOLEAN"
+    },
     "is_show_gallery_app_open": {
       "defaultValue": { "value": "false" },
       "description": "Shows ads in this placement. Off by default. Staging ad gallery only. Derived key of placement gallery_app_open (app_open).",
@@ -141,6 +191,31 @@
       "description": "Shows ads in this placement. Off by default. Staging ad gallery only. Derived key of placement gallery_rw_action (rewarded).",
       "valueType": "BOOLEAN"
     },
+    "is_show_lesson_done_native": {
+      "defaultValue": { "value": "false" },
+      "description": "Shows ads in this placement. Off by default. Derived key of placement lesson_done_native (native_medium).",
+      "valueType": "BOOLEAN"
+    },
+    "is_show_lesson_next_inter": {
+      "defaultValue": { "value": "false" },
+      "description": "Shows ads in this placement. Off by default. Derived key of placement lesson_next_inter (interstitial).",
+      "valueType": "BOOLEAN"
+    },
+    "is_show_lesson_start_inter": {
+      "defaultValue": { "value": "false" },
+      "description": "Shows ads in this placement. Off by default. Derived key of placement lesson_start_inter (interstitial).",
+      "valueType": "BOOLEAN"
+    },
+    "is_show_lessons_bottom": {
+      "defaultValue": { "value": "false" },
+      "description": "Shows ads in this placement. Off by default. Derived key of placement lessons_bottom (native_small).",
+      "valueType": "BOOLEAN"
+    },
+    "is_show_lessons_grid": {
+      "defaultValue": { "value": "false" },
+      "description": "Shows ads in this placement. Off by default. Derived key of placement lessons_grid (native_in_collection).",
+      "valueType": "BOOLEAN"
+    },
     "is_show_native_after_inter": {
       "defaultValue": { "value": "false" },
       "description": "Shows a full-screen native ad right after the interstitial of an in-app placement (combo); never after the startup or resume interstitial.",
@@ -156,9 +231,44 @@
       "description": "Collapsible native layer on the bottom ad bar, only when is_show_native_bottom is also true. Name set by the template, not an AdsKit key.",
       "valueType": "BOOLEAN"
     },
+    "is_show_native_onboarding": {
+      "defaultValue": { "value": "false" },
+      "description": "Shows ads in this placement. Off by default. First open since install only. Derived key of placement native_onboarding (native_step).",
+      "valueType": "BOOLEAN"
+    },
+    "is_show_new_project_native": {
+      "defaultValue": { "value": "false" },
+      "description": "Shows ads in this placement. Off by default. Derived key of placement new_project_native (native_medium).",
+      "valueType": "BOOLEAN"
+    },
+    "is_show_projects_bottom": {
+      "defaultValue": { "value": "false" },
+      "description": "Shows ads in this placement. Off by default. Derived key of placement projects_bottom (native_small).",
+      "valueType": "BOOLEAN"
+    },
+    "is_show_projects_empty_native": {
+      "defaultValue": { "value": "false" },
+      "description": "Shows ads in this placement. Off by default. Derived key of placement projects_empty_native (native_medium).",
+      "valueType": "BOOLEAN"
+    },
+    "is_show_projects_grid": {
+      "defaultValue": { "value": "false" },
+      "description": "Shows ads in this placement. Off by default. Derived key of placement projects_grid (native_in_collection).",
+      "valueType": "BOOLEAN"
+    },
+    "is_show_restore_mrec": {
+      "defaultValue": { "value": "false" },
+      "description": "Shows ads in this placement. Off by default. Derived key of placement restore_mrec (banner_mrec).",
+      "valueType": "BOOLEAN"
+    },
     "is_show_sample_native_small": {
       "defaultValue": { "value": "false" },
       "description": "Shows ads in this placement. Off by default. Derived key of placement sample_native_small (native_small).",
+      "valueType": "BOOLEAN"
+    },
+    "is_show_settings_bottom": {
+      "defaultValue": { "value": "false" },
+      "description": "Shows ads in this placement. Off by default. Derived key of placement settings_bottom (native_small).",
       "valueType": "BOOLEAN"
     },
     "native_every_gallery_in_collection": {
@@ -174,6 +284,16 @@
     "native_every_gallery_inlist_small": {
       "defaultValue": { "value": "8" },
       "description": "Number of items between two native ads of this placement, in items. Derived key of placement gallery_inlist_small (native_small).",
+      "valueType": "NUMBER"
+    },
+    "native_every_lessons_grid": {
+      "defaultValue": { "value": "4" },
+      "description": "Number of items between two native ads of this placement, in items. Derived key of placement lessons_grid (native_in_collection).",
+      "valueType": "NUMBER"
+    },
+    "native_every_projects_grid": {
+      "defaultValue": { "value": "6" },
+      "description": "Number of items between two native ads of this placement, in items. Derived key of placement projects_grid (native_in_collection).",
       "valueType": "NUMBER"
     },
     "open_ad_type": {

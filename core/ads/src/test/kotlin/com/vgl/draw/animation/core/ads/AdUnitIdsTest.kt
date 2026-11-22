@@ -5,23 +5,40 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
+/** The 22 placements of Frameloop (plan T-007), one unit each, in the order of the plan. */
+internal const val FRAMELOOP_PLACEMENT_UNITS =
+    "native_onboarding=unit/native_onboarding;projects_empty_native=unit/projects_empty_native;" +
+        "projects_bottom=unit/projects_bottom;projects_grid=unit/projects_grid;" +
+        "restore_mrec=unit/restore_mrec;create_inter=unit/create_inter;" +
+        "new_project_native=unit/new_project_native;settings_bottom=unit/settings_bottom;" +
+        "editor_exit_inter=unit/editor_exit_inter;editor_rw_layer=unit/editor_rw_layer;" +
+        "editor_rw_brushes=unit/editor_rw_brushes;editor_rw_sounds=unit/editor_rw_sounds;" +
+        "export_options_mrec=unit/export_options_mrec;export_wait_mrec=unit/export_wait_mrec;" +
+        "export_done_native=unit/export_done_native;export_interstitial=unit/export_interstitial;" +
+        "export_rw_extra=unit/export_rw_extra;lessons_grid=unit/lessons_grid;" +
+        "lessons_bottom=unit/lessons_bottom;lesson_start_inter=unit/lesson_start_inter;" +
+        "lesson_done_native=unit/lesson_done_native;lesson_next_inter=unit/lesson_next_inter"
+
 class AdUnitIdsTest {
     @Test
     fun configuredUnits_areParsedPerPlacementKey() {
         val ids = ConfiguredAdUnitIds(
             " sample_native_small = unit/1 ; other_key=unit/2;open_app=unit/3;open_app_inter=unit/4;" +
-                "native_combo=unit/5;resume=unit/6;resume_inter=unit/7;banner=unit/8;native_collap=unit/9",
+                "native_combo=unit/5;resume=unit/6;resume_inter=unit/7;banner=unit/8;native_collap=unit/9;" +
+                FRAMELOOP_PLACEMENT_UNITS,
         )
         assertEquals("unit/1", ids.of(AdPlacement.SAMPLE_NATIVE_SMALL))
         assertTrue(ids.missing.isEmpty())
         // Control: without the two slot keys, the layers of the bottom bar are missing (plan T-056, section 3.5).
         val withoutSlots = ConfiguredAdUnitIds(
             " sample_native_small = unit/1 ; other_key=unit/2;open_app=unit/3;open_app_inter=unit/4;" +
-                "native_combo=unit/5;resume=unit/6;resume_inter=unit/7",
+                "native_combo=unit/5;resume=unit/6;resume_inter=unit/7;" + FRAMELOOP_PLACEMENT_UNITS,
         )
         assertEquals(listOf("banner", "native_collap"), withoutSlots.missing)
         // Control: app-wide placements still need a unit on production (plan T-024, section 3.3).
-        val withoutAppWide = ConfiguredAdUnitIds(" sample_native_small = unit/1 ; other_key=unit/2;")
+        val withoutAppWide = ConfiguredAdUnitIds(
+            " sample_native_small = unit/1 ; other_key=unit/2;$FRAMELOOP_PLACEMENT_UNITS",
+        )
         assertEquals(
             listOf("open_app", "open_app_inter", "native_combo", "resume", "resume_inter", "banner", "native_collap"),
             withoutAppWide.missing,
@@ -232,7 +249,7 @@ class AdUnitIdsTest {
     @Test
     fun missingUnitsWarning_listsMissingKeys() {
         val placementUnits = "sample_native_small=unit/1;open_app=unit/3;open_app_inter=unit/4;" +
-            "native_combo=unit/5;resume=unit/6;resume_inter=unit/7"
+            "native_combo=unit/5;resume=unit/6;resume_inter=unit/7;" + FRAMELOOP_PLACEMENT_UNITS
         val warning = missingUnitsWarning(ConfiguredAdUnitIds(placementUnits))
         assertTrue("warning: $warning", warning != null && "banner, native_collap" in warning)
         // Control: with the two slot keys nothing is missing, so no warning.

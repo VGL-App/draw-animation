@@ -190,6 +190,72 @@ enum class AdPlacement(
     RESUME("resume", AdFormat.APP_OPEN, appWide = true),
     RESUME_INTER("resume_inter", AdFormat.INTERSTITIAL, ignoreInterval = true, appWide = true),
 
+    /** Onboarding, card outside the pager on the 4 pages, first open only (onboarding spec, section 5). Group A. */
+    NATIVE_ONBOARDING("native_onboarding", AdFormat.NATIVE_STEP, firstOpenOnly = true),
+
+    /** Projects list when empty, under the two buttons (projects spec, section 5). Group A. */
+    PROJECTS_EMPTY_NATIVE("projects_empty_native", AdFormat.NATIVE_MEDIUM),
+
+    /** Projects list with projects, bottom bar (projects spec, section 5). Group A. */
+    PROJECTS_BOTTOM("projects_bottom", AdFormat.NATIVE_SMALL),
+
+    /** Projects grid, one cell after every 6 projects (projects spec, section 5). Group A. */
+    PROJECTS_GRID("projects_grid", AdFormat.NATIVE_IN_COLLECTION, nativeEvery = 6),
+
+    /** Restore project dialog, while restoring, under the progress bar (projects spec, section 5). Group A. */
+    RESTORE_MREC("restore_mrec", AdFormat.BANNER_MREC),
+
+    /** New project, on Create, from the second project (projects spec, section 5). Group A. */
+    CREATE_INTER("create_inter", AdFormat.INTERSTITIAL),
+
+    /** New project screen, between the option groups (projects spec, section 5). Group B. */
+    NEW_PROJECT_NATIVE("new_project_native", AdFormat.NATIVE_MEDIUM),
+
+    /** Settings, bottom bar (settings spec, section 5). Group B. */
+    SETTINGS_BOTTOM("settings_bottom", AdFormat.NATIVE_SMALL),
+
+    /** Leaving the editor, after the autosave (editor spec, section 5). Group A. */
+    EDITOR_EXIT_INTER("editor_exit_inter", AdFormat.INTERSTITIAL),
+
+    /** Editor, unlocks layers 6 to 10 for the whole project (T-028). Group A. allow_after_2 (editor spec, question 4). */
+    EDITOR_RW_LAYER("editor_rw_layer", AdFormat.REWARDED, noAdPolicy = RewardedNoAdPolicy.AllowAfter(2)),
+
+    /** Editor, unlocks the pro brushes for 24 hours (T-023). Group A. allow_after_2 (editor spec, question 4). */
+    EDITOR_RW_BRUSHES("editor_rw_brushes", AdFormat.REWARDED, noAdPolicy = RewardedNoAdPolicy.AllowAfter(2)),
+
+    /** Editor, unlocks the sound effect packs for 24 hours (T-034). Group A. allow_after_2 (editor spec, question 4). */
+    EDITOR_RW_SOUNDS("editor_rw_sounds", AdFormat.REWARDED, noAdPolicy = RewardedNoAdPolicy.AllowAfter(2)),
+
+    /** Export options, under the project summary card (export spec, section 5). Group A. */
+    EXPORT_OPTIONS_MREC("export_options_mrec", AdFormat.BANNER_MREC),
+
+    /** Export, while waiting (export spec, section 5). Group A. */
+    EXPORT_WAIT_MREC("export_wait_mrec", AdFormat.BANNER_MREC),
+
+    /** Export done, under the preview (export spec, section 5). Group A. */
+    EXPORT_DONE_NATIVE("export_done_native", AdFormat.NATIVE_MEDIUM),
+
+    /** Leaving the export done screen, after the file is saved (export spec, section 5). Group A. */
+    EXPORT_INTERSTITIAL("export_interstitial", AdFormat.INTERSTITIAL),
+
+    /** Export, unlocks no watermark, PNG sequence, clear background for that export. Group A. allow_after_2 (q. 14). */
+    EXPORT_RW_EXTRA("export_rw_extra", AdFormat.REWARDED, noAdPolicy = RewardedNoAdPolicy.AllowAfter(2)),
+
+    /** Lessons grid, one cell after every 4 cards (lessons spec, section 5). Group A. */
+    LESSONS_GRID("lessons_grid", AdFormat.NATIVE_IN_COLLECTION, nativeEvery = 4),
+
+    /** Lessons, bottom bar (lessons spec, section 5). Group A. */
+    LESSONS_BOTTOM("lessons_bottom", AdFormat.NATIVE_SMALL),
+
+    /** Entering a lesson (lessons spec, section 5). Group A. */
+    LESSON_START_INTER("lesson_start_inter", AdFormat.INTERSTITIAL),
+
+    /** Lesson done screen, under the result (lessons spec, section 5). Group B. */
+    LESSON_DONE_NATIVE("lesson_done_native", AdFormat.NATIVE_MEDIUM),
+
+    /** On "Next lesson" (lessons spec, section 5). Group B. */
+    LESSON_NEXT_INTER("lesson_next_inter", AdFormat.INTERSTITIAL),
+
     // Staging ad gallery only (plans T-014, T-036): placements of every format, see [stagingOnly]. The collapsible
     // layer has none of its own: it loads through the placement of its bottom bar (GALLERY_NATIVE_SMALL, T-030).
     GALLERY_NATIVE_SMALL("gallery_native_small", AdFormat.NATIVE_SMALL),
