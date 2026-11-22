@@ -1,6 +1,6 @@
 ---
 feature: projects
-status: confirmed
+status: changed
 owner: Nhật
 product_owner: Nhật
 requests:
@@ -218,6 +218,7 @@ Tiêu chí chấp nhận:
 - [ ] Khi từ Cài đặt quay lại thì về danh sách, đúng chỗ đang cuộn.
 - [ ] Khi đổi "Default canvas" hay "Default frame rate" trong Cài đặt rồi mở màn Tạo dự án thì lựa chọn sẵn theo giá trị mới.
 - [ ] Khi cờ của feature Cài đặt tắt thì thanh trên không có nút cài đặt, và màn Tạo dự án chọn sẵn 12 khung/giây, 9:16 (xem spec settings KB-10, câu 15).
+- [ ] Khi cờ của feature Cài đặt tắt mà người dùng ở vùng bắt buộc hộp thoại đồng ý quảng cáo thì thanh trên hiện nút lựa chọn quyền riêng tư quảng cáo ở chỗ nút cài đặt; bấm thì hộp thoại lựa chọn quyền riêng tư quảng cáo dùng chung của app mở lại, như dòng "Ad privacy choices" của màn Cài đặt (spec settings KB-7). Ở vùng không bắt buộc thì không hiện nút nào (câu hỏi 23).
 
 ### KB-12. Dùng trên điện thoại gập khi mở ra
 
@@ -380,6 +381,9 @@ Không có.
 22. **Chữ "free" trong nút "Try a free lesson" ở màn trống.** Mọi bài học đều miễn phí, nên chữ "free" có thể làm người dùng nghĩ có bài trả phí. Bản đề xuất mục 6 gọi lối vào này là thẻ "Học bài đầu tiên"; thiết kế đã duyệt ghi "Try a free lesson". Spec lessons câu 15 giao quyết định về chữ cho câu này.
     - Đề xuất của AI: giữ chữ theo thiết kế đã duyệt. Nếu muốn tránh hiểu nhầm thì đổi thành "Try a lesson" hay "Start your first lesson", cần sửa thiết kế và bảng chữ. Nút mở màn Bài học theo spec lessons câu 15.
     - Trả lời: Giữ chữ "Try a free lesson".
+23. **Lối vào lựa chọn quyền riêng tư quảng cáo khi cờ Cài đặt tắt.** Mọi cờ mặc định tắt khi chưa tải được cấu hình từ xa (ADR-0003); lần mở đầu trên production mà chưa tải được thì người dùng mất dòng "Ad privacy choices", lối vào duy nhất để rút đồng ý quảng cáo (spec settings câu 15).
+    - Đề xuất của AI: khi cờ Cài đặt tắt, chỗ nút cài đặt trên thanh trên hiện nút lựa chọn quyền riêng tư quảng cáo có sẵn của phần quảng cáo dùng chung, chỉ ở vùng bắt buộc hộp thoại đồng ý.
+    - Trả lời: Nút trên thanh trên, theo đề xuất của AI (anh Nhật chọn trong phiên 2026-11-22).
 
 ## 10. Lịch sử
 
@@ -390,3 +394,4 @@ Không có.
 | 2026-11-21 | AI | Ghi các frame thiết kế bổ sung, sửa theo câu trả lời (chờ anh Nhật duyệt) ở mục 4 và các tiêu chí liên quan |
 | 2026-11-21 | AI | Đổi tham số `scope` (`all`, `project`) của `backup_export`, `backup_restore` thành `source` (`settings`, `projects`), theo lời anh Nhật trong phiên; thiết kế bổ sung đã được anh duyệt |
 | 2026-11-21 | AI | Chuyển `confirmed` theo lời anh Nhật (người phụ trách sản phẩm) trong phiên: "xác nhận 6 spec" |
+| 2026-11-22 | AI | Thêm tiêu chí vào KB-11 và câu hỏi 23: nút lựa chọn quyền riêng tư quảng cáo trên thanh trên khi cờ Cài đặt tắt, theo câu trả lời của anh Nhật trong phiên. Spec `changed`, chờ xác nhận lại |
