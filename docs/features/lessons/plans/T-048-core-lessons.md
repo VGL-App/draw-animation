@@ -259,7 +259,7 @@ interface LessonProgressStore {
 }
 ```
 
-- Lưu trong tệp `app_preferences` dùng chung (`DataStore<Preferences>` của `:core:data`), một khóa `stringPreferencesKey("lessons_progress")` chứa JSON có số phiên bản. Một khóa thay vì một khóa mỗi bài để mọi thay đổi là một giao dịch `edit` và định dạng có phiên bản như T-001. Tên khóa `lessons_progress` và `lessons_index_version` là hợp đồng với dữ liệu trên máy người dùng; không trùng khóa đã có (`sample_count`, `ads_first_open_done`, `ads_inter_display_count`) hay khóa của T-005 (`settings_default_frame_rate`, `settings_default_aspect_ratio`, `settings_stylus_pressure`, `first_stroke_drawn`).
+- Lưu trong tệp `app_preferences` dùng chung (`DataStore<Preferences>` của `:core:data`), một khóa `stringPreferencesKey("lessons_progress")` chứa JSON có số phiên bản. Một khóa thay vì một khóa mỗi bài để mọi thay đổi là một giao dịch `edit` và định dạng có phiên bản như T-001. Tên khóa `lessons_progress` và `lessons_index_version` là hợp đồng với dữ liệu trên máy người dùng; không trùng khóa đã có (`sample_count`, `ads_first_open_done`, `ads_inter_display_count`) hay khóa của T-005 (`settings_default_frame_rate`, `settings_default_aspect_ratio`, `settings_stylus_pressure`, `first_stroke_drawn`; mốc này vẫn được lưu làm dữ liệu dự phòng).
 - **Tệp mẫu tiến độ** (`core/lessons/src/test/resources/progress-v1.json`, bước 3 chép nguyên văn):
 
 ```json
@@ -289,7 +289,20 @@ interface LessonProgressStore {
 
 **Hilt** (`di/LessonsModule.kt`, `internal object`, theo mẫu `AssetsModule`): `@Provides @Singleton LessonContent = DefaultLessonContent(assets, settings, dataStore, PackExtractor(File(context.noBackupFilesDir, "lessons")), Dispatchers.IO, logger)`; `@Provides @Singleton LessonProgressStore = DataStoreLessonProgressStore(dataStore, logger)`. Chọn `noBackupFilesDir` như `:core:assets`: gói tải lại được, hệ thống không tự xóa như thư mục cache, và không sao lưu.
 
-**Không làm trong ticket:** đăng tệp vào `docs/ops/required-assets.txt` (câu hỏi 1 ở mục 8: thêm trước khi có nội dung trên R2 staging làm kiểm tra thiết lập hằng ngày đỏ và chặn mọi phiên tự chạy); dọn thư mục phiên bản cũ (câu hỏi 6); dựng dự án từ gói (T-052).
+**Tệp bắt buộc trên R2 staging** (câu hỏi 1, anh Nhật chọn "T-048 đăng luôn"): thêm vào cuối `docs/ops/required-assets.txt`, theo đúng định dạng của tệp (mỗi dòng một đường dẫn tương đối với địa chỉ staging, `#` là chú thích; `scripts/setup-check.sh` bỏ phần sau `#` và khoảng trắng):
+
+```
+# Lesson content (plan T-048): the index and the two sample lessons of lessons_content_version v1.
+lessons/v1/index.json
+lessons/v1/bouncing-ball/thumb.webp
+lessons/v1/bouncing-ball/lesson.zip
+lessons/v1/squash-and-stretch/thumb.webp
+lessons/v1/squash-and-stretch/lesson.zip
+```
+
+**Điều kiện trước phiên** (dev kiểm trước phiên, không phải lệnh `curl` trong phiên: proxy của `claude --cloud` chặn R2): dev đưa nội dung mẫu `lessons/v1/...` (năm tệp trên, đúng hợp đồng ở mục này) lên R2 staging, chạy `scripts/setup-check.sh` trên máy dev thấy cả năm dòng `ok`, rồi ghi kết quả vào danh sách chạy, trước khi phiên chạy T-048 bắt đầu. Lý do: `setup-check.sh` chạy trước mỗi phiên (`start-run.yml`) và mỗi sáng (`env-canary.yml`); PR của T-048 merge mà tệp chưa có thì kiểm tra đỏ, mở issue `setup-broken` và mọi phiên sau bị từ chối. Tệp trên R2 không bao giờ bị ghi đè (ADR-0015), nên nội dung đưa lên `v1` là bản `v1` mãi mãi: nên đưa hai bài mẫu thật đã duyệt; bản sửa sau đi vào `v2`.
+
+**Không làm trong ticket:** dọn thư mục phiên bản cũ (câu hỏi 6); dựng dự án từ gói (T-052).
 
 Mẫu có sẵn được làm theo: `NetworkSettings` (khóa của module core), `DefaultRemoteAssets` (khóa theo đường dẫn, ghi tạm rồi đổi tên, `withContext(ioDispatcher)`), `DataStoreCounterRepository` (đọc thử lại khi `IOException`), định dạng JSON có phiên bản và tệp mẫu của plan T-001, test trên tệp DataStore thật của plan T-005.
 
@@ -304,6 +317,7 @@ Mẫu có sẵn được làm theo: `NetworkSettings` (khóa của module core),
 | Sửa | `app/src/test/kotlin/com/vgl/draw/animation/config/RemoteConfigKeysTest.kt` | Thêm test `lessonsKeys_areListed` (mục 4); không đổi test có sẵn |
 | Sửa | `docs/remote-config-keys.md` | Sinh lại bằng lệnh của `docs/ops/remote-config.md`, mục 3: thêm dòng `lessons_content_version` |
 | Sửa | `docs/remote-config-template.json` | Sinh lại cùng lệnh: thêm tham số `lessons_content_version` |
+| Sửa | `docs/ops/required-assets.txt` | Thêm một dòng chú thích và năm đường dẫn của mục 3.1 (Tệp bắt buộc trên R2 staging), ở cuối tệp, không đổi dòng có sẵn |
 | Tạo | `core/lessons/build.gradle.kts` | Plugin thư viện, Hilt, kotlin serialization; phụ thuộc `:core:assets`, `:core:config`, `:core:data`, `:core:logging`, `kotlinx-serialization-json` |
 | Tạo | `core/lessons/consumer-rules.pro` | Một dòng chú thích: kotlinx.serialization đã kèm luật R8 cho lớp `@Serializable` (mục 4.1) |
 | Tạo | `core/lessons/src/main/kotlin/com/vgl/draw/animation/core/lessons/LessonsSettings.kt` | Khóa `lessons_content_version`, `all()`, `contentVersionOrDefault` |
@@ -330,7 +344,7 @@ Mẫu có sẵn được làm theo: `NetworkSettings` (khóa của module core),
 | Tạo | `core/lessons/src/test/resources/lesson-v1.json` | Tệp mẫu `lesson.json`, chép nguyên văn từ mục 3.1 |
 | Tạo | `core/lessons/src/test/resources/progress-v1.json` | Tệp mẫu tiến độ, chép nguyên văn từ mục 3.1 |
 
-Không có ảnh chuẩn screenshot. Không sửa `docs/ops/required-assets.txt` (câu hỏi 1).
+Không có ảnh chuẩn screenshot.
 
 Nơi đọc các file có sẵn mà plan sửa (`grep -rln` trên `scripts/ .github/ */src/test */src/androidTest` và file build), và vì sao không phải sửa thêm:
 
@@ -338,6 +352,7 @@ Nơi đọc các file có sẵn mà plan sửa (`grep -rln` trên `scripts/ .git
 - `CLAUDE.md`: như plan T-001. `app/src/androidTest/kotlin/com/vgl/draw/animation/AppLaunchTest.kt`, `core/ads/src/test/kotlin/com/vgl/draw/animation/core/ads/NativeFullScreenOverlayScreenshotTest.kt`, `scripts/local-setup.sh`, `scripts/run-watchdog.py` chỉ nhắc tên file; `scripts/tests/run.sh` đọc dòng `git status --short -- '...'` và dòng `export ANDROID_HOME` ở mục Lệnh, plan chỉ thêm một dòng vào bảng module.
 - `app/build.gradle.kts`: `scripts/setup-check.sh` đọc `ASSETS_BASE_URL` và `applicationId`; `scripts/release.sh` (không chạm, ADR-0049) và `scripts/ui-test-verdict.sh` đọc `applicationId`, `versionCode`, `versionName`; `.github/workflows/pr-check.yml` lọc theo tên file; `app/src/test/kotlin/com/vgl/draw/animation/ProductionPropertiesTest.kt` chỉ đọc khối `productFlavors` (khóa AppsFlyer, AppLovin của production). Plan chỉ thêm một dòng `implementation` trong khối `dependencies`, không đổi các dòng đó.
 - `AppRemoteKeys.kt`: `RemoteConfigKeysTest` (sửa, mục 3.5), `StagingRemoteValuesModuleTest.everyLocalValue_isADeclaredKey` (chỉ cần tập khóa chứa mọi giá trị cục bộ; plan thêm khóa, không thêm giá trị cục bộ, nên vẫn qua).
+- `docs/ops/required-assets.txt`: `scripts/setup-check.sh` đọc từng dòng (bỏ phần sau `#`, khoảng trắng) và kiểm `200` ở địa chỉ staging; test của script trong `scripts/tests/run.sh` dùng danh sách riêng qua `SETUP_CHECK_ASSETS_LIST`, không đọc tệp thật. Dòng mới đúng định dạng nên script không phải sửa; điều kiện là tệp đã có trên R2 (mục 3.1).
 - `docs/remote-config-keys.md`, `docs/remote-config-template.json`: `app/build.gradle.kts` (truyền đường dẫn cho `RemoteConfigKeysTest`), `scripts/main-guard-verified.sh` (danh sách `GRADLE_READ_DOCS`, chỉ dùng tên file), `scripts/tests/run.sh` (test của `main-guard-verified.sh`, chỉ dùng tên file), `scripts/ads-plan.py` (đọc mọi dòng của bảng khóa để dựng trang Remote Config; dòng mới có đúng dạng của bảng, script không lọc theo module).
 
 ### 3.3. Cờ tính năng, quảng cáo, dữ liệu, quyền, thư viện
@@ -346,7 +361,7 @@ Nơi đọc các file có sẵn mà plan sửa (`grep -rln` trên `scripts/ .git
 - Quảng cáo: Không chạm.
 - Sự kiện phân tích: Không chạm. Module chỉ cung cấp `startedAtMillis` và giá trị trả về của `complete` để T-052, T-053 ghi `lesson_start`, `lesson_complete`.
 - Remote Config: khóa mới `lessons_content_version` (string, mặc định `"v1"`), đã có trong spec lessons mục 8 và câu hỏi 5; khai báo ở module sở hữu, sinh lại bảng khóa trong cùng PR (ADR-0046). Không thêm giá trị cục bộ cho staging: mặc định `v1` đúng với nội dung mẫu của T-049.
-- File R2: đặt cách đặt tên `lessons/<phiên bản>/index.json`, `lessons/<phiên bản>/<mã bài>/thumb.webp`, `lessons/<phiên bản>/<mã bài>/lesson.zip` (điểm chặn 8). Chỉ đọc qua `RemoteAssets`, không ghi hay xóa gì trên R2. Phiên không cần R2: mọi test dùng `FakeRemoteAssets`.
+- File R2: đặt cách đặt tên `lessons/<phiên bản>/index.json`, `lessons/<phiên bản>/<mã bài>/thumb.webp`, `lessons/<phiên bản>/<mã bài>/lesson.zip` (điểm chặn 8). Chỉ đọc qua `RemoteAssets`, không ghi hay xóa gì trên R2. Phiên không cần R2: mọi test dùng `FakeRemoteAssets`. Năm tệp của `lessons/v1/` đăng vào `docs/ops/required-assets.txt`; dev đưa lên R2 staging và kiểm trước phiên (mục 3.1).
 - Dữ liệu trên máy: hai khóa mới trong tệp `app_preferences` (`lessons_progress`, `lessons_index_version`), thư mục mới `noBackupFilesDir/lessons/`. Lần đầu đặt, không có dữ liệu cũ phải chuyển, nên không chạm điểm chặn 9 (như plan T-001, T-005); mọi lần đổi định dạng sau sẽ chạm.
 - **Quyền truy cập:** Không thêm. Tải file đi qua `:core:assets` (quyền `INTERNET` đã có); giải nén và DataStore chỉ dùng `noBackupFilesDir` và `filesDir` của app, không cần quyền ở mọi phiên bản từ minSdk 26 tới targetSdk 36.
 - **Thư viện và SDK:** Không thêm thư viện mới. `java.util.zip` có sẵn trong Android và JDK. Dùng thư viện đã có trong `gradle/libs.versions.toml`: `kotlinx-serialization-json` và plugin `kotlin-serialization` (thêm phụ thuộc ở `:core:lessons`); DataStore Preferences qua `api` của `:core:data`; Hilt qua `template.hilt`; `junit4`, `kotlinx-coroutines-test` do convention plugin thêm cho test.
@@ -439,11 +454,11 @@ Thứ tự commit: bước 3 commit các tệp test, `TestDoubles.kt`, ba tệp 
 | Tiêu chí | Điểm (0 đến 3) | Lý do |
 | --- | --- | --- |
 | A. Phạm vi thay đổi | 3 | Module mới với nhiều giao diện công khai (`LessonContent`, `LessonProgressStore`, mô hình), cộng sửa `:app` (`AppRemoteKeys`, file build), `settings.gradle.kts`, `CLAUDE.md` và hai bảng khóa sinh tự động |
-| B. Độ rõ của yêu cầu | 2 | Spec đã xác nhận phần lớn (đường dẫn có phiên bản, khóa, bài dở giữ bản cũ). Bố cục trong gói bài, cách tính thanh tiến độ, chỗ nhớ bước (kho tiến độ hay dự án), việc đăng tệp bắt buộc, mã dự án của lần xong và trần layer là AI đề xuất, còn chờ người duyệt (mục 8, câu 1 tới 5, 8, 9) |
+| B. Độ rõ của yêu cầu | 1 | Spec đã xác nhận phần lớn (đường dẫn có phiên bản, khóa, bài dở giữ bản cũ). Bố cục trong gói bài, cách tính thanh tiến độ, chỗ nhớ bước (kho tiến độ hay dự án), việc đăng tệp bắt buộc, mã dự án của lần xong và trần layer là AI đề xuất, đã được anh Nhật trả lời ngày 2026-11-22 (mục 8, câu 1 tới 5, 8, 9); thêm điều kiện trước phiên về tệp trên R2 staging |
 | C. Khả năng kiểm chứng tự động | 0 | Mọi hành vi có unit test JVM với tệp mẫu, zip dựng trong test và DataStore thật; chỉ dòng tài liệu cần người đọc |
 | D. Ảnh hưởng chéo | 2 | Chưa feature nào dùng, nhưng T-039, T-050, T-052, T-053 và nội dung của T-049 dựa vào định dạng và giao diện này; hai bảng khóa cũng bị T-006 (đang chạy), T-007 (cùng đợt) sinh lại; `settings.gradle.kts` cũng bị T-001 và T-044 (cùng đợt) sửa; `CLAUDE.md` cũng bị T-001, T-004 sửa |
 | E. Độ mới của kỹ thuật | 2 | Giải nén zip an toàn (`ZipInputStream`, chống đường dẫn ra ngoài, giới hạn byte) chưa có trong dự án nhưng phổ biến; phần còn lại là biến thể của mẫu có sẵn. Đã chạy thử bằng `scripts/check.sh` (mục 4.1) |
-| **Tổng** | 9 | **Mức: Cao** (chạm điểm chặn 7, 8; tổng 9 cũng là Cao) |
+| **Tổng** | 8 | **Mức: Cao** (chạm điểm chặn 7, 8) |
 
 ## 6. Ảnh hưởng chéo
 
@@ -454,11 +469,13 @@ Thứ tự commit: bước 3 commit các tệp test, `TestDoubles.kt`, ba tệp 
   - T-005 (đang chạy) thêm khóa vào `app_preferences` và sửa `core/data/build.gradle.kts`; T-048 không sửa `:core:data`, tên khóa không trùng (mục 3.1).
   - T-002 có thể cho `:core:project` phụ thuộc `:core:data`; `:core:lessons` không phụ thuộc `:core:project`, nên không có vòng nếu về sau `:core:project` cần `:core:lessons`.
   - T-039 (màn vẽ) đọc `LessonPack` và gọi `setStep`; tiêu đề "Lesson 1 · Bouncing ball" của màn vẽ cần tên bài và `libraryNumber` từ `LessonIndex`, nên T-039 và T-052 dùng cả danh sách lẫn gói; T-050 thu `library()`, đọc `progress`, gọi `thumbnail`; T-052 gọi `packVersionFor`, `loadPack`, `start`, dựng dự án `ProjectKind.Lesson` từ gói (đổi giá trị thô sang kiểu của `:core:project`); T-053 gọi `complete` và dùng giá trị trả về cho `duration_ms`, `next` cho "Next lesson", `completed[id].projectId` cho "Export my animation". T-052 xóa dự án của lần xong trước khi bắt đầu làm lại bài đã xong. Giới hạn 15 giây tổng cho lần tải (spec KB-2, KB-3) nằm ở ViewModel của T-050, T-052 nếu cần hơn giới hạn từng lần kết nối của `RemoteAssets`.
-  - T-049 làm nội dung theo đúng hợp đồng ở mục 3.1 (đường dẫn R2, `index.json`, bố cục và `lesson.json` của gói), nén zip bằng đúng lệnh ở mục 3.1, đưa hai bài mẫu lên `lessons/v1/` của R2 staging, và (theo câu hỏi 1) thêm đường dẫn vào `docs/ops/required-assets.txt` sau khi tệp đã lên R2.
+  - T-049 làm nội dung thật của thư viện theo đúng hợp đồng ở mục 3.1 (đường dẫn R2, `index.json`, bố cục và `lesson.json` của gói), nén zip bằng đúng lệnh ở mục 3.1. Năm tệp `lessons/v1/...` mà T-048 đăng vào `docs/ops/required-assets.txt` phải luôn trả `200` trên R2 staging: `v1` giữ nguyên, không xóa hay đổi tên; nội dung mới đi vào `v2` và đổi `lessons_content_version`. Hai bài mẫu đưa lên trước phiên của T-048 (điều kiện trước phiên, mục 3.1) nên là bản T-049 đã duyệt, vì `v1` không sửa được về sau.
 - `:app` phụ thuộc `:core:lessons` ngay ở task này (vì `AppRemoteKeys`), nên R8 của bản release xử lý module ngay; `pr-check` build bản release vì PR đổi file build.
 - Đề xuất thứ tự chạy: sau T-001 (phụ thuộc theo ticket, và cùng sửa `settings.gradle.kts`, `CLAUDE.md`), sau T-006 và T-007 nếu cùng phiên (cùng sinh lại bảng khóa); trước T-039, T-050, T-052, T-053.
 
 ## 7. Điều kiện dừng riêng
+
+- Danh sách chạy chưa ghi kết quả dev kiểm năm tệp `lessons/v1/...` trên R2 staging (điều kiện trước phiên, mục 3.1): không làm task, dừng ở đầu task, vì merge PR sẽ làm `setup-check.sh` đỏ và chặn mọi phiên sau; phiên không đưa được tệp lên R2. Khi phiên đã bắt đầu thì `start-run.yml` đã qua `setup-check.sh` với danh sách cũ, nên phiên không thấy lỗi; nếu trong phiên có issue `setup-broken` đang mở báo thiếu tệp `lessons/v1/...`, không merge, dừng task, ghi vào nhật ký và báo cáo để dev đưa tệp lên.
 
 - Cần đổi một trong ba tệp mẫu (`index-v1.json`, `lesson-v1.json`, `progress-v1.json`) so với khối ở mục 3.1 (tên khóa, cấu trúc, giá trị) để test qua: dừng, vì tệp mẫu là hợp đồng định dạng người duyệt duyệt cùng plan.
 - Cần đổi cách đặt đường dẫn R2 ở mục 3.1 (thư mục, tên tệp `index.json`, `thumb.webp`, `lesson.zip`): dừng (điểm chặn 8).
@@ -467,16 +484,26 @@ Thứ tự commit: bước 3 commit các tệp test, `TestDoubles.kt`, ba tệp 
 
 ## 8. Câu hỏi cho người duyệt
 
-1. **Đăng tệp vào `docs/ops/required-assets.txt` khi nào?** Ticket ghi T-048 đăng tệp; spec mục 7 ghi "ghi vào `required-assets.txt` khi có nội dung". Tệp trong danh sách được `scripts/setup-check.sh` kiểm mỗi sáng (`env-canary.yml`) và trước mỗi phiên (`start-run.yml`): thêm `lessons/v1/index.json` khi R2 staging chưa có làm kiểm tra đỏ, mở issue `setup-broken` và chặn mọi phiên tự chạy cho tới khi có tệp. Đề xuất của AI: T-048 không sửa tệp đó; T-049 (người làm, đưa hai bài mẫu lên R2 staging) thêm `lessons/v1/index.json` và tệp của hai bài mẫu sau khi đã đưa lên, và sửa phạm vi ticket trong PR của đợt, đúng như sau. T-048, mục Phạm vi: dòng "Đăng file vào `docs/ops/required-assets.txt`. Unit test với file mẫu." thành "Unit test với file mẫu. Đăng file vào `docs/ops/required-assets.txt` chuyển sang T-049 (plan T-048, câu hỏi 1)." T-049, mục Phạm vi: thêm dòng "Sau khi tệp đã lên R2 staging (dev kiểm bằng `scripts/setup-check.sh`), thêm vào `docs/ops/required-assets.txt`: `lessons/v1/index.json`, `lessons/v1/bouncing-ball/thumb.webp`, `lessons/v1/bouncing-ball/lesson.zip`, `lessons/v1/squash-and-stretch/thumb.webp`, `lessons/v1/squash-and-stretch/lesson.zip`." Cách khác: giữ trong T-048, dev đưa tệp lên R2 staging trước phiên (dev kiểm trước phiên, ghi vào danh sách chạy); khi đó T-049 phải có nội dung trước T-048, ngược với `depends_on` hiện tại.
+1. **Đăng tệp vào `docs/ops/required-assets.txt` khi nào?** Ticket ghi T-048 đăng tệp; spec mục 7 ghi "ghi vào `required-assets.txt` khi có nội dung". Tệp trong danh sách được `scripts/setup-check.sh` kiểm mỗi sáng (`env-canary.yml`) và trước mỗi phiên (`start-run.yml`): thêm khi R2 staging chưa có tệp làm kiểm tra đỏ, mở issue `setup-broken` và chặn mọi phiên tự chạy. AI đã đưa hai cách: T-048 đăng, dev đưa tệp lên trước phiên; hay chuyển việc đăng sang T-049.
+   - Trả lời (anh Nhật, 2026-11-22, chọn trong phiên): "T-048 đăng luôn". Giữ ticket như đã viết: T-048 thêm năm đường dẫn `lessons/v1/index.json`, `lessons/v1/bouncing-ball/thumb.webp`, `lessons/v1/bouncing-ball/lesson.zip`, `lessons/v1/squash-and-stretch/thumb.webp`, `lessons/v1/squash-and-stretch/lesson.zip` vào `docs/ops/required-assets.txt` (mục 3.2); dev đưa nội dung mẫu `lessons/v1/...` lên R2 staging và kiểm trước phiên (mục 3.1); điều kiện dừng ở mục 7.
 2. **Module mới `:core:lessons`?** Đề xuất của AI: một module core mới, không phụ thuộc `:core:project` (mục 3.1, lý do). Cách khác: đặt trong `:core:project` (dùng chung kiểu `AspectRatio`, `FrameRate`), nhưng module đó là dữ liệu dự án của người dùng và chưa có trên nhánh chính.
+   - Trả lời (anh Nhật, 2026-11-22, chọn trong phiên): Module mới `:core:lessons`, theo đề xuất của AI.
 3. **Hợp đồng nội dung bài** (mục 3.1: đường dẫn R2, `index.json`, bố cục gói `cells/`, `guides/`, `demo/`, `lesson.json`): đây là dạng chung của spec editor câu 16 và spec lessons câu 5, do AI chi tiết hóa. Điểm cần anh xem: mỗi bước có tối đa một ảnh nét dẫn phủ trên một khung; đoạn mẫu "Show me" là dãy ảnh phát theo tốc độ khung của bài; "khung áp dụng" là một khung (`frame`) và một layer (`layer`) mà người dùng vẽ ở bước đó; chữ trong gói chỉ tiếng Anh. Đổi sau khi T-049 đã làm nội dung là tăng `formatVersion` và làm lại gói. Anh duyệt dạng này, hay muốn T-039 (màn vẽ) góp ý trước?
+   - Trả lời (anh Nhật, 2026-11-22, chọn trong phiên): Duyệt hợp đồng nội dung bài như mục 3.1, theo đề xuất của AI.
 4. **Thanh tiến độ tính thế nào?** Spec câu hỏi 7 ghi "bước 3 của 6 thì đầy một nửa", còn KB-4 ghi "ứng với các bước đã qua" (ở bước 3 thì mới qua 2 bước, tức một phần ba). Đề xuất của AI: theo câu trả lời của câu 7, `(step + 1) / stepCount` với `step` từ 0; bài vừa mở ở bước 1 của 6 có thanh đầy một phần sáu, bước cuối chưa xong có thanh đầy. Cách khác: `step / stepCount` (bài vừa mở có thanh rỗng).
+   - Trả lời (anh Nhật, 2026-11-22, chọn trong phiên): `(step + 1) / stepCount`, theo đề xuất của AI.
 5. **Bước đang làm lưu ở đâu là chính?** Dự án bài học của T-001 có `ProjectKind.Lesson(lessonId, step)`; kho tiến độ của plan này cũng giữ `step`. Đề xuất của AI: kho tiến độ là nguồn cho màn Bài học và cho bước mở lại; T-039 ghi cả hai mỗi lần bấm "Next step" (ghi dự án theo tự lưu của màn vẽ, ghi kho bằng `setStep`); khi hai giá trị lệch (tắt app giữa hai lần ghi), T-052 mở theo kho tiến độ.
+   - Trả lời (anh Nhật, 2026-11-22, chọn trong phiên): Kho tiến độ là nguồn chính, T-039 ghi cả hai, theo đề xuất của AI.
 6. **Dọn bản nội dung cũ.** Spec mục 6 ghi danh sách và nội dung bài giữ "đến khi có bản mới". Module không xóa thư mục phiên bản cũ (bài dở còn cần), cũng không xóa tệp trong bộ nhớ của `:core:assets` (module đó chưa có hàm xóa). Mỗi phiên bản dưới 40 MB và thư viện ít khi đổi. Đề xuất của AI: chưa dọn ở bản đầu; khi cần, một ticket sau xóa phiên bản không còn bài dở nào dùng (cần thêm hàm xóa vào `:core:assets`). Anh đồng ý để lại không?
+   - Trả lời (anh Nhật, 2026-11-22, chọn trong phiên): Chưa dọn bản cũ ở bản đầu, theo đề xuất của AI.
 7. **Một bài sai làm cả danh sách lỗi.** Plan kiểm chặt: một bài sai luật trong `index.json` (thiếu trường, nhóm không có, đường dẫn sai) làm cả danh sách ra `INVALID`, màn Bài học báo lỗi. Gói của một bài lệch danh sách (số bước, số khung) chỉ làm `loadPack` của bài đó ra `INVALID`; danh sách vẫn hiện. Đề xuất của AI: giữ kiểm chặt để lỗi nội dung lộ ra ngay trên staging; T-049 kiểm tệp trước khi đưa lên bằng chính bộ đọc của module (ví dụ chép tệp vào thư mục test tạm và chạy test đọc). Cách khác: bỏ qua bài sai, chỉ hiện bài đúng (lỗi nội dung khó thấy hơn).
+   - Trả lời (anh Nhật, 2026-11-22, chọn trong phiên): Giữ kiểm chặt, theo đề xuất của AI.
 8. **Giữ mã dự án của lần xong.** Spec mục 6 giữ hoạt hình của bài tới khi làm lại, KB-7 xuất hoạt hình từ màn Hoàn thành, KB-5 làm lại thì bỏ hoạt hình cũ. Đề xuất của AI: `completed` là bảng mã bài ra `CompletedLesson(projectId)` của lần xong gần nhất; làm lại vẫn giữ mã cũ (nhãn "Done" còn) tới khi lượt mới xong thì thay; T-052 xóa dự án cũ khi bắt đầu làm lại. Anh xác nhận?
+   - Trả lời (anh Nhật, 2026-11-22, chọn trong phiên): Giữ mã dự án của lần xong gần nhất, theo đề xuất của AI.
 9. **Gói tối đa 5 layer.** T-001 khóa layer 6 tới 10 sau `extraLayersUnlocked`. Đề xuất của AI: gói bài tối đa 5 layer, để bài không cần mở khóa. Cách khác: cho tới 10 layer và T-052 đặt `extraLayersUnlocked = true` cho dự án bài học.
+   - Trả lời (anh Nhật, 2026-11-22, chọn trong phiên): Gói tối đa 5 layer, theo đề xuất của AI.
 10. **Duyệt chéo khi nhóm một dev.** Plan rủi ro Cao cần duyệt chéo; nếu nhóm chỉ có anh, mục 9 ghi anh vừa duyệt vừa duyệt chéo kèm lý do (risk-scoring.md, mục 3).
+   - Trả lời (anh Nhật, 2026-11-22, chọn trong phiên): Anh Nhật vừa duyệt vừa duyệt chéo, vì nhóm hiện chỉ có một dev.
 
 ## 9. Quyết định duyệt
 
