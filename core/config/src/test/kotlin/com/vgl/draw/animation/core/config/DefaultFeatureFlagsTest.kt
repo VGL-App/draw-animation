@@ -11,6 +11,16 @@ import org.junit.Test
 class DefaultFeatureFlagsTest {
     private val remote = FakeRemoteFlagSource()
 
+    /** Remote keys of the Frameloop flags, from section 8 of each feature spec (plan T-006). */
+    private val frameloopKeys = listOf(
+        "feature_onboarding_enabled",
+        "feature_projects_enabled",
+        "feature_settings_enabled",
+        "feature_editor_enabled",
+        "feature_export_enabled",
+        "feature_lessons_enabled",
+    )
+
     private fun flags(locallyEnabled: Set<FeatureFlag> = emptySet()) = DefaultFeatureFlags(locallyEnabled, remote)
 
     @Test
@@ -71,6 +81,40 @@ class DefaultFeatureFlagsTest {
                 "Flag key '${flag.key}' must match feature_<name>_enabled",
                 Regex("^feature_[a-z0-9_]+_enabled$").matches(flag.key),
             )
+        }
+    }
+
+    @Test
+    fun frameloopFlags_areDeclaredOnceWithSpecKeys() {
+        frameloopKeys.forEach { key ->
+            assertEquals(key, 1, FeatureFlag.entries.count { it.key == key })
+        }
+        assertEquals(FeatureFlag.entries.size, FeatureFlag.entries.map { it.key }.toSet().size)
+    }
+
+    @Test
+    fun sampleAndLoadingFlags_stayDeclared() {
+        // Behavior kept by plan T-006: adding Frameloop flags does not replace the sample and loading flags.
+        assertTrue(FeatureFlag.entries.any { it.key == "feature_sample_enabled" })
+        assertTrue(FeatureFlag.entries.any { it.key == "feature_loading_enabled" })
+    }
+
+    @Test
+    fun eachFrameloopFlag_followsOnlyItsOwnRemoteValue() = runTest {
+        frameloopKeys.forEach { key ->
+            val flag = FeatureFlag.entries.single { it.key == key }
+            val flags = flags()
+            flags.enabled(flag).test {
+                assertFalse(key, awaitItem())
+                remote.booleans.value = mapOf(key to true)
+                assertTrue(key, awaitItem())
+                // Control: the remote value of this flag does not turn any other flag on.
+                FeatureFlag.entries.filter { it != flag }.forEach { other ->
+                    assertFalse("${other.key} follows $key", flags.enabled(other).first())
+                }
+                remote.booleans.value = emptyMap()
+                assertFalse(key, awaitItem())
+            }
         }
     }
 }
