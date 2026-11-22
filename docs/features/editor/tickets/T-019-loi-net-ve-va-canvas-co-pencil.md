@@ -19,7 +19,7 @@ created: 2026-11-22
 
 ## Mô tả
 
-Vẽ nét một ngón bằng cọ Pencil trên khung và layer đang chọn, hai ngón di chuyển, thu phóng, xoay canvas; ghi mốc nét vẽ đầu tiên. Nền tảng nét và hiển thị khung cho các công cụ sau.
+Vẽ nét một ngón bằng cọ Pencil trên khung và layer đang chọn, hai ngón di chuyển, thu phóng, xoay canvas; ghi mốc nét vẽ đầu tiên (chỉ ghi dữ liệu, không luật nào đọc mốc này từ 2026-11-22, spec editor câu hỏi 24). Nền tảng nét và hiển thị khung cho các công cụ sau.
 
 ## Phạm vi
 
@@ -32,7 +32,7 @@ Vẽ nét một ngón bằng cọ Pencil trên khung và layer đang chọn, hai
 
 ## Rủi ro sơ bộ
 
-Kỹ thuật vẽ bằng ngón và bút mới (tiêu chí E); ghi mốc mà luật quảng cáo đọc (tiêu chí D).
+Kỹ thuật vẽ bằng ngón và bút mới (tiêu chí E); ghi mốc dùng chung trên máy (tiêu chí D).
 
 ## Định nghĩa hoàn thành
 

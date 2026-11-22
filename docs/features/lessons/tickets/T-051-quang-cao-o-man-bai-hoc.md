@@ -19,7 +19,7 @@ created: 2026-11-22
 
 ## Mô tả
 
-`lessons_grid` (sau mỗi 4 thẻ của danh sách đang hiện, bỏ qua tiêu đề nhóm) và `lessons_bottom`, chỉ ở trạng thái danh sách, theo luật trước nét vẽ đầu tiên.
+`lessons_grid` (sau mỗi 4 thẻ của danh sách đang hiện, bỏ qua tiêu đề nhóm) và `lessons_bottom`, chỉ ở trạng thái danh sách, theo khóa `is_show_<mã>` của từng vị trí. Bỏ luật trước nét vẽ đầu tiên ngày 2026-11-22, vì anh Nhật bỏ hẳn luật đó (spec lessons câu hỏi 17).
 
 ## Phạm vi
 

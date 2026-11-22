@@ -19,7 +19,7 @@ created: 2026-11-22
 
 ## Mô tả
 
-Đặt `projects_empty_native` (màn trống, dưới hai nút), `projects_bottom` (thanh đáy, chỉ khi có dự án), `projects_grid` (một ô sau mỗi 6 dự án, cả bố cục gập), theo luật trước nét vẽ đầu tiên.
+Đặt `projects_empty_native` (màn trống, dưới hai nút), `projects_bottom` (thanh đáy, chỉ khi có dự án), `projects_grid` (một ô sau mỗi 6 dự án, cả bố cục gập), theo khóa `is_show_<mã>` của từng vị trí. Bỏ luật trước nét vẽ đầu tiên ngày 2026-11-22, vì anh Nhật bỏ hẳn luật đó (spec projects câu hỏi 24).
 
 ## Phạm vi
 

@@ -25,13 +25,13 @@ App tự làm trong `:core:ads` định dạng native banner gọn khoảng 56 d
 
 - Composable theo thiết kế `NativeAdStrip`; không có quảng cáo do khóa tắt thì không giữ chỗ.
 - ADR của app (dải 1001 trở lên) ghi ngoại lệ với MC-02; ghi `hold=core/ads` cho lần chạy `template-sync.sh`; mở issue `from-app` sau khi chạy ổn trên staging (editor mục 5).
-- Đưa `editor_top_native` vào luật trước nét vẽ đầu tiên của T-007, kèm test.
 - Khai báo khóa `time_reload_editor_top_native`, mặc định 120 giây, suy ra từ khai báo vị trí `editor_top_native` (chuyển từ T-006, theo lời anh Nhật trong phiên 2026-11-22 (câu hỏi của plan T-006)).
 - Test: nhãn "Ad" và chữ nút không bị cắt ở cỡ chữ lớn nhất; screenshot với thẻ giả; tải lại theo thời gian.
 
 **Không bao gồm:**
 
 - Đặt dải lên màn vẽ (T-040).
+- Luật trước nét vẽ đầu tiên: bỏ ngày 2026-11-22 vì anh Nhật bỏ hẳn luật đó (spec editor câu hỏi 24).
 
 ## Rủi ro sơ bộ
 

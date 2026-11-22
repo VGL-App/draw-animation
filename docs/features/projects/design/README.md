@@ -197,7 +197,7 @@ Vai trò màu theo `tokens.json` (tên vai trò Material 3); giá trị Studio N
 
 ## 5. Vị trí quảng cáo
 
-`projects_empty_native` native medium dưới hai nút ở màn trống (cách 24 dp); `projects_bottom` thanh đáy native nhỏ trên thanh điều hướng; `projects_grid` ô native trong lưới sau mỗi 6 dự án (không có trên ảnh vì các frame có ít dự án); `restore_mrec` MREC trong hộp thoại khôi phục, cách nút 24 dp, hộp thoại rộng 348 dp; `new_project_native` native medium trong phần cuộn của `NewProjectScreen`, giữa nhóm Frame rate và nhóm Background, cách mỗi nhóm 24 dp, `keepSpaceWhenEmpty` (nút Create ghim đáy, ở xa thẻ); `create_inter` interstitial khi bấm Create từ dự án thứ 2. Màn Projects khai `InContentAds` (MC-13). Trước nét vẽ đầu tiên chỉ có `projects_empty_native` trên màn này (bản đề xuất mục 9.1).
+`projects_empty_native` native medium dưới hai nút ở màn trống (cách 24 dp); `projects_bottom` thanh đáy native nhỏ trên thanh điều hướng; `projects_grid` ô native trong lưới sau mỗi 6 dự án (không có trên ảnh vì các frame có ít dự án); `restore_mrec` MREC trong hộp thoại khôi phục, cách nút 24 dp, hộp thoại rộng 348 dp; `new_project_native` native medium trong phần cuộn của `NewProjectScreen`, giữa nhóm Frame rate và nhóm Background, cách mỗi nhóm 24 dp, `keepSpaceWhenEmpty` (nút Create ghim đáy, ở xa thẻ); `create_inter` interstitial khi bấm Create từ dự án thứ 2. Màn Projects khai `InContentAds` (MC-13). Mỗi vị trí chỉ theo khóa `is_show_<mã>` của nó; luật "trước nét vẽ đầu tiên" đã bỏ ngày 2026-11-22 (spec projects câu hỏi 24).
 
 ## 6. Chuyển sang Compose
 

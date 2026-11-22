@@ -8,7 +8,7 @@ owner: Nhật
 status: backlog
 risk: high
 size: M
-depends_on: [T-007, T-018]
+depends_on: [T-007, T-018, T-044]
 sprint:
 plan:
 auto_run:
@@ -19,7 +19,7 @@ created: 2026-11-22
 
 ## Mô tả
 
-Tạo `:feature:export` với trạng thái chọn (MP4, GIF, chuỗi PNG, GIF trong suốt; 720p/1080p theo dự án; watermark); một lượt `export_rw_extra` mở cả ba tùy chọn trong một lần mở màn; `export_options_mrec`. Tạo đích điều hướng của màn Xuất; nối nút "Export" của màn vẽ trong `:app` nếu T-040 đã xong (không thì T-040 nối).
+Dùng `:feature:export` do T-044 tạo (plan T-044, đợt 20261122-02), thêm trạng thái chọn (MP4, GIF, chuỗi PNG, GIF trong suốt; 720p/1080p theo dự án; watermark); một lượt `export_rw_extra` mở cả ba tùy chọn trong một lần mở màn; `export_options_mrec`. Tạo đích điều hướng của màn Xuất; nối nút "Export" của màn vẽ trong `:app` nếu T-040 đã xong (không thì T-040 nối).
 
 ## Phạm vi
 

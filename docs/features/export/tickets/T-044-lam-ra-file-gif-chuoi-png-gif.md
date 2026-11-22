@@ -5,12 +5,12 @@ feature: export
 spec: features/export/spec.md
 scenarios: [KB-4]
 owner: Nhật
-status: backlog
+status: approved
 risk: medium
 size: M
 depends_on: [T-004]
 sprint:
-plan:
+plan: features/export/plans/T-044-xuat-gif-png-watermark.md
 auto_run:
 created: 2026-11-22
 ---

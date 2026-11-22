@@ -174,11 +174,11 @@ Vai trò màu theo `tokens.json` (tên vai trò Material 3); giá trị Studio N
 
 ## 4. Luồng thao tác
 
-Thanh điều hướng > `LessonsScreen` (`list`; `loading` khi đang tải từ R2, `error` khi tải lỗi). Chạm thẻ bài > interstitial `lesson_start_inter` > `EditorScreen` (`lesson-step`). Trước nét vẽ đầu tiên không có interstitial lúc vào bài (bản đề xuất mục 9.1). Hoàn thành bài > `LessonDoneScreen` > "Next lesson" (interstitial `lesson_next_inter`) hoặc "Export my animation" > `ExportScreen`.
+Thanh điều hướng > `LessonsScreen` (`list`; `loading` khi đang tải từ R2, `error` khi tải lỗi). Chạm thẻ bài > interstitial `lesson_start_inter` > `EditorScreen` (`lesson-step`). Hoàn thành bài > `LessonDoneScreen` > "Next lesson" (interstitial `lesson_next_inter`) hoặc "Export my animation" > `ExportScreen`.
 
 ## 5. Vị trí quảng cáo
 
-`lessons_bottom`: thanh đáy native nhỏ; `lessons_grid`: ô native sau mỗi 4 thẻ (không có trên ảnh); `lesson_done_native`: native medium dưới kết quả (nhóm B); interstitial `lesson_start_inter`, `lesson_next_inter`. Trước nét vẽ đầu tiên không có quảng cáo nào trên màn này.
+`lessons_bottom`: thanh đáy native nhỏ; `lessons_grid`: ô native sau mỗi 4 thẻ (không có trên ảnh); `lesson_done_native`: native medium dưới kết quả (nhóm B); interstitial `lesson_start_inter`, `lesson_next_inter`. Mỗi vị trí chỉ theo khóa `is_show_<mã>` của nó; luật "trước nét vẽ đầu tiên" đã bỏ ngày 2026-11-22 (spec lessons câu hỏi 17).
 
 ## 6. Chuyển sang Compose
 

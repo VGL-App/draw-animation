@@ -7,7 +7,7 @@ requests:
   - requests/2026-11-21-ban-dau.md
 design: design/README.md
 created: 2026-11-21
-confirmed: 2026-11-21
+confirmed: 2026-11-22
 ---
 
 # SPEC: CÀI ĐẶT
@@ -173,9 +173,8 @@ Người vận hành bật quảng cáo ở màn Cài đặt (nhóm B, bật d�
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi vị trí quảng cáo của màn Cài đặt được bật, người dùng đã đồng ý quảng cáo và đã vẽ nét vẽ đầu tiên thì thanh quảng cáo native nhỏ hiện ở đáy màn, nội dung cuộn phía trên, không dòng nào bị che.
+- [ ] Khi vị trí quảng cáo của màn Cài đặt được bật và người dùng đã đồng ý quảng cáo thì thanh quảng cáo native nhỏ hiện ở đáy màn, nội dung cuộn phía trên, không dòng nào bị che.
 - [ ] Khi vị trí bị tắt thì không có thanh quảng cáo và nội dung dùng cả chiều cao màn.
-- [ ] Khi người dùng chưa vẽ nét vẽ đầu tiên ở bất kỳ dự án hay bài học nào thì màn Cài đặt không có quảng cáo.
 
 Trường hợp đặc biệt:
 
@@ -210,9 +209,9 @@ Thiết kế bổ sung ngày 2026-11-21, anh Nhật duyệt ngày 2026-11-21 (ch
 
 | Vị trí | Định dạng | Màn hình | Khi nào hiển thị | Giới hạn tần suất | Khóa bật tắt |
 | --- | --- | --- | --- | --- | --- |
-| `settings_bottom` | Thanh đáy native nhỏ | Cài đặt | Mọi lúc ở màn Cài đặt, sau nét vẽ đầu tiên; nhóm B (dựng sẵn, bật dần) | Thay nội dung theo `time_reload_native_small` của thanh đáy | `is_show_settings_bottom` |
+| `settings_bottom` | Thanh đáy native nhỏ | Cài đặt | Mọi lúc ở màn Cài đặt; nhóm B (dựng sẵn, bật dần) | Thay nội dung theo `time_reload_native_small` của thanh đáy | `is_show_settings_bottom` |
 
-**Trước nét vẽ đầu tiên** (bản đề xuất, đoạn dưới bảng 9.1): tới khi người dùng vẽ nét đầu tiên ở bất kỳ dự án hay bài học nào, app chỉ hiện `native_onboarding`, `projects_empty_native` và `editor_top_native`; `settings_bottom` không hiện. Quảng cáo `resume`, `resume_inter` khi quay lại app vẫn theo spec ads (Q4).
+**Không có luật trước nét vẽ đầu tiên** (bỏ ngày 2026-11-22, câu hỏi 16): `settings_bottom` chỉ theo khóa `is_show_settings_bottom` cùng các tham số, điều kiện ở bảng, các ghi chú khác của mục này và luật kinh doanh sẵn có. Quảng cáo `resume`, `resume_inter` khi quay lại app vẫn theo spec ads (Q4).
 
 ## 6. Dữ liệu và phân tích
 
@@ -299,6 +298,8 @@ Không có.
 15. **Khi cờ `feature_settings_enabled` tắt:** người dùng mất lối vào lựa chọn quyền riêng tư quảng cáo, và giá trị mặc định đã chọn trước đó có còn dùng ở màn Tạo dự án không?
     - Đề xuất của AI: bật cờ trên production từ ngày phát hành, vì đây là lối vào duy nhất để rút đồng ý quảng cáo. Khi cờ tắt, màn Tạo dự án dùng 12 fps, 9:16, giá trị đã lưu vẫn giữ để dùng lại khi bật cờ.
     - Trả lời: Đồng ý đề xuất của AI.
+16. **Bỏ luật "trước nét vẽ đầu tiên"** (yêu cầu thay đổi của anh Nhật ngày 2026-11-22: "Việc thiết lập quảng cáo sẽ cần linh hoạt tuỳ theo kịch bản kinh doanh"). Luật này giữ `settings_bottom` tới khi người dùng vẽ nét đầu tiên. Bỏ luật thì mỗi vị trí chỉ theo khóa `is_show_<mã>` và các tham số Remote Config, luật kinh doanh sẵn có.
+    - Trả lời: Bỏ hẳn luật, giữ mốc nét vẽ đầu tiên làm dữ liệu dự phòng (anh Nhật, 2026-11-22, trong phiên).
 
 ## 10. Lịch sử
 
@@ -309,3 +310,5 @@ Không có.
 | 2026-11-21 | AI | Ghi các frame thiết kế bổ sung, sửa theo câu trả lời (chờ anh Nhật duyệt) ở mục 4 và các tiêu chí liên quan |
 | 2026-11-21 | AI | Đổi tham số `scope` (`all`, `project`) của `backup_export`, `backup_restore` thành `source` (`settings`, `projects`), theo lời anh Nhật trong phiên; thiết kế bổ sung đã được anh duyệt |
 | 2026-11-21 | AI | Chuyển `confirmed` theo lời anh Nhật (người phụ trách sản phẩm) trong phiên: "xác nhận 6 spec" |
+| 2026-11-22 | AI | Bỏ luật quảng cáo trước nét vẽ đầu tiên: bỏ điều kiện nét vẽ đầu tiên ở tiêu chí đầu của KB-9 và bỏ tiêu chí thứ ba của KB-9, sửa dòng `settings_bottom` và ghi chú ở mục 5, thêm câu hỏi 16; chuyển `changed`. Theo lời anh Nhật trong phiên: bỏ luật trước nét vẽ đầu tiên, giữ mốc làm dữ liệu dự phòng; chờ xác nhận lại |
+| 2026-11-22 | AI | Chuyển `confirmed` theo lời anh Nhật (người phụ trách sản phẩm) trong phiên: "Duyệt đợt 20261122-02: plan T-007, T-048, T-044, T-002, T-003 và danh sách RUN-20261122-02, bắt đầu phiên khi merge; xác nhận sáu spec editor, export, lessons, onboarding, projects, settings. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." |

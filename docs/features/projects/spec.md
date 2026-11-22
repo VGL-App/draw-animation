@@ -7,7 +7,7 @@ requests:
   - requests/2026-11-21-ban-dau.md
 design: design/README.md
 created: 2026-11-21
-confirmed: 2026-11-21
+confirmed: 2026-11-22
 ---
 
 # SPEC: DANH SÁCH DỰ ÁN VÀ TẠO DỰ ÁN
@@ -218,6 +218,7 @@ Tiêu chí chấp nhận:
 - [ ] Khi từ Cài đặt quay lại thì về danh sách, đúng chỗ đang cuộn.
 - [ ] Khi đổi "Default canvas" hay "Default frame rate" trong Cài đặt rồi mở màn Tạo dự án thì lựa chọn sẵn theo giá trị mới.
 - [ ] Khi cờ của feature Cài đặt tắt thì thanh trên không có nút cài đặt, và màn Tạo dự án chọn sẵn 12 khung/giây, 9:16 (xem spec settings KB-10, câu 15).
+- [ ] Khi cờ của feature Cài đặt tắt mà người dùng ở vùng bắt buộc hộp thoại đồng ý quảng cáo thì thanh trên hiện nút lựa chọn quyền riêng tư quảng cáo ở chỗ nút cài đặt; bấm thì hộp thoại lựa chọn quyền riêng tư quảng cáo dùng chung của app mở lại, như dòng "Ad privacy choices" của màn Cài đặt (spec settings KB-7). Ở vùng không bắt buộc thì không hiện nút nào (câu hỏi 23).
 
 ### KB-12. Dùng trên điện thoại gập khi mở ra
 
@@ -260,7 +261,7 @@ Chép từ bản đề xuất, mục 9.1. Mọi vị trí mặc định tắt, b
 
 | Vị trí | Định dạng | Màn hình | Khi nào hiển thị | Giới hạn tần suất | Khóa bật tắt |
 | --- | --- | --- | --- | --- | --- |
-| `projects_empty_native` | native medium | Danh sách dự án, trạng thái trống | Dưới hai nút "New animation" và "Try a free lesson", cách ít nhất 24 dp; mọi lúc danh sách trống, kể cả sau khi xóa hết dự án và trước nét vẽ đầu tiên. Nhóm A | Không | `is_show_projects_empty_native` |
+| `projects_empty_native` | native medium | Danh sách dự án, trạng thái trống | Dưới hai nút "New animation" và "Try a free lesson", cách ít nhất 24 dp; mọi lúc danh sách trống, kể cả sau khi xóa hết dự án. Nhóm A | Không | `is_show_projects_empty_native` |
 | `projects_bottom` | thanh đáy native nhỏ | Danh sách dự án | Trên thanh điều hướng, chỉ ở trạng thái có dự án; trạng thái trống không có thanh đáy (câu hỏi 14). Nhóm A | Không | `is_show_projects_bottom` |
 | `projects_grid` | native ô lưới | Danh sách dự án, trạng thái có dự án | Một ô sau mỗi 6 dự án (sau dự án thứ 6, 12, ...); có cả ở bố cục điện thoại gập (câu hỏi 15). Nhóm A | Không | `is_show_projects_grid` |
 | `restore_mrec` | banner MREC | Hộp thoại đang khôi phục | Dưới thanh tiến độ, cách nút "Cancel" ít nhất 24 dp; hộp thoại rộng 348 dp, lề trong 24 dp; chỉ lúc đang khôi phục, không ở hộp thoại lỗi. Nhóm A | Không | `is_show_restore_mrec` |
@@ -269,7 +270,7 @@ Chép từ bản đề xuất, mục 9.1. Mọi vị trí mặc định tắt, b
 
 - Màn danh sách khai báo ba vị trí trong nội dung `projects_empty_native`, `projects_grid`, `restore_mrec`: khi một trong ba đang bật thì thanh đáy không có lớp native thu gọn (MC-13).
 - Sau `create_inter` có thể hiện `native_combo` (native toàn màn hình sau interstitial của feature), theo spec `ads`.
-- **Trước nét vẽ đầu tiên** (bản đề xuất, đoạn dưới bảng 9.1): tới khi người dùng vẽ nét đầu tiên ở bất kỳ dự án hay bài học nào, feature này chỉ hiện `projects_empty_native` trên màn trống. `projects_bottom`, `projects_grid`, `restore_mrec`, `create_inter`, `new_project_native` không hiện, kể cả khi người dùng đã tạo dự án mà chưa vẽ nét nào. Mốc nét vẽ đầu tiên được nhớ trên máy, dùng chung với các feature khác.
+- **Không có luật trước nét vẽ đầu tiên** (bỏ ngày 2026-11-22, câu hỏi 24): sáu vị trí chỉ theo khóa `is_show_<mã>`, các tham số Remote Config và điều kiện ở bảng (ví dụ `create_inter` từ dự án thứ 2), kể cả khi người dùng chưa vẽ nét nào.
 - "Từ dự án thứ 2" do app tự đếm, không phải luật của phần quảng cáo dùng chung.
 
 ## 6. Dữ liệu và phân tích
@@ -282,7 +283,7 @@ Mọi dữ liệu chỉ lưu trên máy, không tài khoản, không gửi lên 
 | --- | --- | --- |
 | Dự án: tên, khung hình, độ phân giải, tốc độ khung, nền (kể cả bản sao ảnh nền người dùng chọn), các khung và layer, âm thanh, thời điểm sửa gần nhất, ảnh thu nhỏ | Hiện danh sách, mở, nhân bản, sao lưu | Đến khi người dùng xóa dự án hay xóa dữ liệu app |
 | Số dự án người dùng đã tạo | Điều kiện "từ dự án thứ 2" của `create_inter` và số trong tên mặc định (câu hỏi 4, 16) | Đến khi xóa dữ liệu app |
-| Mốc "đã vẽ nét đầu tiên" (dùng chung, đọc ở đây) | Luật "Trước nét vẽ đầu tiên" | Đến khi xóa dữ liệu app |
+| Mốc "đã vẽ nét đầu tiên" (dùng chung, feature này không đọc) | Dữ liệu dự phòng cho kịch bản kinh doanh sau, không luật nào đọc (câu hỏi 24) | Đến khi xóa dữ liệu app |
 | Khung hình và tốc độ mặc định (của feature `settings`, đọc ở đây) | Lựa chọn sẵn ở màn Tạo dự án | Đến khi xóa dữ liệu app |
 
 File sao lưu ".frameloop" nằm ở nơi người dùng chọn (trên máy hay Google Drive); app không giữ bản sao hay đường dẫn tới nó.
@@ -361,6 +362,7 @@ Không có.
 16. **"Từ dự án thứ 2" của `create_inter` tính thế nào?** Theo số dự án đã từng tạo hay số dự án đang có? Dự án khôi phục, nhân bản có tính không?
     - Đề xuất của AI: tính theo số dự án đã từng tạo bằng màn Tạo dự án (không giảm khi xóa, không tính bài học, khôi phục hay nhân bản): lần bấm "Create" đầu tiên trong đời app không có interstitial, các lần sau theo `ads_interval` và luật trước nét vẽ đầu tiên.
     - Trả lời: Đồng ý đề xuất của AI.
+    - Đổi 2026-11-22: bỏ "luật trước nét vẽ đầu tiên", các lần sau chỉ theo `ads_interval`; xem câu hỏi 24.
 17. **Xác nhận danh sách sự kiện và tham số ở mục 6.** Bản đề xuất mục 9.2 là "đề xuất", chưa có câu trả lời riêng. Đổi tên, nhân bản, xóa dự án không có sự kiện nào trong 9.2. `backup_export`, `backup_restore` dùng chung cho sao lưu, khôi phục một dự án (feature này) và tất cả dự án (spec `settings`); câu này là chỗ trả lời chung cho hai spec (spec settings câu 1 trỏ về đây).
     - Đề xuất của AI: dùng ba sự kiện `project_create`, `backup_export`, `backup_restore` với tham số ở mục 6; không thêm sự kiện cho đổi tên, nhân bản, xóa ở bản đầu. Theo đề xuất, `project_open` do màn vẽ ghi (spec editor câu 5), feature này không ghi. Hai sự kiện sao lưu và khôi phục có `scope` (`all`, `project`) và `project_count`, chỉ ghi khi thành công, vì 9.2 không có sự kiện lỗi.
     - Phương án khác cho anh chọn: ghi cả lần lỗi và lần hủy bằng thêm tham số `result` (`success`, `fail`, `cancel`; `cancel` chỉ có ở khôi phục), có thể thêm `frame_count`. Phương án này đo được tỷ lệ khôi phục thành công (mục 1 của spec này và của spec settings) nhưng ghi cả lúc thất bại, ngoài những gì 9.2 nêu.
@@ -380,6 +382,11 @@ Không có.
 22. **Chữ "free" trong nút "Try a free lesson" ở màn trống.** Mọi bài học đều miễn phí, nên chữ "free" có thể làm người dùng nghĩ có bài trả phí. Bản đề xuất mục 6 gọi lối vào này là thẻ "Học bài đầu tiên"; thiết kế đã duyệt ghi "Try a free lesson". Spec lessons câu 15 giao quyết định về chữ cho câu này.
     - Đề xuất của AI: giữ chữ theo thiết kế đã duyệt. Nếu muốn tránh hiểu nhầm thì đổi thành "Try a lesson" hay "Start your first lesson", cần sửa thiết kế và bảng chữ. Nút mở màn Bài học theo spec lessons câu 15.
     - Trả lời: Giữ chữ "Try a free lesson".
+23. **Lối vào lựa chọn quyền riêng tư quảng cáo khi cờ Cài đặt tắt.** Mọi cờ mặc định tắt khi chưa tải được cấu hình từ xa (ADR-0003); lần mở đầu trên production mà chưa tải được thì người dùng mất dòng "Ad privacy choices", lối vào duy nhất để rút đồng ý quảng cáo (spec settings câu 15).
+    - Đề xuất của AI: khi cờ Cài đặt tắt, chỗ nút cài đặt trên thanh trên hiện nút lựa chọn quyền riêng tư quảng cáo có sẵn của phần quảng cáo dùng chung, chỉ ở vùng bắt buộc hộp thoại đồng ý.
+    - Trả lời: Nút trên thanh trên, theo đề xuất của AI (anh Nhật chọn trong phiên 2026-11-22).
+24. **Bỏ luật "trước nét vẽ đầu tiên"** (yêu cầu thay đổi của anh Nhật ngày 2026-11-22: "Việc thiết lập quảng cáo sẽ cần linh hoạt tuỳ theo kịch bản kinh doanh"). Luật này giữ `projects_bottom`, `projects_grid`, `restore_mrec`, `create_inter`, `new_project_native` tới khi người dùng vẽ nét đầu tiên. Bỏ luật thì mỗi vị trí chỉ theo khóa `is_show_<mã>` và các tham số Remote Config, luật kinh doanh sẵn có. Điều kiện "từ dự án thứ 2" của `create_inter` (câu hỏi 16) vẫn giữ.
+    - Trả lời: Bỏ hẳn luật, giữ mốc nét vẽ đầu tiên làm dữ liệu dự phòng (anh Nhật, 2026-11-22, trong phiên).
 
 ## 10. Lịch sử
 
@@ -390,3 +397,6 @@ Không có.
 | 2026-11-21 | AI | Ghi các frame thiết kế bổ sung, sửa theo câu trả lời (chờ anh Nhật duyệt) ở mục 4 và các tiêu chí liên quan |
 | 2026-11-21 | AI | Đổi tham số `scope` (`all`, `project`) của `backup_export`, `backup_restore` thành `source` (`settings`, `projects`), theo lời anh Nhật trong phiên; thiết kế bổ sung đã được anh duyệt |
 | 2026-11-21 | AI | Chuyển `confirmed` theo lời anh Nhật (người phụ trách sản phẩm) trong phiên: "xác nhận 6 spec" |
+| 2026-11-22 | AI | Thêm tiêu chí vào KB-11 và câu hỏi 23: nút lựa chọn quyền riêng tư quảng cáo trên thanh trên khi cờ Cài đặt tắt, theo câu trả lời của anh Nhật trong phiên. Spec `changed`, chờ xác nhận lại |
+| 2026-11-22 | AI | Bỏ luật quảng cáo trước nét vẽ đầu tiên: sửa dòng `projects_empty_native` và ghi chú ở mục 5, mục đích của mốc ở mục 6, ghi chú dưới câu hỏi 16, thêm câu hỏi 24. Theo lời anh Nhật trong phiên: bỏ luật trước nét vẽ đầu tiên, giữ mốc làm dữ liệu dự phòng; chờ xác nhận lại |
+| 2026-11-22 | AI | Chuyển `confirmed` theo lời anh Nhật (người phụ trách sản phẩm) trong phiên: "Duyệt đợt 20261122-02: plan T-007, T-048, T-044, T-002, T-003 và danh sách RUN-20261122-02, bắt đầu phiên khi merge; xác nhận sáu spec editor, export, lessons, onboarding, projects, settings. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." |

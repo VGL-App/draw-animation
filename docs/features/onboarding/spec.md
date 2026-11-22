@@ -7,7 +7,7 @@ requests:
   - requests/2026-11-21-ban-dau.md
 design: design/README.md
 created: 2026-11-21
-confirmed: 2026-11-21
+confirmed: 2026-11-22
 ---
 
 # SPEC: ONBOARDING
@@ -162,7 +162,7 @@ Số liệu chính của thiết kế (khung 411 × 891 dp): thanh trên cao 48 
 
 Ghi chú:
 
-- **Trước nét vẽ đầu tiên** (bản đề xuất, dưới bảng 9.1; app tự làm, `:core:ads` không có luật này): tới khi người dùng vẽ nét đầu tiên ở bất kỳ dự án hay bài học nào, app chỉ hiện `native_onboarding`, `projects_empty_native` trên màn trống và `editor_top_native` khi đã vào màn vẽ, không hiện vị trí quảng cáo nào khác. Onboarding nằm trong khoảng này nên chỉ có `native_onboarding`.
+- **Không có luật trước nét vẽ đầu tiên** (bỏ ngày 2026-11-22, câu hỏi 11): `native_onboarding` chỉ theo khóa `is_show_native_onboarding` và luật lần mở đầu ở bảng. Onboarding vẫn chỉ có `native_onboarding`, theo đoạn "Màn hình không có quảng cáo" ở trên.
 - Màn onboarding khai `native_onboarding` là quảng cáo trong nội dung (MC-13), nên không có lớp nổi.
 - Thẻ do `:core:ads` vẽ theo bố cục `native_step`; bố cục thẻ trên thiết kế khác và chỉ là khung giữ chỗ (câu hỏi 4).
 
@@ -229,6 +229,8 @@ Không có. Hình minh họa của 4 trang vẽ trong app theo số liệu thi�
 10. **Chữ "Start drawing" mà đích là danh sách dự án trống.** Nút ở trang 4 gợi là vào vẽ ngay, nhưng bản đề xuất mục 6 đưa người dùng tới danh sách dự án (trống), rồi còn "New animation" và "Create" mới tới màn vẽ.
    - Đề xuất của AI: giữ đích theo bản đề xuất (thước đo 7 thao tác đã tính hai bước này) và giữ chữ theo thiết kế đã duyệt. Nếu muốn khớp chữ hơn thì có hai cách: đổi chữ nút (ví dụ "Get started"), hoặc mở thẳng màn Tạo dự án (bớt một thao tác); cả hai cần sửa thiết kế hay bản đề xuất.
    - Trả lời: Giữ nguyên đích và chữ, theo đề xuất của AI.
+11. **Bỏ luật "trước nét vẽ đầu tiên"** (yêu cầu thay đổi của anh Nhật ngày 2026-11-22: "Việc thiết lập quảng cáo sẽ cần linh hoạt tuỳ theo kịch bản kinh doanh"). Luật này chỉ cho vài vị trí hiện tới khi người dùng vẽ nét đầu tiên. Bỏ luật thì mỗi vị trí chỉ theo khóa `is_show_<mã>` và các tham số Remote Config, luật kinh doanh sẵn có. Onboarding không đổi vì chỉ có `native_onboarding`.
+   - Trả lời: Bỏ hẳn luật, giữ mốc nét vẽ đầu tiên làm dữ liệu dự phòng (anh Nhật, 2026-11-22, trong phiên).
 
 ## 10. Lịch sử
 
@@ -239,3 +241,5 @@ Không có. Hình minh họa của 4 trang vẽ trong app theo số liệu thi�
 | 2026-11-21 | AI | Ghi các frame thiết kế bổ sung, sửa theo câu trả lời (chờ anh Nhật duyệt) ở mục 4 và các tiêu chí liên quan |
 | 2026-11-21 | AI | Thiết kế bổ sung đã được anh Nhật duyệt trong phiên (chọn "Duyệt") |
 | 2026-11-21 | AI | Chuyển `confirmed` theo lời anh Nhật (người phụ trách sản phẩm) trong phiên: "xác nhận 6 spec" |
+| 2026-11-22 | AI | Bỏ luật quảng cáo trước nét vẽ đầu tiên: sửa ghi chú ở mục 5, thêm câu hỏi 11; chuyển `changed`. Theo lời anh Nhật trong phiên: bỏ luật trước nét vẽ đầu tiên, giữ mốc làm dữ liệu dự phòng; chờ xác nhận lại |
+| 2026-11-22 | AI | Chuyển `confirmed` theo lời anh Nhật (người phụ trách sản phẩm) trong phiên: "Duyệt đợt 20261122-02: plan T-007, T-048, T-044, T-002, T-003 và danh sách RUN-20261122-02, bắt đầu phiên khi merge; xác nhận sáu spec editor, export, lessons, onboarding, projects, settings. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." |

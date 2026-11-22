@@ -7,7 +7,7 @@ requests:
   - requests/2026-11-21-ban-dau.md
 design: design/README.md
 created: 2026-11-21
-confirmed: 2026-11-21
+confirmed: 2026-11-22
 ---
 
 # SPEC: MÀN VẼ
@@ -88,7 +88,7 @@ Tiêu chí chấp nhận:
 - [ ] Khi chạm công cụ tẩy lần nữa thì bảng "Eraser" mở với "Size" (thiết kế: 24 px), "Softness" (0%) và công tắc "Erase on all layers" (tắt); bật công tắc thì tẩy xóa nét ở mọi layer tại chỗ tẩy (câu hỏi 23).
 - [ ] Khi chạm ô màu ở cột phải thì bảng "Color" mở với 12 ô màu và thanh "Opacity"; chạm một ô thì màu đó thành màu đang chọn, ô có viền chọn.
 - [ ] Khi chạm ô màu ở cột phải thì chọn được màu mới; khi dùng hút màu và chạm canvas thì màu tại điểm chạm thành màu đang chọn.
-- [ ] Khi người dùng vẽ nét đầu tiên trên máy (ở bất kỳ dự án hay bài học nào) thì app nhớ mốc "nét vẽ đầu tiên" trên máy.
+- [ ] Khi người dùng vẽ nét đầu tiên trên máy (ở bất kỳ dự án hay bài học nào) thì app nhớ mốc "nét vẽ đầu tiên" trên máy. Mốc này là dữ liệu dự phòng, không luật nào đọc (câu hỏi 24).
 
 ### KB-3. Mở gói cọ nâng cao
 
@@ -280,7 +280,6 @@ Tiêu chí chấp nhận:
 Tiêu chí chấp nhận:
 
 - [ ] Khi bấm quay lại (nút trên thanh tiêu đề hay nút back của máy) ở một dự án thường thì app tự lưu xong, có thể hiện một quảng cáo xen giữa theo khoảng cách tối thiểu giữa hai lần, rồi về danh sách dự án. Rời bài học giữa chừng thì về màn Bài học (KB-18, câu hỏi 17).
-- [ ] Khi người dùng chưa vẽ nét đầu tiên nào trên máy thì rời màn vẽ không có quảng cáo xen giữa.
 - [ ] Khi bấm "Export" thì app tự lưu xong rồi mở màn Xuất của dự án.
 
 ### KB-21. Điện thoại gập mở ra
@@ -348,7 +347,7 @@ Chép từ bản đề xuất mục 9.1. Mọi vị trí mặc định tắt, b�
 | `editor_rw_sounds` | rewarded | Màn vẽ, bảng âm thanh | Người dùng bấm "Watch ad"; mở gói hiệu ứng âm thanh 24 giờ; nhập nhạc, ghi âm, bộ hiệu ứng cơ bản luôn miễn phí. Nhóm A | Không bị `ads_interval` chặn | `is_show_editor_rw_sounds` |
 
 - **Định dạng mới cho `editor_top_native` (ngoại lệ có chủ đích, bản đề xuất đoạn dưới bảng 9.1, Q17):** `:core:ads` chưa có native cao dưới 106 dp, nên app tự làm native banner gọn một tầng trong `:core:ads` của app. Việc này lệch MC-02, `ads-guide.md` và `docs/ops/to-app.md` mục 2, nên: plan làm định dạng là plan rủi ro cao kèm một ADR của app (dải 1001 trở lên); mọi lần chạy `template-sync.sh` cho app đặt `hold=core/ads` tới khi dự án mẫu nhận định dạng; chạy ổn trên bản phát hành thì mở issue `from-app`. Hình thức: chỉ icon, không ảnh chính; nhãn "Ad" luôn thấy; chừa góc trên phải cho AdChoices; CTA viền, khác nút xanh chanh của app; cao cố định khoảng 56 dp ở mọi cỡ chữ, chữ dài cắt bằng "…"; plan có test nhãn "Ad" và chữ CTA không bị cắt ở cỡ chữ lớn.
-- **Trước nét vẽ đầu tiên (app tự làm):** tới khi người dùng vẽ nét đầu tiên ở bất kỳ dự án hay bài học nào, màn vẽ chỉ hiện `editor_top_native`; không hiện `editor_exit_inter`. Rewarded chỉ khi người dùng tự chọn.
+- **Không có luật trước nét vẽ đầu tiên** (bỏ ngày 2026-11-22, câu hỏi 24): mỗi vị trí chỉ theo khóa `is_show_<mã>` cùng các tham số, điều kiện ở bảng, các ghi chú khác của mục này và luật kinh doanh sẵn có. Mốc "nét vẽ đầu tiên" vẫn được ghi, làm dữ liệu dự phòng.
 - **Rewarded:** lời mời là thẻ trong bảng công cụ (cọ, âm thanh) hay lời mời khi thêm layer thứ 6; chỉ khi người dùng bấm "Watch ad" mới mở quảng cáo, không tự mở. Khóa `is_show_<mã>` tắt thì hành động làm thẳng, không mời (MC-05). Điều kiện "mở 24 giờ" và "cả dự án" do app tự làm. Khi không có quảng cáo để hiện: `allow_after_2`, sau 2 lần thử liên tiếp không có quảng cáo thì mở luôn (câu hỏi 4).
 - **Vị trí toàn app (không thuộc bảng này):** `resume`, `resume_inter` hiện cả ở màn vẽ khi quay lại app (Q4); `native_combo` có thể hiện sau `editor_exit_inter` theo spec ads.
 
@@ -362,7 +361,7 @@ Chép từ bản đề xuất mục 9.1. Mọi vị trí mặc định tắt, b�
 | Dự án đã mở layer 6 đến 10 | Giữ quyền mở cho cả dự án | Cùng dự án |
 | Thời điểm mở gói cọ nâng cao, gói hiệu ứng âm thanh | Tính 24 giờ | Đến khi hết hạn |
 | Lực bút chỉnh riêng của từng cọ (bật, tắt, hay chưa chỉnh) | Công tắc ở bảng "Brush" thắng giá trị mặc định ở Cài đặt (câu hỏi 22) | Đến khi xóa dữ liệu app |
-| Mốc "nét vẽ đầu tiên" | Luật quảng cáo trước nét vẽ đầu tiên | Đến khi xóa dữ liệu app |
+| Mốc "nét vẽ đầu tiên" | Dữ liệu dự phòng cho kịch bản kinh doanh sau, không luật nào đọc (câu hỏi 24) | Đến khi xóa dữ liệu app |
 | Đã xem hay bỏ qua hướng dẫn trên màn vẽ | Không tự hiện lại | Đến khi xóa dữ liệu app |
 | Bộ hiệu ứng âm thanh đã tải | Không tải lại mỗi lần | Đến khi xóa dữ liệu app |
 
@@ -453,6 +452,7 @@ Tham số Remote Config của màn vẽ (không phải cờ): `time_reload_edito
 17. **Đóng bài học giữa chừng:** về đâu, có hiện `editor_exit_inter` không, có giữ tiến độ bài không? Bản đề xuất và thiết kế không nói.
     - Đề xuất của AI: về màn Bài học (KB-18); có hiện `editor_exit_inter` như rời màn vẽ thường (theo `ads_interval`, sau nét vẽ đầu tiên); giữ bước đang làm để lần sau mở tiếp (spec lessons KB-4, mục 5).
     - Trả lời: Đồng ý đề xuất của AI.
+    - Đổi 2026-11-22: bỏ điều kiện "sau nét vẽ đầu tiên", xem câu hỏi 24.
 18. **Màn 360 × 640:** thiết kế chỉ có khung 411 × 891 và màn gập. Ở 360 × 640, thanh công cụ 8 nút (cao 392 dp) không vừa vùng làm việc khi có dải quảng cáo.
     - Đề xuất của AI: thanh công cụ cuộn được; canvas thu nhỏ giữ tỷ lệ; các bảng công cụ cuộn được. Screenshot test ở trạng thái drawing có dải quảng cáo và tool-brush.
     - Trả lời: Đồng ý đề xuất của AI.
@@ -473,6 +473,9 @@ Tham số Remote Config của màn vẽ (không phải cờ): `time_reload_edito
     - Đề xuất của AI: giữ cả, vì làm thêm ít và hợp với app vẽ; nếu muốn gọn thì bỏ "Softness" và "Erase on all layers" (tẩy chỉ có "Size"), sửa frame `tool-eraser`.
     - Trả lời: Giữ cả, theo đề xuất của AI.
 
+24. **Bỏ luật "trước nét vẽ đầu tiên"** (yêu cầu thay đổi của anh Nhật ngày 2026-11-22: "Việc thiết lập quảng cáo sẽ cần linh hoạt tuỳ theo kịch bản kinh doanh"). Luật này giữ mọi quảng cáo trừ vài vị trí tới khi người dùng vẽ nét đầu tiên; trên màn vẽ nó chặn `editor_exit_inter`. Bỏ luật thì mỗi vị trí chỉ theo khóa `is_show_<mã>` và các tham số Remote Config, luật kinh doanh sẵn có.
+    - Trả lời: Bỏ hẳn luật, giữ mốc nét vẽ đầu tiên làm dữ liệu dự phòng (anh Nhật, 2026-11-22, trong phiên).
+
 ## 10. Lịch sử
 
 | Ngày | Người | Nội dung |
@@ -483,3 +486,5 @@ Tham số Remote Config của màn vẽ (không phải cờ): `time_reload_edito
 | 2026-11-21 | AI | Ghi câu trả lời của anh Nhật trong phiên: bỏ dòng thời gian thu gọn (câu hỏi 2, đổi lại câu trả lời trước), giữ các điều khiển mới (câu hỏi 23) |
 | 2026-11-21 | AI | Thiết kế bổ sung đã được anh Nhật duyệt trong phiên (chọn "Duyệt") |
 | 2026-11-21 | AI | Chuyển `confirmed` theo lời anh Nhật (người phụ trách sản phẩm) trong phiên: "xác nhận 6 spec" |
+| 2026-11-22 | AI | Bỏ luật quảng cáo trước nét vẽ đầu tiên: bỏ tiêu chí ở KB-20, sửa mục 5, mục đích của mốc ở mục 6, ghi chú dưới câu hỏi 17, thêm câu hỏi 24; chuyển `changed`. Theo lời anh Nhật trong phiên: bỏ luật trước nét vẽ đầu tiên, giữ mốc làm dữ liệu dự phòng; chờ xác nhận lại |
+| 2026-11-22 | AI | Chuyển `confirmed` theo lời anh Nhật (người phụ trách sản phẩm) trong phiên: "Duyệt đợt 20261122-02: plan T-007, T-048, T-044, T-002, T-003 và danh sách RUN-20261122-02, bắt đầu phiên khi merge; xác nhận sáu spec editor, export, lessons, onboarding, projects, settings. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." |
