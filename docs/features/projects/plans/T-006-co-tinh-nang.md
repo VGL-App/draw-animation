@@ -1,7 +1,7 @@
 ---
 ticket: T-006
 title: Cờ tính năng của 6 feature Frameloop
-status: approved                # draft | approved | stopped | done
+status: done                    # draft | approved | stopped | done
 version: 1                   # tăng khi plan được sửa lại sau phản hồi hoặc sau khi dừng
 risk_score:                  # tổng điểm theo risk-scoring.md, để trống nếu chạm điểm chặn
 risk_level: high             # low | medium | high
@@ -192,3 +192,15 @@ Không cần (E dưới 2).
 - **Ghi chú:** Duyệt cả đợt 20261122-01 ngày 2026-11-22, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261122-01: plan T-004, T-005, T-006 và danh sách RUN-20261122-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
 
 ## 10. Nhật ký thực hiện
+
+### RUN-20261122-01, phiên bản plan 1
+
+- **Kết quả:** đã merge
+- **Nhánh, PR:** `claude/T-006-co-tinh-nang`, PR #11 (merge 2026-11-22 08:25 UTC, commit af882bd)
+- **Đã làm:** 6 dòng `FeatureFlag` mới (mặc định tắt), 5 hàm bật cờ trong `StagingFeatureFlagsModule` (trừ lessons), sinh lại `docs/remote-config-keys.md` và `docs/remote-config-template.json` (chỉ thêm 6 khóa `feature_*_enabled`).
+- **Test viết trước:** 4 test (commit 183ae1c). 3 test thất bại đúng lý do (khóa chưa có, `single` không thấy cờ, tập cờ staging chỉ có 2 khóa); `sampleAndLoadingFlags_stayDeclared` là test giữ hành vi, qua ngay như plan ghi. Viết chặt thêm: 0.
+- **Rà soát độc lập:** 0 chặn, 0 nên sửa, 1 ghi chú (vòng lặp của `eachFrameloopFlag_followsOnlyItsOwnRemoteValue` trả giá trị từ xa về rỗng cuối mỗi lượt, đúng).
+- **Kết quả CI:** `scripts/check.sh` cục bộ qua (2441 test JVM, 99 ảnh); `pr-check` xanh ở vòng đầu (lần chạy 45001830502).
+- **Lệch so với plan:** Không có. Không có file ngoài mục 3.2, không đổi file test sau commit test.
+- **Việc còn lại:** nhánh `claude/T-006-co-tinh-nang` không xóa được sau merge, người xóa tay.
+- **Cần người xem:** nhóm điền giá trị phát hành `true` của `feature_projects_enabled`, `feature_settings_enabled` ở file Excel kế hoạch (mục 4 của plan, dòng người).
