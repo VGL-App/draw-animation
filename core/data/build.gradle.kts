@@ -9,4 +9,5 @@ android {
 
 dependencies {
     api(libs.androidx.datastore.preferences)
+    implementation(project(":core:logging"))
 }
