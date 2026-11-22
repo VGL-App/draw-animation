@@ -2,15 +2,15 @@
 ticket: T-007
 title: Vị trí quảng cáo của Frameloop
 status: stopped                 # draft | approved | stopped | done
-version: 1                   # tăng khi plan được sửa lại sau phản hồi hoặc sau khi dừng
+version: 2                   # tăng khi plan được sửa lại sau phản hồi hoặc sau khi dừng
 risk_score:                  # tổng điểm theo risk-scoring.md, để trống nếu chạm điểm chặn
 risk_level: high             # low | medium | high
 token_estimate: 15M          # tổng token dự kiến, ví dụ 20M; số gợi ý: scripts/token-usage.py estimate (docs/ops/token-usage.md)
 blocking_points: [ads, core] # các điểm chặn bị chạm, ví dụ [ads, sdk]
 run_order:                   # AI điền khi lập danh sách chạy
-reviewer: Nhật               # người duyệt
-cross_reviewer: Nhật         # bắt buộc khi risk_level là high
-approved_at: 2026-11-22
+reviewer:                    # người duyệt
+cross_reviewer:              # bắt buộc khi risk_level là high
+approved_at:
 lane:                        # để trống: phiên tự chạy; quick: đường làm nhanh có người theo dõi (ADR-0048)
 ---
 
@@ -19,6 +19,11 @@ lane:                        # để trống: phiên tự chạy; quick: đườ
 ## 1. Tóm tắt
 
 Khai báo 22 vị trí quảng cáo của sáu feature trong `AdPlacement` của `:core:ads`, mỗi vị trí một dòng theo bảng 9.1 của bản đề xuất và mục 5 của sáu spec; `native_onboarding` chỉ ở lần mở đầu, hai ô lưới có `nativeEvery`, bốn vị trí rewarded dùng `allow_after_2`. Mỗi vị trí chỉ bật tắt bằng khóa `is_show_<mã>` (mặc định tắt) và luật có sẵn của `:core:ads`; không thêm luật riêng nào. Kiểm chứng bằng unit test của khai báo, cập nhật dữ liệu của 5 test có sẵn, và bảng khóa sinh lại.
+
+**Phiên bản 2 (soạn ở RUN-20261122-02 sau khi task dừng, `draft`, chờ người duyệt):**
+
+- Vì sao phiên bản 1 chưa đủ tốt (theo cách hiểu của phiên): code của plan đúng và `scripts/check.sh` qua trên máy (Java 21), nhưng `pr-check` (Java 17) đỏ hai lần ở `:core:ads:testDebugUnitTest` vì `OutOfMemoryError` trong screenshot test có sẵn. `AdsController` dựng chỗ nạp sẵn cho mọi vị trí, nên thêm 22 vị trí làm các test của module tốn thêm bộ nhớ, trong khi heap của test JVM là mặc định và `build-logic/` (nơi đặt heap) nằm ngoài plan. Plan chưa lường giới hạn bộ nhớ của test `:core:ads` trên CI.
+- Thay đổi so với phiên bản 1: thêm điều kiện trước khi chạy (mục 3.1, Cách tiếp tục): giới hạn bộ nhớ của test `:core:ads` trên CI đã được sửa trên nhánh chính bằng một thay đổi riêng do người quyết (câu hỏi 2 ở mục 8). Phần code, test và danh sách file giữ nguyên phiên bản 1.
 
 ## 2. Hiểu yêu cầu
 
@@ -86,6 +91,8 @@ Không đổi dòng có sẵn nào. Khóa tự suy ra: 22 khóa `is_show_<mã>` 
 Không có log, ViewModel hay màn hình mới. Không thêm luật nào ngoài khóa của vị trí và luật có sẵn của `:core:ads` (quyết định bỏ luật trước nét vẽ đầu tiên, mục 8).
 
 Thứ tự commit (test viết trước, `docs/auto-run.md` bước 3): bước 3 commit `FrameloopPlacementsTest.kt`, đỏ vì chưa biên dịch được (thiếu 22 hằng của `AdPlacement`). Bước 4 viết 22 dòng, cập nhật dữ liệu của 5 test có sẵn theo mục 3.5 (chúng chỉ đỏ khi 22 dòng có mặt, nên vào cùng commit code), sinh lại bảng khóa.
+
+**Cách tiếp tục (phiên bản 2):** tiếp tục trên nhánh cũ `claude/T-007-vi-tri-quang-cao`, PR #20 (commit test d2faad9, commit code c76d8bf). Điều kiện trước khi chạy: thay đổi sửa giới hạn bộ nhớ của test `:core:ads` trên CI đã merge vào nhánh chính và `main-guard` của nó xanh (dev kiểm trước phiên). Phiên cập nhật nhánh theo nhánh chính (`git fetch origin main`, `git merge origin/main`), sinh lại hai file bảng khóa nếu nhánh chính đã đổi chúng (lệnh ở trên), chạy `scripts/check.sh`, rồi đi tiếp từ bước 6 (rà soát độc lập cho phần đổi so với lần trước) và bước 8 (CI). Không viết lại test của bước 3: test viết trước giữ nguyên, đã thất bại đúng lý do ở phiên bản 1. CI vẫn đỏ vì `OutOfMemoryError` ở `:core:ads` thì dừng như phiên bản 1, không tự sửa `build-logic/`.
 
 ### 3.2. Danh sách file
 
@@ -210,11 +217,22 @@ Còn mở:
 1. **Phụ thuộc T-005 của ticket.** Plan không còn đọc gì của T-005. AI đề xuất bỏ T-005 khỏi `depends_on` của ticket (chỉ còn T-006) để T-007 không phải chờ; giữ nguyên cũng không hại gì.
    - Đã làm trong PR của đợt: ticket T-007 chỉ còn `depends_on: [T-006]`; anh Nhật xác nhận cùng lời duyệt đợt.
 
+2. **(Phiên bản 2) Sửa giới hạn bộ nhớ của test `:core:ads` trên CI bằng cách nào?** Phương án AI đề xuất: (a) nâng heap của test JVM, ví dụ `maxHeapSize = "2g"` cho mọi task `Test` trong convention plugin của `build-logic/`, bằng một plan rủi ro cao duyệt chéo của app và đề xuất về dự án mẫu (`docs/ops/from-app.md`), vì mọi app thêm vị trí quảng cáo đều gặp; hoặc (b) đổi các screenshot test có hiệu ứng chạy mãi của `:core:ads` sang dừng đồng hồ (`mainClock.autoAdvance = false`) ở dự án mẫu rồi đồng bộ về. (a) nhỏ và chắc hơn. Trước khi duyệt, nên chạy `:core:ads:testDebugUnitTest` của nhánh `claude/T-007-vi-tri-quang-cao` với Java 17 để xác nhận nguyên nhân (máy của phiên chỉ có Java 21).
+
 ## 9. Quyết định duyệt
+
+Phiên bản 1:
+
 
 - **Quyết định:** Duyệt
 - **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3; khi có dev thứ hai thì quy tắc duyệt chéo áp dụng lại)
 - **Ghi chú:** Duyệt cả đợt 20261122-02 ngày 2026-11-22, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261122-02: plan T-007, T-048, T-044, T-002, T-003 và danh sách RUN-20261122-02, bắt đầu phiên khi merge; xác nhận sáu spec editor, export, lessons, onboarding, projects, settings. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+Phiên bản 2:
+
+- **Quyết định:** <Duyệt / Yêu cầu sửa / Từ chối>
+- **Người duyệt:** <tên>, **duyệt chéo:** <tên>
+- **Ghi chú:** <...>
 
 ## 10. Nhật ký thực hiện
 
