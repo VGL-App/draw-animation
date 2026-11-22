@@ -5,12 +5,12 @@ feature: settings
 spec: features/settings/spec.md
 scenarios: [KB-2, KB-3, KB-4]
 owner: Nhật
-status: backlog
+status: approved
 risk: high
 size: S
 depends_on: []
 sprint:
-plan:
+plan: features/settings/plans/T-005-cai-dat-dung-chung.md
 auto_run:
 created: 2026-11-22
 ---
