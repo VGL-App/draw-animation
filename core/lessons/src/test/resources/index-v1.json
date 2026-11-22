@@ -1,0 +1,39 @@
+{
+  "formatVersion": 1,
+  "groups": [
+    { "id": "basics", "title": "Basics" },
+    { "id": "motion", "title": "Motion" }
+  ],
+  "lessons": [
+    {
+      "id": "walk-in-place",
+      "group": "motion",
+      "title": "Walk in place",
+      "minutes": 8,
+      "frameCount": 16,
+      "stepCount": 5,
+      "thumb": "walk-in-place/thumb.webp",
+      "pack": "walk-in-place/lesson.zip"
+    },
+    {
+      "id": "bouncing-ball",
+      "group": "basics",
+      "title": "Bouncing ball",
+      "minutes": 5,
+      "frameCount": 4,
+      "stepCount": 3,
+      "thumb": "bouncing-ball/thumb.webp",
+      "pack": "bouncing-ball/lesson.zip"
+    },
+    {
+      "id": "squash-and-stretch",
+      "group": "basics",
+      "title": "Squash and stretch",
+      "minutes": 6,
+      "frameCount": 12,
+      "stepCount": 6,
+      "thumb": "squash-and-stretch/thumb.webp",
+      "pack": "squash-and-stretch/lesson.zip"
+    }
+  ]
+}

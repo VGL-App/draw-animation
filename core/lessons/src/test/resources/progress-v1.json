@@ -1,0 +1,15 @@
+{
+  "formatVersion": 1,
+  "completed": {
+    "bouncing-ball": { "projectId": "6f1c2a3e-0000-4000-8000-000000000002" }
+  },
+  "inProgress": {
+    "squash-and-stretch": {
+      "contentVersion": "v1",
+      "step": 2,
+      "stepCount": 6,
+      "projectId": "6f1c2a3e-0000-4000-8000-000000000001",
+      "startedAtMillis": 1763769600000
+    }
+  }
+}
