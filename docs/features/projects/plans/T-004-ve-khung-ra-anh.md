@@ -1,7 +1,7 @@
 ---
 ticket: T-004
 title: Vẽ khung ra ảnh: gộp layer, nền, camera ảo, ảnh thu nhỏ
-status: approved                # draft | approved | stopped | done
+status: done                    # draft | approved | stopped | done
 version: 1                   # tăng khi plan được sửa lại sau phản hồi hoặc sau khi dừng
 risk_score:                  # tổng điểm theo risk-scoring.md, để trống nếu chạm điểm chặn
 risk_level: high             # low | medium | high
@@ -318,3 +318,15 @@ Thứ tự commit: bước 3 commit các test, `RenderTestImages.kt`, `ProjectBa
 ## 10. Nhật ký thực hiện
 
 <!-- AI ghi khi task đã có kết quả cuối (đã merge hoặc đã dừng), trên nhánh báo cáo của phiên (auto-run.md, bước 10). Mục mới thêm vào cuối, không sửa mục cũ. -->
+
+### RUN-20261122-01, phiên bản plan 1
+
+- **Kết quả:** đã merge
+- **Nhánh, PR:** `claude/T-004-ve-khung-ra-anh`, PR #15 (merge 2026-11-22 11:02 UTC, commit 4cf684a)
+- **Đã làm:** gói `render` của `:core:project` (`CameraTimeline`, `CameraMatrix`, `RenderSize`, `BackgroundPalette`, `FrameComposer`, `FrameRenderer`/`StoreFrameRenderer`, `BackgroundDecoder`, `ProjectThumbnails`), `RenderModule`, `ProjectBackgroundColors` (ba màu của câu 1, mục 8) trong `:core:designsystem`, `tokens.json` sinh lại (chỉ thêm dòng `projectBackground`), `DesignTokensTest` thêm phần sinh dòng đó và test `projectBackgroundColors_listedInTokens`, `robolectric.properties` (`sdk=35`), dòng `:core:project` trong `CLAUDE.md`.
+- **Test viết trước:** 46 test (commit f41e1aa): 43 test mới của `:core:project` đỏ vì `NotImplementedError` (`frameIndexOutOfRange_throws` đỏ vì loại lỗi khác); `ProjectBackgroundColorsTest.values_matchApprovedColors`, `DesignTokensTest.projectBackgroundColors_listedInTokens` và test có sẵn `tokensFile_matchesTheDesignSystem` đỏ đúng như plan nói. Viết chặt thêm: 0.
+- **Rà soát độc lập:** 0 chặn, 0 nên sửa. Ghi chú: sáu chi tiết cài đặt phiên tự quyết, không trái plan (chữ ký bước của `FrameComposer`; cắt ảnh nền bằng `clipRect` cộng ma trận phủ kín, không làm tròn vùng nguồn; câu "`drawSolid` với zoom 0.5" kiểm qua `compose(Solid, zoom 0.5)`; `RecordingAppLogger` riêng cho từng trường hợp của `photoBackgroundMissing_fallsBackToWhiteAndLogs`; `DefaultProjectThumbnails` ghi `warn` không kèm ngoại lệ theo ADR-0019; cảnh báo lint `UseKtx` ở `StoreFrameRenderer.kt:35` để nguyên vì phải thêm core-ktx). `StoreFrameRenderer.render` tạo bitmap đích trên luồng người gọi; T-019, T-043 có thể xem lại.
+- **Kết quả CI:** `scripts/check.sh` cục bộ qua (2547 test JVM, 99 ảnh; môi trường báo nhân hệ điều hành giết một tiến trình vì thiếu bộ nhớ trong lúc chạy, kết quả vẫn qua); `./gradlew :core:project:lintDebug :core:designsystem:lintDebug` 0 lỗi, 1 cảnh báo `UseKtx`; `pr-check` xanh ở vòng đầu (lần chạy 45013516380).
+- **Lệch so với plan:** bước 4 (chi tiết test): `StoreFrameRendererTest.render_runsOnRenderDispatcher` viết như plan (`StandardTestDispatcher()` scheduler riêng trong `runTest`) ném `IllegalStateException: Detected use of different schedulers`; sửa sau commit test: `QueueDispatcher` nhỏ trong test xếp hàng việc tới `runAll()`. Câu khẳng định của mục 4 giữ nguyên (chưa xong sau `runCurrent()`, xong sau tối đa 10 vòng, ảnh đúng nền và nét). Trước sửa đỏ với lỗi trên, sau sửa qua, đối chứng bỏ `withContext(renderDispatcher)` thì đỏ ở `assertFalse(deferred.isCompleted)`. Rà soát xét theo bước 4: hợp lệ. Không có file ngoài mục 3.2.
+- **Việc còn lại:** nhánh `claude/T-004-ve-khung-ra-anh` không xóa được sau merge, người xóa tay. Kiểm ảnh trên máy thật ở T-009.
+- **Cần người xem:** dòng `:core:project` trong `CLAUDE.md` (mục 4, dòng người); chỗ sửa test ở dòng Lệch so với plan; cảnh báo lint `UseKtx`.
