@@ -161,7 +161,7 @@ Không cần (E dưới 2).
   - T-054 thêm `lessons()` vào `StagingFeatureFlagsModule`, sau plan này; T-054 cập nhật dữ liệu của `StagingFeatureFlagsModuleTest` (chỉ thêm `feature_lessons_enabled` vào tập so bằng), đúng loại cập nhật dữ liệu ADR-0029 cho phép; plan T-054 nên ghi điều này ở mục 3.5.
   - T-007 (22 vị trí quảng cáo), T-008 (vị trí `editor_top_native` và, theo câu hỏi 1, khóa `time_reload_editor_top_native`), T-048 (theo câu hỏi 2, `lessons_content_version`) sinh lại cùng hai file bảng khóa. Hai file sinh từ code nên xung đột được giải bằng cách chạy lại lệnh sinh trên nhánh mới nhất.
   - T-004, T-005 (cùng đợt) không chạm file của plan này.
-  - T-009, T-018, T-048, T-007 ghi `depends_on: T-006`.
+  - T-009, T-018, T-007 ghi `depends_on: T-006` (T-048 đã bỏ T-006 khỏi phụ thuộc khi khóa `lessons_content_version` chuyển sang nó).
 - Đề xuất thứ tự chạy: chạy sớm, trước T-007, T-009, T-018, T-048; không phụ thuộc task nào (`depends_on: []`).
 
 ## 7. Điều kiện dừng riêng
@@ -178,10 +178,10 @@ Không cần (E dưới 2).
 3. **Điều kiện duyệt nếu đồng ý câu 1 và 2:** sửa ticket trong PR của đợt, trước khi danh sách chạy được duyệt; không thì phiên rà soát của task so với mô tả cũ của T-006 (còn hai khóa) và báo lệch. Cụ thể: T-006 bỏ hai khóa khỏi mô tả; T-008 thêm một dòng phạm vi "khai báo khóa `time_reload_editor_top_native`, mặc định 120 giây, suy ra từ khai báo vị trí `editor_top_native`"; T-048 thêm khóa `lessons_content_version` vào phạm vi và xem lại `depends_on: [T-001, T-006]` (T-048 phụ thuộc T-006 chỉ vì khóa này, nên có thể bỏ T-006). Người duyệt xác nhận AI làm các sửa này trong PR của đợt.
    - Trả lời (anh Nhật, 2026-11-22, chọn trong phiên): Đồng ý; AI đã sửa ticket T-006, T-008, T-048 trong PR của đợt.
 4. **Spec nói "production bật từ lần phát hành", ADR-0003 buộc mọi cờ mặc định tắt khi chưa có cấu hình.** Lần mở đầu trên production mà `RemoteConfigRefresher` hết 10 giây (mạng chậm, Firebase lỗi), hai cờ đọc mặc định `false`:
-   - Trả lời (anh Nhật, 2026-11-22, chọn trong phiên): (b) Ticket riêng cho lối vào tùy chọn quyền riêng tư khi cờ settings tắt; T-009 và vỏ app quyết màn khi cờ projects tắt. Không chặn đợt này.
    - `feature_settings_enabled` (nặng hơn): người dùng mất nút Cài đặt, lối vào duy nhất để rút đồng ý quảng cáo (spec settings, câu hỏi 15), trong khi quảng cáo vẫn có thể hiện.
    - `feature_projects_enabled`: danh sách dự án tắt.
    Plan này không đổi hai điều đó (test `everyFlag_isOffByDefault` giữ ADR-0003). Người duyệt chọn: (a) chấp nhận khoảng trống tới lần tải cấu hình sau; hay (b) giao một ticket khác cho lối vào tùy chọn quyền riêng tư (privacy options) khi cờ settings tắt, và để T-009 cùng vỏ app quyết màn hình khi cờ projects tắt. AI đề xuất (b), vì khoảng trống ở settings là chuyện tuân thủ đồng ý quảng cáo, không chỉ trải nghiệm.
+   - Trả lời (anh Nhật, 2026-11-22, chọn trong phiên): (b) Ticket riêng cho lối vào tùy chọn quyền riêng tư khi cờ settings tắt; T-009 và vỏ app quyết màn khi cờ projects tắt. Không chặn đợt này.
 
 ## 9. Quyết định duyệt
 
