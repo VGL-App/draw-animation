@@ -5,7 +5,7 @@ feature: projects
 spec: features/projects/spec.md
 scenarios: []
 owner: Nhật
-status: approved
+status: on-staging
 risk: high
 size: S
 depends_on: []

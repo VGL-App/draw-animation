@@ -1,7 +1,7 @@
 ---
 ticket: T-001
 title: Module :core:project: mô hình dự án và định dạng lưu có phiên bản
-status: approved             # draft | approved | stopped | done
+status: done                 # draft | approved | stopped | done
 version: 1                   # tăng khi plan được sửa lại sau phản hồi hoặc sau khi dừng
 risk_score:                  # tổng điểm theo risk-scoring.md, để trống nếu chạm điểm chặn
 risk_level: high             # low | medium | high
@@ -371,3 +371,15 @@ Thứ tự commit: bước 3 commit các tệp test, `TestProjects.kt`, `project
 ## 10. Nhật ký thực hiện
 
 <!-- AI ghi khi task đã có kết quả cuối (đã merge hoặc đã dừng), trên nhánh báo cáo của phiên (auto-run.md, bước 10). Mục mới thêm vào cuối, không sửa mục cũ. -->
+
+### RUN-20261122-01, phiên bản plan 1
+
+- **Kết quả:** đã merge
+- **Nhánh, PR:** `claude/T-001-core-project`, PR #14 (merge 2026-11-22 10:09 UTC, commit 1568710)
+- **Đã làm:** module `:core:project` (24 file của mục 3.2): mô hình dự án, khung vẽ, mã định danh; định dạng tệp v1 có luật kiểm tra và `migrate` (chuỗi bước rỗng ở phiên bản 1); `FileProjectStore` (ghi qua `.tmp`, `Mutex` theo dự án, đọc lỗi trả `Corrupt`, xóa qua `.deleting-*`); `ProjectModule`; `include` trong `settings.gradle.kts`; dòng module trong `CLAUDE.md`.
+- **Test viết trước:** 42 test (commit 8ce2cba), cả 42 thất bại đúng lý do (41 `NotImplementedError`, `invalidExtensionOrIndex_throws` vì `Background("../x")` được nhận). Viết chặt thêm: 0. Đối chứng ở bước 4: đổi tạm `@SerialName("photo")` thành `"picture"` thì `decode_v1Sample_returnsFullProject`, `encode_fullProject_matchesV1Sample` đỏ; bỏ `withContext(ioDispatcher)` thì `operations_runOnIoDispatcher` đỏ; bỏ `Mutex`, 50 vòng × 20 lần ghi song song thì 50/50 vòng hỏng. Đã trả code về.
+- **Rà soát độc lập:** 0 chặn, 0 nên sửa, 4 ghi chú: `checkInsideRoot` gọi `canonicalFile` ngoài `try` của `read()` (về lý thuyết có thể ném dù KDoc hứa không ném; T-002 có thể để ý); dọn `.deleting-*` của dự án khác không giữ khóa dự án đó (đua lành tính); bảng `locks` không bỏ mục cũ (đúng plan); các lần đột biến của mục 4 đã chạy.
+- **Kết quả CI:** `scripts/check.sh` cục bộ qua (2502 test JVM, 99 ảnh); `./gradlew :core:project:lintDebug :app:assembleStagingRelease` qua. `pr-check` vòng đầu đỏ ở `build-and-test` vì Robolectric không tải được android-all (`MavenArtifactFetcher` IOException, bảng tra lỗi `khong-co`); chạy lại job đỏ một lần thì xanh (lần chạy 45008324763). Không sửa code.
+- **Lệch so với plan:** bước 4 (chi tiết test): `FileProjectStoreTest.operations_runOnIoDispatcher` viết đúng plan (dispatcher `io` có scheduler riêng, gọi trong `runTest`) ném `IllegalStateException: Detected use of different schedulers`; sửa sau commit test: bỏ `runTest`, bên gọi chạy trên `CoroutineScope(StandardTestDispatcher(TestCoroutineScheduler()))`, `callerScheduler.runCurrent()`. Câu khẳng định của mục 4 giữ nguyên (chưa xong trước khi chạy `io`, `Ok` sau), `await()` thành `isCompleted` cộng `getCompleted()`. Trước sửa đỏ với lỗi trên, sau sửa qua, đối chứng bỏ `withContext(ioDispatcher)` thì đỏ. Rà soát độc lập xét theo bước 4: hợp lệ. Không có file ngoài mục 3.2.
+- **Việc còn lại:** nhánh `claude/T-001-core-project` không xóa được sau merge, người xóa tay.
+- **Cần người xem:** chỗ sửa test ở dòng Lệch so với plan; dòng `:core:project` mới trong bảng module của `CLAUDE.md`.
