@@ -37,11 +37,17 @@ data class LessonPack(
     val dir: File,
 ) {
     /** Prebuilt content of [layer] at [frame], or null for an empty cell. */
-    fun cellFile(frame: Int, layer: Int): File? = TODO()
+    fun cellFile(frame: Int, layer: Int): File? = File(dir, "cells/$frame/$layer.png").takeIf { it.isFile }
 
     /** Guide image of [step], or null when the step has no guide. */
-    fun guideFile(step: Int): File? = TODO()
+    fun guideFile(step: Int): File? {
+        if (steps.getOrNull(step)?.hasGuide != true) return null
+        return File(dir, "guides/$step.png").takeIf { it.isFile }
+    }
 
     /** Images of the "Show me" clip of [step], in play order; empty when the step has none. */
-    fun demoFiles(step: Int): List<File> = TODO()
+    fun demoFiles(step: Int): List<File> {
+        val count = steps.getOrNull(step)?.demoFrameCount ?: 0
+        return List(count) { File(dir, "demo/$step/$it.png") }
+    }
 }

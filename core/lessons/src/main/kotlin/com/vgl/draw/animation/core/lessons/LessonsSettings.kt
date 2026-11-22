@@ -24,4 +24,5 @@ internal fun isContentVersion(value: String): Boolean = CONTENT_VERSION_PATTERN.
  * [raw] when it is a valid version folder, else the default: a typo on Firebase ("V2", "v2/", "") must not break the
  * lessons screen. The caller logs a warning.
  */
-internal fun contentVersionOrDefault(raw: String): String = TODO()
+internal fun contentVersionOrDefault(raw: String): String =
+    if (isContentVersion(raw)) raw else LessonsSettings.CONTENT_VERSION.default

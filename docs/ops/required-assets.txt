@@ -5,3 +5,9 @@
 test/v1/hello.txt
 test/v1/content.txt
 test/v1/goodbye.txt
+# Lesson content (plan T-048): the index and the two sample lessons of lessons_content_version v1.
+lessons/v1/index.json
+lessons/v1/bouncing-ball/thumb.webp
+lessons/v1/bouncing-ball/lesson.zip
+lessons/v1/squash-and-stretch/thumb.webp
+lessons/v1/squash-and-stretch/lesson.zip

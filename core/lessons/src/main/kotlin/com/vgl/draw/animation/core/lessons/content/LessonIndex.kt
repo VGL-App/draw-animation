@@ -21,21 +21,28 @@ data class LessonEntry(
 /** The list of lessons of one content version (`lessons/<version>/index.json`). */
 data class LessonIndex(val groups: List<LessonGroup>, val lessons: List<LessonEntry>) {
     /** Lessons by the order of [groups], then by their order in [lessons]. */
-    val ordered: List<LessonEntry> get() = TODO()
+    val ordered: List<LessonEntry> get() = groups.flatMap { group -> lessonsIn(group.id) }
 
-    fun lessonsIn(groupId: String): List<LessonEntry> = TODO()
+    fun lessonsIn(groupId: String): List<LessonEntry> = lessons.filter { it.groupId == groupId }
 
-    fun entry(lessonId: String): LessonEntry? = TODO()
+    fun entry(lessonId: String): LessonEntry? = lessons.firstOrNull { it.id == lessonId }
 
     /** Position of the lesson in its group, from 1; null for an unknown lesson. */
-    fun numberInGroup(lessonId: String): Int? = TODO()
+    fun numberInGroup(lessonId: String): Int? {
+        val entry = entry(lessonId) ?: return null
+        return lessonsIn(entry.groupId).indexOfFirst { it.id == lessonId } + 1
+    }
 
     /** "Lesson <number>": position in the whole library ([ordered]), from 1; null for an unknown lesson. */
-    fun libraryNumber(lessonId: String): Int? = TODO()
+    fun libraryNumber(lessonId: String): Int? = ordered.indexOfFirst { it.id == lessonId }.takeIf { it >= 0 }?.plus(1)
 
     /** The lesson after [lessonId] in [ordered], crossing into the next group; null after the last lesson. */
-    fun next(lessonId: String): LessonEntry? = TODO()
+    fun next(lessonId: String): LessonEntry? {
+        val all = ordered
+        val position = all.indexOfFirst { it.id == lessonId }
+        return if (position < 0) null else all.getOrNull(position + 1)
+    }
 
     /** How many lessons of the group are in [completed] (pass `progress.completed.keys`). */
-    fun completedCount(groupId: String, completed: Set<String>): Int = TODO()
+    fun completedCount(groupId: String, completed: Set<String>): Int = lessonsIn(groupId).count { it.id in completed }
 }

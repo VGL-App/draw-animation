@@ -11,7 +11,7 @@ data class LessonAttempt(
     val startedAtMillis: Long,
 ) {
     /** Fill of the progress bar: step 3 of 6 (index 2) is half full (spec lessons, question 7). */
-    val fraction: Float get() = TODO()
+    val fraction: Float get() = (step + 1).toFloat() / stepCount
 }
 
 /** Project of the last completion, kept for export until the lesson is done again. */
@@ -27,4 +27,5 @@ data class LessonProgress(
  * Content version to open [lessonId] with: a lesson in progress keeps the version it started with, until done or
  * restarted (spec lessons, KB-4); otherwise the version of the index shown.
  */
-fun packVersionFor(lessonId: String, progress: LessonProgress, indexVersion: String): String = TODO()
+fun packVersionFor(lessonId: String, progress: LessonProgress, indexVersion: String): String =
+    progress.inProgress[lessonId]?.contentVersion ?: indexVersion
