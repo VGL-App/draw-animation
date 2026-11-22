@@ -5,12 +5,12 @@ feature: projects
 spec: features/projects/spec.md
 scenarios: [KB-8, KB-9, KB-10]
 owner: Nhật
-status: backlog
+status: planned
 risk: high
 size: M
 depends_on: [T-002]
 sprint:
-plan:
+plan: features/projects/plans/T-003-file-sao-luu.md
 auto_run:
 created: 2026-11-22
 ---
