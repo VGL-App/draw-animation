@@ -346,12 +346,19 @@ Thứ tự commit: bước 3 commit các tệp test, `TestProjects.kt`, `project
 ## 8. Câu hỏi cho người duyệt
 
 1. **Chỗ đặt âm thanh.** Plan neo âm thanh vào mã khung bắt đầu (`startFrameId`, `null` là từ đầu) cộng thời lượng, nên chèn hay xóa khung phía trước thì âm thanh đi theo khung. Spec chỉ ghi chữ hiển thị ("from 0:00", "frames 8 to 20", "frame 12"). Đề xuất của AI: giữ cách neo theo khung; khung bắt đầu bị xóa thì màn vẽ (T-032) dời về khung kế tiếp. Anh muốn neo theo thời gian thay không? Đổi sau khi đã có dữ liệu là tăng phiên bản định dạng.
+   - Trả lời (anh Nhật, 2026-11-22, chọn trong phiên): Neo theo khung, theo đề xuất của AI.
 2. **Khung không có điểm đặt camera** được vẽ thế nào? Đề xuất của AI: nội suy tuyến tính giữa hai điểm đặt gần nhất, trước điểm đầu là vị trí gốc, sau điểm cuối giữ điểm cuối; luật nằm ở lớp vẽ T-004, T-037, định dạng không đổi theo câu trả lời.
+   - Trả lời (anh Nhật, 2026-11-22, chọn trong phiên): Nội suy giữa hai điểm đặt gần nhất, theo đề xuất của AI.
 3. **Lớp vẽ theo dạng video khi có giữ khung:** ảnh thứ i đi với khung thứ i (theo chỉ số), hay theo thời gian phát? Đề xuất của AI: theo chỉ số khung, khung vượt số ảnh thì không có ảnh vẽ theo; dễ hiểu khi vẽ từng khung. Luật nằm ở T-036, định dạng không đổi theo câu trả lời.
+   - Trả lời (anh Nhật, 2026-11-22, chọn trong phiên): Theo chỉ số khung, theo đề xuất của AI.
 4. **T-005 giữ giá trị thô cho khung hình và tốc độ mặc định?** Đề xuất của AI: có, để tránh vòng phụ thuộc giữa `:core:data` và `:core:project` (mục 6).
+   - Trả lời (anh Nhật, 2026-11-22, chọn trong phiên): T-005 giữ giá trị thô, theo đề xuất của AI.
 5. **Onion skin mặc định tắt hay bật** ở dự án mới? Spec editor KB-8 chỉ ghi số mặc định. Đề xuất của AI: tắt, người dùng bật bằng chip.
+   - Trả lời (anh Nhật, 2026-11-22, chọn trong phiên): Tắt, theo đề xuất của AI.
 6. **Có viết ADR cho định dạng lưu dự án không?** Đề xuất của AI: tệp mẫu v1 trong plan, KDoc của `ProjectFormat` và test là đủ cho bản đầu; nếu anh muốn, AI viết ADR-1001 trong một PR tài liệu riêng, không chặn plan này.
+   - Trả lời (anh Nhật, 2026-11-22, chọn trong phiên): Chưa cần ADR, theo đề xuất của AI.
 7. **Duyệt chéo khi nhóm một dev.** Plan rủi ro Cao cần duyệt chéo; nếu nhóm chỉ có anh, mục 9 ghi anh vừa duyệt vừa duyệt chéo kèm lý do (risk-scoring.md, mục 3).
+   - Trả lời (anh Nhật, 2026-11-22, chọn trong phiên): Anh Nhật vừa duyệt vừa duyệt chéo, vì nhóm hiện chỉ có một dev.
 
 ## 9. Quyết định duyệt
 
