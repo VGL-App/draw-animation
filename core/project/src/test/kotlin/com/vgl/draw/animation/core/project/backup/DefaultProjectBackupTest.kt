@@ -1078,10 +1078,16 @@ class DefaultProjectBackupTest {
         val cat = project("Cat")
         writeWithCells(store(), cat)
         val queue = QueueDispatcher()
+        // The store's own calls also wait for the queue, so the uri streams tell whether the backup itself switched.
+        val openedOnQueue = mutableListOf<Boolean>()
+        val recording = FileBackupStreams().apply {
+            wrapRead = { input -> input.also { openedOnQueue += queue.running } }
+            wrapWrite = { output -> output.also { openedOnQueue += queue.running } }
+        }
         val backup = DefaultProjectBackup(
             store = FileProjectStore(root, queue, logger),
             repository = repository,
-            streams = streams,
+            streams = recording,
             clock = { NOW },
             ioDispatcher = queue,
             logger = logger,
@@ -1110,6 +1116,7 @@ class DefaultProjectBackupTest {
         }
         assertTrue("restore not done after 20 rounds", restore.isCompleted)
         assertTrue(restore.await() is RestoreResult.Success)
+        assertEquals(listOf(true, true), openedOnQueue)
     }
 
     private companion object {

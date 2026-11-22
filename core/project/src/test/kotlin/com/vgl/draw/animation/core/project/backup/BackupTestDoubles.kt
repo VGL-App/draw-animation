@@ -290,12 +290,21 @@ internal class RefreshCountingRepository : ProjectRepository {
 internal class QueueDispatcher : CoroutineDispatcher() {
     private val queue = ArrayDeque<Runnable>()
 
+    /** True while [runAll] runs queued work, so a test can tell whether code runs on this dispatcher. */
+    var running = false
+        private set
+
     override fun dispatch(context: CoroutineContext, block: Runnable) {
         queue.addLast(block)
     }
 
     fun runAll() {
-        while (queue.isNotEmpty()) queue.removeFirst().run()
+        running = true
+        try {
+            while (queue.isNotEmpty()) queue.removeFirst().run()
+        } finally {
+            running = false
+        }
     }
 }
 

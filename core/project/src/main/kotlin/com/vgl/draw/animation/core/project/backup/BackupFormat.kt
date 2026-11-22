@@ -3,6 +3,10 @@ package com.vgl.draw.animation.core.project.backup
 import com.vgl.draw.animation.core.project.model.Project
 import com.vgl.draw.animation.core.project.storage.ProjectFile
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.intOrNull
 
 /**
  * The `.frameloop` file: a ZIP file whose entries come in exactly this order:
@@ -52,21 +56,73 @@ internal object BackupFormat {
     /** Name of the entry of [relativePath] in project [index]. */
     fun projectEntry(index: Int, relativePath: String): String = "$PROJECTS_DIR$index/$relativePath"
 
+    private const val THUMBNAIL_MAX_BYTES = 8L shl 20
+    private const val CELL_MAX_BYTES = 32L shl 20
+    private const val MEDIA_MAX_BYTES = 64L shl 20
+
+    private val json = Json {
+        encodeDefaults = true
+        ignoreUnknownKeys = true
+    }
+
     /** Largest allowed size of [file], in bytes. */
-    fun maxBytesFor(file: ProjectFile): Long = TODO()
+    fun maxBytesFor(file: ProjectFile): Long = when (file) {
+        ProjectFile.Thumbnail -> THUMBNAIL_MAX_BYTES
+        is ProjectFile.Cell -> CELL_MAX_BYTES
+        is ProjectFile.Background, is ProjectFile.ReferenceImage, is ProjectFile.Sound -> MEDIA_MAX_BYTES
+    }
 
     /** The first limit of the format [project] breaks, or null when it fits. */
-    fun limitViolation(project: Project): String? = TODO()
+    fun limitViolation(project: Project): String? = when {
+        project.frames.size > MAX_FRAMES_PER_PROJECT -> "more than $MAX_FRAMES_PER_PROJECT frames"
+        project.layers.size.toLong() * project.frames.size > MAX_CELLS_PER_PROJECT ->
+            "more than $MAX_CELLS_PER_PROJECT cells"
+        project.sounds.size > MAX_SOUNDS -> "more than $MAX_SOUNDS sounds"
+        (project.reference?.frameCount ?: 0) > MAX_REFERENCE_IMAGES ->
+            "more than $MAX_REFERENCE_IMAGES reference images"
+        else -> null
+    }
 
-    fun encodeManifest(manifest: Manifest): String = TODO()
+    fun encodeManifest(manifest: Manifest): String = json.encodeToString(Manifest.serializer(), manifest)
 
-    /** Never throws. */
-    fun decodeManifest(text: String): ManifestResult = TODO()
+    /**
+     * Checks `app` and the version before the rest, so a file of a newer format is reported as such even when its
+     * fields changed. Never throws.
+     */
+    fun decodeManifest(text: String): ManifestResult {
+        val root = try {
+            json.parseToJsonElement(text) as? JsonObject
+        } catch (e: IllegalArgumentException) {
+            null
+        } ?: return ManifestResult.Invalid
+        val app = (root["app"] as? JsonPrimitive)?.takeIf { it.isString }?.content
+        if (app != APP_ID) return ManifestResult.Invalid
+        val version = (root["backupFormatVersion"] as? JsonPrimitive)?.takeIf { !it.isString }?.intOrNull
+            ?: return ManifestResult.Invalid
+        if (version > CURRENT_BACKUP_FORMAT_VERSION) return ManifestResult.NewerVersion
+        if (version < 1) return ManifestResult.Invalid
+        val manifest = try {
+            json.decodeFromJsonElement(Manifest.serializer(), root)
+        } catch (e: IllegalArgumentException) {
+            // SerializationException is an IllegalArgumentException.
+            return ManifestResult.Invalid
+        }
+        val projects = manifest.projects
+        val valid = projects.isNotEmpty() &&
+            projects.size <= MAX_PROJECTS &&
+            projects.all { it.frameCount in 1..MAX_FRAMES_PER_PROJECT } &&
+            projects.sumOf { it.frameCount.toLong() } <= Int.MAX_VALUE
+        return if (valid) ManifestResult.Ok(manifest) else ManifestResult.Invalid
+    }
 
-    fun encodeEnd(end: BackupEnd): String = TODO()
+    fun encodeEnd(end: BackupEnd): String = json.encodeToString(BackupEnd.serializer(), end)
 
     /** Null when [text] is not a valid `end.json`. Never throws. */
-    fun decodeEnd(text: String): BackupEnd? = TODO()
+    fun decodeEnd(text: String): BackupEnd? = try {
+        json.decodeFromString(BackupEnd.serializer(), text)
+    } catch (e: IllegalArgumentException) {
+        null
+    }
 }
 
 /** `manifest.json`: what a restore dialog needs before reading any project. */
