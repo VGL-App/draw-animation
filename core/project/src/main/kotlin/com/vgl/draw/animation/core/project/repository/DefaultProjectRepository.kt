@@ -199,6 +199,12 @@ internal class DefaultProjectRepository(
             } catch (e: IOException) {
                 logger.warn(TAG, "Incomplete project folders not removed (${e::class.simpleName})")
             }
+            try {
+                val removed = store.deleteAbandonedImports()
+                if (removed > 0) logger.info(TAG, "Removed $removed abandoned restore folders")
+            } catch (e: IOException) {
+                logger.warn(TAG, "Abandoned restore folders not removed (${e::class.simpleName})")
+            }
         }
     }
 

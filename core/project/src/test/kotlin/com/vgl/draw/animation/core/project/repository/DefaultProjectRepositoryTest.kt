@@ -19,6 +19,7 @@ import com.vgl.draw.animation.core.project.storage.ProjectFile
 import com.vgl.draw.animation.core.project.storage.ProjectReadResult
 import com.vgl.draw.animation.core.project.storage.ProjectStore
 import java.io.File
+import java.io.IOException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -764,6 +765,45 @@ class DefaultProjectRepositoryTest {
 
         assertEquals(listOf(ProjectListItem.Readable(valid)), repo.projects.first())
         assertEquals(1, repoWarnings().size)
+    }
+
+    @Test
+    fun projects_firstCollect_deletesAbandonedImports() = runTest {
+        val store = fileStore()
+        val valid = project()
+        store.write(valid)
+        val leftover = File(root, ".restoring-old/${ProjectId.random().value}/cells/x.png")
+        assertTrue(leftover.parentFile!!.mkdirs())
+        leftover.writeBytes(byteArrayOf(1))
+        val staging = File(root, ".restoring-old")
+
+        val repo = repo(store)
+        // Control: building the repository does not clean.
+        assertTrue(staging.isDirectory)
+
+        assertEquals(listOf(ProjectListItem.Readable(valid)), repo.projects.first())
+        assertFalse(staging.exists())
+    }
+
+    @Test
+    fun projects_abandonedImportCleanupFails_stillLoads() = runTest {
+        val fileStore = fileStore()
+        val valid = project()
+        fileStore.write(valid)
+        val store = object : ProjectStore by fileStore {
+            override suspend fun deleteAbandonedImports(): Int = throw IOException("x")
+        }
+        val incomplete = File(root, "${ProjectId.random().value}/cells/x.png")
+        assertTrue(incomplete.parentFile!!.mkdirs())
+        incomplete.writeBytes(byteArrayOf(1))
+
+        assertEquals(listOf(ProjectListItem.Readable(valid)), repo(store).projects.first())
+
+        // The other clean-up still ran.
+        assertFalse(incomplete.parentFile!!.parentFile!!.exists())
+        val warnings = repoWarnings()
+        assertEquals(1, warnings.size)
+        assertNull(warnings.single().error)
     }
 
     /** A regular project with 5 of its 12 cells drawn, written through the inner store (not counted). */
