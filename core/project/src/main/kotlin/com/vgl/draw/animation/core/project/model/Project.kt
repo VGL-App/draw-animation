@@ -41,7 +41,24 @@ data class Project(
             firstLayerName: String,
             nowMillis: Long,
             kind: ProjectKind = ProjectKind.Regular,
-        ): Project = TODO()
+        ): Project = Project(
+            id = id,
+            kind = kind,
+            name = name,
+            aspectRatio = aspectRatio,
+            resolution = resolution,
+            frameRate = frameRate,
+            background = background,
+            layers = listOf(Layer(LayerId.random(), firstLayerName, visible = true)),
+            frames = listOf(Frame(FrameId.random())),
+            sounds = emptyList(),
+            camera = CameraSettings(),
+            onionSkin = OnionSkinSettings(),
+            reference = null,
+            extraLayersUnlocked = false,
+            createdAtMillis = nowMillis,
+            updatedAtMillis = nowMillis,
+        )
     }
 }
 

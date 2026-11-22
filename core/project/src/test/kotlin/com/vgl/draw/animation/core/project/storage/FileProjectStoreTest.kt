@@ -15,13 +15,15 @@ import java.nio.file.Files
 import java.util.UUID
 import java.util.concurrent.Executors
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
@@ -400,6 +402,7 @@ class FileProjectStoreTest {
         assertFalse(newerWarning.message, newer.value in newerWarning.message)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun operations_runOnIoDispatcher() {
         val io = StandardTestDispatcher()
@@ -409,14 +412,17 @@ class FileProjectStoreTest {
         assertTrue(file.parentFile!!.mkdirs())
         file.writeText(ProjectFormat.encode(full))
 
-        runTest {
-            val d = async { store.read(full.id) }
-            runCurrent()
-            assertFalse(d.isCompleted)
-            io.scheduler.advanceUntilIdle()
-            runCurrent()
-            assertTrue(d.await() is ProjectReadResult.Ok)
-        }
+        // Not runTest: its context carries its scheduler, and switching to `io` (another scheduler) fails with
+        // "Detected use of different schedulers". The caller gets its own scheduler instead.
+        val callerScheduler = TestCoroutineScheduler()
+        val caller = CoroutineScope(StandardTestDispatcher(callerScheduler))
+        val d = caller.async { store.read(full.id) }
+        callerScheduler.runCurrent()
+        assertFalse(d.isCompleted)
+        io.scheduler.advanceUntilIdle()
+        callerScheduler.runCurrent()
+        assertTrue(d.isCompleted)
+        assertTrue(d.getCompleted() is ProjectReadResult.Ok)
     }
 
     private fun writeRaw(id: ProjectId, text: String) {

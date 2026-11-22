@@ -63,4 +63,15 @@ internal object FrameRateSerializer : KSerializer<FrameRate> {
 data class CanvasSize(val width: Int, val height: Int)
 
 /** The short side is 720 or 1080 pixels; the long side follows the aspect ratio. */
-fun canvasSize(aspectRatio: AspectRatio, resolution: Resolution): CanvasSize = TODO()
+fun canvasSize(aspectRatio: AspectRatio, resolution: Resolution): CanvasSize {
+    val short = when (resolution) {
+        Resolution.P720 -> 720
+        Resolution.P1080 -> 1080
+    }
+    val long = short * 16 / 9
+    return when (aspectRatio) {
+        AspectRatio.PORTRAIT_9_16 -> CanvasSize(width = short, height = long)
+        AspectRatio.LANDSCAPE_16_9 -> CanvasSize(width = long, height = short)
+        AspectRatio.SQUARE_1_1 -> CanvasSize(width = short, height = short)
+    }
+}
