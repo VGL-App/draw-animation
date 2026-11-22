@@ -6,8 +6,14 @@ Mọi khóa Remote Config của bản app hiện tại (ADR-0046). File mẫu đ
 
 | Khóa | Kiểu | Mặc định | Module | Mô tả |
 | --- | --- | --- | --- | --- |
+| `feature_editor_enabled` | boolean | `false` | `:core:config` | Lets users open the drawing screen, virtual camera included. |
+| `feature_export_enabled` | boolean | `false` | `:core:config` | Shows the export button on the drawing and lesson complete screens and opens the Export screen. |
+| `feature_lessons_enabled` | boolean | `false` | `:core:config` | Shows the Lessons tab, the free lesson button on the empty project list and the Lessons screen. |
 | `feature_loading_enabled` | boolean | `false` | `:core:config` | Shows the loading screen that prepares the app before the start screen. |
+| `feature_onboarding_enabled` | boolean | `false` | `:core:config` | Shows onboarding to users who have not finished it; off opens the project list directly. |
+| `feature_projects_enabled` | boolean | `false` | `:core:config` | Opens the project list and the Create project screen. |
 | `feature_sample_enabled` | boolean | `false` | `:core:config` | Shows the sample feature screen, the reference pattern for new features. |
+| `feature_settings_enabled` | boolean | `false` | `:core:config` | Shows the settings button on the project list and opens the Settings screen, where users withdraw ad consent. |
 | `ads_interval` | long | `45` | `:core:ads` | Minimum time between two full-screen ads of the default interval group, in seconds. |
 | `ads_mediation_order` | string | `"max_admob"` | `:core:ads` | Order of the two ad platforms for banner, MREC, interstitial, rewarded and resume app open ads: admob, max, admob_max or max_admob; any other value uses max_admob. Without a MAX SDK key in the build, admob. Name set by the template, not an AdsKit key. |
 | `is_enable_consent_shortcut` | boolean | `false` | `:core:ads` | Remote switch of ERROR_ALLOWED, the temporary right when UMP fails on the network (S-12); also needs the build setting of the app. CACHED_EARLY is always on (ADR-0045). False takes ERROR_ALLOWED back at once. Name set by the template, not an AdsKit key. |
