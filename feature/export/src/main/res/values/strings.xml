@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand name drawn as the watermark on exported files; never translated. -->
+    <string name="export_watermark_brand" translatable="false">Frameloop</string>
+</resources>

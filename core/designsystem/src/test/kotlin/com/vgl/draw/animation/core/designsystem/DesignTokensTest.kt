@@ -15,7 +15,9 @@ import com.vgl.draw.animation.core.designsystem.theme.LightColors
 import com.vgl.draw.animation.core.designsystem.theme.ProjectBackgroundColors
 import com.vgl.draw.animation.core.designsystem.theme.SpaceGroteskFamily
 import com.vgl.draw.animation.core.designsystem.theme.Spacing
+import com.vgl.draw.animation.core.designsystem.theme.WatermarkColors
 import java.io.File
+import java.util.Locale
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -82,6 +84,30 @@ class DesignTokensTest {
         assertEquals("  },", lines[index - 1])
         assertEquals("    \"dark\": ${colors(DarkColors, DarkAppColors)}", lines[index - 2])
     }
+
+    @Test
+    fun watermarkColors_listedInTokens() {
+        val line = "  \"watermark\": {\"content\": \"#FFFFFF\", \"pill\": \"#000000\", \"pillOpacity\": 0.35}"
+        assertWatermarkIsLastGroup(tokensJson(), line)
+        // The opacity must not follow the machine's locale: Vietnamese writes a decimal comma.
+        val previous = Locale.getDefault()
+        try {
+            Locale.setDefault(Locale.forLanguageTag("vi-VN"))
+            assertWatermarkIsLastGroup(tokensJson(), line)
+        } finally {
+            Locale.setDefault(previous)
+        }
+    }
+
+    private fun assertWatermarkIsLastGroup(json: String, line: String) {
+        val lines = json.lines()
+        val index = lines.indexOf(line)
+        assertTrue("tokens.json must list the watermark colors at the top level: $line\n$json", index >= 0)
+        // Last group of the top-level object, after every existing group.
+        assertEquals("}", lines[index + 1])
+        assertEquals("", lines[index + 2])
+        assertEquals(index + 3, lines.size)
+    }
 }
 
 internal fun tokensJson(): String = buildString {
@@ -99,7 +125,8 @@ internal fun tokensJson(): String = buildString {
     }
     appendLine("  },")
     val spacing = Spacing.scale.joinToString(", ") { (name, dp) -> "\"$name\": ${dp.value.toInt()}" }
-    appendLine("  \"spacingDp\": {$spacing}")
+    appendLine("  \"spacingDp\": {$spacing},")
+    appendLine("  \"watermark\": ${watermark()}")
     appendLine("}")
 }
 
@@ -113,6 +140,16 @@ private fun projectBackground(): String = listOf(
     "dark" to ProjectBackgroundColors.DARK,
     "blue" to ProjectBackgroundColors.BLUE,
 ).joinToString(prefix = "{", postfix = "}", separator = ", ") { (name, argb) -> "\"$name\": \"${hex(argb)}\"" }
+
+// Not under "color" either: the watermark is part of exported files and does not follow the theme.
+private fun watermark(): String {
+    val alpha = WatermarkColors.PILL ushr 24
+    // Integer percent, so the value never depends on the locale's decimal separator.
+    val percent = (alpha * 100 + 127) / 255
+    val opacity = if (percent < 100) String.format(Locale.ROOT, "0.%02d", percent) else "1.0"
+    return "{\"content\": \"${hex(WatermarkColors.CONTENT)}\", \"pill\": \"${hex(WatermarkColors.PILL)}\", " +
+        "\"pillOpacity\": $opacity}"
+}
 
 internal fun colorRoles(scheme: ColorScheme): List<Pair<String, Color>> = listOf(
     "primary" to scheme.primary,
