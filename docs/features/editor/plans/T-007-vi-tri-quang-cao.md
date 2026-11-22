@@ -110,7 +110,7 @@ Không sửa `docs/ops/*` (tài liệu của dự án mẫu) hay file chính nà
 ### 3.3. Cờ tính năng, quảng cáo, dữ liệu, quyền, thư viện
 
 - Cờ tính năng: Không có. Vị trí không đọc cờ của feature; màn nào đặt vị trí thì đi theo cờ của màn đó (ticket màn hình).
-- Quảng cáo: thêm 22 vị trí của bảng 9.1 bản đề xuất và mục 5 của sáu spec đã xác nhận (mục 2), mọi khóa mặc định tắt; `allow_after_2` cho bốn vị trí rewarded (editor câu 4, export câu 14). Chưa màn nào đặt vị trí; ticket màn hình đặt chúng. Không đổi định dạng, nhịp hay luật nào của `:core:ads`.
+- Quảng cáo: thêm 22 vị trí của bảng 9.1 bản đề xuất và mục 5 của sáu spec (mục 2; đang `changed` sau khi bỏ luật trước nét vẽ đầu tiên, phải được xác nhận lại cùng lời duyệt đợt trước khi duyệt hay chạy), mọi khóa mặc định tắt; `allow_after_2` cho bốn vị trí rewarded (editor câu 4, export câu 14). Chưa màn nào đặt vị trí; ticket màn hình đặt chúng. Không đổi định dạng, nhịp hay luật nào của `:core:ads`.
 - Sự kiện phân tích: Không thêm sự kiện hay tham số. Các sự kiện quảng cáo có sẵn sẽ mang giá trị `ad_placement` mới là mã vị trí của spec khi màn hình đặt vị trí; plan này chưa sinh sự kiện nào.
 - File R2: Không chạm.
 - Dữ liệu trên máy: Không chạm.
@@ -172,7 +172,7 @@ Không cần (E dưới 2). Để viết mục 3.5 chính xác, đã thử một
 | Tiêu chí | Điểm (0 đến 3) | Lý do |
 | --- | --- | --- |
 | A. Phạm vi thay đổi | 1 | Code chính chỉ ở một file (`AdPlacement.kt`), thêm 22 hằng công khai; cộng test của cùng module và hai file bảng khóa sinh ra |
-| B. Độ rõ của yêu cầu | 0 | Spec đã xác nhận, bảng vị trí rõ; câu hỏi về định dạng ô lưới đã được anh Nhật trả lời (mục 8) |
+| B. Độ rõ của yêu cầu | 0 | Bảng vị trí rõ; sáu spec đang `changed` chỉ vì bỏ luật trước nét vẽ đầu tiên và được xác nhận lại cùng lời duyệt đợt; câu hỏi về định dạng ô lưới đã được anh Nhật trả lời (mục 8) |
 | C. Khả năng kiểm chứng tự động | 0 | Mọi thuộc tính khai báo có unit test; bảng khóa có test so với code |
 | D. Ảnh hưởng chéo | 2 | Sửa `AdPlacement.kt` mà T-008 cũng sửa, và hai file bảng khóa mà T-006, T-048, T-008 cũng sinh lại; mọi ticket đặt quảng cáo dùng các hằng này |
 | E. Độ mới của kỹ thuật | 0 | Đúng mẫu `ads-guide.md` mục 5 |
@@ -182,7 +182,7 @@ Không cần (E dưới 2). Để viết mục 3.5 chính xác, đã thử một
 
 - File hoặc thành phần dùng chung bị chạm: `AdPlacement` (mọi màn đặt quảng cáo), hai file bảng khóa (sinh từ `AppRemoteKeys`, `scripts/ads-plan.py` đọc).
 - Task khác có thể xung đột:
-  - T-005: plan không còn cần T-005 (không đọc mốc `first_stroke_drawn`). Ticket vẫn ghi `depends_on: [T-005, T-006]`; giữ T-005 không hại gì (chỉ làm T-007 chạy sau T-005), hoặc bỏ đi (câu hỏi 1).
+  - T-005: không còn là phụ thuộc (plan không đọc mốc `first_stroke_drawn`; ticket `depends_on: [T-006]`, mục 8).
   - T-006 (phải merge trước): cùng sinh lại `docs/remote-config-keys.md`, `docs/remote-config-template.json`; giải xung đột bằng lệnh sinh trên nhánh mới nhất.
   - T-048 (cùng đợt): cũng sinh lại hai file đó (thêm `lessons_content_version`). Cách giải giống trên. T-048 merge trước thì dòng `lessons_content_version` đã có trên nhánh chính, không phải dòng lạ của mục 7.
   - T-008: thêm `EDITOR_TOP_NATIVE` vào `AdPlacement.kt` sau task này; `FrameloopPlacementsTest.placements_matchSpecTables` cần thêm dòng `editor_top_native` (cập nhật dữ liệu, ADR-0029). Ngoại lệ MC-02 của định dạng 56 dp là việc của T-008.
