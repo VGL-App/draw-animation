@@ -266,7 +266,7 @@ Mọi test là unit test JVM trong `:core:project`, chạy bằng Robolectric (`
 
 - **Đã chạy thử:** `java.util.zip` qua `ContentResolver` (kỹ thuật lần đầu dùng trong dự án: `grep -rln 'java.util.zip\|contentResolver\|openOutputStream'` không thấy tệp Kotlin nào). Test tạm không commit `core/project/src/test/kotlin/com/vgl/draw/animation/core/project/backup/TrialZipUriTest.kt` (Robolectric, sdk 35 theo `robolectric.properties` của module), 2026-11-22, nhánh `claude/plan-T-003-file-sao-luu` từ commit da87fc5: ghi ZIP qua `openOutputStream(Uri.fromFile(f), "wt")`, ghi lại ngắn hơn để kiểm cắt nội dung cũ, đọc lại qua `openInputStream`; tệp không phải ZIP; ZIP cụt; `Uri` của nhà cung cấp không có.
 - **Lệnh:** `./gradlew :core:project:testDebugUnitTest --tests '*TrialZipUriTest*'`; `scripts/check.sh`
-- **Kết quả:** CHẠY_THỬ_KẾT_QUẢ
+- **Kết quả:** `./gradlew :core:project:testDebugUnitTest --tests '*TrialZipUriTest*'`: 3 test chạy. Qua: ghi ZIP 200 000 byte qua `openOutputStream(Uri.fromFile(f), "wt")`, ghi lại ngắn hơn thì tệp bị cắt (nhỏ hơn lần đầu), đọc lại qua `openInputStream` đúng mục và đúng byte; tệp văn bản thường cho `ZipInputStream.nextEntry == null` (không ném); ZIP cắt còn 500 byte ném `java.io.EOFException: Unexpected end of ZLIB input stream`. Khác dự kiến: `openInputStream(Uri.parse("content://com.example.none/doc/1"))` trên Robolectric không ném `FileNotFoundException` như máy thật mà trả một luồng ném `UnsupportedOperationException: You must use ShadowContentResolver.registerInputStream()` khi đọc; vì vậy mục 4 bỏ test `content://` không có nhà cung cấp, kiểm đường mở lỗi bằng `FileBackupStreams` giả. Hệ quả cho mục 3.1: tệp không phải ZIP cho `nextEntry == null` (bước 2 đã coi là `NOT_A_BACKUP`), tệp cụt cho `EOFException` (bước 9). `scripts/check.sh` lần 1 (có test tạm): đỏ ở `:core:project:ktlintTestSourceSetCheck` vì kiểu viết của chính test tạm (nhiều lệnh trên một dòng); chạy `ktlintTestSourceSetFormat` rồi chạy lại: qua (`EXIT=0`, kết thúc 12:14 UTC; `:core:project:testDebugUnitTest` chạy lại, `TrialZipUriTest` 3 test, 0 lỗi). Chưa chạy thử: hủy qua `onProgress` trên `runTest` (mục 3.4 có dự phòng). Không chạy `./gradlew :app:assembleStagingRelease`: không thêm thư viện hay module, `:app` chưa phụ thuộc `:core:project`.
 
 ## 5. Chấm rủi ro
 
@@ -308,7 +308,7 @@ Mọi test là unit test JVM trong `:core:project`, chạy bằng Robolectric (`
 7. **Giới hạn kích thước để chống file độc** (`manifest.json` 1 MB, `project.json` 4 MB, mỗi tệp 64 MB, 10 000 dự án): đề xuất của AI: chấp nhận; ô vẽ 1080p PNG thường dưới 8 MB. Vượt thì `NOT_A_BACKUP`.
 8. **Thời điểm sửa của dự án khôi phục.** Đề xuất của AI: `updatedAtMillis = lúc khôi phục` (để đứng đầu danh sách như spec KB-9), `createdAtMillis` giữ như trong file. Dòng "edited <thời điểm>" của menu khi đó là lúc khôi phục.
 9. **Hủy không ngắt được lần đọc đang chờ, và hủy trong lúc đổi tên vào chỗ thật.** Lần đọc luồng nguồn đang chờ (Drive chậm) không bị ngắt: hộp thoại của T-013 đóng ngay khi bấm "Cancel", phần dọn chạy khi lần đọc trả về. `commit` (bước cuối, rất ngắn) chạy `NonCancellable`, nên bấm "Cancel" đúng lúc đó vẫn có dự án mới trong danh sách (dự án đủ, không dở). Đề xuất của AI: chấp nhận cả hai.
-10. **Chạy thử chưa đủ:** xem mục 4.1; nếu `scripts/check.sh` chưa chạy xong trong phiên viết plan thì cần chạy lại trước khi duyệt.
+10. **Phần chưa chạy thử:** hủy qua `onProgress` trên `runTest` (mục 3.4 có dự phòng bằng luồng thật). Đề xuất của AI: chấp nhận, phiên chuyển sang dự phòng theo điều kiện của mục 3.4.
 
 ## 9. Quyết định duyệt
 
