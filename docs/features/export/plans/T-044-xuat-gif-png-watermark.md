@@ -1,7 +1,7 @@
 ---
 ticket: T-044
 title: Làm ra file GIF, chuỗi PNG, GIF trong suốt và watermark
-status: approved                # draft | approved | stopped | done
+status: done                    # draft | approved | stopped | done
 version: 1                   # tăng khi plan được sửa lại sau phản hồi hoặc sau khi dừng
 risk_score:                  # tổng điểm theo risk-scoring.md, để trống nếu chạm điểm chặn
 risk_level: high             # low | medium | high
@@ -330,3 +330,15 @@ Trong phiên, sau `scripts/check.sh` chạy thêm `./gradlew :feature:export:lin
 ## 10. Nhật ký thực hiện
 
 <!-- AI ghi khi task đã có kết quả cuối (đã merge hoặc đã dừng), trên nhánh báo cáo của phiên (auto-run.md, bước 10). Mục mới thêm vào cuối, không sửa mục cũ. -->
+
+### RUN-20261122-02, phiên bản plan 1
+
+- **Kết quả:** đã merge (PR #22, commit merge 91b07f1, 2026-11-22 18:44 UTC).
+- **Nhánh, PR:** `claude/T-044-xuat-gif-png-watermark`, PR #22.
+- **Đã làm:** module `:feature:export` đúng mục 3.1, 3.2 (24 file, không file nào ngoài mục 3.2): xuất GIF (LZW, bảng màu từng khung, cắt trung vị), GIF trong suốt, chuỗi PNG, hủy xóa tệp dở, watermark; `WatermarkColors` trong `:core:designsystem`; `docs/design-system/tokens.json` sinh lại (chỉ thêm nhóm `watermark` và dấu phẩy do lệnh sinh). Bước 3 đến 5 do phiên con làm trong worktree riêng. Phương án dự phòng 3.4 không dùng (cắt trung vị qua ngay).
+- **Test viết trước:** commit a49042c (kèm khung `TODO()`, hằng màu bằng 0): 38 test (37 của `:feature:export` và `WatermarkColorsTest`, cộng `DesignTokensTest.watermarkColors_listedInTokens`), cả 38 đỏ đúng lý do (`NotImplementedError`, không ném ngoại lệ, giá trị 0, thiếu dòng trong `tokens.json`); `tokensFile_matchesTheDesignSystem` đỏ trước khi sinh lại như mục 3.5. Không test nào qua ngay, không test nào phải viết chặt thêm. Commit code c23195f.
+- **Rà soát độc lập:** 0 chặn, 0 nên sửa, 6 ghi chú: (1) `GifPngExporterTest` dùng chung `logger` cho hai lần lặp nên câu kiểm "Export cancelled" của lần PNG luôn đúng nhờ lần GIF (không sai hiện tại vì khối `catch` chung); (2) vài chỗ xuống dòng lạ ở `GifPngExporter.kt`; (3) GIF trong suốt vẽ viên thuốc đen đặc, khác một câu của `docs/features/export/design/README.md` (đúng câu trả lời câu hỏi 2), README có thể cập nhật sau; (4) test lớn nhất cấp phát 10 đến 25 MB, giải phóng sau mỗi test; (5) `OPAQUE` là mặt nạ alpha; (6) cảnh báo lint `UseKtx`.
+- **Kết quả CI:** `scripts/check.sh` trên máy: QUA; `./gradlew :app:assembleStagingRelease`: qua (`:app` chưa phụ thuộc `:feature:export`). `pr-check` lần chạy 45054853013: xanh ở vòng đầu.
+- **Lệch so với plan:** Không có. Chi tiết test bước 4 (mọi câu khẳng định của mục 4 còn đủ, không nới): `endCode_usesDecoderWidth` đọc mã LZW bằng bộ đọc bit tự dựng trong test; `colours_followParameters` thêm một câu kiểm màu mặc định trên nền trắng; `watermarkColors_listedInTokens` kiểm nhóm cuối bằng dòng `}` cuối tệp và chạy cả dưới `vi-VN`; `gif_oneFramePerProjectFrame_*` kiểm thêm thư mục chỉ có `animation.gif`.
+- **Việc còn lại:** nối `:feature:export` vào `:app` và màn Xuất ở ticket sau; kiểm tra thủ công sau T-046 như mục 4.
+- **Cần người xem:** ghi chú 1 và 3 của rà soát.
