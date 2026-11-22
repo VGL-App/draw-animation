@@ -1,7 +1,7 @@
 ---
 ticket: T-005
 title: Cài đặt dùng chung trên máy: mặc định dự án, lực bút, mốc nét vẽ đầu tiên
-status: approved                # draft | approved | stopped | done
+status: done                    # draft | approved | stopped | done
 version: 1                   # tăng khi plan được sửa lại sau phản hồi hoặc sau khi dừng
 risk_score:                  # tổng điểm theo risk-scoring.md, để trống nếu chạm điểm chặn
 risk_level: high             # low | medium | high
@@ -224,3 +224,15 @@ Không cần (E dưới 2). Để chắc phần ít gặp nhất (DataStore trê
 - **Ghi chú:** Duyệt cả đợt 20261122-01 ngày 2026-11-22, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261122-01: plan T-004, T-005, T-006 và danh sách RUN-20261122-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
 
 ## 10. Nhật ký thực hiện
+
+### RUN-20261122-01, phiên bản plan 1
+
+- **Kết quả:** đã merge
+- **Nhánh, PR:** `claude/T-005-cai-dat-dung-chung`, PR #13 (merge 2026-11-22 09:06 UTC, commit 24d6133)
+- **Đã làm:** `DeviceSettingsRepository` và `DataStoreDeviceSettingsRepository` trong `:core:data` (bốn khóa, `retryWhen` chỉ thử lại khi `IOException`, log thẻ `Settings`, `require` trước khi ghi, mốc nét vẽ đầu một chiều trả `false` khi ghi lỗi), `DeviceSettingsModule` (Hilt `@Binds`), `:core:data` phụ thuộc `:core:logging`.
+- **Test viết trước:** 19 test (commit c8017fc, khung `TODO()` đúng đoạn Thứ tự commit của mục 4). 18 test thất bại đúng lý do (`NotImplementedError`, hai test kiểm loại lỗi đỏ ở `assertTrue` vì nhận `NotImplementedError`); `values_matchSpec` qua ngay như plan dự kiến. Viết chặt thêm: 0.
+- **Rà soát độc lập:** 0 chặn, 0 nên sửa, 2 ghi chú (dòng KDoc dài hơn 120 ký tự, ktlint bỏ qua; luật phụ thuộc và binding Hilt kiểm bằng `check.sh`, đã qua).
+- **Kết quả CI:** `scripts/check.sh` cục bộ qua (2460 test JVM, 99 ảnh); `pr-check` xanh ở vòng đầu (lần chạy 45004319474).
+- **Lệch so với plan:** Không có. Không có file ngoài mục 3.2, không đổi file test sau commit test.
+- **Việc còn lại:** nhánh `claude/T-005-cai-dat-dung-chung` không xóa được sau merge, người xóa tay.
+- **Cần người xem:** Không có.
