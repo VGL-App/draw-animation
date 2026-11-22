@@ -4,6 +4,7 @@ import com.vgl.draw.animation.core.ads.AdsSettings
 import com.vgl.draw.animation.core.analytics.AppsFlyerSettings
 import com.vgl.draw.animation.core.config.FeatureFlag
 import com.vgl.draw.animation.core.config.RemoteKey
+import com.vgl.draw.animation.core.lessons.LessonsSettings
 import com.vgl.draw.animation.core.network.NetworkSettings
 
 /**
@@ -17,5 +18,6 @@ object AppRemoteKeys {
         ":core:ads" to AdsSettings.all(),
         ":core:analytics" to AppsFlyerSettings.all(),
         ":core:network" to NetworkSettings.all(),
+        ":core:lessons" to LessonsSettings.all(),
     )
 }

@@ -1,0 +1,44 @@
+{
+  "formatVersion": 1,
+  "id": "bouncing-ball",
+  "aspectRatio": "9:16",
+  "resolution": "720p",
+  "frameRate": 12,
+  "background": "white",
+  "layers": [
+    { "name": "Ball" },
+    { "name": "Shadow" }
+  ],
+  "frames": [
+    { "hold": 1 },
+    { "hold": 1 },
+    { "hold": 2 },
+    { "hold": 1 }
+  ],
+  "steps": [
+    {
+      "title": "Draw the ball",
+      "instruction": "Trace the red circle on frame 1.",
+      "frame": 0,
+      "layer": 0,
+      "guide": true,
+      "demoFrameCount": 2
+    },
+    {
+      "title": "Squash it",
+      "instruction": "On frame 3, draw the ball flat where it hits the ground.",
+      "frame": 2,
+      "layer": 0,
+      "guide": true,
+      "demoFrameCount": 0
+    },
+    {
+      "title": "Play it",
+      "instruction": "Tap play to watch your ball bounce.",
+      "frame": 0,
+      "layer": 0,
+      "guide": false,
+      "demoFrameCount": 0
+    }
+  ]
+}
