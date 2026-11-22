@@ -26,6 +26,8 @@ import com.vgl.draw.animation.core.project.storage.ProjectFile
 import com.vgl.draw.animation.core.project.storage.ProjectStore
 import java.io.File
 import java.io.IOException
+import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -369,7 +371,9 @@ class StoreFrameRendererTest {
         val store = FileProjectStore(root, UnconfinedTestDispatcher(testScheduler), logger)
         val project = RenderTestImages.project(background = solid(BackgroundColor.BLUE)).also { store.write(it) }
         store.writeCell(project, 0, 0, topLeft720())
-        val render = StandardTestDispatcher()
+        // Not a TestDispatcher on another scheduler: runTest rejects that ("Detected use of different schedulers").
+        // A dispatcher that only queues shows the same thing: nothing is drawn until its queue runs.
+        val render = QueueDispatcher()
         val renderer = StoreFrameRenderer(store, TEST_PALETTE, render, logger)
 
         val deferred = async { renderer.render(project, 0, size100, includeBackground = true) }
@@ -378,7 +382,7 @@ class StoreFrameRendererTest {
 
         repeat(10) {
             if (!deferred.isCompleted) {
-                render.scheduler.advanceUntilIdle()
+                render.runAll()
                 advanceUntilIdle()
             }
         }
@@ -386,5 +390,18 @@ class StoreFrameRendererTest {
         val bitmap = deferred.await()
         assertEquals(BLACK, bitmap.getPixel(25, 25))
         assertEquals(TEST_PALETTE.blue, bitmap.getPixel(75, 75))
+    }
+
+    /** Runs nothing until [runAll] is called. */
+    private class QueueDispatcher : CoroutineDispatcher() {
+        private val queue = ArrayDeque<Runnable>()
+
+        override fun dispatch(context: CoroutineContext, block: Runnable) {
+            queue.addLast(block)
+        }
+
+        fun runAll() {
+            while (queue.isNotEmpty()) queue.removeFirst().run()
+        }
     }
 }

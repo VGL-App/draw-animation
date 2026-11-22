@@ -10,7 +10,7 @@ package com.vgl.draw.animation.core.designsystem.theme
  * Listed in docs/design-system/tokens.json as the theme-independent group `projectBackground`.
  */
 object ProjectBackgroundColors {
-    const val WHITE: Int = 0
-    const val DARK: Int = 0
-    const val BLUE: Int = 0
+    const val WHITE: Int = 0xFFFFFFFF.toInt()
+    const val DARK: Int = 0xFF22262E.toInt()
+    const val BLUE: Int = 0xFF2F6FE0.toInt()
 }

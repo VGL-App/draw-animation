@@ -11,4 +11,12 @@ import com.vgl.draw.animation.core.project.model.CameraKey
  * gestures into keys with this meaning. The move is a fraction of the output size, so a key gives the same layout at
  * 720p, 1080p and in a thumbnail.
  */
-fun cameraMatrix(key: CameraKey, width: Int, height: Int): Matrix = TODO()
+fun cameraMatrix(key: CameraKey, width: Int, height: Int): Matrix {
+    val centerX = width / 2f
+    val centerY = height / 2f
+    return Matrix().apply {
+        postScale(key.zoom, key.zoom, centerX, centerY)
+        postRotate(key.rotationDegrees, centerX, centerY)
+        postTranslate(key.panX * width, key.panY * height)
+    }
+}
