@@ -42,6 +42,7 @@ include(":core:assets")
 include(":core:logging")
 include(":core:network")
 include(":core:project")
+include(":core:lessons")
 
 include(":feature:sample")
 include(":feature:loading")

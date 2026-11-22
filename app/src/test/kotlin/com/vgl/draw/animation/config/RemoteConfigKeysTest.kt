@@ -5,6 +5,7 @@ import com.vgl.draw.animation.core.ads.AdsSettings
 import com.vgl.draw.animation.core.analytics.AppsFlyerSettings
 import com.vgl.draw.animation.core.config.FeatureFlag
 import com.vgl.draw.animation.core.config.RemoteKey
+import com.vgl.draw.animation.core.lessons.LessonsSettings
 import com.vgl.draw.animation.core.network.NetworkSettings
 import java.io.File
 import org.junit.Assert.assertEquals
@@ -182,6 +183,11 @@ class RemoteConfigKeysTest {
     @Test
     fun networkKeys_areListed() {
         assertEquals(NetworkSettings.all(), AppRemoteKeys.byModule[":core:network"])
+    }
+
+    @Test
+    fun lessonsKeys_areListed() {
+        assertEquals(LessonsSettings.all(), AppRemoteKeys.byModule[":core:lessons"])
     }
 
     private fun assertFileMatches(property: String, expected: String, name: String) {
