@@ -185,7 +185,7 @@ Chép từ bảng 9.1 của bản đề xuất. Mọi vị trí mặc định t�
 
 Ghi chú:
 
-- **Không có luật trước nét vẽ đầu tiên** (bỏ ngày 2026-11-22, câu hỏi 15): mỗi vị trí chỉ theo khóa `is_show_<mã>` và các tham số Remote Config ở bảng, kể cả khi người dùng chưa từng vẽ nét nào trên máy.
+- **Không có luật trước nét vẽ đầu tiên** (bỏ ngày 2026-11-22, câu hỏi 15): mỗi vị trí chỉ theo khóa `is_show_<mã>` cùng các tham số, điều kiện ở bảng, các ghi chú khác của mục này và luật kinh doanh sẵn có, kể cả khi người dùng chưa từng vẽ nét nào trên máy.
 - Sau `export_interstitial` có thể có native toàn màn hình `native_combo` theo vị trí toàn app (bản đề xuất 9.1); spec này không thêm vị trí đó.
 - Quảng cáo khi quay lại app (`resume`, `resume_inter`) hiện ở mọi màn, kể cả màn chờ xuất (Q4); theo luật của vị trí toàn app, không thuộc spec này.
 - Màn Xuất có quảng cáo trong nội dung (MREC, native medium), nên lớp nổi của quảng cáo không hiện cạnh chúng (luật chung của quảng cáo).

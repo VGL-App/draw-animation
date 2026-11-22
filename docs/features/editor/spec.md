@@ -88,7 +88,7 @@ Tiêu chí chấp nhận:
 - [ ] Khi chạm công cụ tẩy lần nữa thì bảng "Eraser" mở với "Size" (thiết kế: 24 px), "Softness" (0%) và công tắc "Erase on all layers" (tắt); bật công tắc thì tẩy xóa nét ở mọi layer tại chỗ tẩy (câu hỏi 23).
 - [ ] Khi chạm ô màu ở cột phải thì bảng "Color" mở với 12 ô màu và thanh "Opacity"; chạm một ô thì màu đó thành màu đang chọn, ô có viền chọn.
 - [ ] Khi chạm ô màu ở cột phải thì chọn được màu mới; khi dùng hút màu và chạm canvas thì màu tại điểm chạm thành màu đang chọn.
-- [ ] Khi người dùng vẽ nét đầu tiên trên máy (ở bất kỳ dự án hay bài học nào) thì app nhớ mốc "nét vẽ đầu tiên" trên máy. Mốc này là dữ liệu dự phòng, chưa luật nào đọc (câu hỏi 24).
+- [ ] Khi người dùng vẽ nét đầu tiên trên máy (ở bất kỳ dự án hay bài học nào) thì app nhớ mốc "nét vẽ đầu tiên" trên máy. Mốc này là dữ liệu dự phòng, không luật nào đọc (câu hỏi 24).
 
 ### KB-3. Mở gói cọ nâng cao
 
@@ -347,7 +347,7 @@ Chép từ bản đề xuất mục 9.1. Mọi vị trí mặc định tắt, b�
 | `editor_rw_sounds` | rewarded | Màn vẽ, bảng âm thanh | Người dùng bấm "Watch ad"; mở gói hiệu ứng âm thanh 24 giờ; nhập nhạc, ghi âm, bộ hiệu ứng cơ bản luôn miễn phí. Nhóm A | Không bị `ads_interval` chặn | `is_show_editor_rw_sounds` |
 
 - **Định dạng mới cho `editor_top_native` (ngoại lệ có chủ đích, bản đề xuất đoạn dưới bảng 9.1, Q17):** `:core:ads` chưa có native cao dưới 106 dp, nên app tự làm native banner gọn một tầng trong `:core:ads` của app. Việc này lệch MC-02, `ads-guide.md` và `docs/ops/to-app.md` mục 2, nên: plan làm định dạng là plan rủi ro cao kèm một ADR của app (dải 1001 trở lên); mọi lần chạy `template-sync.sh` cho app đặt `hold=core/ads` tới khi dự án mẫu nhận định dạng; chạy ổn trên bản phát hành thì mở issue `from-app`. Hình thức: chỉ icon, không ảnh chính; nhãn "Ad" luôn thấy; chừa góc trên phải cho AdChoices; CTA viền, khác nút xanh chanh của app; cao cố định khoảng 56 dp ở mọi cỡ chữ, chữ dài cắt bằng "…"; plan có test nhãn "Ad" và chữ CTA không bị cắt ở cỡ chữ lớn.
-- **Không có luật trước nét vẽ đầu tiên** (bỏ ngày 2026-11-22, câu hỏi 24): mỗi vị trí chỉ theo khóa `is_show_<mã>` và các tham số Remote Config ở bảng. Mốc "nét vẽ đầu tiên" vẫn được ghi, làm dữ liệu dự phòng.
+- **Không có luật trước nét vẽ đầu tiên** (bỏ ngày 2026-11-22, câu hỏi 24): mỗi vị trí chỉ theo khóa `is_show_<mã>` cùng các tham số, điều kiện ở bảng, các ghi chú khác của mục này và luật kinh doanh sẵn có. Mốc "nét vẽ đầu tiên" vẫn được ghi, làm dữ liệu dự phòng.
 - **Rewarded:** lời mời là thẻ trong bảng công cụ (cọ, âm thanh) hay lời mời khi thêm layer thứ 6; chỉ khi người dùng bấm "Watch ad" mới mở quảng cáo, không tự mở. Khóa `is_show_<mã>` tắt thì hành động làm thẳng, không mời (MC-05). Điều kiện "mở 24 giờ" và "cả dự án" do app tự làm. Khi không có quảng cáo để hiện: `allow_after_2`, sau 2 lần thử liên tiếp không có quảng cáo thì mở luôn (câu hỏi 4).
 - **Vị trí toàn app (không thuộc bảng này):** `resume`, `resume_inter` hiện cả ở màn vẽ khi quay lại app (Q4); `native_combo` có thể hiện sau `editor_exit_inter` theo spec ads.
 

@@ -92,6 +92,7 @@ Tiêu chí chấp nhận:
 - [ ] Khi đang tải nội dung của bài thì người dùng thấy bài đang được mở và không chạm được thẻ khác (hộp thoại nhỏ "Opening lesson…" có vòng chờ, chạm ngoài không đóng, nút quay lại hủy việc mở; câu hỏi 6); tải lỗi hay không có phản hồi sau 15 giây thì app báo lỗi, có nút thử lại, người dùng vẫn ở màn Bài học.
 - [ ] Khi bài đã mở trong màn vẽ thì danh sách dự án không có thêm dự án nào và số dự án của người dùng không đổi; điều kiện "từ dự án thứ 2" của quảng cáo khi tạo dự án không tính bài học.
 - [ ] Khi bài đã mở trong màn vẽ thì app ghi nhận một lần bắt đầu bài, kèm mã bài.
+- [ ] Khi vị trí quảng cáo lúc vào bài bật và đã qua khoảng cách tối thiểu giữa hai quảng cáo toàn màn hình thì chạm thẻ bài có thể hiện một quảng cáo toàn màn hình trước khi màn vẽ mở bài; chạm thẻ khác trong khoảng cách đó thì không có quảng cáo (diễn lại bảng ở mục 5, câu hỏi 17).
 
 Trường hợp đặc biệt:
 
@@ -220,7 +221,7 @@ Chép từ bảng 9.1 của bản đề xuất. Mọi vị trí mặc định t�
 - Sau mỗi interstitial của feature, `native_combo` (vị trí toàn app) có thể hiện theo `is_show_native_after_inter`; không phải vị trí của spec này.
 - Bấm "Next lesson" mở thẳng bài tiếp, nên chỉ `lesson_next_inter` được gọi, không gọi thêm `lesson_start_inter` cho bài đó (câu hỏi 12).
 
-**Không có luật trước nét vẽ đầu tiên** (bỏ ngày 2026-11-22, câu hỏi 17): cả năm vị trí trên chỉ theo khóa `is_show_<mã>` và các tham số Remote Config ở bảng, kể cả khi người dùng chưa vẽ nét nào.
+**Không có luật trước nét vẽ đầu tiên** (bỏ ngày 2026-11-22, câu hỏi 17): cả năm vị trí trên chỉ theo khóa `is_show_<mã>` cùng các tham số, điều kiện ở bảng, các ghi chú khác của mục này và luật kinh doanh sẵn có, kể cả khi người dùng chưa vẽ nét nào.
 
 **Không đặt quảng cáo ở** (bản đề xuất 9.1): canvas, dòng thời gian, các bảng công cụ của màn vẽ, kể cả khi làm bài; không làm quảng cáo giống nút của app hay sát nút.
 
@@ -329,4 +330,4 @@ Khóa Remote Config khác (không phải cờ): `lessons_content_version`, thư 
 | 2026-11-21 | AI | Ghi các frame thiết kế bổ sung, sửa theo câu trả lời (chờ anh Nhật duyệt) ở mục 4 và các tiêu chí liên quan |
 | 2026-11-21 | AI | Thiết kế bổ sung đã được anh Nhật duyệt trong phiên (chọn "Duyệt") |
 | 2026-11-21 | AI | Chuyển `confirmed` theo lời anh Nhật (người phụ trách sản phẩm) trong phiên: "xác nhận 6 spec" |
-| 2026-11-22 | AI | Bỏ luật quảng cáo trước nét vẽ đầu tiên: bỏ một tiêu chí ở KB-3 và một ở KB-9, bỏ điều kiện "đã vẽ nét đầu tiên" ở ba tiêu chí của KB-9, sửa mục 5, mục đích của mốc ở mục 6, thêm câu hỏi 17; chuyển `changed`. Theo lời anh Nhật trong phiên: bỏ luật trước nét vẽ đầu tiên, giữ mốc làm dữ liệu dự phòng; chờ xác nhận lại |
+| 2026-11-22 | AI | Bỏ luật quảng cáo trước nét vẽ đầu tiên: bỏ một tiêu chí ở KB-3 (thay bằng một tiêu chí diễn lại bảng `lesson_start_inter` của mục 5) và một ở KB-9, bỏ điều kiện "đã vẽ nét đầu tiên" ở ba tiêu chí của KB-9, sửa mục 5, mục đích của mốc ở mục 6, thêm câu hỏi 17; chuyển `changed`. Theo lời anh Nhật trong phiên: bỏ luật trước nét vẽ đầu tiên, giữ mốc làm dữ liệu dự phòng; chờ xác nhận lại |

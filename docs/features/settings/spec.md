@@ -173,7 +173,7 @@ Người vận hành bật quảng cáo ở màn Cài đặt (nhóm B, bật d�
 
 Tiêu chí chấp nhận:
 
-- [ ] Khi vị trí quảng cáo của màn Cài đặt được bật, người dùng đã đồng ý quảng cáo thì thanh quảng cáo native nhỏ hiện ở đáy màn, nội dung cuộn phía trên, không dòng nào bị che.
+- [ ] Khi vị trí quảng cáo của màn Cài đặt được bật và người dùng đã đồng ý quảng cáo thì thanh quảng cáo native nhỏ hiện ở đáy màn, nội dung cuộn phía trên, không dòng nào bị che.
 - [ ] Khi vị trí bị tắt thì không có thanh quảng cáo và nội dung dùng cả chiều cao màn.
 
 Trường hợp đặc biệt:
@@ -211,7 +211,7 @@ Thiết kế bổ sung ngày 2026-11-21, anh Nhật duyệt ngày 2026-11-21 (ch
 | --- | --- | --- | --- | --- | --- |
 | `settings_bottom` | Thanh đáy native nhỏ | Cài đặt | Mọi lúc ở màn Cài đặt; nhóm B (dựng sẵn, bật dần) | Thay nội dung theo `time_reload_native_small` của thanh đáy | `is_show_settings_bottom` |
 
-**Không có luật trước nét vẽ đầu tiên** (bỏ ngày 2026-11-22, câu hỏi 16): `settings_bottom` chỉ theo khóa `is_show_settings_bottom` và các tham số Remote Config ở bảng. Quảng cáo `resume`, `resume_inter` khi quay lại app vẫn theo spec ads (Q4).
+**Không có luật trước nét vẽ đầu tiên** (bỏ ngày 2026-11-22, câu hỏi 16): `settings_bottom` chỉ theo khóa `is_show_settings_bottom` cùng các tham số, điều kiện ở bảng, các ghi chú khác của mục này và luật kinh doanh sẵn có. Quảng cáo `resume`, `resume_inter` khi quay lại app vẫn theo spec ads (Q4).
 
 ## 6. Dữ liệu và phân tích
 
