@@ -9,11 +9,14 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import com.vgl.draw.animation.core.ads.AdsController
 import com.vgl.draw.animation.core.ads.AdsHost
 import com.vgl.draw.animation.core.ads.FullScreenAdHost
+import com.vgl.draw.animation.core.config.FeatureFlag
+import com.vgl.draw.animation.core.config.FeatureFlags
 import com.vgl.draw.animation.core.designsystem.theme.AppTheme
 import com.vgl.draw.animation.core.network.NetworkDialogController
 import com.vgl.draw.animation.navigation.AppNavHost
@@ -30,6 +33,9 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var networkDialog: NetworkDialogController
+
+    @Inject
+    lateinit var featureFlags: FeatureFlags
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,13 +54,16 @@ class MainActivity : ComponentActivity() {
                     // testTag shows as resource-id in uiautomator dump, for the scenario files of the plans.
                     Surface(modifier = Modifier.fillMaxSize().exposeTestTagsForUiAutomator().testTag(APP_ROOT_TAG)) {
                         val networkDialogState by networkDialog.state.collectAsState()
+                        // The bottom bar of the shell shows only with the Lessons tab (spec projects, KB-1).
+                        val lessonsEnabled by remember { featureFlags.enabled(FeatureFlag.LESSONS) }
+                            .collectAsState(initial = false)
                         // Back while the network dialog shows sends the app to the background (plan T-017).
                         NetworkDialogHost(
                             state = networkDialogState,
                             onRetry = networkDialog::retry,
                             onBack = { moveTaskToBack(true) },
                         ) {
-                            AppNavHost(onScreenChanged = networkDialog::setScreen)
+                            AppNavHost(lessonsEnabled = lessonsEnabled, onScreenChanged = networkDialog::setScreen)
                         }
                     }
                     // Native full-screen ads open as a dialog over the current screen (ADR-0045).

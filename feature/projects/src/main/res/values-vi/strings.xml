@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="projects_import">Mở tệp sao lưu</string>
+    <string name="projects_settings">Cài đặt</string>
+    <string name="projects_empty_title">Tạo hoạt hình đầu tiên</string>
+    <string name="projects_empty_body">Vẽ từng khung, thêm âm thanh, rồi xuất video hoặc GIF. Mọi thứ tự lưu trên điện thoại khi bạn vẽ.</string>
+    <string name="projects_new">Hoạt hình mới</string>
+    <string name="projects_try_lesson">Thử một bài học miễn phí</string>
+    <string name="projects_your_projects">Dự án của bạn</string>
+    <string name="projects_recent">Gần đây</string>
+    <string name="projects_coming_soon">Sắp ra mắt</string>
+    <string name="projects_cannot_open">Không mở được dự án này.</string>
+    <string name="projects_card_unnamed">Dự án chưa có tên</string>
+    <plurals name="projects_card_frames">
+        <item quantity="other">%1$d khung · %2$d fps</item>
+    </plurals>
+</resources>
