@@ -65,6 +65,6 @@ class AdsControllerUnitIdsTest {
 
         /** Every production placement key, no slot key. */
         const val PLACEMENT_UNITS = "sample_native_small=unit/1;open_app=unit/3;open_app_inter=unit/4;" +
-            "native_combo=unit/5;resume=unit/6;resume_inter=unit/7"
+            "native_combo=unit/5;resume=unit/6;resume_inter=unit/7;" + FRAMELOOP_PLACEMENT_UNITS
     }
 }
