@@ -1,0 +1,629 @@
+---
+ticket: T-012
+title: Menu dự án - mở, đổi tên, nhân bản, xóa
+status: approved                # draft | approved | stopped | done
+version: 1                   # tăng khi plan được sửa lại sau phản hồi hoặc sau khi dừng
+risk_score: 8                # tổng điểm theo risk-scoring.md, để trống nếu chạm điểm chặn
+risk_level: medium           # low | medium | high
+token_estimate: 16.4M        # tổng token dự kiến, ví dụ 20M; số gợi ý: scripts/token-usage.py estimate (docs/ops/token-usage.md)
+blocking_points: []          # các điểm chặn bị chạm, ví dụ [ads, sdk]
+run_order:                   # AI điền khi lập danh sách chạy
+reviewer: Nhật               # người duyệt
+cross_reviewer: Nhật         # bắt buộc khi risk_level là high
+approved_at: 2026-11-23
+lane:                        # để trống: phiên tự chạy; quick: đường làm nhanh có người theo dõi (ADR-0048)
+---
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+# PLAN T-012: MENU DỰ ÁN - MỞ, ĐỔI TÊN, NHÂN BẢN, XÓA
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+## 1. Tóm tắt
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+Thêm vào `:feature:projects` (module do plan T-009 tạo) menu dự án mở bằng nhấn giữ thẻ: `ModalBottomSheet` của Material 3 với đầu menu (ảnh thu nhỏ, tên, "<n> frames · <fps> fps · edited <thời điểm>") và năm mục theo thiết kế; hộp thoại đổi tên và hộp thoại xác nhận xóa là `BasicAlertDialog` của Material 3 bọc một thẻ nội dung theo kiểu hộp thoại chuẩn; nhân bản hiện thông báo ngắn "đang nhân bản" và chặn bấm lại tới khi xong. Mọi thao tác đi qua `ProjectRepository` có sẵn của `:core:project` (`rename`, `duplicate`, `delete` của T-002), không sửa module core. Kiểm chứng bằng unit test ViewModel, test giao diện Robolectric (mở và đóng menu bằng nút quay lại, chạm ngoài, kéo xuống), screenshot test cùng tên ảnh thiết kế `ProjectsScreen_menu_*`.
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+**Phụ thuộc plan T-009 cùng đợt.** T-009 và T-012 cùng đợt 20261123-02; trong danh sách chạy, T-012 chạy ngay sau T-009. Plan này chỉ dùng các tên sau của plan T-009 (bản trên nhánh của đợt, đọc ngày 2026-11-23): `ProjectsViewModel` (`uiState` là `combine` của `repository.items` với các cờ rồi `stateIn(WhileSubscribed(5_000))`, `onProjectClick`, trường `editorEnabled` gán trong `combine`, `thumbnails: StateFlow<Map<ProjectId, ImageBitmap?>>` cùng bộ nhớ ảnh LRU 40 nằm trong ViewModel, hàm riêng `retainThumbnails` gọi trong đường của `uiState`), `ProjectsUiState` (`Empty`, `List(cards: kotlin.collections.List<ProjectCardUi>, …)`, `Loading`, `Disabled`), `ProjectCardUi(id, name: String?, frameCount, fps, updatedAtMillis, readable)`, `ProjectsEffect` (`OpenProject`, `ShowCannotOpen`, `ShowComingSoon`), `ProjectsRepository`/`DefaultProjectsRepository` (chỉ `items`, `thumbnail`), `FakeProjectsRepository`, `ProjectsRoute` (callback `null` nghĩa là "Coming soon"), `ProjectsScreen(…, gridState: LazyGridState = rememberLazyGridState(), …)`, `ProjectsTestTags`, tag `project_card_${id.value}`, chuỗi `projects_coming_soon`, `projects_card_frames`, `projects_card_unnamed`. T-009 đổi một tên trong danh sách này thì plan T-012 phải xem lại (mục 6, mục 7).
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+## 2. Hiểu yêu cầu
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+Ticket xử lý các kịch bản sau trong `features/projects/spec.md`:
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+| Kịch bản | Tiêu chí chấp nhận | Cách hiểu của AI |
+| --- | --- | --- |
+| KB-4 | Nhấn giữ thẻ: menu trượt lên từ đáy, nền tối; đầu menu ảnh thu nhỏ, tên, "<số khung> frames · <tốc độ> fps · edited <thời điểm>"; mục "Open", "Rename", "Duplicate", "Back up to a file" (chú thích ".frameloop"), "Delete" (màu báo lỗi), đúng thiết kế | `ProjectCard` thêm `onLongClick` (`combinedClickable`); ViewModel đặt `ProjectsOverlay.Menu(card)`; màn vẽ `ModalBottomSheet` (`skipPartiallyExpanded = true`, `containerColor = surfaceContainerHigh`, `scrimColor = scrim` độ mờ 0.55 như thiết kế). Nền tối của sheet thật không đo được trên Robolectric, kiểm bằng mắt (mục 4). "edited" theo hàm thuần `editedAt` (câu hỏi 3) |
+| KB-4 | Bấm "Open" thì mở trong màn vẽ | Đóng menu rồi đi cùng đường với chạm thẻ của T-009 (`OpenProject` khi cờ `EDITOR` bật, `ShowComingSoon` khi tắt, theo spec KB-2 dòng "Open" trong menu) |
+| KB-4 | Chạm ngoài, kéo xuống, nút quay lại thì menu đóng, danh sách giữ nguyên | Cả ba gọi `onDismissRequest` của `ModalBottomSheet` (đã chạy thử, mục 4.1) → `dismissOverlay()`; danh sách không đổi vì không gọi kho |
+| KB-4 (đặc biệt) | Menu mở thì không có quảng cáo trong menu | Nội dung menu không có `AdSlot`/`NativeAdSlot`; test quét import của tệp menu và hộp thoại. Thanh đáy native của T-010 nằm ở cửa sổ activity, dưới lớp nền tối của cửa sổ menu |
+| KB-5 | Bấm "Rename": hộp thoại tiêu đề "Rename", "Save", "Cancel", ô nhập có sẵn tên hiện tại, bàn phím hiện | `ProjectsOverlay.Rename(card)`; `BasicAlertDialog` bọc `RenameDialogCard` có `OutlinedTextField` nhận `FocusRequester`, `requestFocus()` trong `LaunchedEffect` (ô có tiêu điểm thì bàn phím mềm hiện; test kiểm tiêu điểm, máy thật kiểm bàn phím). Con trỏ đặt cuối tên (`TextFieldValue` với `TextRange(name.length)`) |
+| KB-5 | Xác nhận thì thẻ hiện tên mới ngay; mở lại app vẫn giữ | `ProjectsRepository.rename` → `ProjectRepository.rename` ghi `project.json` và phát lại danh sách (T-002); tên lưu trên đĩa nên mở lại app vẫn giữ (test của T-002) |
+| KB-5 | Hủy thì tên giữ nguyên | "Cancel", chạm ngoài, quay lại: `dismissOverlay()`, không gọi kho |
+| KB-5 (đặc biệt) | Ô trống hay chỉ khoảng trắng thì nút xác nhận tắt | `Save` `enabled = text.isNotBlank()`; ViewModel cũng bỏ qua tên trống (không gọi `rename`, vì `ProjectNames.normalize` ném `IllegalArgumentException` với tên trống) |
+| KB-5 (đặc biệt) | Trùng tên dự án khác vẫn cho lưu | Không kiểm trùng; kho không kiểm trùng (T-002) |
+| KB-5 (ngầm, câu hỏi 5) | Tên tối đa 40 ký tự | Ô nhập cắt ở `ProjectNames.MAX_NAME_LENGTH` điểm mã (code point) bằng `takeCodePoints` riêng của feature, cùng cách đếm với kho; kho vẫn `normalize` |
+| KB-6 | Nhân bản: bản sao đủ khung, layer, âm thanh, khung hình, độ phân giải, tốc độ, nền ở đầu danh sách, tên "<tên> copy" (lần sau "copy 2"), cắt tên gốc khi quá 40 ký tự; gốc không đổi | `ProjectsRepository.duplicate` → `ProjectRepository.duplicate` (T-002 làm và đã có test cho mọi điều này); ViewModel gọi, báo kết quả, và khi bản sao đã đứng đầu danh sách thì phát `ScrollToTop` để lưới cuộn lên đầu (người dùng đang cuộn xuống vẫn thấy bản sao) |
+| KB-6 | Vẽ trên bản sao thì gốc không đổi và ngược lại | Bản sao có mã mới và tệp riêng (T-002, `duplicate_copiesEveryReferencedFile`, `duplicate_sourceUnchanged`); không có gì mới ở T-012 |
+| KB-6 (đặc biệt) | Hết chỗ: báo lỗi dễ hiểu, không để bản sao dở | Kho trả `Failure(NO_SPACE)` và đã xóa bản dở (T-002); ViewModel phát thông báo "Not enough space on your phone. Free up some space and try again." (chữ của câu hỏi 12, câu hỏi 2 của plan) |
+| KB-6 (đặc biệt) | Dự án lớn: có dấu hiệu đang làm; không bấm nhân bản lần nữa được tới khi xong | `duplicatingName: String?` trong `ProjectsMenuState`; khi khác `null`: thông báo ngắn không tự ẩn "Duplicating “<tên>”…" (spec mục 4, "đang nhân bản" là thông báo ngắn chuẩn) và mục "Duplicate" của mọi menu `enabled = false`; `onDuplicate` của ViewModel bỏ qua khi đang nhân bản |
+| KB-7 | Bấm "Delete": hộp thoại "Delete “<tên>”?", "This can't be undone.", "Delete", "Cancel"; đã xóa không hoàn tác | `ProjectsOverlay.ConfirmDelete(card)`; `BasicAlertDialog` bọc `DeleteDialogCard`; nút "Delete" màu `error` (truyền `colors` rõ cho `TextButton`) |
+| KB-7 | Xác nhận: thẻ biến mất, dữ liệu xóa khỏi máy, mở lại không thấy | `ProjectsRepository.delete` → `ProjectRepository.delete` xóa thư mục và phát lại danh sách (T-002) |
+| KB-7 | Hủy thì giữ nguyên | `dismissOverlay()`, không gọi kho |
+| KB-7 | Xóa dự án cuối thì về trạng thái trống | Danh sách rỗng phát lại thì `ProjectsViewModel` của T-009 ra `Empty` (T-009 đã có test với kho giả); T-012 thêm một test đi trọn đường xóa |
+| KB-2 (đặc biệt, phần T-012) | Dự án hỏng: menu chỉ còn "Delete"; app không tự xóa | `ProjectMenuContent` với `card.readable == false` chỉ có mục "Delete"; đầu menu có tên; `name == null` thì dùng chữ thay thế `projects_card_unnamed` "Untitled project" của T-009 (cả ở tiêu đề hộp xác nhận xóa); ảnh trống, không có dòng số khung. Xóa chỉ khi người dùng xác nhận |
+| KB-12 (phần T-012) | Gập, mở máy giữ menu hay hộp thoại đang mở | `ProjectsOverlay` nằm trong `ProjectsViewModel` (sống qua đổi cấu hình); chữ đang gõ trong hộp đổi tên giữ bằng `rememberSaveable` |
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+Thiết kế tham chiếu: `features/projects/design/README.md`, các ảnh trong `design/screens/`: `ProjectsScreen_menu_light`, `ProjectsScreen_menu_dark` (số liệu ở `design/context/ProjectsScreen_menu_*.md`). Hộp thoại đổi tên, xác nhận xóa và thông báo ngắn không có frame riêng (spec mục 4, câu hỏi 2): dùng hộp thoại theo kiểu chuẩn của Material 3 (`BasicAlertDialog` bọc thẻ nội dung) và `Snackbar` chuẩn.
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+ADR liên quan: ADR-0001 (feature chỉ phụ thuộc core), ADR-0003 (cờ `EDITOR` theo dõi bằng `Flow`, đã có ở T-009), ADR-0008 (hệ thống thiết kế), ADR-0019 (log), ADR-0020 (screenshot cùng tên ảnh thiết kế), ADR-0031 (câu khẳng định cũ), ADR-0045 (quảng cáo: không chạm).
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+## 3. Giải pháp
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+### 3.1. Cách làm
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+Gói `com.vgl.draw.animation.feature.projects` (của T-009). Mọi tên của T-009 dưới đây lấy theo plan T-009 trên nhánh của đợt, bản đọc ngày 2026-11-23 (danh sách ở mục 1).
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+**Dữ liệu.** `data/ProjectsRepository.kt` thêm ba hàm, `DefaultProjectsRepository` chuyển thẳng cho `ProjectRepository` của `:core:project` (đã tiêm ở T-009 cho `items`), trả nguyên `ProjectResult`:
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+```kotlin
+suspend fun rename(id: ProjectId, name: String): ProjectResult<Project>
+suspend fun duplicate(id: ProjectId): ProjectResult<Project>
+suspend fun delete(id: ProjectId): ProjectResult<Unit>
+```
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+Không bắt `IOException`: kho của T-002 đã đổi mọi lỗi ghi thành `ProjectResult.Failure`. `rename` với tên trống ném `IllegalArgumentException` (lỗi lập trình), nên ViewModel không bao giờ gọi với tên trống.
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+**Trạng thái** (thêm vào `ProjectsUiState.kt`):
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+```kotlin
+sealed interface ProjectsOverlay {
+    data object None : ProjectsOverlay
+    data class Menu(val card: ProjectCardUi) : ProjectsOverlay
+    data class Rename(val card: ProjectCardUi) : ProjectsOverlay
+    data class ConfirmDelete(val card: ProjectCardUi) : ProjectsOverlay
+}
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+data class ProjectsMenuState(
+    val overlay: ProjectsOverlay = ProjectsOverlay.None,
+    val duplicatingName: String? = null, // non-null while a duplicate runs
+    val busy: Boolean = false,           // a rename or delete is being written
+)
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+enum class ProjectsMessage { RENAME_FAILED, DELETE_FAILED, DUPLICATE_FAILED, NO_SPACE }
+```
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+`ProjectsEffect` (T-009) thêm `data class ShowMessage(val message: ProjectsMessage)`, `data class BackUpProject(val id: ProjectId, val name: String)` (T-013 gợi ý tên file từ tên dự án) và `data object ScrollToTop`. Thẻ hỏng có `name == null` thì đầu menu và tiêu đề hộp xác nhận xóa dùng chuỗi `projects_card_unnamed` "Untitled project" mà T-009 tạo cho thẻ không đọc được tên (T-012 dùng lại, không tạo chuỗi mới).
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+**ViewModel.** `ProjectsViewModel` (T-009) có thêm một luồng danh sách dùng chung, thay cho chỗ `uiState` của T-009 đọc thẳng `repository.items`:
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+```kotlin
+private val items = repository.items
+    .shareIn(viewModelScope, SharingStarted.WhileSubscribed(), replay = 1)
+private val _menuState = MutableStateFlow(ProjectsMenuState())
+val menuState: StateFlow<ProjectsMenuState> = _menuState
+    .combine(items.onEach(::closeOverlayIfCardMissing)) { menu, _ -> menu }
+    .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), ProjectsMenuState())
+```
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+`uiState` của T-009 đổi `repository.items` thành `items`; còn lại giữ nguyên, kể cả bước dọn ảnh thu nhỏ: hàm riêng `retainThumbnails` của ViewModel mà T-009 gọi trong chính đường ống `uiState` (không có người thu riêng), nên kho vẫn chỉ bị đọc một lần. Vì vậy `uiState` và việc đóng menu dùng một lần đọc kho. Luồng dùng chung dừng ngay khi hết người thu (`WhileSubscribed()` không chờ), còn 5 giây chờ nằm ở `stateIn` của `uiState` và `menuState`: hai lớp chờ không cộng dồn, nên màn rời đi quá 5 giây thì không còn ai đọc kho (luồng `projects` của kho là luồng lạnh, mỗi người thu đọc lại mọi dự án từ đĩa). `_menuState` là nguồn thật: các hàm dưới đây đọc và ghi `_menuState`, nên chạy đúng cả khi chưa ai thu `menuState`. Mở menu không phát lại danh sách vì `_menuState` không nằm trong `combine` của `uiState`. Các hàm:
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+- `onProjectLongClick(card)`: `overlay = Menu(card)`. Bỏ qua khi `overlay` khác `None`.
+- `onMenuOpen()`: đọc thẻ của `Menu`, `overlay = None`, rồi gọi đúng nhánh của `onProjectClick(card)` (T-009) để phát `OpenProject` hay `ShowComingSoon` hay `ShowCannotOpen`; cờ `EDITOR` đọc ngay lúc bấm từ trường `editorEnabled` mà T-009 gán trong `combine` của `uiState` (không đọc một lần lúc mở menu).
+- `onMenuRename()`: `overlay = Rename(card)` (chỉ với thẻ `readable`).
+- `onRenameConfirm(name: String)`: `name.isBlank()` hay `busy` thì bỏ qua. `busy = true`; `ProjectNames.normalize(name) == card.name` thì không ghi, đặt `overlay = None` (hộp thoại đóng như khi lưu xong); ngược lại gọi `repository.rename(card.id, name)`. `Success`: `overlay = None`. `Failure`: `overlay = None` và phát `ShowMessage(NO_SPACE)` khi `NO_SPACE`, `ShowMessage(RENAME_FAILED)` với lỗi khác (`WRITE_FAILED`, `NOT_FOUND`, `UNREADABLE`). `busy = false` trong `finally`.
+- `onMenuDuplicate()`: `overlay = None`; `duplicatingName != null` thì bỏ qua (không gọi kho lần hai). Đặt `duplicatingName = card.name`, gọi `repository.duplicate(card.id)` trong `viewModelScope`. Có kết quả thì đặt `duplicatingName = null` trước (để thông báo "Duplicating…" tắt trước khi thông báo kết quả hiện), rồi: `Failure(NO_SPACE)` thì phát `ShowMessage(NO_SPACE)`, lỗi khác `ShowMessage(DUPLICATE_FAILED)`; `Success(copy)` không báo chữ gì (bản sao đứng đầu danh sách là dấu hiệu), chờ có giới hạn tới khi `items` phát danh sách có `copy.id` ở đầu (`withTimeoutOrNull(2_000) { items.first { it.firstOrNull()?.id == copy.id } }`, vì kho phát lại danh sách sau khi `duplicate` trả về) rồi phát `ScrollToTop`; hết giờ chờ thì không phát. Hiệu ứng đi qua kênh hiệu ứng của T-009, nên nếu người dùng mở màn vẽ trong 2 giây chờ thì `ScrollToTop` nằm chờ trong kênh và lưới cuộn lên đầu khi quay lại danh sách. Chấp nhận: khi đó bản sao, hay dự án vừa sửa, đều ở đầu danh sách, nên cuộn lên đầu vẫn đúng chỗ người dùng cần. `duplicatingName = null` cũng nằm trong `finally` (khi coroutine bị hủy).
+- `onMenuDelete()`: `overlay = ConfirmDelete(card)` (cả thẻ hỏng).
+- `onDeleteConfirm()`: `busy` thì bỏ qua. `busy = true`, `repository.delete(card.id)`; `Success`: `overlay = None`; `Failure`: `overlay = None`, `ShowMessage(DELETE_FAILED)` (`NO_SPACE` không xảy ra khi xóa, vẫn ánh xạ như lỗi khác). `busy = false` trong `finally`.
+- `onMenuBackUp()`: lấy thẻ của `Menu` đang mở (mục sao lưu chỉ có ở thẻ `readable`, nên `name` khác `null`), `overlay = None`, rồi phát `ProjectsEffect.BackUpProject(card.id, requireNotNull(card.name))`; Route nhận hiệu ứng này và gọi `onBackUpProject(id, name)` khi có, `null` thì "Coming soon" như mẫu của T-009 (T-013 nối).
+- `dismissOverlay()`: `overlay = None` (bỏ qua khi `busy`, để hộp thoại không đóng giữa lúc ghi).
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+Thẻ trong `overlay` là bản chụp lúc mở; danh sách phát lại mà không còn thẻ cùng `id` (bị xóa từ chỗ khác) thì `closeOverlayIfCardMissing` đặt `_menuState.overlay = None` (chỉ so `id`; bỏ qua khi `busy`). Hàm này chạy trong `onEach` của luồng dùng chung, nên chỉ chạy khi có người thu `menuState` (Route luôn thu); không có `collect` nào trong `init`. Log (thẻ `Projects`, ADR-0019): mở menu, đổi tên xong/lỗi (loại lỗi), nhân bản bắt đầu/xong/lỗi, xóa xong/lỗi; không ghi tên dự án hay mã. Không ghi sự kiện phân tích (spec câu hỏi 17).
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+**Thời điểm "edited".** `EditedAt.kt`: hàm thuần `editedAt(updatedAtMillis: Long, nowMillis: Long, zone: ZoneId): EditedAt` với `sealed interface EditedAt { Today; Yesterday; data class OnDate(val date: LocalDate, val sameYear: Boolean) }` (cùng ngày lịch theo `zone` là `Today`; hôm trước là `Yesterday`; còn lại `OnDate`; thời điểm sau `now` vì đồng hồ lệch coi là `Today`). Chữ: "edited today", "edited yesterday", "edited %1$s". Ngày của `OnDate` định dạng từ chính `LocalDate` đã tính, cùng `zone`, nên chữ và nhánh `Today`/`Yesterday` không lệch nhau: `DateTimeFormatter.ofPattern(DateFormat.getBestDateTimePattern(locale, if (sameYear) "MMMd" else "yMMMd"), locale).format(date)` (`android.text.format.DateFormat`, có từ API 18; `locale` lấy từ `LocalConfiguration`). `java.time` có từ API 26 (= `minSdk`). `ProjectMenuContent` nhận `nowMillis: Long`; `ProjectsRoute` truyền `System.currentTimeMillis()` lấy một lần khi menu mở (`remember(overlay)`), screenshot truyền số cố định. Dòng meta: `plurals` `projects_card_frames` của T-009 nối thêm " · " và chữ "edited ...", tức chuỗi mới `projects_menu_meta` = `%1$s · %2$s`.
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+**Menu.** `ProjectMenuSheet.kt`:
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+- `ProjectMenuContent(card, thumbnail: ImageBitmap?, nowMillis, zone: ZoneId, duplicateEnabled, bottomInset: Dp, onOpen, onRename, onDuplicate, onBackUp, onDelete)`: cột không trạng thái, số liệu theo `context/ProjectsScreen_menu_*.md`: tay kéo 32 × 4 bo 2 màu `outline` trong dải cao 24; đầu menu cao 56, lề trái/phải 24, lề dưới 8, ảnh 48 × 48 bo 8 nền `canvas` (ảnh thu nhỏ từ `thumbnails` của T-009, `ContentScale.Crop`), cách chữ 12; tên `titleMedium` `onSurface` một dòng cắt "…"; meta `bodySmall` `onSurfaceVariant` một dòng cắt "…". Năm mục `ListItem` cao 56, lề 16, icon 24 cách chữ 16, `colors = ListItemDefaults.colors(containerColor = Color.Transparent)`, chữ `bodyLarge` `onSurface`; "Back up to a file" có `trailingContent` ".frameloop" `bodyMedium` `onSurfaceVariant`; "Delete" icon và chữ `error`. Lề dưới cột là 16 dp cộng `bottomInset` (tham số, để test truyền được số khác 0: trên Robolectric `navigationBars` luôn bằng 0). `ProjectsScreen` truyền `WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()` đọc ở cửa sổ activity; sheet đặt `contentWindowInsets = { WindowInsets(0) }` để lề thanh hệ thống chỉ cộng một lần. Thẻ `readable = false`: chỉ đầu menu (không dòng meta) và mục "Delete". Mỗi mục `Modifier.clickable(role = Role.Button)`, `testTag` `project_menu_open`, `project_menu_rename`, `project_menu_duplicate`, `project_menu_backup`, `project_menu_delete`; cột gốc `project_menu`.
+- `ProjectMenuSheet(…)`: `ModalBottomSheet(onDismissRequest, sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true), shape = RectangleShape, containerColor = surfaceContainerHigh, contentWindowInsets = { WindowInsets(0) }, scrimColor = scrim.copy(alpha = MENU_SCRIM_ALPHA), dragHandle = null) { ProjectMenuContent(…) }` (tay kéo vẽ trong `ProjectMenuContent` cho đúng số liệu và để screenshot vẽ được trong một cửa sổ). `MENU_SCRIM_ALPHA = 0.55f` là hằng của file (độ mờ của thiết kế, như `SCRIM_ALPHA` của `NetworkDialog`). Bấm một mục: ViewModel đặt `overlay` mới; sheet rời cây ngay (không chờ hiệu ứng ẩn), chấp nhận mất hiệu ứng trượt xuống khi chọn mục.
+- `@OptIn(ExperimentalMaterial3Api::class)` cho `ModalBottomSheet` (Material 3 1.3.2).
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+**Hộp thoại.** `ProjectDialogs.kt`:
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+- `RenameProjectDialog(initialName, busy, onConfirm: (String) -> Unit, onDismiss)`: hộp thoại Material 3 nền `surfaceContainerHigh` (cách dựng ở dòng cuối của phần này), tiêu đề "Rename" (`titleLarge`), `OutlinedTextField` một dòng (`singleLine`, `ImeAction.Done` gọi `onConfirm` khi chữ không trống), giá trị `rememberSaveable(stateSaver = TextFieldValue.Saver)` khởi tạo bằng tên hiện tại, con trỏ ở cuối; mỗi lần đổi cắt ở 40 điểm mã. `confirmButton` "Save" `enabled = text.isNotBlank() && !busy`; `dismissButton` "Cancel". Cả hai `TextButton` truyền `colors = ButtonDefaults.textButtonColors(contentColor = primary)` rõ (nút chữ trên nền khác màu, `CLAUDE.md` bước 10). `testTag`: `rename_dialog`, `rename_field`, `rename_save`, `rename_cancel`.
+- `DeleteProjectDialog(name, busy, onConfirm, onDismiss)`: tiêu đề "Delete “%1$s”?" (`titleLarge`, tối đa 2 dòng, cắt "…"), lời "This can't be undone." (`bodyMedium` `onSurfaceVariant`), "Delete" `TextButton` `contentColor = error`, "Cancel" `contentColor = primary`, `enabled = !busy`. `testTag`: `delete_dialog`, `delete_confirm`, `delete_cancel`.
+- Phần thân của hai hộp thoại tách thành hai composable không có cửa sổ: `RenameDialogCard(…)` và `DeleteDialogCard(…)` (nền `surfaceContainerHigh`, bo và lề như hộp thoại chuẩn của Material 3, cùng tiêu đề, ô nhập, nút và `testTag` ở trên). `RenameProjectDialog`/`DeleteProjectDialog` là `BasicAlertDialog(onDismissRequest) { <Tên>DialogCard(…) }`, nên cửa sổ thật và bản dùng cho screenshot, đo màu vẽ cùng một nội dung.
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+**Màn hình.** `ProjectsScreen.kt` (T-009): `ProjectsScreen` nhận thêm `menuState: ProjectsMenuState = ProjectsMenuState()`, `nowMillis: Long = 0L` (chỉ đọc khi menu mở; `ProjectsRoute` luôn truyền giá trị thật), `zone: ZoneId = ZoneId.systemDefault()` và các callback `onProjectLongClick`, `onMenuOpen`, `onMenuRename`, `onMenuDuplicate`, `onMenuBackUp`, `onMenuDelete`, `onRenameConfirm`, `onDeleteConfirm`, `onDismissOverlay` (mặc định rỗng, để test có sẵn của T-009 gọi `ProjectsScreen` không đổi). Theo `menuState.overlay` vẽ `ProjectMenuSheet`, `RenameProjectDialog` hay `DeleteProjectDialog` sau nội dung chính. Thông báo ngắn dùng chung một `SnackbarHostState` (của T-009) với "Coming soon", "Can't open this project." và `ShowMessage`, theo ba quy tắc để "Duplicating…" (không tự ẩn) không chặn thông báo khác:
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+- `duplicatingName != null` thì `LaunchedEffect(duplicatingName) { while (isActive) snackbarHostState.showSnackbar("Duplicating “…”…", duration = Indefinite) }`; về `null` thì hiệu ứng bị hủy và thông báo tắt.
+- Mỗi hiệu ứng có chữ (`ShowComingSoon`, `ShowCannotOpen`, `ShowMessage`) chạy trong một `launch` riêng của scope Route, để vòng thu hiệu ứng không bị chặn trong lúc thông báo hiện: `launch { snackbarHostState.currentSnackbarData?.takeIf { it.visuals.duration == Indefinite }?.dismiss(); snackbarHostState.showSnackbar(text) }`. Thông báo đến khi "Duplicating…" đang hiện thì "Duplicating…" ẩn, thông báo mới hiện ngay; vòng `while` ở trên gọi lại `showSnackbar` và xếp hàng sau thông báo mới (`SnackbarHostState` dùng `Mutex` công bằng), nên "Duplicating…" hiện lại khi thông báo mới tự ẩn mà vẫn đang nhân bản.
+- ViewModel đặt `duplicatingName = null` trước khi phát `ShowMessage` của lỗi nhân bản, nên lỗi hiện sau khi "Duplicating…" đã tắt.
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+Đây là thông báo ngắn chuẩn, không có vòng chờ quay, để screenshot không chạy mãi. `ProjectsRoute` thu `menuState`, nhận thêm `onBackUpProject: ((ProjectId, String) -> Unit)? = null`, hiện `ShowMessage` bằng `SnackbarHost` có sẵn của T-009 (chữ theo `ProjectsMessage`). `ProjectsRoute` nhận thêm `gridState: LazyGridState = rememberLazyGridState()` (để test đọc được vị trí cuộn) và truyền vào tham số `gridState` có sẵn của `ProjectsScreen`; nhận `ScrollToTop` thì `launch { gridState.animateScrollToItem(0) }`. `ProjectCard.kt` (T-009): `Modifier.clickable` của thẻ đổi thành `combinedClickable(onClick, onLongClick, onLongClickLabel = stringResource(R.string.projects_card_long_click_label))` ("Project options", nhãn cho trợ năng).
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+**Điều hướng.** `navigation/ProjectsNavigation.kt` (T-009): `projectsScreen(…)` thêm `onBackUpProject: ((ProjectId, String) -> Unit)? = null`, chuyển cho `ProjectsRoute`. Giá trị mặc định `null` nên `AppNavHost` không đổi ở T-012.
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+**Icon.** `Icons.Rounded.Edit` ("Open", thiết kế dùng `edit`) và `Icons.Rounded.Delete` có trong bộ icon lõi đi kèm `material3` 1.3.2 (đã xem ở plan T-009, mục 4.1). `drive_file_rename_outline`, `content_copy`, `save_alt` không có, làm vector drawable như T-009 (`viewportWidth/Height = 960`, `<group android:translateY="960">`, `fillColor` `@android:color/white`), `pathData` từ SVG Material Symbols Rounded (Apache 2.0) tải ngày 2026-11-22 tại `https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsrounded/<tên>/default/24px.svg` (HTTP 200), dán sẵn vì phiên không gọi được máy chủ ngoài:
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+- `drive_file_rename_outline` (`ic_menu_rename.xml`):
+  `m400-120 160-160h240q33 0 56.5 23.5T880-200q0 33-23.5 56.5T800-120H400Zm-240-80h57l391-391-57-57-391 391v57Zm-80 40v-97q0-16 6-30.5t17-25.5l505-504q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T777-647L273-143q-11 11-25.5 17t-30.5 6h-97q-17 0-28.5-11.5T80-160Zm640-544-56-56 56 56Zm-141 85-28-29 57 57-29-28Z`
+- `content_copy` (`ic_menu_duplicate.xml`):
+  `M360-240q-33 0-56.5-23.5T280-320v-480q0-33 23.5-56.5T360-880h360q33 0 56.5 23.5T800-800v480q0 33-23.5 56.5T720-240H360Zm0-80h360v-480H360v480ZM200-80q-33 0-56.5-23.5T120-160v-520q0-17 11.5-28.5T160-720q17 0 28.5 11.5T200-680v520h400q17 0 28.5 11.5T640-120q0 17-11.5 28.5T600-80H200Zm160-240v-480 480Z`
+- `save_alt` (`ic_menu_backup.xml`):
+  `M465-339.5q-7-2.5-13-8.5L308-492q-12-12-11.5-28t11.5-28q12-12 28.5-12.5T365-549l75 75v-286q0-17 11.5-28.5T480-800q17 0 28.5 11.5T520-760v286l75-75q12-12 28.5-11.5T652-548q11 12 11.5 28T652-492L508-348q-6 6-13 8.5t-15 2.5q-8 0-15-2.5ZM240-160q-33 0-56.5-23.5T160-240v-80q0-17 11.5-28.5T200-360q17 0 28.5 11.5T240-320v80h480v-80q0-17 11.5-28.5T760-360q17 0 28.5 11.5T800-320v80q0 33-23.5 56.5T720-160H240Z`
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+**Chữ** (`values/strings.xml` của feature, bản Việt ở `values-vi/`, câu hỏi 5): `projects_menu_open` "Open", `projects_menu_rename` "Rename", `projects_menu_duplicate` "Duplicate", `projects_menu_backup` "Back up to a file", `projects_menu_backup_extension` ".frameloop" (`translatable="false"`), `projects_menu_delete` "Delete", `projects_menu_meta` "%1$s · %2$s" (`translatable="false"`), `projects_menu_edited_today` "edited today", `projects_menu_edited_yesterday` "edited yesterday", `projects_menu_edited_on` "edited %1$s", `projects_card_long_click_label` "Project options", `projects_rename_title` "Rename", `projects_rename_save` "Save", `projects_rename_cancel` "Cancel", `projects_delete_title` "Delete “%1$s”?", `projects_delete_message` "This can't be undone.", `projects_delete_confirm` "Delete", `projects_delete_cancel` "Cancel", `projects_duplicating` "Duplicating “%1$s”…", `projects_message_no_space` "Not enough space on your phone. Free up some space and try again.", `projects_message_rename_failed` "Couldn't rename the project. Try again.", `projects_message_duplicate_failed` "Couldn't duplicate the project. Try again.", `projects_message_delete_failed` "Couldn't delete the project. Try again.". Chữ spec chưa có, hỏi ở câu hỏi 2 (bản Việt ở câu hỏi 5): "Project options", bốn chữ lỗi, "edited today", "edited yesterday", "edited %1$s", "Duplicating “%1$s”…". Dùng lại của T-009, không tạo: `projects_card_frames`, `projects_card_unnamed`, `projects_coming_soon`.
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+### 3.2. Danh sách file
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+Các tệp ghi "Sửa" dưới `feature/projects/` do plan T-009 tạo; T-009 chạy ngay trước T-012 trong cùng danh sách (mục 8, câu 1).
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+| Thao tác | Đường dẫn | Nội dung thay đổi |
+| --- | --- | --- |
+| Sửa | `feature/projects/src/main/kotlin/com/vgl/draw/animation/feature/projects/ProjectsUiState.kt` | `ProjectsOverlay`, `ProjectsMenuState`, `ProjectsMessage`; `ProjectsEffect` thêm `ShowMessage`, `BackUpProject(id, name)`, `ScrollToTop` |
+| Sửa | `feature/projects/src/main/kotlin/com/vgl/draw/animation/feature/projects/ProjectsViewModel.kt` | Luồng `items` dùng chung (`uiState` đọc nó thay cho `repository.items`), `menuState` và các hàm của mục 3.1 |
+| Sửa | `feature/projects/src/main/kotlin/com/vgl/draw/animation/feature/projects/ProjectsScreen.kt` | Tham số mới của `ProjectsScreen`/`ProjectsRoute` (gồm `gridState` của Route), vẽ menu và hộp thoại, thông báo "đang nhân bản" và `ShowMessage` theo ba quy tắc của mục 3.1, `ScrollToTop`, tag mới trong `ProjectsTestTags` |
+| Sửa | `feature/projects/src/main/kotlin/com/vgl/draw/animation/feature/projects/ProjectCard.kt` | `combinedClickable` có `onLongClick` |
+| Tạo | `feature/projects/src/main/kotlin/com/vgl/draw/animation/feature/projects/ProjectMenuSheet.kt` | `ProjectMenuContent`, `ProjectMenuSheet` |
+| Tạo | `feature/projects/src/main/kotlin/com/vgl/draw/animation/feature/projects/ProjectDialogs.kt` | `RenameProjectDialog`, `DeleteProjectDialog`, `RenameDialogCard`, `DeleteDialogCard`, cắt tên ở 40 điểm mã |
+| Tạo | `feature/projects/src/main/kotlin/com/vgl/draw/animation/feature/projects/EditedAt.kt` | `EditedAt`, `editedAt(...)`, hàm chữ `editedLabel(...)` (định dạng ngày từ `LocalDate`) |
+| Sửa | `feature/projects/src/main/kotlin/com/vgl/draw/animation/feature/projects/data/ProjectsRepository.kt` | `rename`, `duplicate`, `delete` |
+| Sửa | `feature/projects/src/main/kotlin/com/vgl/draw/animation/feature/projects/data/DefaultProjectsRepository.kt` | Chuyển ba hàm cho `ProjectRepository` |
+| Sửa | `feature/projects/src/main/kotlin/com/vgl/draw/animation/feature/projects/navigation/ProjectsNavigation.kt` | Tham số `onBackUpProject` mặc định `null` |
+| Sửa | `feature/projects/src/main/res/values/strings.xml` | Chữ mới của mục 3.1; dùng lại `projects_card_frames`, `projects_card_unnamed`, `projects_coming_soon` của T-009, không khai báo lại |
+| Sửa | `feature/projects/src/main/res/values-vi/strings.xml` | Bản tiếng Việt cùng tên (câu hỏi 5) |
+| Tạo | `feature/projects/src/main/res/drawable/ic_menu_rename.xml` | Vector `drive_file_rename_outline` |
+| Tạo | `feature/projects/src/main/res/drawable/ic_menu_duplicate.xml` | Vector `content_copy` |
+| Tạo | `feature/projects/src/main/res/drawable/ic_menu_backup.xml` | Vector `save_alt` |
+| Sửa | `feature/projects/src/test/kotlin/com/vgl/draw/animation/feature/projects/FakeProjectsRepository.kt` | Ghi lại lời gọi `rename`/`duplicate`/`delete`, kết quả đặt trước, cổng `CompletableDeferred` để giữ `duplicate`/`rename`/`delete` đang chạy; `delete` và `duplicate` thành công thì đổi danh sách như kho thật; đếm số người đang thu `items` (tăng ở `onStart`, giảm ở `onCompletion`; cho `items_readOnceForUiAndMenu`) |
+| Tạo | `feature/projects/src/test/kotlin/com/vgl/draw/animation/feature/projects/ProjectMenuViewModelTest.kt` | Unit test mục 4 (phần ViewModel) |
+| Tạo | `feature/projects/src/test/kotlin/com/vgl/draw/animation/feature/projects/EditedAtTest.kt` | Unit test của `editedAt` |
+| Tạo | `feature/projects/src/test/kotlin/com/vgl/draw/animation/feature/projects/ProjectMenuTest.kt` | Test giao diện Robolectric mục 4 (menu, hộp thoại, đóng bằng ba cách, nhấn giữ thẻ) |
+| Tạo | `feature/projects/src/test/kotlin/com/vgl/draw/animation/feature/projects/ProjectMenuScreenshotTest.kt` | Screenshot test mục 4; ảnh dark dựng `AppTheme(darkTheme = true)` |
+| Sửa | `feature/projects/build.gradle.kts` | (dự phòng) Khối `tasks.withType<Test>().configureEach { maxHeapSize = "2g" }`, chỉ khi `pr-check` hết bộ nhớ trong test của module (mục 3.4) |
+| Tạo | `feature/projects/src/test/kotlin/com/vgl/draw/animation/feature/projects/ProjectMenuWindowScreenshotTest.kt` | (dự phòng) chụp cả màn bằng `captureScreenRoboImage`, mục 3.4 |
+| Sửa | `feature/projects/src/test/kotlin/com/vgl/draw/animation/feature/projects/data/DefaultProjectsRepositoryTest.kt` | Ba test chuyển tiếp (kết quả và mã dự án đi nguyên). `ProjectRepository` giả nằm ngay trong tệp `DefaultProjectsRepositoryTest.kt` này (`:core:project` không có bản giả dùng chung; tệp của T-009 đã có một bản giả thì dùng lại nó và thêm phần còn thiếu) và cài đủ mọi thành viên của interface: `projects`, `createdCount`, `create`, `save`, `rename`, `duplicate`, `delete`, `refresh`; ba hàm của T-012 ghi lại tham số và trả kết quả đặt trước, các thành viên không dùng ném `UnsupportedOperationException` |
+| Tạo | `feature/projects/src/test/screenshots/ProjectsScreen_menu_light.png` | Ảnh chuẩn mới, cùng tên ảnh thiết kế |
+| Tạo | `feature/projects/src/test/screenshots/ProjectsScreen_menu_dark.png` | Ảnh chuẩn mới, cùng tên ảnh thiết kế |
+| Tạo | `feature/projects/src/test/screenshots/ProjectsScreen_menu_small.png` | Ảnh chuẩn mới, khung 360 × 640, tên dài |
+| Tạo | `feature/projects/src/test/screenshots/ProjectsScreen_menuUnreadable_light.png` | Ảnh chuẩn mới, menu của thẻ hỏng |
+| Tạo | `feature/projects/src/test/screenshots/ProjectsScreen_rename_light.png` | Ảnh chuẩn mới, hộp thoại đổi tên |
+| Tạo | `feature/projects/src/test/screenshots/ProjectsScreen_rename_dark.png` | Ảnh chuẩn mới |
+| Tạo | `feature/projects/src/test/screenshots/ProjectsScreen_delete_light.png` | Ảnh chuẩn mới, hộp thoại xác nhận xóa |
+| Tạo | `feature/projects/src/test/screenshots/ProjectsScreen_delete_dark.png` | Ảnh chuẩn mới |
+| Tạo | `feature/projects/src/test/screenshots/ProjectsScreen_duplicating_light.png` | Ảnh chuẩn mới, thông báo "đang nhân bản" |
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+Nơi đọc các file plan sửa: mọi tệp "Sửa" ở trên chỉ có trong `:feature:projects` (T-009 tạo), không script hay workflow nào đọc chúng theo tên (`grep -rn "feature/projects" scripts/ .github/` trên nhánh chính chỉ có thể khớp các mẫu đường dẫn chung `feature/**`). Ảnh chuẩn của T-009 (`ProjectsScreen_list_*`, `ProjectsScreen_empty_*`) không đổi vì menu chỉ vẽ khi `overlay` khác `None` và thẻ không đổi hình (chỉ đổi cách bắt chạm); nếu ảnh nào của T-009 lệch thì đó là lỗi, không ghi lại.
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+### 3.3. Cờ tính năng, quảng cáo, dữ liệu, quyền, thư viện
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+- Cờ tính năng: Không thêm. "Open" dùng cờ `EDITOR` mà `ProjectsViewModel` của T-009 đã theo dõi; cả menu nằm sau cờ `PROJECTS` của T-009. Staging bật sẵn `EDITOR` (`StagingFeatureFlagsModule`), nên nhánh cờ tắt kiểm bằng test.
+- Quảng cáo: Không chạm. Menu, hộp thoại đổi tên, hộp thoại xóa không có quảng cáo (spec mục 5).
+- Sự kiện phân tích: Không chạm (spec câu hỏi 17: không có sự kiện cho đổi tên, nhân bản, xóa).
+- File R2: Không chạm.
+- **Quyền truy cập:** Không thêm. Đổi tên, nhân bản, xóa chỉ ghi bộ nhớ trong của app qua `ProjectRepository`.
+- **Thư viện và SDK:** Không thêm. `ModalBottomSheet`, `rememberModalBottomSheetState`, `BasicAlertDialog`, `ListItem`, `OutlinedTextField` thuộc `androidx-compose-material3` (bản 1.3.2, đã có trên classpath của feature qua plugin `template.android.feature`); `combinedClickable` thuộc `androidx.compose.foundation` (phụ thuộc bắc cầu của material3); `Icons.Rounded.Edit`, `Icons.Rounded.Delete` thuộc bộ icon lõi đi kèm `material3`; `android.text.format.DateFormat` (API 18); `java.time` (API 26), gồm `DateTimeFormatter`; `BasicAlertDialog` thuộc `material3` (thử nghiệm, `@OptIn(ExperimentalMaterial3Api::class)`). Phần chạy thử trước phiên dùng `AlertDialog`; `BasicAlertDialog` thử ở đầu task (mục 4.1). `ModalBottomSheet`, `AlertDialog`, `OutlinedTextField`, `combinedClickable` đã biên dịch và chạy trong test tạm của mục 4.1; `BasicAlertDialog` thử ở đầu task. `:feature:projects` đã phụ thuộc `:core:project` (T-009).
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+### 3.4. Phương án dự phòng
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+- **Điểm chưa chắc:** screenshot của menu và hộp thoại. `ModalBottomSheet` và `BasicAlertDialog` mở cửa sổ riêng (test tạm thấy hai gốc ngữ nghĩa), nên chụp theo khối nội dung của Roborazzi (dạng lambda) chỉ thấy cửa sổ của activity.
+- **Phương án chính:** như `NetworkLostScreenScreenshotTest`: test screenshot vẽ trong một cửa sổ `ProjectsScreen` (trạng thái `List`, bốn dự án của bảng chữ thiết kế) cộng một `Box` nền `scrim` độ mờ 0.55 và `ProjectMenuContent` căn đáy trên nền `surfaceContainerHigh`; hộp thoại vẽ bằng nội dung của chúng (`RenameDialogCard`, `DeleteDialogCard`: phần thân không có cửa sổ, chính là nội dung mà `BasicAlertDialog` của `RenameProjectDialog`/`DeleteProjectDialog` bọc), căn giữa trên nền tối. Cửa sổ thật của sheet và hộp thoại kiểm bằng `ProjectMenuTest` qua ngữ nghĩa (node, chữ, vị trí, đóng mở). Đo màu điểm ảnh không cần dự phòng: test đo màu vẽ `ProjectMenuContent`, `RenameDialogCard`, `DeleteDialogCard` ngay trong cửa sổ activity và đọc điểm ảnh của `decorView` activity, cách mà `CLAUDE.md` bước 10 quy định và `NativeAdCardTest.windowBitmap()` của `:core:ads` đã dùng; không đo trên cửa sổ riêng của sheet hay hộp thoại.
+- **Điều kiện chuyển:** ảnh do phương án chính vẽ lệch rõ với thiết kế ở phần menu vì nội dung không giống sheet thật (ví dụ bóng hay lề của sheet thật không có trong ảnh; sheet đặt `RectangleShape` như khung `ProjectMenuSheet` của thiết kế, không có bo góc, câu hỏi 10), sau 2 lần sửa.
+- **Cách làm thay:** chụp cả màn bằng `captureScreenRoboImage("src/test/screenshots/<Tên>.png")` của Roborazzi (chụp mọi cửa sổ) trong lớp test riêng có `createAndroidComposeRule<ComponentActivity>()`, dựng `ProjectsScreen` với `menuState` mở sẵn; tệp `ProjectMenuWindowScreenshotTest.kt` (mục 3.2, dự phòng), các test tương ứng bỏ khỏi `ProjectMenuScreenshotTest.kt`. `scripts/check.sh` chỉ đối chiếu các lệnh captureRoboImage (không có chữ Screen) với ảnh chuẩn có trong git, nên ảnh chụp bằng lệnh có chữ Screen không được kiểm thiếu ảnh: mỗi test của tệp dự phòng bắt đầu bằng `assertTrue(File(path).exists() || System.getProperty("roborazzi.test.record") == "true")`, và người xem `git status --short -- '*/src/test/screenshots/*'` thấy đủ ảnh của mục 3.2 (câu hỏi 7). Tên ảnh, khung giữ nguyên; test ở mục 4 giữ nguyên.
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+Các dự phòng khác, mỗi cái độc lập:
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+- **`BasicAlertDialog` trên Robolectric.** Điểm chưa chắc: `BasicAlertDialog` chưa chạy thử (mục 4.1, test tạm (a)). Điều kiện chuyển: test tạm (a) đỏ sau 2 lần sửa. Cách làm thay: `RenameProjectDialog` và `DeleteProjectDialog` dùng `AlertDialog(onDismissRequest, title, text = { OutlinedTextField(…) }, confirmButton, dismissButton)` của Material 3, cách đã chạy thử qua (mục 4.1, điểm 3). Phần thân vẫn tách thành `RenameDialogCard` và `DeleteDialogCard` (tiêu đề, ô nhập, nút, `testTag` như mục 3.1) để screenshot và test đo màu vẽ trong cửa sổ activity: `AlertDialog` nhận các phần của thẻ qua `title`, `text`, `confirmButton`, `dismissButton`, nên thẻ chia thành các composable con dùng chung cho cả hai nơi. Câu khẳng định của mục 4 giữ nguyên. Chỉ dừng khi cả `BasicAlertDialog` lẫn `AlertDialog` đều đỏ trong test tạm (mục 7).
+- **`menuSheet_isAtBottom` đo theo chiều cao cửa sổ của sheet.** Điểm chưa chắc: chưa chạy thử cách lấy chiều cao cửa sổ riêng của `ModalBottomSheet` trên Robolectric. Điều kiện chuyển: không lấy được chiều cao đó (cửa sổ của sheet không có `View` gốc đọc được, hay số đo bằng 0), hay `bottom` của `project_menu` lệch chiều cao cửa sổ quá 1 px trong khi ảnh và các test khác cho thấy sheet nằm đúng đáy, sau 2 lần sửa. Cách làm thay: so `boundsInWindow.bottom` của `project_menu` với `boundsInWindow.bottom` của gốc ngữ nghĩa của cửa sổ sheet (`onAllNodes(isRoot())`, gốc chứa `project_menu`), lệch tối đa 1 px; câu `top` ở nửa dưới màn giữ nguyên.
+- **Thứ tự thông báo khi đang nhân bản.** Điểm chưa chắc: ba quy tắc dùng chung một `SnackbarHostState` (mục 3.1) chưa chạy thử. Điều kiện chuyển: `duplicating_otherMessageShowsImmediately` đỏ sau 2 lần sửa, ví dụ "Coming soon" không hiện trong 500 ms sau khi chạm, hay "Duplicating…" không hiện lại sau khi thông báo kia tự ẩn. Cách làm thay: "Duplicating…" hiện trong một `SnackbarHost` riêng với `SnackbarHostState` riêng, đặt ngay trên `SnackbarHost` của T-009; thông báo khác vẫn dùng `SnackbarHostState` của T-009 và không còn bước ẩn thông báo `Indefinite`. Host riêng của "Duplicating…" chỉ hiện khi `SnackbarHostState` của T-009 không có thông báo nào (`currentSnackbarData == null`), nên mọi câu khẳng định của test giữ nguyên: "thông báo khác hiện ngay" và "không còn Duplicating… khi thông báo khác hiện", rồi "Duplicating…" hiện lại khi thông báo kia tự ẩn. Phương án dự phòng không đổi test viết trước. Không thêm tệp mới.
+- **Bộ nhớ của test trên CI.** Điểm chưa chắc: `pr-check` chạy Java 17 với heap mặc định của task `Test`, còn `scripts/check.sh` của phiên chạy Java 21; T-012 thêm nhiều test Robolectric `NATIVE` và screenshot vào `:feature:projects` (bài học L-004). Điều kiện chuyển: `pr-check` đỏ với `java.lang.OutOfMemoryError` trong một test của `:feature:projects:testDebugUnitTest`. Cách làm thay: thêm vào `feature/projects/build.gradle.kts` khối `tasks.withType<Test>().configureEach { maxHeapSize = "2g" }` (tệp riêng của app, không phải `build-logic/`, không cần ADR; T-009 có cùng dự phòng, khối đã có thì không thêm lần nữa), ghi vào mô tả PR rằng dự án mẫu nên đặt `maxHeapSize` chung. Không đổi test. Vẫn hết bộ nhớ thì dừng task.
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+### 3.5. Hành vi đã có bị đổi
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+`scripts/existing-tests.py` chạy trên plan này (nhánh của đợt, 2026-11-23) không thấy test có sẵn nào: mọi tệp main của mục 3.2 do T-009 tạo, chưa có trước khi phiên làm T-009. Các hành vi do T-009 thêm mà plan này đổi, với test T-009 sẽ viết (theo mục 4 của plan T-009):
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+| Hành vi cũ | Hành vi mới (câu của mục 3.1) | Test có sẵn khẳng định hành vi cũ | Giữ, hay câu khẳng định mới |
+| --- | --- | --- | --- |
+| Thẻ chỉ nhận chạm (`clickable`) | Thẻ nhận chạm và nhấn giữ (`combinedClickable`); chạm vẫn gọi `onProjectClick` | `ProjectsScreenTest` của T-009 (các test chạm thẻ), `ProjectsViewModelTest.clickReadable_*`, `clickUnreadable_emitsCannotOpen` | Giữ: chạm vẫn qua `onClick`; `ProjectMenuTest.cardTap_stillOpens_longPressOpensMenu` thêm đối chứng nhấn giữ không gọi `onProjectClick` |
+| `ProjectsScreen` không có `menuState` | Thêm tham số có giá trị mặc định | `ProjectsScreenTest`, `ProjectsScreenScreenshotTest` của T-009 | Giữ: gọi không truyền tham số mới vẫn biên dịch và vẽ như cũ (mặc định `ProjectsMenuState()`); ảnh chuẩn của T-009 không đổi |
+| `ProjectsRepository` có `items`, `thumbnail` | Thêm `rename`, `duplicate`, `delete` | `DefaultProjectsRepositoryTest` của T-009 | Giữ; `FakeProjectsRepository` thêm ba hàm (cập nhật dữ liệu giả, ADR-0029) |
+| `uiState` thu thẳng `repository.items` | `uiState` thu luồng `items` dùng chung (`shareIn(WhileSubscribed(), replay = 1)`, dừng ngay khi hết người thu); giá trị phát ra không đổi | `ProjectsViewModelTest` của T-009 (các test `Empty`/`List`, cờ đổi giữa chừng) | Giữ: mọi câu khẳng định của T-009 vẫn đúng vì danh sách và thứ tự phát không đổi; `ProjectMenuViewModelTest.items_readOnceForUiAndMenu` thêm câu mới |
+| `ProjectsScreen` tự gọi `rememberLazyGridState()` khi Route không truyền | `ProjectsRoute` có tham số `gridState` (mặc định `rememberLazyGridState()`) và truyền vào; `ProjectsScreen` giữ giá trị mặc định | `ProjectsScreenTest.scrollPosition_survivesRestore` của T-009 | Giữ: test gọi `ProjectsScreen` trực tiếp, tham số mặc định không đổi |
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+## 4. Kiểm thử
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+Dữ liệu dùng chung: `ProjectId` là UUID chuẩn (`requireCanonicalUuid`, `core/project/.../model/Ids.kt`), nên mã cố định: `WALK = ProjectId("00000000-0000-4000-8000-000000000001")`, `BROKEN = ProjectId("00000000-0000-4000-8000-000000000002")`, các dự án khác `...0003` trở đi. Thẻ `walk` (`ProjectCardUi(id = WALK, name = "Walk cycle", frameCount = 24, fps = 12, updatedAtMillis = NOW - 1 phút, readable = true)`), thẻ hỏng `broken` (`id = BROKEN`, `name = "Old test"`, `readable = false`); tag thẻ theo mẫu của T-009 `project_card_${id.value}` (trong mục này viết tắt `project_card_walk`). `NOW` cố định 2026-11-22 12:00 UTC (giữa ngày), test truyền `zone = ZoneId.of("UTC")` cho `ProjectsScreen`/`ProjectMenuContent`, nên "edited today" không phụ thuộc múi giờ máy chạy test. Luồng thu trong `backgroundScope` chờ bằng `runCurrent()`, không `advanceUntilIdle()` (bài học của T-002). Tên mới khi đổi tên: `(WALK, "Walk loop")`, tức kho giả nhận đúng hằng `WALK` và chuỗi "Walk loop".
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+Thu luồng trong unit test ViewModel: `uiState` và `menuState` là `stateIn(WhileSubscribed(5_000))`, không ai thu thì không chạy. Test phụ thuộc cờ `EDITOR` (cờ nằm trong `combine` của `uiState`, T-009) mở `backgroundScope.launch { viewModel.uiState.collect {} }` trước khi bấm, để giá trị cờ đã theo dõi có sẵn lúc bấm. Test phụ thuộc việc đóng menu khi thẻ mất (`closeOverlayIfCardMissing` chạy trong `onEach`) thu `menuState` như vậy. Các test khác đọc `menuState.value` cũng thu `menuState`; hàm của ViewModel đọc `_menuState` nên không phụ thuộc người thu.
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+| Tiêu chí chấp nhận | Loại test | Tên test hoặc cách kiểm tra |
+| --- | --- | --- |
+| KB-4, nhấn giữ mở menu | Unit test, Compose UI test | `ProjectMenuViewModelTest.longClick_opensMenuForThatCard` (`overlay == Menu(walk)`); `longClick_whileOverlayOpen_ignored`; `ProjectMenuTest.cardTap_stillOpens_longPressOpensMenu` (`ProjectsScreen` với `List` và trạng thái giữ trong test: `longClick()` trên `project_card_walk` gọi `onProjectLongClick(walk)` một lần, `onProjectClick` 0 lần; `performClick()` gọi `onProjectClick` một lần, `onProjectLongClick` không thêm) |
+| KB-4, menu trượt từ đáy | Compose UI test | `ProjectMenuTest.menuSheet_isAtBottom` (`@GraphicsMode(NATIVE)`, khung `w411dp-h891dp-xxhdpi`, `ProjectMenuSheet` mở: chờ `waitUntil(3_000)` có `project_menu`; node `project_menu` (cột của `ProjectMenuContent`, gồm cả lề dưới): `boundsInWindow.bottom` bằng chiều cao cửa sổ của sheet, lệch tối đa 1 px; `top` của `project_menu` ở nửa dưới màn); `ProjectMenuTest.menuContent_bottomInsetAddedOnce` (`@GraphicsMode(NATIVE)`, `ProjectMenuContent` vẽ trong cửa sổ activity với `bottomInset = 48.dp`: `bottom` của `project_menu_delete` bằng `bottom` của `project_menu` trừ (16 + 48) dp, lệch tối đa 1 px; đối chứng `bottomInset = 0.dp`: trừ 16 dp. Robolectric có `navigationBars` bằng 0, nên lề thật chỉ truyền qua tham số) |
+| KB-4, nền tối sau menu | Kiểm tra thủ công (người: xem ảnh trên máy/emulator; lớp nền tối của `ModalBottomSheet` thật nằm ở cửa sổ riêng, Robolectric không vẽ được, và nền tối giả trong ảnh screenshot không phải bằng chứng) | Cần T-011 trên staging để có dự án mà nhấn giữ (chưa có màn Tạo dự án thì danh sách luôn trống). Nhấn giữ một thẻ: phần màn phía trên menu tối đi rõ, danh sách vẫn thấy mờ phía sau; so với ảnh `ProjectsScreen_menu_light`/`_dark` của thiết kế. Có kịch bản emulator nhấn giữ được thì chụp ảnh ở bước đó và xem |
+| KB-4, nội dung menu đúng | Compose UI test | `ProjectMenuTest.menu_showsHeaderAndFiveItems`: có "Walk cycle", "24 frames · 12 fps · edited today", "Open", "Rename", "Duplicate", "Back up to a file", ".frameloop", "Delete" theo đúng thứ tự từ trên xuống (so `top`); `ProjectMenuTest.deleteItem_usesErrorColor` (`@GraphicsMode(NATIVE)`: `setContent` vẽ `ProjectMenuContent` (không có cửa sổ riêng) trên nền `surfaceContainerHigh` ngay trong cửa sổ activity; vẽ `(composeRule as AndroidComposeTestRule<*, *>).activity.window.decorView` vào một `Bitmap` bằng `draw(Canvas(bitmap))`; hàm `windowBitmap()` của `NativeAdCardTest` (`:core:ads`) là `private`, nên chép thành hàm riêng trong `ProjectMenuTest.kt`, cùng hàm đo `inkColorsIn` viết mới trong tệp đó; cách đo chung `inkColorsIn(bitmap, bounds)`: trong `boundsInWindow` của node, lấy mọi điểm ảnh khác màu nền (`surfaceContainerHigh`) quá 24 ở tổng ba kênh; kiểm ít nhất 20 điểm và hơn 70% số điểm gần `error` hơn `onSurface` (khoảng cách tổng ba kênh) với icon của `project_menu_delete`; đối chứng: với icon của `project_menu_open` hơn 70% gần `onSurface` hơn `error`) |
+| KB-4, "edited <thời điểm>" | Unit test | `EditedAtTest`: cùng ngày 00:00 và 23:59 → `Today`; hôm trước 23:59 → `Yesterday`; hai ngày trước → `OnDate(sameYear = true)`; năm trước → `OnDate(sameYear = false)`; `updatedAt` sau `now` 5 phút → `Today`; ranh giới ngày theo `zone` (cùng thời điểm, `UTC` là `Today`, `Asia/Ho_Chi_Minh` là `Yesterday` khi `now` = 2026-11-22 00:30 giờ Việt Nam và `updatedAt` = 23:30 hôm trước giờ Việt Nam) |
+| KB-4, "Open" mở màn vẽ | Unit test | `ProjectMenuViewModelTest.menuOpen_editorOn_emitsOpenProjectAndCloses`; `menuOpen_editorOff_emitsComingSoon` (spec KB-2: cờ màn vẽ tắt, lối "Open"); `menuOpen_editorTurnsOffWhileMenuOpen_emitsComingSoon` (cờ bật lúc mở menu, tắt trước khi bấm, `runCurrent()`: kiểm ngay lúc bấm). Cả ba thu `uiState` trong `backgroundScope` (đoạn đầu mục 4) |
+| KB-4, chạm ngoài, kéo xuống, quay lại thì đóng | Compose UI test | `ProjectMenuTest.back_closesMenu` (`Espresso.pressBack()`), `tapOutside_closesMenu` (chạm gốc ngữ nghĩa của cửa sổ sheet ở `(centerX, 20 px)`, vùng nền tối), `swipeDown_closesMenu` (`swipeDown(startY = top, endY = top + 2000f)` trên `project_menu_open`): mỗi test `onDismissOverlay` gọi đúng 1 lần, sau đó không còn node `project_menu`, `onRename`/`onDelete`/`onOpen` 0 lần. Cả ba cách đã chạy thử với `ModalBottomSheet` (mục 4.1) |
+| KB-4, đóng thì danh sách giữ nguyên | Unit test | `ProjectMenuViewModelTest.dismiss_closesWithoutRepositoryCalls`: sau `dismissOverlay()` `overlay == None`, kho giả 0 lời gọi ghi, `uiState` vẫn là cùng danh sách |
+| KB-4 (đặc biệt), không quảng cáo trong menu | Unit test (quét mã nguồn theo import) | `ProjectMenuTest.menuFiles_importNothingFromCoreAds`: đọc `src/main/kotlin/com/vgl/draw/animation/feature/projects/ProjectMenuSheet.kt` và `ProjectDialogs.kt` (đường dẫn tương đối từ thư mục module, như các test quét tệp có sẵn), không dòng `import` nào bắt đầu bằng `com.vgl.draw.animation.core.ads`; đối chứng trong cùng test: hàm quét trả có khi đưa một chuỗi mẫu `import com.vgl.draw.animation.core.ads.AdSlot`. Quét theo import, không theo chuỗi con, nên chú thích nhắc quảng cáo không làm test đỏ |
+| KB-5, mở hộp đổi tên | Unit test, Compose UI test | `ProjectMenuViewModelTest.menuRename_opensRenameDialog`; `ProjectMenuTest.renameDialog_showsTitleButtonsAndCurrentName_focused`: có "Rename", "Save", "Cancel"; `rename_field` có chữ "Walk cycle" và `assertIsFocused()` (đã chạy thử, mục 4.1) |
+| KB-5, xác nhận đổi tên | Unit test | `ProjectMenuViewModelTest.renameConfirm_callsRepositoryAndCloses` (kho giả nhận `("walk", "Walk loop")`, `overlay == None`); `renameConfirm_listShowsNewName` (kho giả đổi danh sách khi `rename` thành công; thẻ đầu tiên của `uiState` có tên "Walk loop"); `renameConfirm_sameName_noWrite` (đối chứng: " Walk cycle " → 0 lời gọi `rename`, `overlay == None`; "Walk cycle 2" → 1 lời gọi) |
+| KB-5, mở lại app giữ tên | Unit test (có sẵn) | `DefaultProjectRepositoryTest` của T-002 (đổi tên rồi đọc lại từ kho mới cùng thư mục); T-012 thêm `DefaultProjectsRepositoryTest.rename_delegatesToProjectRepository` (mã và tên đi nguyên, `Success` trả nguyên) |
+| KB-5, hủy | Unit test, Compose UI test | `ProjectMenuViewModelTest.renameCancel_noWrite`; `ProjectMenuTest.renameCancel_callsDismiss` |
+| KB-5 (đặc biệt), trống hay khoảng trắng thì tắt nút | Compose UI test, Unit test | `ProjectMenuTest.renameSave_disabledWhenBlank` (xóa hết → `rename_save` `assertIsNotEnabled()`; "   " → vẫn tắt; "a" → `assertIsEnabled()`); `ProjectMenuViewModelTest.renameConfirm_blank_ignored` (0 lời gọi, không ném) |
+| KB-5 (đặc biệt), trùng tên vẫn lưu | Unit test | `ProjectMenuViewModelTest.renameConfirm_duplicateName_stillSaves` (danh sách có "Bouncing ball"; đổi "Walk cycle" thành "Bouncing ball" → 1 lời gọi `rename`) |
+| Tên tối đa 40 ký tự | Compose UI test | `ProjectMenuTest.renameField_cutsAt40CodePoints`: `performTextReplacement` 45 chữ "a" → ô còn 40; 39 chữ "a" cộng hai emoji "🎬🎬" → ô còn 39 "a" cộng một emoji (không cắt đôi cặp thay thế) |
+| KB-5, lỗi ghi | Unit test | `ProjectMenuViewModelTest.renameFailure_closesAndEmitsMessage` (bảng: `WRITE_FAILED`, `NOT_FOUND`, `UNREADABLE` → `RENAME_FAILED`; `NO_SPACE` → `NO_SPACE`) |
+| KB-5, Save hai lần nhanh | Unit test | `ProjectMenuViewModelTest.renameConfirm_twiceWhileWriting_writesOnce` (cổng giữ `rename` đang chạy; gọi `onRenameConfirm` hai lần; mở cổng; 1 lời gọi) |
+| KB-6, nhân bản | Unit test, Compose UI test | `ProjectMenuViewModelTest.menuDuplicate_callsRepositoryAndCloses`; `duplicateSuccess_copyFirstInList` (kho giả thêm "Walk cycle copy" ở đầu; `uiState` có thẻ đó đầu tiên); `duplicateSuccess_scrollsToTop` (thu `uiState` và hiệu ứng; kho giả phát danh sách có bản sao ở đầu: có đúng một `ScrollToTop`; đối chứng `Failure(WRITE_FAILED)`: không có `ScrollToTop`); `ProjectMenuTest.scrollToTop_scrollsGridToFirstCard` (`ProjectsRoute` với ViewModel dựng tay, kho giả 20 dự án như `ProjectsRouteTest` của T-009, và `gridState` do test tạo: cuộn lưới tới thẻ thứ 15 (`performScrollToIndex(15)` trên `projects_grid`), đối chứng `gridState.firstVisibleItemIndex > 0`; nhân bản thẻ đang hiện qua menu, kho giả thêm bản sao ở đầu; `waitUntil(3_000) { gridState.firstVisibleItemIndex == 0 }` và thẻ của bản sao có trong cây); đủ khung, layer, tên "copy", "copy 2", cắt 40 ký tự, gốc không đổi: test có sẵn của T-002 (`DefaultProjectRepositoryTest.duplicate_*`), T-012 thêm `DefaultProjectsRepositoryTest.duplicate_delegatesToProjectRepository` |
+| KB-6, bản sao và gốc tách nhau | Unit test (có sẵn) | `DefaultProjectRepositoryTest.duplicate_*` của T-002 (tệp ô chép sang mã mới); T-012 không đổi kho |
+| KB-6 (đặc biệt), hết chỗ | Unit test | `ProjectMenuViewModelTest.duplicateNoSpace_emitsNoSpaceMessage`; `duplicateWriteFailed_emitsDuplicateFailed`; không để bản dở: test có sẵn của T-002 (`duplicate_noSpace_leavesNothing`) |
+| KB-6 (đặc biệt), dấu hiệu đang làm, không bấm lại được | Unit test, Compose UI test, Screenshot test | `ProjectMenuViewModelTest.duplicate_inProgress_setsDuplicatingAndBlocksSecond` (cổng giữ `duplicate`: `duplicatingName == "Walk cycle"`; mở menu lần nữa, `onMenuDuplicate()` → kho vẫn 1 lời gọi; mở cổng → `duplicatingName == null`); `duplicate_failure_clearsDuplicating` (thu `menuState` và hiệu ứng: lúc `ShowMessage(DUPLICATE_FAILED)` được phát thì `menuState.value.duplicatingName` đã là `null`); `ProjectMenuTest.duplicating_otherMessageShowsImmediately` (`ProjectsRoute`, ViewModel dựng tay, cờ `EDITOR` tắt, cổng giữ `duplicate`, `mainClock.autoAdvance = false`: nhân bản qua menu, có chữ "Duplicating “Walk cycle”…"; chạm thẻ khác (phát `ShowComingSoon`), `mainClock.advanceTimeBy(500)`: có "Coming soon", không còn "Duplicating"; `advanceTimeBy(5_000)` (thông báo ngắn tự ẩn sau 4 giây): "Duplicating “Walk cycle”…" hiện lại; mở cổng, `advanceTimeBy(500)`: không còn "Duplicating"); `ProjectMenuTest.duplicating_showsSnackbarAndDisablesItem` (`menuState.duplicatingName = "Walk cycle"`: có chữ "Duplicating “Walk cycle”…"; menu mở: `project_menu_duplicate` `assertIsNotEnabled()`; đối chứng `duplicatingName = null`: `assertIsEnabled()` và không có chữ "Duplicating"); ảnh `ProjectsScreen_duplicating_light.png` |
+| KB-7, hộp xác nhận | Unit test, Compose UI test | `ProjectMenuViewModelTest.menuDelete_opensConfirm`; `ProjectMenuTest.deleteDialog_showsTexts`: "Delete “Walk cycle”?", "This can't be undone.", "Delete", "Cancel"; `deleteDialog_confirmUsesErrorColor` (`@GraphicsMode(NATIVE)`, `setContent` vẽ `DeleteDialogCard` (không có cửa sổ riêng) trong cửa sổ activity, vẽ `decorView` của activity ra `Bitmap` như trên, cùng cách đo `inkColorsIn(bitmap, bounds)` với nền `surfaceContainerHigh`: trong `boundsInWindow` của `delete_confirm` ít nhất 20 điểm khác nền và hơn 70% gần `error` hơn `primary`; đối chứng: `delete_cancel` hơn 70% gần `primary` hơn `error`) |
+| KB-7, xác nhận xóa | Unit test | `ProjectMenuViewModelTest.deleteConfirm_callsRepositoryAndCardGone` (kho giả bỏ thẻ khỏi danh sách; `uiState` không còn `walk`; `overlay == None`); xóa khỏi máy, mở lại không thấy: test có sẵn của T-002 (`delete_*`); `DefaultProjectsRepositoryTest.delete_delegatesToProjectRepository` |
+| KB-7, hủy | Unit test, Compose UI test | `ProjectMenuViewModelTest.deleteCancel_noWrite`; `ProjectMenuTest.deleteCancel_callsDismiss` |
+| KB-7, xóa dự án cuối về trống | Unit test | `ProjectMenuViewModelTest.deleteLastProject_givesEmpty` (kho giả một dự án; mở menu, xóa, xác nhận; `uiState is ProjectsUiState.Empty`) |
+| KB-7, lỗi xóa, bấm hai lần | Unit test | `deleteFailure_closesAndEmitsDeleteFailed`; `deleteConfirm_twiceWhileWriting_deletesOnce`; `dismiss_whileBusy_ignored` (cổng giữ `delete`, `dismissOverlay()` → `overlay` vẫn `ConfirmDelete`) |
+| KB-2 (đặc biệt), dự án hỏng chỉ còn "Delete" | Compose UI test, Unit test, Screenshot test | `ProjectMenuTest.unreadableMenu_onlyDelete` (có "Old test" và "Delete"; không có "Open", "Rename", "Duplicate", "Back up to a file", không có chữ "frames"); `ProjectMenuViewModelTest.unreadable_deleteConfirmed_deletes` (xóa được thẻ hỏng sau xác nhận) và `unreadable_neverDeletedWithoutConfirm` (mở menu, đóng: 0 lời gọi `delete`); `ProjectMenuTest.unreadableNoName_menuAndDeleteTitleUsePlaceholder` (thẻ hỏng `name = null`: đầu menu có "Untitled project"; bấm "Delete", hộp xác nhận có "Delete “Untitled project”?"; đối chứng thẻ hỏng `name = "Old test"`: không có "Untitled project"); ảnh `ProjectsScreen_menuUnreadable_light.png` |
+| Thẻ trong menu bị xóa từ nơi khác | Unit test | `ProjectMenuViewModelTest.cardRemovedFromList_closesOverlay` (thu `menuState` trong `backgroundScope`; menu của `walk` mở; kho giả phát danh sách không có `walk`; `runCurrent()`; `menuState.value.overlay == None`); đối chứng: phát danh sách vẫn có `walk` với `updatedAtMillis` khác → menu vẫn mở |
+| Một lần đọc kho cho danh sách và menu | Unit test | `ProjectMenuViewModelTest.items_readOnceForUiAndMenu` (thu cả `uiState` và `menuState`: kho giả đếm 1 người thu `items`; hủy cả hai, `advanceTimeBy(5_001)`: 0 người thu, vì `stateIn` dừng sau 5 giây và luồng dùng chung `WhileSubscribed()` dừng ngay sau đó, không chờ thêm 5 giây; đối chứng trước khi thu: 0) |
+| "Back up to a file" trước T-013 | Compose UI test | `ProjectMenuTest.backUp_withoutDestination_showsComingSoon` (`ProjectsRoute` với `onBackUpProject = null` và ViewModel dựng tay với kho giả như `ProjectsRouteTest` của T-009: bấm `project_menu_backup` → menu đóng, snackbar "Coming soon"); `backUp_withDestination_callsWithIdAndName` (callback nhận `(WALK, "Walk cycle")`); `ProjectMenuViewModelTest.menuBackUp_emitsBackUpProjectAndCloses` (menu của `walk` mở, `onMenuBackUp()`: hiệu ứng `BackUpProject(WALK, "Walk cycle")` một lần, `overlay == None`) |
+| KB-12, giữ menu, hộp thoại, chữ đang gõ | Unit test, Compose UI test | Menu và hộp thoại nằm trong ViewModel nên sống qua đổi cấu hình: `ProjectMenuViewModelTest.overlay_isViewModelState` (không phụ thuộc `uiState` phát lại: phát lại danh sách có `walk` thì `overlay` giữ). `ProjectMenuTest.renameText_survivesRestore`: `StateRestorationTester`, gõ "Walk lo", `emulateSavedInstanceStateRestore()`, `rename_field` vẫn "Walk lo"; đối chứng trước khi gõ là "Walk cycle" |
+| Giao diện menu đúng thiết kế | Screenshot test | `ProjectsScreen_menu_light.png`, `ProjectsScreen_menu_dark.png`: `@Config(qualifiers = "en-w411dp-h891dp-xxhdpi")`, ảnh dark dựng `AppTheme(darkTheme = true)`, bốn dự án của bảng chữ thiết kế (`Bouncing ball` 48/12, `Walk cycle` 24/12, `Logo sting` 90/24, `Blink test` 16/8), menu của "Walk cycle", `nowMillis` cùng ngày (ra "edited today"), ảnh thu nhỏ giả màu đặc; vẽ trong một cửa sổ (mục 3.4). Nền tối giả trong ảnh chỉ để ảnh giống thiết kế, không phải bằng chứng cho nền tối của sheet thật (dòng kiểm tay ở trên) |
+| Màn hình thấp | Screenshot test khung `w360dp-h640dp-xxhdpi`, trạng thái nhiều nội dung nhất | `ProjectsScreen_menu_small.png`: menu đủ năm mục của thẻ tên 40 chữ "W" (chắc chắn bị cắt); `ProjectMenuTest.small_menuFits` (`@Config(qualifiers = "w360dp-h640dp-xxhdpi")`, `@GraphicsMode(NATIVE)`: `project_menu_delete` nằm trọn trong cửa sổ, `top` của `project_menu` ≥ 0; tên trong đầu menu `lineCount == 1` và `isLineEllipsized(0)` qua `GetTextLayoutResult`) |
+| Hộp thoại | Screenshot test | `ProjectsScreen_rename_light.png`, `ProjectsScreen_rename_dark.png`, `ProjectsScreen_delete_light.png`, `ProjectsScreen_delete_dark.png` (khung `w411dp-h891dp-xxhdpi`, chữ tiếng Anh) |
+| Đúng thiết kế (khi có `design/screens/`) | Screenshot test cùng tên với từng ảnh thiết kế, ảnh so sánh `scripts/design-compare.sh projects`, rà soát độc lập theo mục 7 của mẫu thiết kế. Ảnh của T-012 không có thanh điều hướng (ở `:app`, T-009) và quảng cáo thanh đáy (T-010): phần đó lệch so với thiết kế như ảnh của T-009 (plan T-009, câu hỏi 1) | `ProjectsScreen_menu_light`, `ProjectsScreen_menu_dark` |
+| Ảnh thiết kế của ticket khác | Không thuộc T-012 | Ảnh thiết kế của ticket khác (T-009): `ProjectsScreen_empty_light`, `ProjectsScreen_empty_dark`, `ProjectsScreen_list_light`, `ProjectsScreen_list_dark` |
+| Ảnh thiết kế của ticket khác | Không thuộc T-012 | Ảnh thiết kế của ticket khác (T-011): `NewProjectScreen_default_light`, `NewProjectScreen_default_dark` |
+| Ảnh thiết kế của ticket khác | Không thuộc T-012 | Ảnh thiết kế của ticket khác (T-013): `ProjectsScreen_restoring_light`, `ProjectsScreen_restoring_dark`, `ProjectsScreen_restore-error_light`, `ProjectsScreen_restore-error_dark` |
+| Ảnh thiết kế của ticket khác | Không thuộc T-012 | Ảnh thiết kế của ticket khác (T-014): `ProjectsScreen_list_light_unfolded`, `ProjectsScreen_list_dark_unfolded` |
+| Chữ đúng bảng chữ của thiết kế | Compose UI test | `ProjectMenuTest.menu_showsHeaderAndFiveItems` (chữ nguyên văn của bảng chữ, mục `ProjectsScreen, menu`); hộp thoại theo chữ của spec câu hỏi 2 trong `renameDialog_*`, `deleteDialog_showsTexts` |
+| Bản tiếng Việt | Compose UI test | `ProjectMenuTest.vietnamese_menuMetaKeepsNumbers` (`@Config(qualifiers = "vi")`): dòng meta có "24" và "12" đúng chỗ khung và tốc độ; tiêu đề hộp xóa chứa tên dự án |
+| Nút chữ trong hộp thoại đúng màu | Compose UI test | `deleteDialog_confirmUsesErrorColor` (trên), `ProjectMenuTest.renameDialog_buttonsUsePrimary` (`@GraphicsMode(NATIVE)`, `setContent` vẽ `RenameDialogCard` trong cửa sổ activity, cùng cách đo trên `decorView` của activity: `rename_save` khi bật hơn 70% điểm khác nền gần `primary` hơn `onSurface`; đối chứng `rename_cancel` cũng gần `primary`) |
+| Bàn phím mềm hiện khi mở hộp đổi tên; nhấn giữ thẻ trên máy | Kiểm tra thủ công (máy thật: khác, Robolectric không có bàn phím mềm; emulator chưa có dự án để nhấn giữ vì màn Tạo dự án là T-011 và cú pháp kịch bản không có nhấn giữ) | Sau khi có T-011 trên staging: tạo dự án, nhấn giữ thẻ, menu trượt lên; "Rename" → bàn phím hiện, ô có tên hiện tại; đổi tên, đóng và mở lại app thấy tên mới; "Duplicate" một dự án nhiều khung thấy thông báo "Duplicating…"; "Delete" → hộp xác nhận, xóa dự án cuối thấy màn trống |
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+**Ngoại lệ viết test trước:** ba vector drawable, `strings.xml` (tài nguyên; chữ được kiểm qua các test chữ ở trên), tham số `onBackUpProject` của `ProjectsNavigation.kt` (một dòng nối, kiểm gián tiếp qua `ProjectsRoute`).
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+Thứ tự commit: bước 3 commit các tệp test, phần thêm của `FakeProjectsRepository.kt` và khung tối thiểu để biên dịch (các lớp trạng thái mới, chữ ký ba hàm của `ProjectsRepository` và `DefaultProjectsRepository` với `TODO()`, chữ ký `ProjectMenuContent`/`ProjectMenuSheet`/hai hộp thoại/`RenameDialogCard`/`DeleteDialogCard`/`editedAt` trả rỗng, luồng `items` dùng chung và `menuState` (chưa đóng menu khi thẻ mất), tham số mới của `ProjectsScreen`/`ProjectsRoute`, các hàm rỗng của ViewModel); bước 4 commit phần code. Ảnh chuẩn ghi ở bước 4 bằng `./gradlew :feature:projects:recordRoborazziDebug :feature:projects:testDebugUnitTest --rerun`, rồi `git status --short -- '*/src/test/screenshots/*'` chỉ được thấy các ảnh của mục 3.2; ảnh khác (của T-009) đổi thì trả bằng `git checkout -- <ảnh>`, và ảnh của T-009 lệch thật thì đó là lỗi của thay đổi, sửa code.
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+### 4.1. Chạy thử
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+- **Đã chạy thử:** ngày 2026-11-22, worktree tạm từ `origin/main` (`b5a33cf`), test tạm không commit `feature/sample/src/test/.../TrialMenuTest.kt` (`:feature:sample` vì `:feature:projects` chưa có trên nhánh chính), cùng classpath Material 3 1.3.2 mà feature nào cũng có: (1) `combinedClickable` nhận `longClick()` của `performTouchInput`: `onLongClick` 1 lần, `onClick` 0 lần; (2) `ModalBottomSheet` (`skipPartiallyExpanded = true`) mở là cửa sổ riêng (cây có 2 gốc ngữ nghĩa), node "Open" trong sheet tìm được bằng `onNodeWithText`; `Espresso.pressBack()` gọi `onDismissRequest` 1 lần và node biến mất; chạm gốc của cửa sổ sheet ở `(centerX, 20 px)` gọi `onDismissRequest` 1 lần; `swipeDown(startY = top, endY = top + 2000f)` trên mục của sheet gọi `onDismissRequest` 1 lần; (3) `AlertDialog` có `OutlinedTextField` với `FocusRequester.requestFocus()` trong `LaunchedEffect`: `assertIsFocused()` qua, `onNode(isDialog())` có node. Kết quả: 4 test, 0 lỗi.
+- **Lệnh:** `./gradlew :feature:sample:testDebugUnitTest --tests '*TrialMenuTest*'` (qua, 4/4). `scripts/check.sh` trên cùng worktree có test tạm: lần đầu dừng ở `:feature:sample:ktlintTestSourceSetCheck` (định dạng của chính test tạm: thứ tự import, dòng quá 120 ký tự), sửa bằng `ktlintTestSourceSetFormat`; lần hai QUA ("Cổng chất lượng: QUA", 2766 test JVM, 0 lỗi, gồm 4 test tạm; 99 ảnh screenshot). Trên `:feature:projects`: chưa chạy được trước phiên, vì module chỉ có sau khi T-009 chạy xong trong cùng danh sách (câu hỏi 6). Phiên làm T-012 chạy phần này ngay đầu task, trước bước 3, trên nhánh đã có code của T-009: chép `TrialMenuTest` sang `feature/projects/src/test/.../TrialMenuTest.kt` (không commit), thêm hai test tạm: (a) `BasicAlertDialog(onDismissRequest = {}) { Card { OutlinedTextField(…, modifier = Modifier.focusRequester(r).testTag("field")) } }` với `r.requestFocus()` trong `LaunchedEffect`: `onNodeWithTag("field").assertIsFocused()` qua và `onNode(isDialog())` có node; (b) vẽ một `Text` màu `error` trong cửa sổ activity rồi đọc điểm ảnh của `decorView` bằng hàm chép từ `NativeAdCardTest.windowBitmap()`; chạy `./gradlew :feature:projects:testDebugUnitTest --tests '*TrialMenuTest*'` rồi `scripts/check.sh`, ghi kết quả vào nhật ký, xóa tệp tạm. Test tạm (a) đỏ thì thử `AlertDialog` theo mục 3.4; test tạm khác đỏ, hay cả hai cách hộp thoại đều đỏ, thì dừng task theo mục 7.
+- **Kết quả:** ba điểm mới của kỹ thuật (nhấn giữ, sheet đóng bằng ba cách, ô nhập có tiêu điểm trong hộp thoại) chạy được trên Robolectric của dự án. Chưa thử: screenshot của sheet và hộp thoại (phương án chính và dự phòng ở mục 3.4). Đo màu điểm ảnh không còn là điểm chưa chắc: test đo trên cửa sổ activity, cách mà `CLAUDE.md` bước 10 quy định và `:core:ads` đã chạy trong CI (`NativeAdCardTest`), không đo trên cửa sổ riêng của sheet hay hộp thoại. Chưa thử trên Robolectric: `BasicAlertDialog` (cùng gói và cùng cơ chế cửa sổ với `AlertDialog` đã thử; phiên thử ở đầu task, test tạm (a)), thứ tự thông báo của ba quy tắc ở mục 3.1 (kiểm bằng `duplicating_otherMessageShowsImmediately`).
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+## 5. Chấm rủi ro
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+**Điểm chặn bị chạm:** Không có. Không sửa module core (chỉ gọi `ProjectRepository` có sẵn), không quảng cáo, không sự kiện, không quyền, không thư viện, không cấu hình build.
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+| Tiêu chí | Điểm (0 đến 3) | Lý do |
+| --- | --- | --- |
+| A. Phạm vi thay đổi | 2 | Nhiều phần trong một module feature (ViewModel, màn, thẻ, repository, điều hướng), đổi giao diện công khai của `ProjectsRepository`, `ProjectsEffect`, `ProjectsScreen`, `ProjectsRoute`, `projectsScreen`, và đổi nguồn danh sách của `uiState` (luồng dùng chung); không chạm module khác |
+| B. Độ rõ của yêu cầu | 1 | Spec đã xác nhận, có thiết kế menu và chữ hộp thoại (câu hỏi 2); AI tự quyết chữ lỗi đổi tên, nhân bản, xóa, cách ghi "edited <thời điểm>", mục "Back up to a file" trước T-013 (mục 8) |
+| C. Khả năng kiểm chứng tự động | 1 | Phần lớn tiêu chí có test JVM, kể cả thứ tự thông báo (đồng hồ test dừng) và lề thanh hệ thống (qua tham số); còn kiểm bằng mắt: nền tối của sheet thật, bàn phím mềm, cảm giác nhấn giữ. Không lên 2 vì các điểm kiểm tay đều dễ thấy và không quyết định hành vi |
+| D. Ảnh hưởng chéo | 2 | Sửa các tệp T-009 tạo; T-010, T-013, T-014 cũng sửa `ProjectsScreen.kt`, `ProjectsViewModel.kt` |
+| E. Độ mới của kỹ thuật | 2 | `ModalBottomSheet`, `BasicAlertDialog`, `combinedClickable`, `shareIn` lần đầu dùng trong dự án (phổ biến; ba kỹ thuật giao diện đã chạy thử trên Robolectric, mục 4.1); screenshot của cửa sổ riêng có dự phòng ở mục 3.4; đo màu đi theo cách đã có của `:core:ads`. Chạy thử trên `:feature:projects` còn chờ phiên (mục 4.1), nhưng cùng classpath nên không lên 3 |
+| **Tổng** | 8 | **Mức: Trung bình** |
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+Ticket ghi rủi ro sơ bộ `low`; chấm theo thang được 8 (Trung bình) vì kỹ thuật mới và vì xây trên tệp của plan T-009 cùng đợt. Bản sửa sau rà soát độc lập thêm phần (luồng dùng chung, ba quy tắc thông báo, cuộn lên đầu) nhưng không đổi điểm từng tiêu chí; 8 là sát ngưỡng Cao, người duyệt có thể yêu cầu duyệt chéo.
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+## 6. Ảnh hưởng chéo
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+- File hoặc thành phần dùng chung bị chạm: chỉ các tệp của `:feature:projects`. Không chạm `:app` (`AppNavHost` không đổi nhờ tham số mặc định `null`), không chạm `:core:*`.
+- **Phụ thuộc plan T-009 cùng đợt 20261123-02.** Mọi tệp "Sửa" của mục 3.2 do T-009 tạo; T-012 chỉ dùng các tên của T-009 liệt kê ở mục 1 (bản đọc ngày 2026-11-23). Plan T-009 còn có thể được sửa trong đợt: sửa một tên trong danh sách đó thì sửa T-012 cùng lúc (mục 3.1, 3.2, 3.5, 4). Phiên làm T-009 lệch tên khi code thì T-012 dừng theo mục 7. T-009 dừng thì T-012 bị bỏ qua (phụ thuộc). Chỗ T-012 đổi trong code của T-009: `uiState` đọc luồng `items` dùng chung thay cho `repository.items`; `ProjectsRoute` thêm tham số `gridState`.
+- Task khác có thể xung đột:
+  - T-009: chạy trước, bắt buộc (`depends_on`).
+  - T-010 (quảng cáo ở danh sách): sửa `ProjectsScreen.kt` (bọc `InContentAds`, thanh đáy, ô lưới). Lớp nổi của quảng cáo (thanh đáy thu gọn) nằm ở cửa sổ activity nên ở dưới menu; T-010 không được thêm quảng cáo vào `ProjectMenuContent`. Xếp tuần tự với T-012, thứ tự nào cũng được.
+  - T-013 (sao lưu, khôi phục): dùng mục "Back up to a file" và callback `onBackUpProject` của plan này; T-013 phụ thuộc T-012 nên chạy sau, nối callback trong `AppNavHost` hay trong feature.
+  - T-014 (máy gập): menu và hộp thoại như điện thoại (spec câu hỏi 21); sửa `ProjectsScreen.kt`, xếp tuần tự.
+  - T-018 (màn vẽ): "Open" dùng đúng đường của chạm thẻ, không thêm gì.
+- Đề xuất thứ tự chạy: sau T-009; trước T-013. Cùng danh sách với T-010, T-014 thì tuần tự (`run-check.py` báo cùng sửa tệp).
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+## 7. Điều kiện dừng riêng
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+- Cần sửa `ProjectRepository`, `ProjectNames` hay tệp khác của `:core:project` để đổi tên, nhân bản, xóa chạy đúng: dừng (điểm chặn 7 mà plan chưa nêu; T-002 đã có đủ hàm).
+- Tên lớp, tham số hay tag của T-009 trên nhánh của phiên khác các tên liệt kê ở mục 1 đến mức phải đổi câu khẳng định của mục 4: dừng, để người xem lại plan.
+- Phần chạy thử đầu task trên `:feature:projects` (mục 4.1) có test tạm đỏ, hay `scripts/check.sh` có test tạm không qua vì lý do ngoài định dạng: dừng, ghi kết quả vào nhật ký. Riêng test tạm (a) (`BasicAlertDialog`) đỏ sau 2 lần sửa thì chưa dừng: thử cách làm thay `AlertDialog` của mục 3.4 bằng một test tạm cùng câu kiểm; chỉ dừng khi cả hai đều đỏ.
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+## 8. Câu hỏi cho người duyệt
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+1. **Duyệt cùng đợt với T-009.** T-012 nằm trong đợt 20261123-02 cùng T-009 và chạy ngay sau T-009 trong cùng danh sách chạy, nên các tệp "Sửa" của mục 3.2 có trên nhánh của phiên khi task bắt đầu. `plan-check.py` trên nhánh của đợt hôm nay: qua. Đề xuất: duyệt T-012 cùng đợt; plan T-009 sửa một tên ở mục 1 thì sửa T-012 trong cùng PR của đợt.
+   - Trả lời (anh Nhật, 2026-11-23, chọn trong phiên): Đồng ý đề xuất.
+2. **Chữ lỗi chưa có trong spec.** Spec câu hỏi 2 chỉ có chữ cho hộp thoại và sao lưu. Đề xuất: hết chỗ khi nhân bản (và khi đổi tên) dùng chữ của câu hỏi 12 "Not enough space on your phone. Free up some space and try again."; lỗi khác "Couldn't rename the project. Try again.", "Couldn't duplicate the project. Try again.", "Couldn't delete the project. Try again." (thông báo ngắn tự ẩn, không nút "Retry"). Nhân bản xong không báo gì, vì bản sao hiện ở đầu danh sách và lưới cuộn lên đầu. Chữ dấu hiệu đang làm: "Duplicating “<tên>”…" (thông báo ngắn không tự ẩn, tắt khi xong). Nhãn trợ năng của nhấn giữ thẻ: "Project options". Dòng meta: "edited today", "edited yesterday", "edited %1$s" (câu hỏi 3). Chữ thay thế cho dự án không đọc được tên là `projects_card_unnamed` "Untitled project" của T-009, hỏi ở plan T-009, T-012 dùng lại.
+   - Trả lời (anh Nhật, 2026-11-23, chọn trong phiên): Đồng ý đề xuất.
+3. **Cách ghi "edited <thời điểm>".** Thiết kế chỉ có "edited today". Đề xuất: "edited today", "edited yesterday", còn lại ngày ngắn theo ngôn ngữ máy ("edited Nov 3"; khác năm thì có năm, "edited Nov 3, 2025"), tính theo múi giờ của máy.
+   - Trả lời (anh Nhật, 2026-11-23, chọn trong phiên): Đồng ý đề xuất.
+4. **Mục "Back up to a file" trước T-013.** Ticket loại trừ sao lưu. Đề xuất: mục hiện đúng thiết kế, bấm thì đóng menu và hiện "Coming soon" tới khi T-013 nối callback (cách T-009 làm với các đích chưa có). Phương án khác: ẩn mục tới T-013 (ảnh `ProjectsScreen_menu_*` lệch thiết kế).
+   - Trả lời (anh Nhật, 2026-11-23, chọn trong phiên): Đồng ý đề xuất.
+5. **Bản tiếng Việt** của chữ mới, theo câu hỏi về tiếng Việt của plan T-009 (đề xuất có `values-vi/`): "Mở", "Đổi tên", "Nhân bản", "Sao lưu ra file", "Xóa", "Lưu", "Hủy", "Xóa “%1$s”?", "Không hoàn tác được.", "Đang nhân bản “%1$s”…", "sửa hôm nay", "sửa hôm qua", "sửa %1$s", "Tùy chọn dự án", "Điện thoại không đủ chỗ trống. Hãy giải phóng bớt dung lượng rồi thử lại.", "Không đổi tên được dự án. Hãy thử lại.", "Không nhân bản được dự án. Hãy thử lại.", "Không xóa được dự án. Hãy thử lại.". T-009 chọn chỉ tiếng Anh thì T-012 cũng bỏ `values-vi/` và test tiếng Việt.
+   - Trả lời (anh Nhật, 2026-11-23, chọn trong phiên): Có `values-vi`, theo đề xuất.
+6. **Chạy thử trên `:feature:projects` chỉ làm được trong phiên.** Ba kỹ thuật mới đã chạy thử và `scripts/check.sh` đã qua trên `:feature:sample` (mục 4.1), cùng classpath Material 3. Module `:feature:projects` chỉ có khi phiên làm xong T-009, nên trước phiên không chạy thử trên đó được. Đề xuất: phiên làm T-012 chạy phần chạy thử ở đầu task như mục 4.1 ghi (test tạm, lệnh Gradle, rồi `scripts/check.sh`), dừng theo mục 7 khi đỏ. Anh chấp nhận, hay muốn tách T-012 sang đợt sau khi T-009 merge?
+   - Trả lời (anh Nhật, 2026-11-23, chọn trong phiên): Đồng ý đề xuất.
+7. **Screenshot của menu và hộp thoại vẽ trong một cửa sổ** (mục 3.4), như `NetworkLostScreenScreenshotTest`: ảnh không phải cửa sổ thật của `ModalBottomSheet`/`BasicAlertDialog` (cửa sổ thật kiểm bằng test giao diện). Anh đồng ý, hay muốn dùng ngay phương án dự phòng `captureScreenRoboImage` (chưa có tiền lệ trong dự án; `scripts/check.sh` không kiểm thiếu ảnh chuẩn của lệnh này, plan bù bằng câu `assertTrue(File(path).exists() ...)` ở mỗi test, mục 3.4)?
+   - Trả lời (anh Nhật, 2026-11-23, chọn trong phiên): Đồng ý đề xuất.
+8. **Đổi tên không đổi chỗ trong danh sách.** Kho giữ `updatedAtMillis` khi đổi tên (T-002, câu hỏi 2 của plan T-002), nên thẻ đổi tên không lên đầu. Spec KB-2 chỉ nói "sửa gần nhất đứng đầu". Đề xuất: giữ như T-002.
+   - Trả lời (anh Nhật, 2026-11-23, chọn trong phiên): Đồng ý đề xuất.
+9. Rà soát độc lập đã chạy hai lần. Lần một: 0 chặn, 8 nên sửa. Lần hai (2026-11-23): 1 chặn (đo màu trên cửa sổ riêng của sheet, hộp thoại chưa chạy thử: chuyển sang đo trên cửa sổ activity), 8 nên sửa (luồng danh sách dùng chung, chữ thay thế cho tên trống, "Duplicating…" không chặn thông báo khác, lề thanh hệ thống qua tham số, nền tối kiểm tay, cuộn lên đầu sau nhân bản, `BackUpProject` có tên, chữ mới vào câu hỏi 2 và 5), 7 ghi chú; đã sửa cả trong bản này. Điều kiện còn lại: chạy thử trên `:feature:projects` trong phiên (câu 6).
+10. **Bo góc của sheet.** Khung `ProjectMenuSheet` của thiết kế (`context/ProjectsScreen_menu_*.md`) không ghi bo góc, còn `ModalBottomSheet` mặc định bo 28 dp ở hai góc trên. Plan đặt `shape = RectangleShape` cho đúng thiết kế. Phương án khác: giữ bo mặc định của Material 3 (ảnh lệch thiết kế ở hai góc trên); anh xem ảnh thiết kế rồi chọn.
+   - Trả lời (anh Nhật, 2026-11-23, chọn trong phiên): Vuông (`RectangleShape`), đúng thiết kế.
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+## 9. Quyết định duyệt
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+## 10. Nhật ký thực hiện
