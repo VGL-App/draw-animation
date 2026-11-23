@@ -2,7 +2,7 @@ package com.vgl.draw.animation.feature.projects
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -59,6 +59,7 @@ internal fun ProjectGrid(
     gridState: LazyGridState,
     onNewProject: () -> Unit,
     onProjectClick: (ProjectCardUi) -> Unit,
+    onProjectLongClick: (ProjectCardUi) -> Unit,
     onThumbnailNeeded: (ProjectCardUi, Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -81,6 +82,7 @@ internal fun ProjectGrid(
                 card = card,
                 thumbnail = if (card.readable) thumbnails[card.id] else null,
                 onClick = { onProjectClick(card) },
+                onLongClick = { onProjectLongClick(card) },
                 onThumbnailNeeded = { width -> onThumbnailNeeded(card, width) },
             )
         }
@@ -106,13 +108,14 @@ private fun SectionHeader(modifier: Modifier = Modifier) {
 
 /**
  * One project: thumbnail (whole picture, letterboxed on paper), name on one line cut with "…", frames and fps.
- * An unreadable card has no thumbnail and no frames line, but keeps the same height.
+ * An unreadable card has no thumbnail and no frames line, but keeps the same height. A long press opens the menu.
  */
 @Composable
 internal fun ProjectCard(
     card: ProjectCardUi,
     thumbnail: ImageBitmap?,
     onClick: () -> Unit,
+    onLongClick: () -> Unit,
     onThumbnailNeeded: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -121,7 +124,11 @@ internal fun ProjectCard(
             .fillMaxWidth()
             .clip(RoundedCornerShape(CardCorner))
             .background(MaterialTheme.colorScheme.surfaceContainer)
-            .clickable(onClick = onClick)
+            .combinedClickable(
+                onLongClickLabel = stringResource(R.string.projects_card_long_click_label),
+                onLongClick = onLongClick,
+                onClick = onClick,
+            )
             .testTag(ProjectsTestTags.card(card.id))
             .padding(start = Spacing.sm, top = Spacing.sm, end = Spacing.sm, bottom = CardBottomPadding),
         verticalArrangement = Arrangement.spacedBy(Spacing.sm),
