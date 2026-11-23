@@ -1,7 +1,7 @@
 ---
 ticket: T-048
 title: Module :core:lessons: nội dung bài học trên R2 và kho tiến độ bài
-status: approved                # draft | approved | stopped | done
+status: done                    # draft | approved | stopped | done
 version: 1                   # tăng khi plan được sửa lại sau phản hồi hoặc sau khi dừng
 risk_score:                  # tổng điểm theo risk-scoring.md, để trống nếu chạm điểm chặn
 risk_level: high             # low | medium | high
@@ -516,3 +516,15 @@ Thứ tự commit: bước 3 commit các tệp test, `TestDoubles.kt`, ba tệp 
 ## 10. Nhật ký thực hiện
 
 <!-- AI ghi khi task đã có kết quả cuối (đã merge hoặc đã dừng), trên nhánh báo cáo của phiên (auto-run.md, bước 10). Mục mới thêm vào cuối, không sửa mục cũ. -->
+
+### RUN-20261122-02, phiên bản plan 1
+
+- **Kết quả:** đã merge (PR #21, commit merge f6fa2eb, 2026-11-22 17:50 UTC).
+- **Nhánh, PR:** `claude/T-048-core-lessons`, PR #21.
+- **Đã làm:** module `:core:lessons` đúng mục 3.1, 3.2 (33 file, không file nào ngoài mục 3.2): định dạng danh sách và gói bài, tải qua `RemoteAssets`, giải nén an toàn, kho tiến độ trên DataStore, khóa `lessons_content_version` trong `AppRemoteKeys`; hai bảng khóa sinh lại (chỉ thêm `lessons_content_version`); `docs/ops/required-assets.txt` thêm năm đường dẫn; dòng `:core:lessons` trong `CLAUDE.md`. Bước 3 đến 5 do phiên con làm trong worktree riêng.
+- **Test viết trước:** commit cd114b6 (kèm khung biên dịch, thân `TODO()`): 48 test của `:core:lessons` và `RemoteConfigKeysTest.lessonsKeys_areListed`. Lần chạy đỏ: 47 test của `:core:lessons` đỏ (`NotImplementedError`, luồng rỗng), 2 test của `:app` đỏ (bảng khóa chưa sinh lại); `LessonsSettingsTest.contentVersion_isStringV1` và `lessonsKeys_areListed` qua ngay đúng như plan dự đoán (đối chứng: `keysFile_matchesCode`, `templateFile_matchesCode` qua sau khi sinh lại). Không test nào phải viết chặt thêm. Ba tệp mẫu khớp từng byte với mục 3.1. Commit code 7b077e8.
+- **Rà soát độc lập:** 0 chặn, 0 nên sửa, 5 ghi chú: (1) lệch đã khai báo ở `PackExtractor` (dưới) chấp nhận được; (2) chi tiết cài đặt ngoài chữ của plan chấp nhận được; (3) ca biên để ticket sau: thư mục `.tmp-*` còn lại khi app bị tắt giữa lúc giải nén không được dọn, tệp `a` rồi mục `a/b` ra `OTHER` thay vì `INVALID`, bảng khóa theo bài chỉ lớn lên; (4) R8 chưa chạy lúc rà soát (đã chạy sau đó, qua); (5) điều kiện R2 của mục 7 đã có trong danh sách chạy.
+- **Kết quả CI:** `scripts/check.sh` trên máy: QUA (2596 test JVM, 0 lỗi); `./gradlew :app:assembleStagingRelease`: qua. `pr-check` lần chạy 45049834122: xanh ở vòng đầu.
+- **Lệch so với plan:** bước 4 (chi tiết cài đặt để đạt test của mục 4): plan dự đoán zip cắt còn nửa làm `ZipInputStream` ném `ZipException`; với gói mẫu, điểm cắt rơi đúng ranh giới mục nên `getNextEntry()` trả `null` lặng lẽ và test `PackExtractorTest.extract_notAZipOrNoLessonJson_isRejected` (ca zip cụt) đỏ dù phần giải nén đã viết theo plan. Không sửa test; `PackExtractor` kiểm thêm bản ghi cuối của zip (`PK\5\6` trong 22 + 65535 byte cuối) và đổi `EOFException` thành `InvalidPackException`. Tệp `"hello"` giờ bị từ chối ở bước này (cùng loại lỗi). Không có file ngoài mục 3.2, không dùng phương án dự phòng 3.4.
+- **Việc còn lại:** ba ca biên ở ghi chú 3 của rà soát, nếu muốn, thành ticket sau.
+- **Cần người xem:** lệch ở `PackExtractor` (kiểm bản ghi cuối của zip).

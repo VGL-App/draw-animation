@@ -1,7 +1,7 @@
 ---
 ticket: T-002
 title: Kho dự án: danh sách, tạo, đổi tên, nhân bản, xóa, đếm dự án
-status: approved                # draft | approved | stopped | done
+status: done                    # draft | approved | stopped | done
 version: 1                   # tăng khi plan được sửa lại sau phản hồi hoặc sau khi dừng
 risk_score:                  # tổng điểm theo risk-scoring.md, để trống nếu chạm điểm chặn
 risk_level: high             # low | medium | high
@@ -296,3 +296,15 @@ Mọi test là unit test JVM trong `:core:project`, chạy bằng `runTest`. Kho
 - **Ghi chú:** Duyệt cả đợt 20261122-02 ngày 2026-11-22, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261122-02: plan T-007, T-048, T-044, T-002, T-003 và danh sách RUN-20261122-02, bắt đầu phiên khi merge; xác nhận sáu spec editor, export, lessons, onboarding, projects, settings. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
 
 ## 10. Nhật ký thực hiện
+
+### RUN-20261122-02, phiên bản plan 1
+
+- **Kết quả:** đã merge (PR #23, commit merge dd5bfc3, 2026-11-22 19:31 UTC).
+- **Nhánh, PR:** `claude/T-002-kho-du-an`, PR #23.
+- **Đã làm:** kho dự án trong `:core:project` đúng mục 3.1, 3.2 (16 file, không file nào ngoài mục 3.2): danh sách, tạo, lưu, đổi tên, nhân bản, xóa, bộ đếm dự án đã tạo trên DataStore, dọn thư mục dở một lần (`deleteIncomplete`), nhận biết hết chỗ; khóa ghi chung và khóa theo dự án. Bước 3 đến 5 do phiên con làm trong worktree riêng.
+- **Test viết trước:** commit 60dd352 (kèm khung `TODO()`): 68 test (`DefaultProjectRepositoryTest` 41, `ProjectNamesTest` 14, `StorageErrorsTest` 6, `CreatedProjectsCounterTest` 5, `FileProjectStoreTest.deleteIncomplete_*` 2), cả 68 đỏ đúng lý do, không test cũ nào đỏ. Hai test giá trị mặc định đã có đối chứng của plan; không test nào phải viết chặt thêm. Đột biến: bỏ khóa theo dự án trong `rename` thì `rename_concurrentWithSave_keepsBoth` đỏ (đã trả lại). Commit code ad1818b.
+- **Rà soát độc lập:** 0 chặn, 0 nên sửa, 6 ghi chú: (1) hai test sửa sau commit test (dưới), không phải điểm chặn; (2) `delete` không lấy khóa dự án: `save`/`rename` chồng với `delete` có thể ghi lại `project.json` sau khi xóa, `duplicate` chép dở khi nguồn bị xóa thì bản sao thiếu ô (plan không yêu cầu); (3) `cleanUpOnce` đặt cờ trước khi dọn; (4) bộ đếm ghi log đọc lỗi kèm ngoại lệ như mẫu có sẵn; (5) gợi ý đột biến bỏ `writeLock` ở `duplicate`; (6) KDoc của `deleteIncomplete` nêu ràng buộc cho T-003.
+- **Kết quả CI:** `scripts/check.sh` trên máy: QUA (2703 test JVM, 0 lỗi). `pr-check` lần chạy 45059028573: xanh ở vòng đầu.
+- **Lệch so với plan:** ADR-0032/L5: ktlint gộp chữ ký `projectRepository(...)` của `ProjectRepositoryModule.kt` về một dòng. Bước 4 (chi tiết test): trong `DefaultProjectRepositoryTest`, hai test `projects_reemitsAfterEachChange` và `refresh_picksUpExternalWrite` (hai dòng "phát lại sau mỗi thay đổi" và "`refresh()` thấy thay đổi từ bên ngoài" của mục 4) đổi mọi `advanceUntilIdle()` thành `runCurrent()`, bỏ một import thừa, thêm một dòng chú thích; mọi câu khẳng định giữ nguyên. Lý do: danh sách thu trong `backgroundScope`, mà `advanceUntilIdle()` của kotlinx-coroutines-test 1.10 dừng khi chỉ còn việc nền, nên lần đọc đĩa không bao giờ chạy. Tái hiện với code thật trước khi sửa: `expected:<[[]]> but was:<[]>` và `NoSuchElementException: List is empty`; sau khi sửa: qua. Phiên chính chạy hai test đã sửa trên khung rỗng 60dd352: vẫn đỏ (cùng hai lỗi), nên test vẫn thất bại đúng lý do. Không phải thay đổi chờ thêm thời gian (không có `delay`).
+- **Việc còn lại:** ghi chú 2 của rà soát (khóa của `delete`) nếu muốn, thành plan sau.
+- **Cần người xem:** hai test đổi cách chờ ở trên; ghi chú 2 của rà soát.

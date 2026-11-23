@@ -1,7 +1,7 @@
 ---
 ticket: T-003
 title: File sao lưu .frameloop: ghi và đọc một hay nhiều dự án
-status: approved                # draft | approved | stopped | done
+status: done                    # draft | approved | stopped | done
 version: 1                   # tăng khi plan được sửa lại sau phản hồi hoặc sau khi dừng
 risk_score:                  # tổng điểm theo risk-scoring.md, để trống nếu chạm điểm chặn
 risk_level: high             # low | medium | high
@@ -403,3 +403,15 @@ Mọi test là unit test JVM trong `:core:project`, chạy bằng Robolectric (`
 - **Ghi chú:** Duyệt cả đợt 20261122-02 ngày 2026-11-22, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261122-02: plan T-007, T-048, T-044, T-002, T-003 và danh sách RUN-20261122-02, bắt đầu phiên khi merge; xác nhận sáu spec editor, export, lessons, onboarding, projects, settings. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
 
 ## 10. Nhật ký thực hiện
+
+### RUN-20261122-02, phiên bản plan 1
+
+- **Kết quả:** đã merge (PR #24, commit merge 53cca4c, 2026-11-22 20:23 UTC).
+- **Nhánh, PR:** `claude/T-003-file-sao-luu`, PR #24.
+- **Đã làm:** file sao lưu `.frameloop` trong `:core:project` đúng mục 3.1, 3.2 (21 file, không file nào ngoài mục 3.2): ghi và đọc một hay nhiều dự án, kiểm an toàn định dạng, nhập nguyên tử với dọn lượt nhập bỏ dở, luồng `Uri` qua `ContentResolver`. Bước 3 đến 5 do phiên con làm trong worktree riêng. Phương án dự phòng 3.4 không dùng.
+- **Test viết trước:** commit bd76f2b (kèm tệp mẫu `backup-v1.frameloop` sinh bằng test tạm `writeSampleFile` đã xóa trước commit, và khung `TODO()`): 59 test (`DefaultProjectBackupTest` 35, `BackupFormatTest` 5, `BackupFileNamesTest` 4, `ContentResolverBackupStreamsTest` 2, `ReferencedFilesTest` 2, `FileProjectStoreTest` 9, `DefaultProjectRepositoryTest` 2), cả 59 đỏ đúng lý do (57 `NotImplementedError`, 2 `AssertionError`), không test cũ nào đỏ. 1 test viết chặt thêm bằng đối chứng: `sampleV1_matchesWriter` qua ngay nên thêm phần giải mã `manifest.json`, `end.json`. Đột biến ở bước 4 (đều trả lại): trần `Sound` 16 MB, bỏ `NonCancellable` quanh `discard()`, bỏ `withContext(ioDispatcher)`, nới các trần và bỏ các phép kiểm của `restore_notABackup_failsWithNotABackup`: mỗi đột biến làm đỏ đúng test của nó. Commit code 2fdc4d4.
+- **Rà soát độc lập:** 0 chặn, 0 nên sửa, 4 ghi chú: (1) KDoc của `ProjectImport.writeFile` ghi "synced" từng tệp, code dồn đồng bộ vào `syncAll()` đúng mục 3.1; (2) số mục lạ của một dự án không có trần và tên mục tới 64 KB giữ trong `HashSet`, file độc vài trăm MB có thể làm hết bộ nhớ trên máy yếu (không hỏng dữ liệu; plan không đặt trần này); (3) test nặng bộ nhớ nhất: `BackupFormatTest.projectJsonCap_fitsFrameLimit`, `restore_moreThan65535Entries_succeeds`, `exportThenRestore_largeSound_roundTrips`; (4) `onProgress` ném lỗi thì ra `WRITE_FAILED`.
+- **Kết quả CI:** `scripts/check.sh` trên máy: QUA (2762 test JVM, 0 lỗi). `pr-check` lần chạy 45064666172: xanh ở vòng đầu.
+- **Lệch so với plan:** Không có lệch ADR-0032. Bước 3 (chi tiết test): các ca cắt file ((l), (n) và `restore_truncatedAtEntryBoundary_notABackup`) cắt byte do `writeSampleV1` sinh ra thay vì tệp mẫu đã commit (giống nhau từng byte trên máy này; tránh lệch vị trí nếu zlib của Java 17 trên CI nén khác); `BackupFileNamesTest` tách 4 test, thêm ca ký tự cấm; thêm hàm phụ `storedZipOf` (ghi ZIP tay để có mục trùng tên cho ca (p)) và vài hàm phụ dựng dữ liệu; tên kiểu đổi nhẹ (`ManifestResult`, `Manifest`, `BackupEnd`) như mục 3.1 cho phép. Bước 4 (chi tiết test, sau commit test): `DefaultProjectBackupTest.export_and_restore_runOnIoDispatcher` thêm câu khẳng định luồng `Uri` mở khi hàng đợi IO đang chạy (`assertEquals(listOf(true, true), openedOnQueue)`), `QueueDispatcher` thêm cờ `running`; không câu nào bị bỏ hay nới. Lý do: đối chứng của plan (bỏ `withContext(ioDispatcher)`) không đỏ vì kho dùng chung hàng đợi. Trước khi sửa, có đột biến: qua; sau khi sửa, có đột biến: đỏ ở cả `export` và `restore`; code thật: qua; khung rỗng: đỏ.
+- **Việc còn lại:** ghi chú 2 của rà soát (trần độ dài tên mục hay tính byte tên vào tổng) để người quyết; ghi chú 1 (KDoc) có thể sửa trong một PR sau.
+- **Cần người xem:** thay đổi test sau commit test ở trên; ghi chú 2 của rà soát.

@@ -1,8 +1,8 @@
 ---
 ticket: T-007
 title: Vị trí quảng cáo của Frameloop
-status: approved                # draft | approved | stopped | done
-version: 1                   # tăng khi plan được sửa lại sau phản hồi hoặc sau khi dừng
+status: approved                 # draft | approved | stopped | done
+version: 2                   # tăng khi plan được sửa lại sau phản hồi hoặc sau khi dừng
 risk_score:                  # tổng điểm theo risk-scoring.md, để trống nếu chạm điểm chặn
 risk_level: high             # low | medium | high
 token_estimate: 15M          # tổng token dự kiến, ví dụ 20M; số gợi ý: scripts/token-usage.py estimate (docs/ops/token-usage.md)
@@ -10,7 +10,7 @@ blocking_points: [ads, core] # các điểm chặn bị chạm, ví dụ [ads, s
 run_order:                   # AI điền khi lập danh sách chạy
 reviewer: Nhật               # người duyệt
 cross_reviewer: Nhật         # bắt buộc khi risk_level là high
-approved_at: 2026-11-22
+approved_at: 2026-11-23
 lane:                        # để trống: phiên tự chạy; quick: đường làm nhanh có người theo dõi (ADR-0048)
 ---
 
@@ -19,6 +19,11 @@ lane:                        # để trống: phiên tự chạy; quick: đườ
 ## 1. Tóm tắt
 
 Khai báo 22 vị trí quảng cáo của sáu feature trong `AdPlacement` của `:core:ads`, mỗi vị trí một dòng theo bảng 9.1 của bản đề xuất và mục 5 của sáu spec; `native_onboarding` chỉ ở lần mở đầu, hai ô lưới có `nativeEvery`, bốn vị trí rewarded dùng `allow_after_2`. Mỗi vị trí chỉ bật tắt bằng khóa `is_show_<mã>` (mặc định tắt) và luật có sẵn của `:core:ads`; không thêm luật riêng nào. Kiểm chứng bằng unit test của khai báo, cập nhật dữ liệu của 5 test có sẵn, và bảng khóa sinh lại.
+
+**Phiên bản 2 (soạn ở RUN-20261122-02 sau khi task dừng, `draft`, chờ người duyệt):**
+
+- Vì sao phiên bản 1 chưa đủ tốt (theo cách hiểu của phiên): code của plan đúng và `scripts/check.sh` qua trên máy (Java 21), nhưng `pr-check` (Java 17) đỏ hai lần ở `:core:ads:testDebugUnitTest` vì `OutOfMemoryError` trong screenshot test có sẵn. `AdsController` dựng chỗ nạp sẵn cho mọi vị trí, nên thêm 22 vị trí làm các test của module tốn thêm bộ nhớ, trong khi heap của test JVM là mặc định và `build-logic/` (nơi đặt heap) nằm ngoài plan. Plan chưa lường giới hạn bộ nhớ của test `:core:ads` trên CI.
+- Thay đổi so với phiên bản 1 (cập nhật 2026-11-23 theo câu trả lời câu hỏi 2 của anh Nhật): task thêm vào `core/ads/build.gradle.kts` một khối `maxHeapSize = "2g"` cho mọi task `Test` của `:core:ads` (ngoại lệ ghi ở ADR-1001, đi cùng PR plan này); phần code, test viết trước và các file khác giữ nguyên phiên bản 1. Chạy thử trên CI Java 17 đã xanh (mục 4.1).
 
 ## 2. Hiểu yêu cầu
 
@@ -64,13 +69,13 @@ Hai ô lưới dùng `native_in_collection` theo câu trả lời của anh Nh�
 
 Thiết kế tham chiếu: Không có thiết kế riêng (ticket không có màn hình; vùng quảng cáo trên thiết kế của từng feature thuộc ticket màn hình, docs/ops/design-workflow.md).
 
-ADR liên quan: ADR-0045 (quảng cáo, MC-01 tới MC-05; mục 4.9: thêm vị trí không thêm code vào `:core:ads`), ADR-0046 (Remote Config, khóa suy ra), ADR-0030 (`AdPlacement.kt` là phần app được sửa trong `:core:ads`).
+ADR liên quan: ADR-0045 (quảng cáo, MC-01 tới MC-05; mục 4.9: thêm vị trí không thêm code vào `:core:ads`), ADR-0046 (Remote Config, khóa suy ra), ADR-0030 (`AdPlacement.kt` là phần app được sửa trong `:core:ads`), ADR-1001 (phiên bản 2: khối heap test trong `core/ads/build.gradle.kts`).
 
 ## 3. Giải pháp
 
 ### 3.1. Cách làm
 
-Làm theo `docs/ops/ads-guide.md` mục 5, bước 2 và 3. Chỉ sửa `AdPlacement.kt`, file mà app được sửa trong `:core:ads` (`docs/ops/to-app.md` mục 2); không thêm code nào khác vào `:core:ads`, đúng ADR-0045 mục 4.9.
+Làm theo `docs/ops/ads-guide.md` mục 5, bước 2 và 3. Chỉ sửa `AdPlacement.kt`, file mà app được sửa trong `:core:ads` (`docs/ops/to-app.md` mục 2); không thêm code nào khác vào `:core:ads` ngoài khối heap của `core/ads/build.gradle.kts` (phiên bản 2, ADR-1001), đúng ADR-0045 mục 4.9.
 
 Thêm 22 dòng ngay sau `RESUME_INTER`, trước khối `gallery_*`, theo thứ tự của bảng ở mục 2. Mỗi dòng một khai báo mà `scripts/release.sh` đọc được, dưới 120 ký tự (dòng dài nhất `EDITOR_RW_BRUSHES` khoảng 110 ký tự). Chính sách viết thẳng `noAdPolicy = RewardedNoAdPolicy.AllowAfter(2)` trên dòng, không đặt thành hằng, vì `scripts/ads-plan.py` chỉ đọc chính sách viết trên dòng. Mỗi dòng có một dòng KDoc ngay trên, nói màn hình, nhóm (A hay B) và spec; dòng rewarded ghi thêm hành động nó giữ (`ads-guide.md` mục 5). Ví dụ:
 
@@ -87,10 +92,22 @@ Không có log, ViewModel hay màn hình mới. Không thêm luật nào ngoài 
 
 Thứ tự commit (test viết trước, `docs/auto-run.md` bước 3): bước 3 commit `FrameloopPlacementsTest.kt`, đỏ vì chưa biên dịch được (thiếu 22 hằng của `AdPlacement`). Bước 4 viết 22 dòng, cập nhật dữ liệu của 5 test có sẵn theo mục 3.5 (chúng chỉ đỏ khi 22 dòng có mặt, nên vào cùng commit code), sinh lại bảng khóa.
 
+**Cách tiếp tục (phiên bản 2):** tiếp tục trên nhánh cũ `claude/T-007-vi-tri-quang-cao`, PR #20 (commit test d2faad9, commit code c76d8bf). Điều kiện trước khi chạy: ADR-1001 đã `accepted` trên nhánh chính. Phiên cập nhật nhánh theo nhánh chính (`git fetch origin main`, `git merge origin/main`), thêm một commit sửa `core/ads/build.gradle.kts`: cuối file thêm
+
+```kotlin
+// Screenshot tests compare full-page bitmaps; the default 512 MB test heap runs out on CI (Java 17). ADR-1001.
+tasks.withType<Test>().configureEach {
+    maxHeapSize = "2g"
+}
+```
+
+rồi sinh lại hai file bảng khóa nếu nhánh chính đã đổi chúng (lệnh ở trên), chạy `scripts/check.sh`, đi tiếp từ bước 6 (rà soát độc lập cho phần đổi so với lần trước) và bước 8 (CI). Không viết lại test của bước 3: test viết trước giữ nguyên, đã thất bại đúng lý do ở phiên bản 1.
+
 ### 3.2. Danh sách file
 
 | Thao tác | Đường dẫn | Nội dung thay đổi |
 | --- | --- | --- |
+| Sửa | `core/ads/build.gradle.kts` | (Phiên bản 2) Khối `tasks.withType<Test>().configureEach { maxHeapSize = "2g" }` cuối file, kèm chú thích dẫn ADR-1001; không đổi gì khác |
 | Sửa | `core/ads/src/main/kotlin/com/vgl/draw/animation/core/ads/AdPlacement.kt` | 22 dòng vị trí với KDoc một dòng (mục 3.1); không đổi dòng có sẵn |
 | Tạo | `core/ads/src/test/kotlin/com/vgl/draw/animation/core/ads/FrameloopPlacementsTest.kt` | Test khai báo 22 vị trí (mục 4) |
 | Sửa | `core/ads/src/test/kotlin/com/vgl/draw/animation/core/ads/AdPlacementTest.kt` | Cập nhật dữ liệu của `inListGalleryPlacements_declareNativeEvery8` (mục 3.5, ADR-0029) |
@@ -105,7 +122,7 @@ Nơi đọc các file bị đổi (`grep -rn` trong `scripts/`, `.github/`, `*/s
 - `AdPlacement.kt`: `scripts/release.sh` và `AdPlacementSourceTest` (đọc khai báo một dòng; 22 dòng mới đúng mẫu, lần thử ở mục 4.1 qua), `scripts/ads-plan.py` (đọc mã, định dạng, `nativeEvery`, chính sách, `firstOpenOnly` và chú thích; lần thử đọc đủ 22 dòng). `StagingRemoteValuesModule` bật mọi vị trí không phải toàn app trên staging, kể cả 22 vị trí mới, không phải sửa (ảnh hưởng ở mục 6). Không sửa `scripts/release.sh` (CLAUDE.md, Không được làm). Bản production cần 22 mã đơn vị thật (mục 6).
 - `docs/remote-config-keys.md`, `docs/remote-config-template.json`: `app/src/test/kotlin/com/vgl/draw/animation/config/RemoteConfigKeysTest.kt` (so hai file với code; không sửa, vì câu khẳng định vẫn đúng sau khi sinh lại, mục 3.5), `app/build.gradle.kts` (truyền đường dẫn, không đổi), `scripts/ads-plan.py` (khóa `is_show_`, `native_every_` vào nhóm khóa suy ra, không sửa), `scripts/main-guard-verified.sh` (chỉ phân loại tệp), `scripts/tests/run.sh` (chỉ dùng tên tệp trong dữ liệu thử của script, không đọc nội dung).
 
-Không sửa `docs/ops/*` (tài liệu của dự án mẫu) hay file chính nào khác của `:core:ads`. Không đọc hay sửa file của T-005.
+Không sửa `docs/ops/*` (tài liệu của dự án mẫu) hay file chính nào khác của `:core:ads` ngoài `build.gradle.kts` (khối heap, phiên bản 2). Không đọc hay sửa file của T-005.
 
 ### 3.3. Cờ tính năng, quảng cáo, dữ liệu, quyền, thư viện
 
@@ -156,7 +173,7 @@ Test mới là unit test JVM của `:core:ads` (không cần Robolectric), trong
 
 Không có test dựng lại activity, đưa app ra nền hay cờ tắt giữa chừng: plan không thêm trạng thái ở vỏ app, không có bước chờ, không giữ tài nguyên mới (khóa đổi giữa chừng đã có test trong `:core:ads` cho mọi vị trí). Không có bước kiểm trên máy: chưa màn nào đặt 22 vị trí, nên người dùng staging không thấy gì mới (khe nạp sẵn thì có đổi, mục 6).
 
-**Ngoại lệ viết test trước:** hai file bảng khóa sinh bằng lệnh, `RemoteConfigKeysTest` có sẵn kiểm; KDoc. Năm test cập nhật dữ liệu ở mục 3.5 (bốn file) đỏ chỉ sau khi 22 dòng có mặt, nên vào commit code của bước 4 cùng 22 dòng.
+**Ngoại lệ viết test trước:** hai file bảng khóa sinh bằng lệnh, `RemoteConfigKeysTest` có sẵn kiểm; KDoc. Năm test cập nhật dữ liệu ở mục 3.5 (bốn file) đỏ chỉ sau khi 22 dòng có mặt, nên vào commit code của bước 4 cùng 22 dòng. Khối heap của `core/ads/build.gradle.kts` (phiên bản 2) là cấu hình build, không có test JVM riêng; kiểm bằng `pr-check` Java 17 (mục 4.1).
 
 ### 4.1. Chạy thử
 
@@ -164,14 +181,16 @@ Không cần (E dưới 2). Để viết mục 3.5 chính xác, đã thử một
 
 - **Lệnh:** `./gradlew :core:ads:testDebugUnitTest :app:testStagingDebugUnitTest --continue`, rồi `./gradlew :feature:loading:testDebugUnitTest :feature:sample:testDebugUnitTest --continue`; `python3` gọi `read_placements(False)` của `scripts/ads-plan.py`.
 - **Kết quả:** biên dịch qua, không dòng nào quá 120 ký tự. `:core:ads` 2002 test, 5 đỏ; `:app` 171 test, 2 đỏ; `:feature:loading` và `:feature:sample` 79 test, 0 đỏ; đúng 7 test của mục 3.5, mỗi test đỏ vì dữ liệu chưa có vị trí mới. `AdFreeGateTest`, `AdsSettingsTest`, `AdsFlagsTest`, `AdPlacementSourceTest`, `StagingRemoteValuesModuleTest` qua, kể cả với `native_onboarding` là `firstOpenOnly` (không treo khi đọc `isEnabled(...).first()` trong test chưa `start`). `ads-plan.py` đọc đủ 22 dòng với đúng định dạng, `nativeEvery` 6 và 4, chính sách `allow_after_2`, `firstOpenOnly`. Phiên chạy `scripts/check.sh` như mọi task.
+- **Chạy thử phiên bản 2 (2026-11-23):** nhánh nháp từ `claude/T-007-vi-tri-quang-cao` (code T-007 của phiên bản 1) cộng đúng khối `maxHeapSize = "2g"` ở trên, mở PR thử #29 (đã đóng, không merge) để chạy `pr-check` trên CI: Java 17 (Temurin 17.0.21), `scripts/check.sh`, job `build-and-test` xanh (lần chạy 45087289839), gồm `:core:ads:testDebugUnitTest` đã đỏ hai lần vì `OutOfMemoryError` (heap mặc định 512 MB, lỗi ở `NativeFlowStepScreenshotTest.fullPage_placeholder_light`, `DataBufferInt`) ở PR #20.
+
 
 ## 5. Chấm rủi ro
 
-**Điểm chặn bị chạm:** 1 (quảng cáo: thêm 22 vị trí), 7 (module core dùng chung `:core:ads`, chỉ ở `AdPlacement.kt`). Không chạm điểm 4 (không thêm sự kiện hay tham số phân tích), điểm 5 (cổng đồng ý và thứ tự khởi tạo SDK không đổi), điểm 9 (không thêm khóa DataStore). Người phụ trách sản phẩm cần biết trước khi duyệt (`risk-scoring.md` mục 3).
+**Điểm chặn bị chạm:** 1 (quảng cáo: thêm 22 vị trí), 7 (module core dùng chung `:core:ads`, ở `AdPlacement.kt` và cấu hình build của `:core:ads`). Không chạm điểm 4 (không thêm sự kiện hay tham số phân tích), điểm 5 (cổng đồng ý và thứ tự khởi tạo SDK không đổi), điểm 9 (không thêm khóa DataStore). Người phụ trách sản phẩm cần biết trước khi duyệt (`risk-scoring.md` mục 3).
 
 | Tiêu chí | Điểm (0 đến 3) | Lý do |
 | --- | --- | --- |
-| A. Phạm vi thay đổi | 1 | Code chính chỉ ở một file (`AdPlacement.kt`), thêm 22 hằng công khai; cộng test của cùng module và hai file bảng khóa sinh ra |
+| A. Phạm vi thay đổi | 1 | Code chính chỉ ở một file (`AdPlacement.kt`), thêm 22 hằng công khai; một khối cấu hình test trong `core/ads/build.gradle.kts` (phiên bản 2); cộng test của cùng module và hai file bảng khóa sinh ra |
 | B. Độ rõ của yêu cầu | 0 | Bảng vị trí rõ; sáu spec đang `changed` chỉ vì bỏ luật trước nét vẽ đầu tiên và được xác nhận lại cùng lời duyệt đợt; câu hỏi về định dạng ô lưới đã được anh Nhật trả lời (mục 8) |
 | C. Khả năng kiểm chứng tự động | 0 | Mọi thuộc tính khai báo có unit test; bảng khóa có test so với code |
 | D. Ảnh hưởng chéo | 2 | Sửa `AdPlacement.kt` mà T-008 cũng sửa, và hai file bảng khóa mà T-006, T-048, T-008 cũng sinh lại; mọi ticket đặt quảng cáo dùng các hằng này |
@@ -190,11 +209,15 @@ Không cần (E dưới 2). Để viết mục 3.5 chính xác, đã thử một
   - Bản staging: `StagingRemoteValuesModule` bật mọi vị trí mới, nên sau khi merge, 4 khe rewarded và 5 khe interstitial nạp sẵn quảng cáo thử của Google ngay lúc mở app, dù chưa màn nào hiện chúng. Không ảnh hưởng production (khóa mặc định tắt).
   - Bản production: `scripts/release.sh` đòi mã đơn vị thật cho cả 22 vị trí mới; người phát hành tạo 22 đơn vị trên AdMob (và MAX nếu dùng) trước bản production đầu tiên. Đơn vị MREC (`restore_mrec`, `export_options_mrec`, `export_wait_mrec`) tắt tự làm mới (`ads-guide.md` mục 5, bước 6).
 - Đề xuất thứ tự chạy: sau T-006, trước mọi ticket đặt quảng cáo, nhất là T-008.
+- `core/ads/build.gradle.kts` là file của dự án mẫu (`docs/ops/to-app.md`, mục 2): ngoại lệ ở ADR-1001; sau khi task merge, người (hay AI trong phiên có người theo dõi) mở issue `from-app` ở repo dự án mẫu trong vòng một tuần, đề xuất nâng heap test (ở `:core:ads` hay chung trong `build-logic/`); phiên tự chạy không mở issue ở repo khác, chỉ ghi một dòng vào mục Cần người kiểm tra của báo cáo; mô tả PR #20 ghi rằng thay đổi được đề xuất về dự án mẫu; số issue ghi vào dòng Áp dụng của bài học về `OutOfMemoryError` trong `docs/lessons.md`; đợt `template-sync` kế tiếp gộp tay theo ADR-1001. T-008 và mọi ticket thêm vị trí sau này dùng chung khối heap này.
+
 
 ## 7. Điều kiện dừng riêng
 
 - Lệnh sinh lại bảng khóa đổi dòng nào khác ngoài 22 khóa `is_show_<mã>` và 2 khóa `native_every_<mã>` mới (trong `docs/remote-config-keys.md`), hay ngoài 24 tham số tương ứng (trong `docs/remote-config-template.json`): dừng, vì bảng trên nhánh chính đã lệch code. Dòng của khóa mà task đã merge trước sinh ra (`lessons_content_version` của T-048) không tính là dòng lạ, vì nó đã có trên nhánh chính.
-- Làm task phải sửa code chính (ngoài thư mục test) của `:core:ads` ngoài `AdPlacement.kt`: dừng, vì thêm vị trí không được thêm code vào `:core:ads` (ADR-0045 mục 4.9).
+- CI vẫn đỏ vì `OutOfMemoryError` ở `:core:ads` sau khi thêm khối `maxHeapSize = "2g"`: dừng, không nâng thêm hay sửa `build-logic/`.
+- ADR-1001 chưa `accepted` trên nhánh chính khi task bắt đầu: dừng.
+- Làm task phải sửa code chính (ngoài thư mục test) của `:core:ads` ngoài `AdPlacement.kt` và khối heap của `core/ads/build.gradle.kts`: dừng, vì thêm vị trí không được thêm code vào `:core:ads` (ADR-0045 mục 4.9).
 - Một test có sẵn của `:core:ads` đỏ vì hành vi (không phải vì dữ liệu chưa có vị trí mới như mục 3.5): dừng theo điều kiện 3, không sửa test.
 
 ## 8. Câu hỏi cho người duyệt
@@ -210,10 +233,35 @@ Còn mở:
 1. **Phụ thuộc T-005 của ticket.** Plan không còn đọc gì của T-005. AI đề xuất bỏ T-005 khỏi `depends_on` của ticket (chỉ còn T-006) để T-007 không phải chờ; giữ nguyên cũng không hại gì.
    - Đã làm trong PR của đợt: ticket T-007 chỉ còn `depends_on: [T-006]`; anh Nhật xác nhận cùng lời duyệt đợt.
 
+2. **(Phiên bản 2) Sửa giới hạn bộ nhớ của test `:core:ads` trên CI bằng cách nào?** Phương án AI đề xuất: (a) nâng heap của test JVM, ví dụ `maxHeapSize = "2g"` cho mọi task `Test` trong convention plugin của `build-logic/`, bằng một plan rủi ro cao duyệt chéo của app và đề xuất về dự án mẫu (`docs/ops/from-app.md`), vì mọi app thêm vị trí quảng cáo đều gặp; hoặc (b) đổi các screenshot test có hiệu ứng chạy mãi của `:core:ads` sang dừng đồng hồ (`mainClock.autoAdvance = false`) ở dự án mẫu rồi đồng bộ về. (a) nhỏ và chắc hơn. Trước khi duyệt, nên chạy `:core:ads:testDebugUnitTest` của nhánh `claude/T-007-vi-tri-quang-cao` với Java 17 để xác nhận nguyên nhân (máy của phiên chỉ có Java 21).
+   - Trả lời (anh Nhật, 2026-11-23, trong phiên): "Sửa riêng core/ads/build.gradle.kts, sau đó tạo issue from-app để đưa về dự án mẫu". Plan thêm khối heap vào mục 3.2, ngoại lệ ghi ở ADR-1001; issue `from-app` mở ở repo dự án mẫu sau khi thay đổi lên nhánh chính (mục 6).
+
 ## 9. Quyết định duyệt
+
+Phiên bản 1:
+
 
 - **Quyết định:** Duyệt
 - **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3; khi có dev thứ hai thì quy tắc duyệt chéo áp dụng lại)
 - **Ghi chú:** Duyệt cả đợt 20261122-02 ngày 2026-11-22, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261122-02: plan T-007, T-048, T-044, T-002, T-003 và danh sách RUN-20261122-02, bắt đầu phiên khi merge; xác nhận sáu spec editor, export, lessons, onboarding, projects, settings. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
 
+Phiên bản 2:
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-01 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-01: plan T-007 phiên bản 2 và danh sách RUN-20261122-03, bắt đầu phiên khi merge; chấp nhận ADR-1001. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev."
+
 ## 10. Nhật ký thực hiện
+
+### RUN-20261122-02, phiên bản plan 1
+
+- **Kết quả:** dừng ở bước 8 (CI đỏ), điều kiện dừng 1 của `risk-scoring.md` mục 4: cách sửa nằm ở `build-logic/`, plan chưa nêu.
+- **Nhánh, PR:** `claude/T-007-vi-tri-quang-cao`, PR #20 (để mở, không merge).
+- **Đã làm:** 22 dòng vị trí trong `AdPlacement.kt` đúng mục 3.1; dữ liệu của 5 test có sẵn theo mục 3.5; sinh lại hai file bảng khóa (chỉ thêm 22 khóa `is_show_*` và 2 khóa `native_every_*`).
+- **Test viết trước:** 7 test trong `FrameloopPlacementsTest` (commit d2faad9), đỏ vì chưa biên dịch được khi chưa có 22 hằng, đúng mục 3.1. Commit code c76d8bf.
+- **Rà soát độc lập:** 0 chặn, 0 nên sửa, 3 ghi chú (KDoc của `EXPORT_RW_EXTRA` ghi "(q. 14)" chưa nói spec export; KDoc cũ của `AdsControllerFirstOpenOnlyTest`, `AdsSettingsTest.placementEnabled_firstOpenOnly_saysSo` giữ theo mục 3.5; tiêu chí đóng sớm, khóa tắt dựa vào test có sẵn như mục 4).
+- **Kết quả CI:** `scripts/check.sh` trên máy (Java 21) qua: 2554 test JVM, 0 lỗi. `pr-check` lần chạy 45043991143 đỏ hai lần ở `:core:ads:testDebugUnitTest`, mỗi lần một hay hai screenshot test có sẵn khác nhau ném `java.lang.OutOfMemoryError at DataBufferInt.java:75`: lần 1 `NativeFullScreenAdScreenScreenshotTest.default_dark`, `NativeFullScreenOverlayScreenshotTest.loading_light`; lần chạy lại (job đỏ, một lần như lỗi chập chờn) `NativeFlowStepScreenshotTest.fullPage_placeholder_light`. `failure-kind.sh --playbook`: `khong-co`.
+- **Nguyên nhân (giả thuyết có căn cứ, chưa đo trên Java 17):** `AdsController` dựng chỗ nạp sẵn cho mọi vị trí (`fullScreenPlacements()`, `pooledPlacements()`, `stockPlacements()` đọc `AdPlacement.entries`), nên 22 vị trí mới (9 toàn màn hình, 8 dùng pool) làm mỗi controller trong hàng trăm test của `:core:ads` giữ nhiều đối tượng hơn. Mọi test của module chạy trong một JVM với heap mặc định của Gradle (không có `maxHeapSize` trong `build-logic/`); screenshot test có hiệu ứng chạy mãi vẽ tới sát giới hạn bộ nhớ rồi mới chụp, nên lần chụp hết chỗ. Trên nhánh chính (cùng các test đó) `pr-check` và `main-guard` vẫn xanh. Máy phiên chỉ có Java 21 nên không tái hiện được; không tự tải JDK 17.
+- **Lệch so với plan:** Không có.
+- **Việc còn lại:** nâng heap của test JVM (ví dụ `maxHeapSize` cho `Test` trong convention plugin của `build-logic/`) hay đổi các screenshot test có hiệu ứng chạy mãi của `:core:ads` sang dừng đồng hồ, rồi chạy lại PR #20. Cả hai nằm ngoài plan; `build-logic/` thuộc mục "Không được làm" của `CLAUDE.md` và là phần dùng chung nên đề xuất về dự án mẫu (`docs/ops/from-app.md`).
+- **Cần người xem:** quyết cách sửa bộ nhớ test của `:core:ads` (plan riêng rủi ro cao cho `build-logic/` hay sửa ở dự án mẫu), rồi cho PR #20 chạy lại CI; mọi ticket thêm vị trí quảng cáo sau này (T-008) gặp cùng giới hạn.

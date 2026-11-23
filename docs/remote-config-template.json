@@ -415,6 +415,11 @@
       "defaultValue": { "value": "2" },
       "description": "Seconds without usable Internet before the network dialog shows (ADR-0024).",
       "valueType": "NUMBER"
+    },
+    "lessons_content_version": {
+      "defaultValue": { "value": "v1" },
+      "description": "R2 folder of the current lesson content, for example v1 for lessons/v1/. Every content change goes to a new folder.",
+      "valueType": "STRING"
     }
   }
 }

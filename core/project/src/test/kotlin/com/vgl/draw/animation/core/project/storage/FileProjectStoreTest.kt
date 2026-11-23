@@ -425,6 +425,224 @@ class FileProjectStoreTest {
         assertTrue(d.getCompleted() is ProjectReadResult.Ok)
     }
 
+    @Test
+    fun deleteIncomplete_removesOnlyUuidDirsWithoutMetadata() = runTest {
+        val store = store()
+        val complete = newProject()
+        store.write(complete)
+        val incomplete = ProjectId.random()
+        store.writeFile(incomplete, ProjectFile.Background("jpg"), byteArrayOf(1))
+        val deleting = File(root, ".deleting-${ProjectId.random().value}").apply { assertTrue(mkdirs()) }
+        val restoring = File(root, ".restoring-x").apply { assertTrue(mkdirs()) }
+        val notAnId = File(root, "not-a-uuid").apply { assertTrue(mkdirs()) }
+        val plainFile = File(root, ProjectId.random().value).apply { writeText("x") }
+        assertTrue(File(projectDir(incomplete), "background.jpg").isFile)
+
+        assertEquals(1, store.deleteIncomplete())
+
+        assertFalse(projectDir(incomplete).exists())
+        assertTrue(File(projectDir(complete.id), "project.json").isFile)
+        assertEquals(ProjectReadResult.Ok(complete), store.read(complete.id))
+        assertTrue(deleting.isDirectory)
+        assertTrue(restoring.isDirectory)
+        assertTrue(notAnId.isDirectory)
+        assertTrue(plainFile.isFile)
+    }
+
+    @Test
+    fun deleteIncomplete_noRoot_returnsZero() = runTest {
+        val store = store()
+
+        assertEquals(0, store.deleteIncomplete())
+
+        assertFalse(root.exists())
+    }
+
+    @Test
+    fun import_commit_movesProjectsInOrder() = runTest {
+        val store = store()
+        // The second id sorts first, so the order can only come from the order of writing.
+        val first = newProject("First").copy(id = ProjectId("6f1c2a3e-0000-4000-8000-0000000000f2"))
+        val second = newProject("Second").copy(id = ProjectId("6f1c2a3e-0000-4000-8000-0000000000f1"))
+        val import = store.beginImport()
+        import.writeFile(first.id, ProjectFile.Thumbnail) { it.write(byteArrayOf(1, 2)) }
+        import.write(first)
+        import.writeFile(second.id, ProjectFile.Thumbnail) { it.write(byteArrayOf(3)) }
+        import.write(second)
+        assertEquals(emptyList<ProjectId>(), store.ids())
+        assertEquals(ProjectReadResult.NotFound, store.read(first.id))
+        assertEquals(1, restoringDirs().size)
+
+        val moved = import.commit()
+
+        assertEquals(listOf(first.id, second.id), moved)
+        assertEquals(ProjectReadResult.Ok(first), store.read(first.id))
+        assertEquals(ProjectReadResult.Ok(second), store.read(second.id))
+        assertArrayEquals(byteArrayOf(1, 2), store.readFile(first.id, ProjectFile.Thumbnail))
+        assertArrayEquals(byteArrayOf(3), store.readFile(second.id, ProjectFile.Thumbnail))
+        import.discard()
+        assertEquals(emptyList<String>(), restoringDirs())
+    }
+
+    @Test
+    fun import_writeFileFillThrows_noFileLeft() = runTest {
+        val store = store()
+        val import = store.beginImport()
+        val kept = ProjectId.random()
+        // Control: a fill that completes leaves its file.
+        import.writeFile(kept, ProjectFile.Thumbnail) { it.write(ByteArray(10)) }
+
+        val error = try {
+            import.writeFile(ProjectId.random(), ProjectFile.Thumbnail) {
+                it.write(ByteArray(10))
+                throw IllegalStateException("x")
+            }
+            null
+        } catch (e: IllegalStateException) {
+            e
+        }
+
+        assertTrue("$error", error is IllegalStateException)
+        val staging = File(root, restoringDirs().single())
+        val files = staging.walk().filter { it.isFile }.map { it.relativeTo(staging).path }.toList()
+        assertEquals(listOf("${kept.value}/thumbnail.png"), files)
+    }
+
+    @Test
+    fun import_stagedProjectWithoutJson_notMoved() = runTest {
+        val store = store()
+        val withoutJson = ProjectId.random()
+        val complete = newProject()
+        val import = store.beginImport()
+        import.writeFile(withoutJson, ProjectFile.Thumbnail) { it.write(byteArrayOf(1)) }
+        import.write(complete)
+
+        assertEquals(listOf(complete.id), import.commit())
+
+        assertEquals(listOf(complete.id), store.ids())
+        assertFalse(projectDir(withoutJson).exists())
+        import.discard()
+        assertEquals(emptyList<String>(), restoringDirs())
+    }
+
+    @Test
+    fun import_deleteIncomplete_doesNotTouchStaging() = runTest {
+        val store = store()
+        val project = newProject()
+        val import = store.beginImport()
+        import.writeFile(project.id, ProjectFile.Thumbnail) { it.write(byteArrayOf(5)) }
+        // Control: an incomplete project folder is deleted by the same call.
+        val incomplete = ProjectId.random()
+        assertTrue(projectDir(incomplete).mkdirs())
+
+        assertEquals(1, store.deleteIncomplete())
+
+        assertFalse(projectDir(incomplete).exists())
+        import.write(project)
+        assertEquals(listOf(project.id), import.commit())
+        assertArrayEquals(byteArrayOf(5), store.readFile(project.id, ProjectFile.Thumbnail))
+    }
+
+    @Test
+    fun import_deleteOfOtherProject_keepsStagingFolder() = runTest {
+        val store = store()
+        val other = newProject("Other")
+        store.write(other)
+        val project = newProject()
+        val import = store.beginImport()
+        import.writeFile(project.id, ProjectFile.Thumbnail) { it.write(byteArrayOf(5)) }
+
+        store.delete(other.id)
+
+        assertEquals(ProjectReadResult.NotFound, store.read(other.id))
+        import.write(project)
+        assertEquals(listOf(project.id), import.commit())
+        assertArrayEquals(byteArrayOf(5), store.readFile(project.id, ProjectFile.Thumbnail))
+    }
+
+    @Test
+    fun import_discardTwice_noThrow() = runTest {
+        val store = store()
+        val import = store.beginImport()
+        import.write(newProject())
+        assertEquals(1, restoringDirs().size)
+
+        import.discard()
+        import.discard()
+
+        assertEquals(emptyList<String>(), restoringDirs())
+        assertEquals(emptyList<ProjectId>(), store.ids())
+    }
+
+    @Test
+    fun import_targetExists_commitThrows() = runTest {
+        val store = store()
+        val project = newProject()
+        val existing = File(projectDir(project.id), "keep.bin")
+        assertTrue(existing.parentFile!!.mkdirs())
+        existing.writeBytes(byteArrayOf(9))
+        val import = store.beginImport()
+        import.write(project)
+
+        val error = try {
+            import.commit()
+            null
+        } catch (e: ProjectImportCommitException) {
+            e
+        }
+
+        assertEquals(emptyList<ProjectId>(), error?.moved)
+        assertArrayEquals(byteArrayOf(9), existing.readBytes())
+        assertEquals(listOf("keep.bin"), projectDir(project.id).list()!!.toList())
+        import.discard()
+    }
+
+    @Test
+    fun import_commitFailsMidway_reportsMoved() = runTest {
+        val store = store()
+        val first = newProject("First")
+        val second = newProject("Second")
+        assertTrue(projectDir(second.id).mkdirs())
+        val import = store.beginImport()
+        import.write(first)
+        import.write(second)
+
+        val error = try {
+            import.commit()
+            null
+        } catch (e: ProjectImportCommitException) {
+            e
+        }
+
+        assertEquals(listOf(first.id), error?.moved)
+        assertEquals(ProjectReadResult.Ok(first), store.read(first.id))
+        import.discard()
+    }
+
+    @Test
+    fun deleteAbandonedImports_removesOnlyInactive() = runTest {
+        val store = store()
+        val abandoned = newProject()
+        val old = File(root, ".restoring-old/${abandoned.id.value}/project.json")
+        assertTrue(old.parentFile!!.mkdirs())
+        old.writeText(ProjectFormat.encode(abandoned))
+        val import = store.beginImport()
+        import.write(newProject())
+        assertEquals(emptyList<ProjectId>(), store.ids())
+
+        assertEquals(1, store.deleteAbandonedImports())
+
+        assertFalse(File(root, ".restoring-old").exists())
+        val active = restoringDirs()
+        assertEquals(1, active.size)
+        assertTrue(File(root, active.single()).walk().any { it.name == "project.json" })
+        assertEquals(emptyList<ProjectId>(), store.ids())
+        import.discard()
+    }
+
+    private fun restoringDirs(): List<String> =
+        root.listFiles().orEmpty().map { it.name }.filter { it.startsWith(".restoring-") }
+
     private fun writeRaw(id: ProjectId, text: String) {
         val dir = projectDir(id)
         assertTrue(dir.mkdirs())

@@ -89,3 +89,4 @@ Mọi khóa Remote Config của bản app hiện tại (ADR-0046). File mẫu đ
 | `is_log_af_rewarded_ad_eligible` | boolean | `true` | `:core:analytics` | Sends af_rewarded_ad_eligible. AppsFlyer event switch. Name set by the template, not an AdsKit key. |
 | `is_log_af_rewarded_api_called` | boolean | `true` | `:core:analytics` | Sends af_rewarded_api_called. AppsFlyer event switch. Name set by the template, not an AdsKit key. |
 | `network_lost_delay_seconds` | long | `2` | `:core:network` | Seconds without usable Internet before the network dialog shows (ADR-0024). |
+| `lessons_content_version` | string | `"v1"` | `:core:lessons` | R2 folder of the current lesson content, for example v1 for lessons/v1/. Every content change goes to a new folder. |
