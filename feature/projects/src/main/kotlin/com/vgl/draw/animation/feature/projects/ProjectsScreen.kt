@@ -54,6 +54,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vgl.draw.animation.core.designsystem.component.PrimaryButton
 import com.vgl.draw.animation.core.designsystem.theme.Spacing
 import com.vgl.draw.animation.core.project.model.ProjectId
+import java.time.ZoneId
 import kotlinx.coroutines.launch
 
 // Numbers of design/context/ProjectsScreen_*.md that have no Spacing token.
@@ -80,6 +81,8 @@ internal fun ProjectsRoute(
     onImport: (() -> Unit)?,
     onFeatureDisabled: () -> Unit,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    onBackUpProject: ((ProjectId, String) -> Unit)? = null,
+    gridState: LazyGridState = rememberLazyGridState(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val thumbnails by viewModel.thumbnails.collectAsStateWithLifecycle()
@@ -99,6 +102,7 @@ internal fun ProjectsRoute(
                 is ProjectsEffect.OpenProject -> currentOpenProject?.invoke(effect.id) ?: show(comingSoon)
                 ProjectsEffect.ShowCannotOpen -> show(cannotOpen)
                 ProjectsEffect.ShowComingSoon -> show(comingSoon)
+                is ProjectsEffect.ShowMessage, is ProjectsEffect.BackUpProject, ProjectsEffect.ScrollToTop -> Unit
             }
         }
     }
@@ -120,6 +124,7 @@ internal fun ProjectsRoute(
         onOpenSettings = { onOpenSettings?.invoke() ?: show(comingSoon) },
         onImport = { onImport?.invoke() ?: show(comingSoon) },
         onThumbnailNeeded = viewModel::onThumbnailNeeded,
+        gridState = gridState,
     )
 }
 
@@ -141,6 +146,18 @@ fun ProjectsScreen(
     modifier: Modifier = Modifier,
     gridState: LazyGridState = rememberLazyGridState(),
     onThumbnailNeeded: (ProjectCardUi, Int) -> Unit = { _, _ -> },
+    menuState: ProjectsMenuState = ProjectsMenuState(),
+    nowMillis: Long = 0L,
+    zone: ZoneId = ZoneId.systemDefault(),
+    onProjectLongClick: (ProjectCardUi) -> Unit = {},
+    onMenuOpen: () -> Unit = {},
+    onMenuRename: () -> Unit = {},
+    onMenuDuplicate: () -> Unit = {},
+    onMenuBackUp: () -> Unit = {},
+    onMenuDelete: () -> Unit = {},
+    onRenameConfirm: (String) -> Unit = {},
+    onDeleteConfirm: () -> Unit = {},
+    onDismissOverlay: () -> Unit = {},
 ) {
     Box(
         modifier = modifier
@@ -288,6 +305,19 @@ object ProjectsTestTags {
     const val LESSON = "projects_lesson"
     const val SETTINGS = "projects_settings"
     const val IMPORT = "projects_import"
+    const val MENU = "project_menu"
+    const val MENU_OPEN = "project_menu_open"
+    const val MENU_RENAME = "project_menu_rename"
+    const val MENU_DUPLICATE = "project_menu_duplicate"
+    const val MENU_BACKUP = "project_menu_backup"
+    const val MENU_DELETE = "project_menu_delete"
+    const val RENAME_DIALOG = "rename_dialog"
+    const val RENAME_FIELD = "rename_field"
+    const val RENAME_SAVE = "rename_save"
+    const val RENAME_CANCEL = "rename_cancel"
+    const val DELETE_DIALOG = "delete_dialog"
+    const val DELETE_CONFIRM = "delete_confirm"
+    const val DELETE_CANCEL = "delete_cancel"
 
     // ProjectId is a value class: its toString() is "ProjectId(value=…)", so the tag uses the raw value.
     fun card(id: ProjectId): String = "project_card_${id.value}"

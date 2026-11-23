@@ -3,10 +3,12 @@ package com.vgl.draw.animation.feature.projects.data
 import android.graphics.BitmapFactory
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
+import com.vgl.draw.animation.core.project.model.Project
 import com.vgl.draw.animation.core.project.model.ProjectId
 import com.vgl.draw.animation.core.project.render.ProjectThumbnails
 import com.vgl.draw.animation.core.project.repository.ProjectListItem
 import com.vgl.draw.animation.core.project.repository.ProjectRepository
+import com.vgl.draw.animation.core.project.repository.ProjectResult
 import com.vgl.draw.animation.core.project.storage.ProjectFile
 import com.vgl.draw.animation.core.project.storage.ProjectReadResult
 import com.vgl.draw.animation.core.project.storage.ProjectStore
@@ -33,6 +35,12 @@ internal class DefaultProjectsRepository @Inject constructor(
             null
         }
     }
+
+    override suspend fun rename(id: ProjectId, name: String): ProjectResult<Project> = TODO()
+
+    override suspend fun duplicate(id: ProjectId): ProjectResult<Project> = TODO()
+
+    override suspend fun delete(id: ProjectId): ProjectResult<Unit> = TODO()
 
     /** A project just created has no thumbnail until the drawing screen is left: draw it once, then read it again. */
     private suspend fun drawMissing(id: ProjectId): ByteArray? {

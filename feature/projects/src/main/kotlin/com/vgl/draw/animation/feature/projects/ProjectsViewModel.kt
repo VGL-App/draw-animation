@@ -23,6 +23,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -56,8 +57,16 @@ class ProjectsViewModel @Inject constructor(
 
     private var lastLogged: String? = null
 
+    // One read of the repository for the list and the menu; stops as soon as nobody collects (the 5 s wait is in the
+    // stateIn of uiState and menuState).
+    private val items = repository.items
+        .shareIn(viewModelScope, SharingStarted.WhileSubscribed(), replay = 1)
+
+    private val _menuState = MutableStateFlow(ProjectsMenuState())
+    val menuState: StateFlow<ProjectsMenuState> = _menuState.asStateFlow()
+
     val uiState: StateFlow<ProjectsUiState> = combine(
-        repository.items.onEach(::retainThumbnails),
+        items.onEach(::retainThumbnails),
         featureFlags.enabled(FeatureFlag.PROJECTS),
         featureFlags.enabled(FeatureFlag.LESSONS),
         featureFlags.enabled(FeatureFlag.SETTINGS),
@@ -86,6 +95,24 @@ class ProjectsViewModel @Inject constructor(
         }
         effectChannel.trySend(effect)
     }
+
+    fun onProjectLongClick(card: ProjectCardUi) = Unit
+
+    fun onMenuOpen() = Unit
+
+    fun onMenuRename() = Unit
+
+    fun onRenameConfirm(name: String) = Unit
+
+    fun onMenuDuplicate() = Unit
+
+    fun onMenuDelete() = Unit
+
+    fun onDeleteConfirm() = Unit
+
+    fun onMenuBackUp() = Unit
+
+    fun dismissOverlay() = Unit
 
     /** The card is on screen: loads its thumbnail unless it is in memory or loading. Unreadable cards get none. */
     fun onThumbnailNeeded(card: ProjectCardUi, maxWidthPx: Int) {

@@ -7,6 +7,7 @@ import com.vgl.draw.animation.core.project.model.ProjectId
 import com.vgl.draw.animation.core.project.render.ProjectThumbnails
 import com.vgl.draw.animation.core.project.render.ThumbnailResult
 import com.vgl.draw.animation.core.project.repository.NewProject
+import com.vgl.draw.animation.core.project.repository.ProjectFailure
 import com.vgl.draw.animation.core.project.repository.ProjectListItem
 import com.vgl.draw.animation.core.project.repository.ProjectRepository
 import com.vgl.draw.animation.core.project.repository.ProjectResult
@@ -44,7 +45,7 @@ class DefaultProjectsRepositoryTest {
     private val id = testProjectId(1)
     private val store = MemoryStore()
     private val thumbnails = DrawingThumbnails(store)
-    private val projects = ListOnlyProjectRepository()
+    private val projects = RecordingProjectRepository()
 
     private fun TestScope.repository() = DefaultProjectsRepository(
         projectRepository = projects,
@@ -117,6 +118,39 @@ class DefaultProjectsRepositoryTest {
         assertEquals(512, repository().thumbnail(id, maxWidthPx = 512)!!.width)
     }
 
+    @Test
+    fun rename_delegatesToProjectRepository() = runTest {
+        val renamed = readableItem(1, name = "Walk loop").project
+        projects.renameResult = ProjectResult.Success(renamed)
+        val result = repository().rename(id, "Walk loop")
+        assertEquals(listOf(id to "Walk loop"), projects.renameCalls)
+        assertEquals(ProjectResult.Success(renamed), result)
+        // Control: a failure is returned as it is.
+        projects.renameResult = ProjectResult.Failure(ProjectFailure.NO_SPACE)
+        assertEquals(ProjectResult.Failure(ProjectFailure.NO_SPACE), repository().rename(id, "Walk loop"))
+    }
+
+    @Test
+    fun duplicate_delegatesToProjectRepository() = runTest {
+        val copy = readableItem(7, name = "Walk cycle copy").project
+        projects.duplicateResult = ProjectResult.Success(copy)
+        val result = repository().duplicate(id)
+        assertEquals(listOf(id), projects.duplicateCalls)
+        assertEquals(ProjectResult.Success(copy), result)
+        projects.duplicateResult = ProjectResult.Failure(ProjectFailure.NO_SPACE)
+        assertEquals(ProjectResult.Failure(ProjectFailure.NO_SPACE), repository().duplicate(id))
+    }
+
+    @Test
+    fun delete_delegatesToProjectRepository() = runTest {
+        projects.deleteResult = ProjectResult.Success(Unit)
+        val result = repository().delete(id)
+        assertEquals(listOf(id), projects.deleteCalls)
+        assertEquals(ProjectResult.Success(Unit), result)
+        projects.deleteResult = ProjectResult.Failure(ProjectFailure.NOT_FOUND)
+        assertEquals(ProjectResult.Failure(ProjectFailure.NOT_FOUND), repository().delete(id))
+    }
+
     private fun png(width: Int, height: Int): ByteArray {
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         bitmap.eraseColor(Color.rgb(47, 111, 224))
@@ -170,8 +204,15 @@ private class DrawingThumbnails(private val store: MemoryStore) : ProjectThumbna
     }
 }
 
-private class ListOnlyProjectRepository : ProjectRepository {
+/** The list, and rename, duplicate, delete recording their arguments and returning the preset result. */
+private class RecordingProjectRepository : ProjectRepository {
     val list = MutableStateFlow<List<ProjectListItem>>(emptyList())
+    val renameCalls = mutableListOf<Pair<ProjectId, String>>()
+    val duplicateCalls = mutableListOf<ProjectId>()
+    val deleteCalls = mutableListOf<ProjectId>()
+    var renameResult: ProjectResult<Project> = ProjectResult.Failure(ProjectFailure.WRITE_FAILED)
+    var duplicateResult: ProjectResult<Project> = ProjectResult.Failure(ProjectFailure.WRITE_FAILED)
+    var deleteResult: ProjectResult<Unit> = ProjectResult.Failure(ProjectFailure.WRITE_FAILED)
 
     override val projects: Flow<List<ProjectListItem>> = list
     override val createdCount: Flow<Int> = MutableStateFlow(0)
@@ -180,11 +221,20 @@ private class ListOnlyProjectRepository : ProjectRepository {
 
     override suspend fun save(project: Project): ProjectResult<Project> = error("not used")
 
-    override suspend fun rename(id: ProjectId, name: String): ProjectResult<Project> = error("not used")
+    override suspend fun rename(id: ProjectId, name: String): ProjectResult<Project> {
+        renameCalls += id to name
+        return renameResult
+    }
 
-    override suspend fun duplicate(id: ProjectId): ProjectResult<Project> = error("not used")
+    override suspend fun duplicate(id: ProjectId): ProjectResult<Project> {
+        duplicateCalls += id
+        return duplicateResult
+    }
 
-    override suspend fun delete(id: ProjectId): ProjectResult<Unit> = error("not used")
+    override suspend fun delete(id: ProjectId): ProjectResult<Unit> {
+        deleteCalls += id
+        return deleteResult
+    }
 
     override fun refresh() = Unit
 }
