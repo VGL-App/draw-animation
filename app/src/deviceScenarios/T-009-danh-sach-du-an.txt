@@ -1,0 +1,16 @@
+ticket: T-009
+criterion: Mở app thì vào danh sách dự án trống (staging bật cờ projects); Back ở danh sách đóng app
+timeout: 180
+# Same entry as T-024: the first-open app open ad may show over loading, and loading may stop with a retry button.
+fresh
+consent decline 30
+wait id=projects_screen | text="Continue to app" | desc="Continue to app" | id=loading_retry 60
+tap_if id=loading_retry
+wait id=projects_screen | text="Continue to app" | desc="Continue to app" 60
+tap_if text="Continue to app" | desc="Continue to app"
+wait id=projects_screen 30
+expect id=projects_empty
+expect id=projects_new
+shot projects_empty
+back
+expect_no id=projects_screen

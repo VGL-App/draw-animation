@@ -6,6 +6,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -23,7 +24,12 @@ import com.vgl.draw.animation.network.reportsScreen
  * back stack has no entry yet, so a recreation never looks like a passage through loading ([reportsScreen]).
  */
 @Composable
-fun AppNavHost(modifier: Modifier = Modifier, onScreenChanged: (String?) -> Unit = {}) {
+fun AppNavHost(
+    modifier: Modifier = Modifier,
+    lessonsEnabled: Boolean = false,
+    onScreenChanged: (String?) -> Unit = {},
+    screens: AppScreens = AppScreens(),
+) {
     val navController = rememberNavController()
     val entry by navController.currentBackStackEntryAsState()
     val route = entry?.destination?.route
@@ -36,14 +42,19 @@ fun AppNavHost(modifier: Modifier = Modifier, onScreenChanged: (String?) -> Unit
         startDestination = LoadingDestination,
         modifier = modifier.safeDrawingPadding(),
     ) {
-        loadingScreen(
-            onFinished = {
-                // Loading leaves the back stack: Back on the start screen closes the app (spec loading, KB-1).
-                navController.navigate(SampleDestination) {
-                    popUpTo<LoadingDestination> { inclusive = true }
-                }
-            },
-        )
-        sampleScreen()
+        screens.loading(this) {
+            // Loading leaves the back stack: Back on the start screen closes the app (spec loading, KB-1).
+            navController.navigate(SampleDestination) {
+                popUpTo<LoadingDestination> { inclusive = true }
+            }
+        }
+        screens.sample(this)
     }
 }
+
+// Skeleton of step 3 (tests first): the projects destination is wired in step 4.
+data class AppScreens(
+    val loading: NavGraphBuilder.(onFinished: () -> Unit) -> Unit = { loadingScreen(it) },
+    val projects: NavGraphBuilder.(onFeatureDisabled: () -> Unit) -> Unit = {},
+    val sample: NavGraphBuilder.() -> Unit = { sampleScreen() },
+)

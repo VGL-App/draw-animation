@@ -7,10 +7,10 @@ timeout: 180
 # stop loading with a retry button (FB-20261025-03).
 fresh
 consent decline 30
-wait id=sample_screen | text="Continue to app" | desc="Continue to app" | id=loading_retry 60
+wait id=projects_screen | text="Continue to app" | desc="Continue to app" | id=loading_retry 60
 tap_if id=loading_retry
-wait id=sample_screen | text="Continue to app" | desc="Continue to app" 60
+wait id=projects_screen | text="Continue to app" | desc="Continue to app" 60
 tap_if text="Continue to app" | desc="Continue to app"
-wait id=sample_screen 30
+wait id=projects_screen 30
 expect_no id=loading_screen
 shot main
