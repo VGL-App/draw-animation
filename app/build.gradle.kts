@@ -211,6 +211,7 @@ dependencies {
     implementation(project(":core:logging"))
     implementation(project(":core:network"))
     implementation(project(":core:lessons"))
+    implementation(project(":core:project"))
 
     implementation(project(":feature:sample"))
     implementation(project(":feature:loading"))

@@ -154,13 +154,15 @@ class ProjectsScreenTest {
     fun longName_isEllipsizedOnOneLine() {
         val longName = "A very long project name that never fits on one card line"
         show(list(listOf(readableCard(1, longName, frames = 48, fps = 12), readableCard(2))))
-        val nameNode = composeRule.onNodeWithText(longName).fetchSemanticsNode()
+        // The card merges its texts for accessibility: read the text nodes themselves.
+        val nameNode = composeRule.onNodeWithText(longName, useUnmergedTree = true).fetchSemanticsNode()
         val layouts = mutableListOf<TextLayoutResult>()
         nameNode.config.getOrNull(SemanticsActions.GetTextLayoutResult)?.action?.invoke(layouts)
         val layout = layouts.single()
         assertEquals(1, layout.lineCount)
         assertTrue("name is cut with an ellipsis", layout.isLineEllipsized(0))
-        val meta = composeRule.onNodeWithText("48 frames · 12 fps").fetchSemanticsNode().boundsInRoot
+        val meta = composeRule.onNodeWithText("48 frames · 12 fps", useUnmergedTree = true)
+            .fetchSemanticsNode().boundsInRoot
         assertTrue("name ${nameNode.boundsInRoot} over meta line $meta", nameNode.boundsInRoot.bottom <= meta.top)
     }
 
