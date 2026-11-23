@@ -23,12 +23,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 /**
  * A [ProjectsRepository] in memory. [projects] is what `items` emits; [images] holds the thumbnail of each id;
  * [reads] counts the thumbnail reads per id; [gate], when set, holds every read until it completes.
+ * [readGates] holds one read: key (id, n) is the n-th read of that id, from 1. A read returns the image [images] held
+ * when the read started, as the real repository reads the file of the version asked for.
  */
 class FakeProjectsRepository : ProjectsRepository {
     val projects = MutableStateFlow<List<ProjectListItem>>(emptyList())
     val images = mutableMapOf<ProjectId, ImageBitmap>()
     val reads = mutableMapOf<ProjectId, Int>()
     var gate: CompletableDeferred<Unit>? = null
+    val readGates = mutableMapOf<Pair<ProjectId, Int>, CompletableDeferred<Unit>>()
 
     /** How many collectors `items` has right now. */
     val collectors: Int get() = projects.subscriptionCount.value
@@ -36,9 +39,12 @@ class FakeProjectsRepository : ProjectsRepository {
     override val items: Flow<List<ProjectListItem>> = projects
 
     override suspend fun thumbnail(id: ProjectId, maxWidthPx: Int): ImageBitmap? {
-        reads[id] = (reads[id] ?: 0) + 1
+        val n = (reads[id] ?: 0) + 1
+        reads[id] = n
+        val image = images[id]
         gate?.await()
-        return images[id]
+        readGates[id to n]?.await()
+        return image
     }
 
     fun readsOf(id: ProjectId): Int = reads[id] ?: 0

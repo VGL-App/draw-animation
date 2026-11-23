@@ -143,6 +143,44 @@ class ProjectsViewModelTest {
     }
 
     @Test
+    fun thumbnail_olderLoadFinishingLast_keepsNewerImage() = runTest {
+        // Project 1: the old version's read finishes last. Project 2 (control): it finishes first.
+        val ids = listOf(testProjectId(1), testProjectId(2))
+        val older = ids.associateWith { image() }
+        val newer = ids.associateWith { image() }
+        val olderGates = ids.associateWith { CompletableDeferred<Unit>() }
+        val newerGates = ids.associateWith { CompletableDeferred<Unit>() }
+        ids.forEach {
+            repository.readGates[it to 1] = olderGates.getValue(it)
+            repository.readGates[it to 2] = newerGates.getValue(it)
+            repository.images[it] = older.getValue(it)
+        }
+        repository.projects.value =
+            listOf(readableItem(1, updatedAtMillis = 100L), readableItem(2, updatedAtMillis = 100L))
+        val viewModel = started()
+        viewModel.cards().forEach { viewModel.onThumbnailNeeded(it, 200) }
+        runCurrent()
+
+        // Both projects are edited while their old thumbnails are still loading.
+        ids.forEach { repository.images[it] = newer.getValue(it) }
+        repository.projects.value =
+            listOf(readableItem(1, updatedAtMillis = 200L), readableItem(2, updatedAtMillis = 200L))
+        runCurrent()
+        viewModel.cards().forEach { viewModel.onThumbnailNeeded(it, 200) }
+        runCurrent()
+
+        newerGates.getValue(ids[0]).complete(Unit)
+        olderGates.getValue(ids[1]).complete(Unit)
+        runCurrent()
+        olderGates.getValue(ids[0]).complete(Unit)
+        newerGates.getValue(ids[1]).complete(Unit)
+        runCurrent()
+
+        assertSame(newer.getValue(ids[1]), viewModel.thumbnails.value[ids[1]])
+        assertSame(newer.getValue(ids[0]), viewModel.thumbnails.value[ids[0]])
+    }
+
+    @Test
     fun thumbnail_twoRequestsSameKey_readOnce() = runTest {
         repository.projects.value = listOf(readableItem(1))
         repository.images[testProjectId(1)] = image()
