@@ -1,16 +1,16 @@
 ---
 ticket: T-007
 title: Vị trí quảng cáo của Frameloop
-status: stopped                 # draft | approved | stopped | done
+status: approved                 # draft | approved | stopped | done
 version: 2                   # tăng khi plan được sửa lại sau phản hồi hoặc sau khi dừng
 risk_score:                  # tổng điểm theo risk-scoring.md, để trống nếu chạm điểm chặn
 risk_level: high             # low | medium | high
 token_estimate: 15M          # tổng token dự kiến, ví dụ 20M; số gợi ý: scripts/token-usage.py estimate (docs/ops/token-usage.md)
 blocking_points: [ads, core] # các điểm chặn bị chạm, ví dụ [ads, sdk]
 run_order:                   # AI điền khi lập danh sách chạy
-reviewer:                    # người duyệt
-cross_reviewer:              # bắt buộc khi risk_level là high
-approved_at:
+reviewer: Nhật               # người duyệt
+cross_reviewer: Nhật         # bắt buộc khi risk_level là high
+approved_at: 2026-11-23
 lane:                        # để trống: phiên tự chạy; quick: đường làm nhanh có người theo dõi (ADR-0048)
 ---
 
@@ -247,9 +247,9 @@ Phiên bản 1:
 
 Phiên bản 2:
 
-- **Quyết định:** <Duyệt / Yêu cầu sửa / Từ chối>
-- **Người duyệt:** <tên>, **duyệt chéo:** <tên>
-- **Ghi chú:** <...>
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-01 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-01: plan T-007 phiên bản 2 và danh sách RUN-20261122-03, bắt đầu phiên khi merge; chấp nhận ADR-1001. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev."
 
 ## 10. Nhật ký thực hiện
 

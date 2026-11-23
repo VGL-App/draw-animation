@@ -1,7 +1,7 @@
 ---
 id: ADR-1001
 title: App nâng heap của JVM test trong core/ads/build.gradle.kts, là ngoại lệ tạm của quy tắc app không sửa :core:ads, chờ dự án mẫu nhận thay đổi
-status: proposed             # proposed | accepted | superseded
+status: accepted             # proposed | accepted | superseded
 origin: app                  # template: ADR của dự án mẫu (mã dưới 1000) | app: ADR riêng của app (mã từ 1001)
 date: 2026-11-23
 deciders: [Nhật]

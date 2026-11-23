@@ -332,7 +332,7 @@ ADR có `origin: template` đến từ dự án mẫu: trong app, không sửa; 
 - không dùng Run now hay lịch hẹn của routine cho danh sách `start: auto`
 - không "Re-run" một lần chạy `start-run.yml` đã gọi API kích hoạt
 
-## Đang đề xuất, chưa duyệt chính thức (vẫn làm theo khi tài liệu quy trình dẫn tới)
+## Quyết định riêng của app
 
 ### [ADR-1001](adr/1001-heap-test-core-ads.md): App nâng heap của JVM test trong core/ads/build.gradle.kts, là ngoại lệ tạm của quy tắc app không sửa :core:ads, chờ dự án mẫu nhận thay đổi
 
