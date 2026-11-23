@@ -5,7 +5,7 @@ feature: projects
 spec: features/projects/spec.md
 scenarios: [KB-4, KB-5, KB-6, KB-7]
 owner: Nhật
-status: on-staging
+status: planned
 risk: low
 size: M
 depends_on: [T-009]
@@ -40,3 +40,7 @@ Không chạm điểm chặn.
 - [ ] CI qua toàn bộ, đã merge vào nhánh chính.
 - [ ] Có trong bản staging, đúng với thiết kế đã duyệt.
 - [ ] Đã được nghiệm thu chéo và nghiệm thu cuối.
+
+## Ghi chú trạng thái
+
+Phiên bản 1 của plan đã merge (PR #36) và có trên bản staging `0.1.0-staging.5`. Ticket chuyển lại `planned` ngày 2026-11-23 vì plan phiên bản 2 (sửa thông báo khi nhân bản, phản hồi `features/projects/feedback/FB-20261123-01-thong-bao-khi-nhan-ban.md`) đang chờ duyệt; plan được duyệt thì `scripts/status.py --sync` chuyển ticket sang `approved`, phiên merge xong thì ticket về `on-staging`.

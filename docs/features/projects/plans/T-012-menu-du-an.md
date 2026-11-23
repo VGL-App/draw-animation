@@ -1,16 +1,16 @@
 ---
 ticket: T-012
 title: Menu dự án - mở, đổi tên, nhân bản, xóa
-status: done                    # draft | approved | stopped | done
-version: 1                   # tăng khi plan được sửa lại sau phản hồi hoặc sau khi dừng
-risk_score: 8                # tổng điểm theo risk-scoring.md, để trống nếu chạm điểm chặn
+status: draft                   # draft | approved | stopped | done
+version: 2                   # tăng khi plan được sửa lại sau phản hồi hoặc sau khi dừng
+risk_score: 5                # tổng điểm theo risk-scoring.md, để trống nếu chạm điểm chặn
 risk_level: medium           # low | medium | high
-token_estimate: 16.4M        # tổng token dự kiến, ví dụ 20M; số gợi ý: scripts/token-usage.py estimate (docs/ops/token-usage.md)
+token_estimate: 5.0M         # tổng token dự kiến, ví dụ 20M; số gợi ý: scripts/token-usage.py estimate (docs/ops/token-usage.md)
 blocking_points: []          # các điểm chặn bị chạm, ví dụ [ads, sdk]
 run_order:                   # AI điền khi lập danh sách chạy
-reviewer: Nhật               # người duyệt
-cross_reviewer: Nhật         # bắt buộc khi risk_level là high
-approved_at: 2026-11-23
+reviewer:                    # người duyệt
+cross_reviewer:              # bắt buộc khi risk_level là high
+approved_at:
 lane:                        # để trống: phiên tự chạy; quick: đường làm nhanh có người theo dõi (ADR-0048)
 ---
 
@@ -21,6 +21,11 @@ lane:                        # để trống: phiên tự chạy; quick: đườ
 Thêm vào `:feature:projects` (module do plan T-009 tạo) menu dự án mở bằng nhấn giữ thẻ: `ModalBottomSheet` của Material 3 với đầu menu (ảnh thu nhỏ, tên, "<n> frames · <fps> fps · edited <thời điểm>") và năm mục theo thiết kế; hộp thoại đổi tên và hộp thoại xác nhận xóa là `BasicAlertDialog` của Material 3 bọc một thẻ nội dung theo kiểu hộp thoại chuẩn; nhân bản hiện thông báo ngắn "đang nhân bản" và chặn bấm lại tới khi xong. Mọi thao tác đi qua `ProjectRepository` có sẵn của `:core:project` (`rename`, `duplicate`, `delete` của T-002), không sửa module core. Kiểm chứng bằng unit test ViewModel, test giao diện Robolectric (mở và đóng menu bằng nút quay lại, chạm ngoài, kéo xuống), screenshot test cùng tên ảnh thiết kế `ProjectsScreen_menu_*`.
 
 **Phụ thuộc plan T-009 cùng đợt.** T-009 và T-012 cùng đợt 20261123-02; trong danh sách chạy, T-012 chạy ngay sau T-009. Plan này chỉ dùng các tên sau của plan T-009 (bản trên nhánh của đợt, đọc ngày 2026-11-23): `ProjectsViewModel` (`uiState` là `combine` của `repository.items` với các cờ rồi `stateIn(WhileSubscribed(5_000))`, `onProjectClick`, trường `editorEnabled` gán trong `combine`, `thumbnails: StateFlow<Map<ProjectId, ImageBitmap?>>` cùng bộ nhớ ảnh LRU 40 nằm trong ViewModel, hàm riêng `retainThumbnails` gọi trong đường của `uiState`), `ProjectsUiState` (`Empty`, `List(cards: kotlin.collections.List<ProjectCardUi>, …)`, `Loading`, `Disabled`), `ProjectCardUi(id, name: String?, frameCount, fps, updatedAtMillis, readable)`, `ProjectsEffect` (`OpenProject`, `ShowCannotOpen`, `ShowComingSoon`), `ProjectsRepository`/`DefaultProjectsRepository` (chỉ `items`, `thumbnail`), `FakeProjectsRepository`, `ProjectsRoute` (callback `null` nghĩa là "Coming soon"), `ProjectsScreen(…, gridState: LazyGridState = rememberLazyGridState(), …)`, `ProjectsTestTags`, tag `project_card_${id.value}`, chuỗi `projects_coming_soon`, `projects_card_frames`, `projects_card_unnamed`. T-009 đổi một tên trong danh sách này thì plan T-012 phải xem lại (mục 6, mục 7).
+
+**Phiên bản 2 (soạn ngày 2026-11-23 theo phản hồi `features/projects/feedback/FB-20261123-01-thong-bao-khi-nhan-ban.md`, `draft`, chờ người duyệt):**
+
+- Vì sao phiên bản 1 chưa đủ tốt: phiên bản 1 đã merge (PR #36). Rà soát độc lập của phiên tìm ra, và một test tạm đo lại: đang nhân bản mà có hai thông báo khác trong 4 giây thì thông báo thứ hai không hiện, chờ tới khi nhân bản xong. Nguyên nhân là ba quy tắc dùng chung một `SnackbarHostState` của mục 3.1: hàm `show` chỉ ẩn thông báo `Indefinite`, còn vòng lặp của "Duplicating…" xếp hàng lại ngay sau thông báo thứ nhất, nên thông báo thứ hai xếp sau vòng lặp. Cũng vì quy tắc đó, khi không nhân bản, thông báo thứ hai chờ thông báo thứ nhất tự ẩn (4 giây); T-009 thì ẩn thông báo cũ và hiện ngay thông báo mới. Plan chưa có test cho hai thông báo liên tiếp, và điều kiện chuyển sang dự phòng của mục 3.4 chỉ dựa vào một thông báo.
+- Thay đổi so với phiên bản 1: chỉ phần thông báo. "Duplicating…" hiện trong một `SnackbarHost` riêng (vòng lặp chuyển sang host riêng), chỉ khi host chung không có thông báo nào: chính là phương án dự phòng đã duyệt ở mục 3.4 của phiên bản 1. Hàm `show` trở lại cách của T-009. Chỉ sửa `ProjectsScreen.kt` và hai tệp test; ViewModel, chữ và ảnh chuẩn giữ nguyên. Thêm hai test viết trước (đỏ trên code hiện tại) và một test đối chứng. Các mục phiên bản 2 ghi ở đầu mục 3.1, 3.2, 3.4, 3.5, 4, 4.1, 5, 6, 7, 8 và 9; nội dung phiên bản 1 giữ nguyên bên dưới để tra cứu.
 
 ## 2. Hiểu yêu cầu
 
@@ -56,6 +61,16 @@ ADR liên quan: ADR-0001 (feature chỉ phụ thuộc core), ADR-0003 (cờ `EDI
 ## 3. Giải pháp
 
 ### 3.1. Cách làm
+
+**Phiên bản 2: "Duplicating…" ở host riêng (FB-20261123-01).** Cách tiếp tục: làm lại từ nhánh chính, trên nhánh mới `claude/T-012-thong-bao-nhan-ban`; phiên bản 1 đã merge ở PR #36, nhánh `claude/T-012-menu-du-an` không dùng lại. Phần này thay ba quy tắc thông báo dùng chung một `SnackbarHostState` ở đoạn "Màn hình" bên dưới; mọi phần khác của phiên bản 1 giữ nguyên và đã có trên nhánh chính.
+
+- `ProjectsScreen` giữ một `SnackbarHostState` riêng cho "Duplicating…": `val duplicatingHostState = remember { SnackbarHostState() }`, gọi ở đầu hàm, ngoài `when (uiState)`, để trạng thái không mất khi màn đổi giữa `List` và `Empty`. Không thêm tham số công khai cho `ProjectsScreen` hay `ProjectsRoute`.
+- `duplicatingName != null` thì `LaunchedEffect(text) { while (isActive) duplicatingHostState.showSnackbar(text, duration = SnackbarDuration.Indefinite) }`: giữ vòng lặp, nhưng trên host riêng. Material 3 bản 1.3.2 cho mỗi snackbar thao tác ngữ nghĩa `dismiss`, nên người dùng TalkBack ẩn được "Duplicating…"; vòng lặp hiện lại nó ngay vì việc vẫn đang chạy. Host riêng chỉ có thông báo này, nên vòng lặp không tranh chỗ với thông báo nào. Nhân bản xong (`duplicatingName` về `null`) thì hiệu ứng rời khỏi cây, `showSnackbar` bị hủy và thông báo tắt, kể cả khi lúc đó nó đang bị thông báo khác che.
+- Hai host vẽ bằng một composable riêng mới trong cùng tệp, `private fun ProjectsSnackbars(snackbarHostState, duplicatingHostState, modifier)`: một `Box(modifier, contentAlignment = Alignment.BottomCenter)` chứa `if (snackbarHostState.currentSnackbarData == null) SnackbarHost(duplicatingHostState)` rồi `SnackbarHost(snackbarHostState)`. `ProjectsSnackbars` thay đúng lời gọi `SnackbarHost(hostState = snackbarHostState, …)` hiện có, giữ chỗ và modifier của lời gọi đó (trên nhánh chính hôm nay là `Modifier.align(Alignment.BottomCenter)` trong `Box` gốc; T-010 đã merge trước thì là chỗ T-010 đặt, mục 6). `currentSnackbarData` là state của Compose, nên màn tự vẽ lại khi nó đổi. Có thông báo khác thì host riêng rời khỏi cây (không còn node "Duplicating…"); thông báo khác tự ẩn hay bị ẩn thì host riêng vào lại cây và hiện "Duplicating…", vì `showSnackbar` của host riêng vẫn đang chờ.
+- `show` của `ProjectsRoute` trở lại cách của T-009: `scope.launch { snackbarHostState.currentSnackbarData?.dismiss(); snackbarHostState.showSnackbar(message) }`. Host chung giờ chỉ có thông báo ngắn tự ẩn, nên thông báo mới ẩn thông báo đang hiện và hiện ngay. Mỗi hiệu ứng vẫn chạy trong một `launch` riêng. Bỏ `CoroutineStart.UNDISPATCHED` và import `CoroutineStart` (`isActive` vẫn dùng cho vòng lặp của host riêng).
+- Giữ nguyên: ViewModel đặt `duplicatingName = null` trước khi phát `ShowMessage` của lỗi nhân bản (không sửa `ProjectsViewModel.kt`); chữ "Duplicating “%1$s”…"; mục "Duplicate" tắt khi đang nhân bản.
+- Sửa chú thích cho đúng cơ chế mới: chú thích trên `show` (bỏ câu "steps aside and comes back after it, since its loop queues again on the same host"), chú thích ở `LaunchedEffect` của "Duplicating…" và KDoc của `ProjectsScreen` (host riêng, chỉ hiện khi host chung trống).
+- Host chung vẽ sau host riêng nên nằm trên. Khi thông báo chung đang mờ dần (khoảng 150 ms sau khi ẩn), "Duplicating…" đã hiện ở cùng chỗ bên dưới; chấp nhận, vì cả hai là thông báo ngắn chuẩn ở cùng một chỗ.
 
 Gói `com.vgl.draw.animation.feature.projects` (của T-009). Mọi tên của T-009 dưới đây lấy theo plan T-009 trên nhánh của đợt, bản đọc ngày 2026-11-23 (danh sách ở mục 1).
 
@@ -152,6 +167,18 @@ Thẻ trong `overlay` là bản chụp lúc mở; danh sách phát lại mà kh�
 
 ### 3.2. Danh sách file
 
+Phiên bản 2: bảng này là ranh giới của task. Các tệp đều đã có trên nhánh chính (phiên bản 1, PR #36).
+
+| Thao tác | Đường dẫn | Nội dung thay đổi |
+| --- | --- | --- |
+| Sửa | `feature/projects/src/main/kotlin/com/vgl/draw/animation/feature/projects/ProjectsScreen.kt` | (Phiên bản 2) `SnackbarHostState` riêng cho "Duplicating…", `ProjectsSnackbars`, vòng lặp của `LaunchedEffect` chuyển sang host riêng, `show` của `ProjectsRoute` theo cách của T-009, chú thích (mục 3.1, phiên bản 2) |
+| Sửa | `feature/projects/src/test/kotlin/com/vgl/draw/animation/feature/projects/ProjectMenuTest.kt` | (Phiên bản 2) Thêm `duplicating_twoMessagesInARow_bothShowAtOnce`, `duplicating_copyEndsDuringOtherMessage_doesNotReturn` (mục 4, phiên bản 2); không đổi test có sẵn |
+| Sửa | `feature/projects/src/test/kotlin/com/vgl/draw/animation/feature/projects/ProjectsRouteTest.kt` | (Phiên bản 2) Thêm `twoMessagesInARow_secondReplacesFirst` (mục 4, phiên bản 2); không đổi test có sẵn |
+
+Không sửa: `ProjectsViewModel.kt`, `ProjectsUiState.kt`, `strings.xml`, `FakeProjectsRepository.kt` (đã có `duplicateGate`, `unreadableItem`), mọi ảnh chuẩn. Ảnh chuẩn không đổi: `ProjectsScreen_duplicating_light.png` vẽ "Duplicating…" ở host riêng, cùng chỗ và cùng kiểu `Snackbar` như hôm nay; mọi ảnh khác không có thông báo. Nơi đọc tệp: không script hay workflow nào đọc `ProjectsScreen.kt` theo tên; `ProjectMenuTest.menuFiles_importNothingFromCoreAds` chỉ đọc `ProjectMenuSheet.kt` và `ProjectDialogs.kt`.
+
+#### Danh sách file của phiên bản 1 (đã merge ở PR #36, giữ để tra cứu, không phải ranh giới của phiên bản 2)
+
 Các tệp ghi "Sửa" dưới `feature/projects/` do plan T-009 tạo; T-009 chạy ngay trước T-012 trong cùng danh sách (mục 8, câu 1).
 
 | Thao tác | Đường dẫn | Nội dung thay đổi |
@@ -202,6 +229,14 @@ Nơi đọc các file plan sửa: mọi tệp "Sửa" ở trên chỉ có trong 
 
 ### 3.4. Phương án dự phòng
 
+Phiên bản 2:
+
+- **Điểm chưa chắc:** host riêng rời khỏi cây rồi vào lại (mục 3.1, phiên bản 2) chưa chạy thử: `SnackbarHost` mới vào cây có thể không hiện thông báo `Indefinite` đang chờ, hay hiện trễ hơn 500 ms vì hiệu ứng hiện dần.
+- **Điều kiện chuyển:** `duplicating_twoMessagesInARow_bothShowAtOnce` hay `duplicating_otherMessageShowsImmediately` đỏ ở câu "Duplicating… hiện lại" sau 2 lần sửa.
+- **Cách làm thay:** host riêng luôn có trong cây; khi host chung có thông báo thì host riêng mang `Modifier.alpha(0f).clearAndSetSemantics {}` (không vẽ, không có node chữ). Cùng tệp `ProjectsScreen.kt`, không thêm tệp. Test ở mục 4 giữ nguyên.
+
+Phiên bản 1:
+
 - **Điểm chưa chắc:** screenshot của menu và hộp thoại. `ModalBottomSheet` và `BasicAlertDialog` mở cửa sổ riêng (test tạm thấy hai gốc ngữ nghĩa), nên chụp theo khối nội dung của Roborazzi (dạng lambda) chỉ thấy cửa sổ của activity.
 - **Phương án chính:** như `NetworkLostScreenScreenshotTest`: test screenshot vẽ trong một cửa sổ `ProjectsScreen` (trạng thái `List`, bốn dự án của bảng chữ thiết kế) cộng một `Box` nền `scrim` độ mờ 0.55 và `ProjectMenuContent` căn đáy trên nền `surfaceContainerHigh`; hộp thoại vẽ bằng nội dung của chúng (`RenameDialogCard`, `DeleteDialogCard`: phần thân không có cửa sổ, chính là nội dung mà `BasicAlertDialog` của `RenameProjectDialog`/`DeleteProjectDialog` bọc), căn giữa trên nền tối. Cửa sổ thật của sheet và hộp thoại kiểm bằng `ProjectMenuTest` qua ngữ nghĩa (node, chữ, vị trí, đóng mở). Đo màu điểm ảnh không cần dự phòng: test đo màu vẽ `ProjectMenuContent`, `RenameDialogCard`, `DeleteDialogCard` ngay trong cửa sổ activity và đọc điểm ảnh của `decorView` activity, cách mà `CLAUDE.md` bước 10 quy định và `NativeAdCardTest.windowBitmap()` của `:core:ads` đã dùng; không đo trên cửa sổ riêng của sheet hay hộp thoại.
 - **Điều kiện chuyển:** ảnh do phương án chính vẽ lệch rõ với thiết kế ở phần menu vì nội dung không giống sheet thật (ví dụ bóng hay lề của sheet thật không có trong ảnh; sheet đặt `RectangleShape` như khung `ProjectMenuSheet` của thiết kế, không có bo góc, câu hỏi 10), sau 2 lần sửa.
@@ -216,6 +251,20 @@ Các dự phòng khác, mỗi cái độc lập:
 
 ### 3.5. Hành vi đã có bị đổi
 
+Phiên bản 2: `scripts/existing-tests.py` trên plan này (2026-11-23, nhánh `claude/batch-20261123-03`, `cdebb3c`) lấy tên từ `ProjectsScreen.kt` (`ProjectsScreen`, `ProjectsRoute`, `ProjectsTestTags`, `NewAnimationButton`, tag của tệp). Kết quả ở dòng cuối của mục này. Các test của `:feature:projects` kiểm thông báo, đã đọc từng test:
+
+| Hành vi cũ | Hành vi mới (câu của mục 3.1) | Test có sẵn khẳng định hành vi cũ | Giữ, hay câu khẳng định mới |
+| --- | --- | --- | --- |
+| `show` chỉ ẩn thông báo `Indefinite`; thông báo ngắn thứ hai chờ thông báo thứ nhất tự ẩn | `show` ẩn thông báo đang hiện của host chung rồi hiện ngay (cách của T-009) | `ProjectsRouteTest.newAnimation_withoutDestination_showsComingSoon`, `lesson_withoutDestination_showsComingSoon`, `settings_withoutDestination_showsComingSoon`, `import_withoutDestination_showsComingSoon`, `openProject_withoutDestination_showsComingSoon`, `unreadable_showsCannotOpen`, `openProject_withDestination_opensIt`; `ProjectMenuTest.backUp_withoutDestination_showsComingSoon` | Giữ: mỗi test có nhiều nhất một thông báo, câu "có chữ sau 500 ms", "không có chữ trước khi chạm" và "mở được thì không có Coming soon" vẫn đúng. Không test nào khẳng định thông báo thứ hai phải chờ |
+| "Duplicating…" ở host chung; vòng `while` xếp hàng lại sau thông báo khác | "Duplicating…" ở host riêng (vòng lặp giữ trên host riêng), chỉ có trong cây khi host chung trống | `ProjectMenuTest.duplicating_otherMessageShowsImmediately`, `duplicating_showsSnackbarAndDisablesItem` | Giữ mọi câu: "Coming soon" hiện sau 500 ms và không còn node "Duplicating"; sau 5 giây "Duplicating “Walk cycle”…" hiện lại; mở cổng thì không còn "Duplicating"; menu mở có "Duplicating…" và mục "Duplicate" tắt, `duplicatingName = null` thì mục bật và không còn chữ |
+| ViewModel tắt `duplicatingName` trước khi phát lỗi nhân bản | Không đổi | `ProjectMenuViewModelTest.duplicate_failure_clearsDuplicating`, `duplicate_inProgress_setsDuplicatingAndBlocksSecond` | Giữ, không sửa `ProjectsViewModel.kt` |
+| Ảnh thông báo "Duplicating…" | Cùng `Snackbar`, cùng chỗ, ở host riêng | `ProjectMenuScreenshotTest.duplicating_light` (`ProjectsScreen_duplicating_light.png`) | Giữ, ảnh không ghi lại (mục 7) |
+| `ProjectsScreen` không có thông báo nào: chỉ có `SnackbarHost` rỗng | Thêm host riêng rỗng, không vẽ gì | `ProjectsScreenScreenshotTest` (ảnh `ProjectsScreen_list_*`, `ProjectsScreen_empty_*`), tám ảnh còn lại của `ProjectMenuScreenshotTest`, `ProjectsScreenTest` | Giữ, ảnh và câu khẳng định không đổi |
+
+Kết quả của `scripts/existing-tests.py`: 160 test dùng tên hay tag của `ProjectsScreen.kt`; "Cần xem trước" 5, "Nên xem" 19 (lần chạy lại sau khi sửa theo rà soát; trước đó 7 và 22, phần chênh là test mà plan nay đã nêu tên), đã đọc từng test. Các test của `:core:project`, `:feature:lessons`, `ProjectThumbnailsTest`, `DefaultProjectsRepositoryTest`, `ProjectsViewModelTest.unreadable_thumbnailNotRead` chỉ trùng tên chung `thumbnail`, không liên quan. `ProjectsScreenTest.scrollGrid_topBarStays` và `small_emptyButtonsReachable` đo vị trí thanh trên, lưới và nút: giữ, vì host riêng rỗng chồng ở đáy `Box` gốc, không chiếm chỗ trong bố cục, và hai test không có thông báo. Các test còn lại của `ProjectsScreenTest`, `ProjectsRouteTest.disabled_callsOnFeatureDisabledOnce`, `ProjectsScreenScreenshotTest.list_unreadable`: không có thông báo, giữ.
+
+Phiên bản 1:
+
 `scripts/existing-tests.py` chạy trên plan này (nhánh của đợt, 2026-11-23) không thấy test có sẵn nào: mọi tệp main của mục 3.2 do T-009 tạo, chưa có trước khi phiên làm T-009. Các hành vi do T-009 thêm mà plan này đổi, với test T-009 sẽ viết (theo mục 4 của plan T-009):
 
 | Hành vi cũ | Hành vi mới (câu của mục 3.1) | Test có sẵn khẳng định hành vi cũ | Giữ, hay câu khẳng định mới |
@@ -227,6 +276,24 @@ Các dự phòng khác, mỗi cái độc lập:
 | `ProjectsScreen` tự gọi `rememberLazyGridState()` khi Route không truyền | `ProjectsRoute` có tham số `gridState` (mặc định `rememberLazyGridState()`) và truyền vào; `ProjectsScreen` giữ giá trị mặc định | `ProjectsScreenTest.scrollPosition_survivesRestore` của T-009 | Giữ: test gọi `ProjectsScreen` trực tiếp, tham số mặc định không đổi |
 
 ## 4. Kiểm thử
+
+Phiên bản 2: test viết trước, đồng hồ test dừng (`mainClock.autoAdvance = false`) như `ProjectsRouteTest` và `duplicating_otherMessageShowsImmediately`. Không có test `runTest` nào (chỉ test giao diện trên luồng chính của Robolectric), nên bài học về dispatcher của test và `runCurrent()` không áp dụng; ViewModel dựng tay với kho giả, như các test có sẵn. Số đo trên code hiện tại lấy từ test tạm không commit (mục 4.1, phiên bản 2).
+
+| Tiêu chí chấp nhận | Loại test | Tên test hoặc cách kiểm tra |
+| --- | --- | --- |
+| FB-20261123-01: đang nhân bản, hai thông báo liên tiếp đều hiện ngay, theo thứ tự; "Duplicating…" hiện lại sau đó | Compose UI test | `ProjectMenuTest.duplicating_twoMessagesInARow_bothShowAtOnce`, `@Config(qualifiers = "w411dp-h891dp-xxhdpi")` (khung mặc định của Robolectric đặt thẻ thứ ba ngoài màn, chạm không tới, đã thấy ở lần đo tạm). Kho giả theo thứ tự `readableItem(1, name = "Walk cycle", frames = 24)`, `readableItem(3)`, `unreadableItem(2, name = "Broken")`; `repository.duplicateGate = CompletableDeferred()`; ViewModel với `FakeFeatureFlags(FeatureFlag.EDITOR)` (bản giả nhận danh sách cờ tắt, nên cờ `EDITOR` tắt và chạm thẻ thường phát `ShowComingSoon`, ra "Coming soon"), `Route(viewModel)`. Nhấn giữ `card(WALK)`, `waitForMenu()`, bấm `MENU_DUPLICATE`, `waitUntil(WAIT_MILLIS)` tới khi có `DUPLICATING_WALK`. `mainClock.autoAdvance = false`. Ẩn bằng TalkBack: `onNodeWithText(DUPLICATING_WALK).performSemanticsAction(SemanticsActions.Dismiss)`, `advanceTimeBy(500)`: vẫn có `DUPLICATING_WALK` (vòng lặp hiện lại vì việc còn chạy). Chạm `card(testProjectId(3))`, `advanceTimeBy(500)`: có "Coming soon", 0 node chứa "Duplicating". `advanceTimeBy(500)`, chạm `card(testProjectId(2))`, `advanceTimeBy(500)`: có "Can't open this project.", 0 node "Coming soon", 0 node chứa "Duplicating". `advanceTimeBy(5_000)`: có `DUPLICATING_WALK`, 0 node "Can't open this project.". `gate.complete(Unit)`, `advanceTimeBy(500)`: 0 node chứa "Duplicating". Trên code hiện tại đỏ ở câu "có Can't open this project.": lúc đó "Coming soon" 1, "Can't open this project." 0 |
+| Không nhân bản: thông báo thứ hai thay thông báo thứ nhất ngay (cách của T-009) | Compose UI test | `ProjectsRouteTest.twoMessagesInARow_secondReplacesFirst` (khung mặc định; `repository.projects.value = listOf(unreadableItem(2, name = "Broken"), readableItem(3))`, `show()`; cờ `EDITOR` bật sẵn ở bản giả nên chạm thẻ thường phát `OpenProject`, `onOpenProject = null` ra "Coming soon"): đối chứng trước khi chạm: 0 node "Coming soon"; chạm `card(testProjectId(3))`, `advanceTimeBy(500)`: có "Coming soon"; `advanceTimeBy(500)`, chạm `card(testProjectId(2))`, `advanceTimeBy(500)`: có "Can't open this project.", 0 node "Coming soon". Trên code hiện tại đỏ ở câu "có Can't open this project.": lúc đó "Coming soon" 1, "Can't open this project." 0; thông báo thứ hai chỉ hiện sau 4,5 giây |
+| Nhân bản xong lúc "Duplicating…" đang bị che thì không hiện lại | Compose UI test (đối chứng, đã qua trên code hiện tại) | `ProjectMenuTest.duplicating_copyEndsDuringOtherMessage_doesNotReturn` (khung mặc định; kho giả `readableItem(1, name = "Walk cycle", frames = 24)`, `readableItem(3)`; cổng, cờ `EDITOR`, nhân bản như trên): `autoAdvance = false`; chạm `card(testProjectId(3))`, `advanceTimeBy(500)`: có "Coming soon"; `gate.complete(Unit)`, `advanceTimeBy(500)`: có "Coming soon", 0 node chứa "Duplicating"; `advanceTimeBy(5_000)`: 0 node "Coming soon", 0 node chứa "Duplicating". Giữ hành vi cho code mới: hiệu ứng của host riêng phải bị hủy cả khi host đang rời khỏi cây |
+| Hành vi phiên bản 1 giữ nguyên | Test có sẵn | Mọi test ở bảng mục 3.5, phiên bản 2; ảnh chuẩn kiểm bằng `verifyRoborazziDebug` trong `scripts/check.sh`, không ghi lại ảnh nào |
+| Cảm giác trên máy: "Duplicating…" nhường chỗ rồi hiện lại | Kiểm tra thủ công (máy thật: khác, cần T-011 trên staging để có dự án lớn và nhấn giữ thẻ) | Gộp vào bước kiểm tay của phiên bản 1: nhân bản một dự án nhiều khung, trong lúc đó chạm hai thẻ liên tiếp (khi màn vẽ chưa có): mỗi thông báo hiện ngay, "Duplicating…" hiện lại sau |
+
+Phiên bản 2 không chạy `scripts/design-compare.sh` và không vẽ lại ảnh nào; hai ảnh thiết kế của menu đã có ảnh chuẩn từ phiên bản 1 (PR #36), các ảnh khác đã khai báo ở bảng phiên bản 1. Ảnh thiết kế của ticket khác (T-012 phiên bản 1, PR #36): `ProjectsScreen_menu_light`, `ProjectsScreen_menu_dark`.
+
+**Ngoại lệ viết test trước (phiên bản 2):** chú thích và KDoc. `duplicating_copyEndsDuringOtherMessage_doesNotReturn` qua cả trước khi sửa (đối chứng giữ hành vi), không tính vào số test đỏ đúng lý do.
+
+Thứ tự commit (phiên bản 2): bước 3 commit ba test của `ProjectMenuTest.kt` và `ProjectsRouteTest.kt` (hai test đỏ ở câu "có Can't open this project.", test đối chứng qua); bước 4 commit `ProjectsScreen.kt`. Không cần khung rỗng: test chỉ dùng tên đã có.
+
+Phiên bản 1:
 
 Dữ liệu dùng chung: `ProjectId` là UUID chuẩn (`requireCanonicalUuid`, `core/project/.../model/Ids.kt`), nên mã cố định: `WALK = ProjectId("00000000-0000-4000-8000-000000000001")`, `BROKEN = ProjectId("00000000-0000-4000-8000-000000000002")`, các dự án khác `...0003` trở đi. Thẻ `walk` (`ProjectCardUi(id = WALK, name = "Walk cycle", frameCount = 24, fps = 12, updatedAtMillis = NOW - 1 phút, readable = true)`), thẻ hỏng `broken` (`id = BROKEN`, `name = "Old test"`, `readable = false`); tag thẻ theo mẫu của T-009 `project_card_${id.value}` (trong mục này viết tắt `project_card_walk`). `NOW` cố định 2026-11-22 12:00 UTC (giữa ngày), test truyền `zone = ZoneId.of("UTC")` cho `ProjectsScreen`/`ProjectMenuContent`, nên "edited today" không phụ thuộc múi giờ máy chạy test. Luồng thu trong `backgroundScope` chờ bằng `runCurrent()`, không `advanceUntilIdle()` (bài học của T-002). Tên mới khi đổi tên: `(WALK, "Walk loop")`, tức kho giả nhận đúng hằng `WALK` và chuỗi "Walk loop".
 
@@ -285,11 +352,34 @@ Thứ tự commit: bước 3 commit các tệp test, phần thêm của `FakePro
 
 ### 4.1. Chạy thử
 
+Phiên bản 2:
+
+- **Đã chạy thử:** 2026-11-23, nhánh `claude/batch-20261123-03` (`cdebb3c`, code của `:feature:projects` giống nhánh chính `a6bb121`), test tạm không commit `feature/projects/src/test/.../TrialSnackbarTest.kt` đi đúng các bước của ba test ở mục 4 và in số node của "Coming soon", "Can't open this project.", "Duplicating" theo thời gian của đồng hồ test. Đã xóa tệp tạm.
+- **Lệnh:** `./gradlew :feature:projects:testDebugUnitTest --tests '*TrialSnackbarTest*'` (qua, test tạm chỉ in số). Không chạy `scripts/check.sh`: tiêu chí E của phiên bản 2 là 1 (mục 5).
+- **Kết quả:** đang nhân bản, khung `w411dp-h891dp-xxhdpi`: chạm thẻ thường, sau 500 ms "Coming soon" 1, "Duplicating" 0; chạm thẻ hỏng 1 giây sau, sau 500 ms "Coming soon" 1, "Can't open this project." 0; thêm 5 giây "Duplicating" 1, "Can't open this project." 0; mở cổng, sau 112 ms "Can't open this project." 1. Khung mặc định của Robolectric: thẻ thứ ba ngoài màn, lần chạm không tới nên "Can't open this project." không bao giờ hiện, vì vậy test đầu dùng khung `w411dp-h891dp-xxhdpi`. Không nhân bản (khung mặc định): sau 500 ms "Coming soon" 1, "Can't open this project." 0; "Can't open this project." chỉ hiện sau 4,5 giây. Nhân bản xong lúc đang có "Coming soon": "Duplicating" 0 cả sau khi "Coming soon" tự ẩn (đối chứng qua). Chưa chạy thử cách sửa (mục 3.4, phiên bản 2 có dự phòng).
+
+Phiên bản 1:
+
 - **Đã chạy thử:** ngày 2026-11-22, worktree tạm từ `origin/main` (`b5a33cf`), test tạm không commit `feature/sample/src/test/.../TrialMenuTest.kt` (`:feature:sample` vì `:feature:projects` chưa có trên nhánh chính), cùng classpath Material 3 1.3.2 mà feature nào cũng có: (1) `combinedClickable` nhận `longClick()` của `performTouchInput`: `onLongClick` 1 lần, `onClick` 0 lần; (2) `ModalBottomSheet` (`skipPartiallyExpanded = true`) mở là cửa sổ riêng (cây có 2 gốc ngữ nghĩa), node "Open" trong sheet tìm được bằng `onNodeWithText`; `Espresso.pressBack()` gọi `onDismissRequest` 1 lần và node biến mất; chạm gốc của cửa sổ sheet ở `(centerX, 20 px)` gọi `onDismissRequest` 1 lần; `swipeDown(startY = top, endY = top + 2000f)` trên mục của sheet gọi `onDismissRequest` 1 lần; (3) `AlertDialog` có `OutlinedTextField` với `FocusRequester.requestFocus()` trong `LaunchedEffect`: `assertIsFocused()` qua, `onNode(isDialog())` có node. Kết quả: 4 test, 0 lỗi.
 - **Lệnh:** `./gradlew :feature:sample:testDebugUnitTest --tests '*TrialMenuTest*'` (qua, 4/4). `scripts/check.sh` trên cùng worktree có test tạm: lần đầu dừng ở `:feature:sample:ktlintTestSourceSetCheck` (định dạng của chính test tạm: thứ tự import, dòng quá 120 ký tự), sửa bằng `ktlintTestSourceSetFormat`; lần hai QUA ("Cổng chất lượng: QUA", 2766 test JVM, 0 lỗi, gồm 4 test tạm; 99 ảnh screenshot). Trên `:feature:projects`: chưa chạy được trước phiên, vì module chỉ có sau khi T-009 chạy xong trong cùng danh sách (câu hỏi 6). Phiên làm T-012 chạy phần này ngay đầu task, trước bước 3, trên nhánh đã có code của T-009: chép `TrialMenuTest` sang `feature/projects/src/test/.../TrialMenuTest.kt` (không commit), thêm hai test tạm: (a) `BasicAlertDialog(onDismissRequest = {}) { Card { OutlinedTextField(…, modifier = Modifier.focusRequester(r).testTag("field")) } }` với `r.requestFocus()` trong `LaunchedEffect`: `onNodeWithTag("field").assertIsFocused()` qua và `onNode(isDialog())` có node; (b) vẽ một `Text` màu `error` trong cửa sổ activity rồi đọc điểm ảnh của `decorView` bằng hàm chép từ `NativeAdCardTest.windowBitmap()`; chạy `./gradlew :feature:projects:testDebugUnitTest --tests '*TrialMenuTest*'` rồi `scripts/check.sh`, ghi kết quả vào nhật ký, xóa tệp tạm. Test tạm (a) đỏ thì thử `AlertDialog` theo mục 3.4; test tạm khác đỏ, hay cả hai cách hộp thoại đều đỏ, thì dừng task theo mục 7.
 - **Kết quả:** ba điểm mới của kỹ thuật (nhấn giữ, sheet đóng bằng ba cách, ô nhập có tiêu điểm trong hộp thoại) chạy được trên Robolectric của dự án. Chưa thử: screenshot của sheet và hộp thoại (phương án chính và dự phòng ở mục 3.4). Đo màu điểm ảnh không còn là điểm chưa chắc: test đo trên cửa sổ activity, cách mà `CLAUDE.md` bước 10 quy định và `:core:ads` đã chạy trong CI (`NativeAdCardTest`), không đo trên cửa sổ riêng của sheet hay hộp thoại. Chưa thử trên Robolectric: `BasicAlertDialog` (cùng gói và cùng cơ chế cửa sổ với `AlertDialog` đã thử; phiên thử ở đầu task, test tạm (a)), thứ tự thông báo của ba quy tắc ở mục 3.1 (kiểm bằng `duplicating_otherMessageShowsImmediately`).
 
 ## 5. Chấm rủi ro
+
+Phiên bản 2:
+
+**Điểm chặn bị chạm:** Không có. Chỉ sửa một tệp của `:feature:projects` và hai tệp test.
+
+| Tiêu chí | Điểm (0 đến 3) | Lý do |
+| --- | --- | --- |
+| A. Phạm vi thay đổi | 1 | Một tệp main (`ProjectsScreen.kt`), phần thông báo; thêm test vào hai tệp test có sẵn; không đổi giao diện công khai |
+| B. Độ rõ của yêu cầu | 0 | Hành vi mong đợi đã nêu ở phản hồi FB-20261123-01 và mục 3.1 của phiên bản 1; phương án (a) do AI chọn, chờ chủ feature xác nhận (câu hỏi 14) |
+| C. Khả năng kiểm chứng tự động | 1 | Thứ tự thông báo kiểm bằng test JVM với đồng hồ dừng; cảm giác trên máy và TalkBack đọc lại "Duplicating…" kiểm tay |
+| D. Ảnh hưởng chéo | 2 | Sửa tệp mà task khác cùng đợt cũng sửa: `ProjectsScreen.kt` do T-010 (cùng đợt) sửa, sau đó T-013, T-014, T-056; chỗ đặt host của T-010 phải đi cùng hai host (mục 6) |
+| E. Độ mới của kỹ thuật | 1 | `SnackbarHost`, `SnackbarHostState` đã dùng trong module; hai host, một host vào ra cây có điều kiện là biến thể nhỏ, chưa chạy thử (dự phòng ở mục 3.4) |
+| **Tổng** | 5 | **Mức: Trung bình** |
+
+Phiên bản 1:
 
 **Điểm chặn bị chạm:** Không có. Không sửa module core (chỉ gọi `ProjectRepository` có sẵn), không quảng cáo, không sự kiện, không quyền, không thư viện, không cấu hình build.
 
@@ -306,6 +396,15 @@ Ticket ghi rủi ro sơ bộ `low`; chấm theo thang được 8 (Trung bình) v
 
 ## 6. Ảnh hưởng chéo
 
+Phiên bản 2:
+
+- File hoặc thành phần dùng chung bị chạm: chỉ `ProjectsScreen.kt` của `:feature:projects`.
+- T-010 (quảng cáo ở danh sách, plan nháp cùng đợt 20261123-03) sửa `ProjectsScreen.kt` và chuyển `SnackbarHost` vào nội dung thanh đáy ở trạng thái `List`. Hai task phải xếp tuần tự (`run-check.py` báo cùng sửa tệp). Task chạy sau giữ hai host đi cùng nhau: T-012 phiên bản 2 chạy sau thì `ProjectsSnackbars` thay đúng lời gọi `SnackbarHost` mà T-010 đã đặt (mục 3.1); T-010 chạy sau thì chuyển cả `ProjectsSnackbars` chứ không chỉ host chung. Đề xuất: T-012 phiên bản 2 chạy trước T-010 (nhỏ, xong nhanh), và plan T-010 ghi thêm một câu về `ProjectsSnackbars` (câu hỏi 12).
+- T-011, T-056: không sửa phần thông báo; T-056 sửa thanh trên của `ProjectsScreen.kt`, xếp tuần tự.
+- T-013 (sao lưu) sẽ thêm thông báo "Backup saved" và thông báo lỗi có nút "Retry" vào host chung: hưởng cách mới, không cần gì thêm.
+
+Phiên bản 1:
+
 - File hoặc thành phần dùng chung bị chạm: chỉ các tệp của `:feature:projects`. Không chạm `:app` (`AppNavHost` không đổi nhờ tham số mặc định `null`), không chạm `:core:*`.
 - **Phụ thuộc plan T-009 cùng đợt 20261123-02.** Mọi tệp "Sửa" của mục 3.2 do T-009 tạo; T-012 chỉ dùng các tên của T-009 liệt kê ở mục 1 (bản đọc ngày 2026-11-23). Plan T-009 còn có thể được sửa trong đợt: sửa một tên trong danh sách đó thì sửa T-012 cùng lúc (mục 3.1, 3.2, 3.5, 4). Phiên làm T-009 lệch tên khi code thì T-012 dừng theo mục 7. T-009 dừng thì T-012 bị bỏ qua (phụ thuộc). Chỗ T-012 đổi trong code của T-009: `uiState` đọc luồng `items` dùng chung thay cho `repository.items`; `ProjectsRoute` thêm tham số `gridState`.
 - Task khác có thể xung đột:
@@ -317,6 +416,14 @@ Ticket ghi rủi ro sơ bộ `low`; chấm theo thang được 8 (Trung bình) v
 - Đề xuất thứ tự chạy: sau T-009; trước T-013. Cùng danh sách với T-010, T-014 thì tuần tự (`run-check.py` báo cùng sửa tệp).
 
 ## 7. Điều kiện dừng riêng
+
+Phiên bản 2:
+
+- Phải sửa `ProjectsViewModel.kt`, `ProjectsUiState.kt` hay chữ để test của mục 4 qua: dừng, vì phạm vi của phiên bản 2 chỉ là cách vẽ thông báo.
+- `verifyRoborazziDebug` báo lệch ở `ProjectsScreen_duplicating_light.png` hay ảnh chuẩn khác của `:feature:projects`: không ghi lại ảnh; sửa code để host riêng vẽ đúng chỗ, đúng kiểu như hôm nay. Vẫn lệch sau 2 lần sửa thì dừng, để người xem ảnh so sánh.
+- Một câu khẳng định của test có sẵn ở bảng mục 3.5 (phiên bản 2) phải đổi: dừng, vì plan nói mọi câu đó giữ nguyên.
+
+Phiên bản 1:
 
 - Cần sửa `ProjectRepository`, `ProjectNames` hay tệp khác của `:core:project` để đổi tên, nhân bản, xóa chạy đúng: dừng (điểm chặn 7 mà plan chưa nêu; T-002 đã có đủ hàm).
 - Tên lớp, tham số hay tag của T-009 trên nhánh của phiên khác các tên liệt kê ở mục 1 đến mức phải đổi câu khẳng định của mục 4: dừng, để người xem lại plan.
@@ -343,12 +450,24 @@ Ticket ghi rủi ro sơ bộ `low`; chấm theo thang được 8 (Trung bình) v
 9. Rà soát độc lập đã chạy hai lần. Lần một: 0 chặn, 8 nên sửa. Lần hai (2026-11-23): 1 chặn (đo màu trên cửa sổ riêng của sheet, hộp thoại chưa chạy thử: chuyển sang đo trên cửa sổ activity), 8 nên sửa (luồng danh sách dùng chung, chữ thay thế cho tên trống, "Duplicating…" không chặn thông báo khác, lề thanh hệ thống qua tham số, nền tối kiểm tay, cuộn lên đầu sau nhân bản, `BackUpProject` có tên, chữ mới vào câu hỏi 2 và 5), 7 ghi chú; đã sửa cả trong bản này. Điều kiện còn lại: chạy thử trên `:feature:projects` trong phiên (câu 6).
 10. **Bo góc của sheet.** Khung `ProjectMenuSheet` của thiết kế (`context/ProjectsScreen_menu_*.md`) không ghi bo góc, còn `ModalBottomSheet` mặc định bo 28 dp ở hai góc trên. Plan đặt `shape = RectangleShape` cho đúng thiết kế. Phương án khác: giữ bo mặc định của Material 3 (ảnh lệch thiết kế ở hai góc trên); anh xem ảnh thiết kế rồi chọn.
    - Trả lời (anh Nhật, 2026-11-23, chọn trong phiên): Vuông (`RectangleShape`), đúng thiết kế.
+11. **(Phiên bản 2) Trạng thái ticket.** Ticket T-012 đang `on-staging` (phiên bản 1). `run-check.py` chỉ nhận ticket `approved` (hay `planned` khi kiểm cả đợt với `--batch`), còn `scripts/status.py --sync` không chuyển ticket `on-staging`. AI đã đổi ticket sang `planned` cùng plan nháp này (phiên bản 1 vẫn trên staging, ghi ở ticket); khi plan phiên bản 2 được duyệt, `status.py --sync` chuyển ticket sang `approved`. Đề xuất: đồng ý. Phương án khác: giữ `on-staging` tới lúc duyệt rồi người sửa tay sang `approved` (không vào được danh sách của đợt khi kiểm `--batch`).
+12. **(Phiên bản 2) Xếp với T-010.** Hai plan cùng sửa `ProjectsScreen.kt`, đúng chỗ đặt thông báo (mục 6). Đề xuất: cùng danh sách chạy, T-012 phiên bản 2 chạy trước T-010; plan T-010 thêm câu "chuyển `ProjectsSnackbars` (hai host) vào thanh đáy, không chỉ `SnackbarHost`".
+13. **(Phiên bản 2) TalkBack và khung hình chớp.** Host riêng vào lại cây sau mỗi thông báo khác, nên TalkBack có thể đọc lại "Duplicating “<tên>”…". Khi một thông báo thay thông báo khác, `currentSnackbarData` của host chung có thể là `null` trong một khung hình, nên "Duplicating…" có thể chớp một khung giữa hai thông báo. Đề xuất: chấp nhận cả hai (đọc lại nhắc người dùng việc vẫn đang chạy; một khung hình khó thấy); kiểm khi thử TalkBack trên máy.
+14. **(Phiên bản 2) Chọn cách sửa của FB-20261123-01.** Báo cáo phiên RUN-20261123-01 nêu ba phương án, không đề xuất phương án nào: (a) host riêng cho "Duplicating…"; (b) trả lại cách ẩn mọi thông báo của T-009 cho host chung; (c) chấp nhận. Anh Nhật nói "Duyệt mọi đề xuất của AI" ngày 2026-11-23, và AI tự chọn (a). AI đề xuất (a) vì: (b) một mình thì thông báo khác ẩn "Duplicating…" và vòng lặp của nó lại xếp hàng chung, nên vẫn chặn thông báo sau; (c) để thông báo lỗi đổi tên, xóa hiện trễ tới hết lúc nhân bản; (a) là phương án dự phòng đã duyệt ở mục 3.4 của phiên bản 1 và chỉ sửa một tệp. Chủ feature quyết theo `docs/CLAUDE.md`, mục Khi xử lý phản hồi; lời duyệt plan phiên bản 2 xác nhận lựa chọn này.
 
 ## 9. Quyết định duyệt
+
+Phiên bản 1:
 
 - **Quyết định:** Duyệt
 - **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
 - **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+Phiên bản 2:
+
+- **Quyết định:** Duyệt / Dừng / Duyệt có điều kiện
+- **Người duyệt:** <tên>, **duyệt chéo:** <tên, nếu rủi ro cao>
+- **Ghi chú:** <điều kiện, yêu cầu sửa, trả lời câu hỏi 11 đến 14 ở mục 8>
 
 ## 10. Nhật ký thực hiện
 
