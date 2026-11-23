@@ -16,4 +16,27 @@
         <item quantity="one">%1$d frame · %2$d fps</item>
         <item quantity="other">%1$d frames · %2$d fps</item>
     </plurals>
+    <string name="projects_menu_open">Open</string>
+    <string name="projects_menu_rename">Rename</string>
+    <string name="projects_menu_duplicate">Duplicate</string>
+    <string name="projects_menu_backup">Back up to a file</string>
+    <string name="projects_menu_backup_extension" translatable="false">.frameloop</string>
+    <string name="projects_menu_delete">Delete</string>
+    <string name="projects_menu_meta" translatable="false">%1$s · %2$s</string>
+    <string name="projects_menu_edited_today">edited today</string>
+    <string name="projects_menu_edited_yesterday">edited yesterday</string>
+    <string name="projects_menu_edited_on">edited %1$s</string>
+    <string name="projects_card_long_click_label">Project options</string>
+    <string name="projects_rename_title">Rename</string>
+    <string name="projects_rename_save">Save</string>
+    <string name="projects_rename_cancel">Cancel</string>
+    <string name="projects_delete_title">Delete “%1$s”?</string>
+    <string name="projects_delete_message">This can\'t be undone.</string>
+    <string name="projects_delete_confirm">Delete</string>
+    <string name="projects_delete_cancel">Cancel</string>
+    <string name="projects_duplicating">Duplicating “%1$s”…</string>
+    <string name="projects_message_no_space">Not enough space on your phone. Free up some space and try again.</string>
+    <string name="projects_message_rename_failed">Couldn\'t rename the project. Try again.</string>
+    <string name="projects_message_duplicate_failed">Couldn\'t duplicate the project. Try again.</string>
+    <string name="projects_message_delete_failed">Couldn\'t delete the project. Try again.</string>
 </resources>

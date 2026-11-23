@@ -15,6 +15,7 @@ import com.vgl.draw.animation.core.project.model.Project
 import com.vgl.draw.animation.core.project.model.ProjectId
 import com.vgl.draw.animation.core.project.model.Resolution
 import com.vgl.draw.animation.core.project.repository.ProjectListItem
+import com.vgl.draw.animation.core.project.repository.ProjectResult
 import com.vgl.draw.animation.feature.projects.data.ProjectsRepository
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
@@ -25,6 +26,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
  * [reads] counts the thumbnail reads per id; [gate], when set, holds every read until it completes.
  * [readGates] holds one read: key (id, n) is the n-th read of that id, from 1. A read returns the image [images] held
  * when the read started, as the real repository reads the file of the version asked for.
+ *
+ * Menu actions: each call is recorded; a preset result ([renameResult], [duplicateResult], [deleteResult]) is
+ * returned when set, otherwise the action succeeds and changes [projects] as the real repository does (rename keeps
+ * the place, the copy comes first, a deleted project leaves the list). A gate ([renameGate], [duplicateGate],
+ * [deleteGate]) holds the call until it completes.
  */
 class FakeProjectsRepository : ProjectsRepository {
     val projects = MutableStateFlow<List<ProjectListItem>>(emptyList())
@@ -48,6 +54,52 @@ class FakeProjectsRepository : ProjectsRepository {
     }
 
     fun readsOf(id: ProjectId): Int = reads[id] ?: 0
+
+    val renameCalls = mutableListOf<Pair<ProjectId, String>>()
+    val duplicateCalls = mutableListOf<ProjectId>()
+    val deleteCalls = mutableListOf<ProjectId>()
+    var renameResult: ProjectResult<Project>? = null
+    var duplicateResult: ProjectResult<Project>? = null
+    var deleteResult: ProjectResult<Unit>? = null
+    var renameGate: CompletableDeferred<Unit>? = null
+    var duplicateGate: CompletableDeferred<Unit>? = null
+    var deleteGate: CompletableDeferred<Unit>? = null
+    private var nextCopy = COPY_ID_START
+
+    /** Every write call made so far. */
+    val writeCalls: Int get() = renameCalls.size + duplicateCalls.size + deleteCalls.size
+
+    override suspend fun rename(id: ProjectId, name: String): ProjectResult<Project> {
+        renameCalls += id to name
+        renameGate?.await()
+        renameResult?.let { return it }
+        val item = projects.value.first { it.id == id } as ProjectListItem.Readable
+        val renamed = item.project.copy(name = name.trim())
+        projects.value = projects.value.map { if (it.id == id) ProjectListItem.Readable(renamed) else it }
+        return ProjectResult.Success(renamed)
+    }
+
+    override suspend fun duplicate(id: ProjectId): ProjectResult<Project> {
+        duplicateCalls += id
+        duplicateGate?.await()
+        duplicateResult?.let { return it }
+        val source = (projects.value.first { it.id == id } as ProjectListItem.Readable).project
+        val copy = source.copy(id = testProjectId(nextCopy++), name = "${source.name} copy")
+        projects.value = listOf(ProjectListItem.Readable(copy)) + projects.value
+        return ProjectResult.Success(copy)
+    }
+
+    override suspend fun delete(id: ProjectId): ProjectResult<Unit> {
+        deleteCalls += id
+        deleteGate?.await()
+        deleteResult?.let { return it }
+        projects.value = projects.value.filterNot { it.id == id }
+        return ProjectResult.Success(Unit)
+    }
+
+    private companion object {
+        const val COPY_ID_START = 900
+    }
 }
 
 /** Every flag starts on; tests turn single flags off. */

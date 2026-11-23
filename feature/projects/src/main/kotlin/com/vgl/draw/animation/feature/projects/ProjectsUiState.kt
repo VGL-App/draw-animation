@@ -40,4 +40,37 @@ sealed interface ProjectsEffect {
 
     /** The drawing screen is not available yet (editor flag off). */
     data object ShowComingSoon : ProjectsEffect
+
+    /** A short message after a rename, duplicate or delete. */
+    data class ShowMessage(val message: ProjectsMessage) : ProjectsEffect
+
+    /** "Back up to a file" was chosen; [name] suggests the file name (T-013). */
+    data class BackUpProject(val id: ProjectId, val name: String) : ProjectsEffect
+
+    /** A copy was added at the top of the list: the grid scrolls to the top so the copy is seen. */
+    data object ScrollToTop : ProjectsEffect
 }
+
+/** What is open over the list: nothing, the project menu, or one of its dialogs. Holds the card as it was opened. */
+sealed interface ProjectsOverlay {
+    data object None : ProjectsOverlay
+
+    data class Menu(val card: ProjectCardUi) : ProjectsOverlay
+
+    data class Rename(val card: ProjectCardUi) : ProjectsOverlay
+
+    data class ConfirmDelete(val card: ProjectCardUi) : ProjectsOverlay
+}
+
+/**
+ * The project menu and its work (spec projects, KB-4 to KB-7). [duplicatingName] is not null while a duplicate runs;
+ * [busy] is true while a rename or a delete is being written.
+ */
+data class ProjectsMenuState(
+    val overlay: ProjectsOverlay = ProjectsOverlay.None,
+    val duplicatingName: String? = null,
+    val busy: Boolean = false,
+)
+
+/** Messages of [ProjectsEffect.ShowMessage]. */
+enum class ProjectsMessage { RENAME_FAILED, DELETE_FAILED, DUPLICATE_FAILED, NO_SPACE }
