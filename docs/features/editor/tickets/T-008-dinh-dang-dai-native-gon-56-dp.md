@@ -5,12 +5,12 @@ feature: editor
 spec: features/editor/spec.md
 scenarios: [KB-19]
 owner: Nhật
-status: planned
+status: backlog
 risk: high
 size: M
 depends_on: [T-007]
 sprint:
-plan: features/editor/plans/T-008-dai-native-56dp.md
+plan:
 auto_run:
 created: 2026-11-22
 ---
