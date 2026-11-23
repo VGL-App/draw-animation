@@ -1,7 +1,7 @@
 ---
 ticket: T-007
 title: Vị trí quảng cáo của Frameloop
-status: approved                 # draft | approved | stopped | done
+status: done                     # draft | approved | stopped | done
 version: 2                   # tăng khi plan được sửa lại sau phản hồi hoặc sau khi dừng
 risk_score:                  # tổng điểm theo risk-scoring.md, để trống nếu chạm điểm chặn
 risk_level: high             # low | medium | high
@@ -265,3 +265,14 @@ Phiên bản 2:
 - **Lệch so với plan:** Không có.
 - **Việc còn lại:** nâng heap của test JVM (ví dụ `maxHeapSize` cho `Test` trong convention plugin của `build-logic/`) hay đổi các screenshot test có hiệu ứng chạy mãi của `:core:ads` sang dừng đồng hồ, rồi chạy lại PR #20. Cả hai nằm ngoài plan; `build-logic/` thuộc mục "Không được làm" của `CLAUDE.md` và là phần dùng chung nên đề xuất về dự án mẫu (`docs/ops/from-app.md`).
 - **Cần người xem:** quyết cách sửa bộ nhớ test của `:core:ads` (plan riêng rủi ro cao cho `build-logic/` hay sửa ở dự án mẫu), rồi cho PR #20 chạy lại CI; mọi ticket thêm vị trí quảng cáo sau này (T-008) gặp cùng giới hạn.
+
+### RUN-20261122-03, phiên bản plan 2
+
+- **Kết quả:** đã merge, PR #20, commit merge ad0b766 (2026-11-23 02:13 UTC).
+- **Nhánh, PR:** tiếp tục trên `claude/T-007-vi-tri-quang-cao`, PR #20, theo mục 3.1 (Cách tiếp tục). Gộp `origin/main` 4de523b vào nhánh (commit merge 6ab4bfa, không xung đột), rồi commit cb558a4 thêm khối `maxHeapSize = "2g"` cuối `core/ads/build.gradle.kts`, đúng nguyên văn mục 3.1. Hai file bảng khóa không phải sinh lại: phần nhánh chính đổi (`lessons_content_version` của T-048) gộp tự động, `RemoteConfigKeysTest` qua.
+- **Test viết trước:** giữ nguyên từ phiên bản 1 (7 test của `FrameloopPlacementsTest`, commit d2faad9, đã thất bại đúng lý do ở phiên bản 1); không đổi sau commit test. Khối heap là cấu hình build, thuộc ngoại lệ viết test trước của mục 4.
+- **Rà soát độc lập:** agent con ngữ cảnh mới, chỉ đọc, cho phần gộp nhánh chính và khối heap: 0 chặn, 0 nên sửa, 4 ghi chú (mô tả PR #20 chưa cập nhật cho phiên bản 2, đã cập nhật trước khi merge, kèm câu đề xuất về dự án mẫu; khối heap đúng plan, không chỗ nào khác đặt `maxHeapSize`; gộp nhánh chính không đổi phần của task; danh sách file khớp mục 3.2, không test nào bị xóa, bảng khóa chỉ thêm 24 khóa). Ba ghi chú của phiên bản 1 vẫn còn.
+- **Kết quả CI:** `scripts/check.sh` trên máy (Java 21): QUA, 2769 test JVM (`:core:ads` 2009), 0 lỗi. `pr-check` lần chạy 45093937801 trên cb558a4: xanh ở lần đầu (Java 17), không còn `OutOfMemoryError`.
+- **Ngoài mục 3.2:** Không có.
+- **Lệch so với plan:** Không có.
+- **Cần người xem:** mở issue `from-app` ở repo dự án mẫu đề xuất nâng heap test (mục 6, ADR-1001), ghi số issue vào dòng Áp dụng của L-004 khi bài học được nhận; xóa tay nhánh `claude/T-007-vi-tri-quang-cao` (script merge không xóa được); bản production cần 22 mã đơn vị thật.
