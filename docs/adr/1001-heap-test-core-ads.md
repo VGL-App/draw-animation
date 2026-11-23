@@ -17,13 +17,13 @@ App khai báo 22 vị trí quảng cáo trong `AdPlacement.kt`. `AdsController` 
 
 `docs/ops/to-app.md` mục 2 và ADR-0030 xếp `:core:ads` (trừ `AdPlacement.kt`) vào phần của dự án mẫu, app không sửa. Chỗ đặt heap cho mọi module là convention plugin trong `build-logic/`, cũng của dự án mẫu. Không sửa thì mọi ticket thêm vị trí quảng cáo bị chặn ở CI, trong đó T-007 đang chặn 21 ticket.
 
-Không ghi `supersedes` cho ADR-0030: app không chuyển ADR của dự án mẫu sang `superseded` được, và `scripts/template-sync.sh` xóa ADR của dự án mẫu đã `superseded`.
+Không ghi `supersedes` cho ADR-0030 vì hai lý do: đây không phải thay ADR-0030, mà là "phần app chưa đưa về" mà ADR-0030 cho giữ khi gộp, và `docs/ops/from-app.md` mục 1 cho làm ở app khi cần ngay rồi mở issue trong vòng một tuần; ghi `supersedes` sẽ đòi một ADR hợp nhất chép lại mọi quy tắc của ADR-0030 (ADR-0044).
 
 ## Quyết định
 
 1. App thêm vào `core/ads/build.gradle.kts` một khối đặt `maxHeapSize = "2g"` cho mọi task `Test` của module, không đổi gì khác của `:core:ads` ngoài `AdPlacement.kt`.
 2. App mở issue `from-app` ở repo dự án mẫu, đề xuất dự án mẫu nhận thay đổi (ở `core/ads/build.gradle.kts`, hay chung cho mọi module ở `build-logic/`).
-3. Ở đợt `template-sync` kế tiếp, khi dự án mẫu chưa nhận thay đổi thì giữ dòng của app (gộp tay khi xung đột); khi dự án mẫu đã nhận (cùng hay tốt hơn) thì lấy bản của mẫu và chuyển ADR này sang `superseded` bằng một ADR mới của app ghi việc đó.
+3. Khối heap là phần app chưa đưa về theo ADR-0030 tới khi issue `from-app` được dự án mẫu nhận hay đóng; khi dự án mẫu đã nhận (cùng hay tốt hơn), ADR này chuyển sang `superseded` bằng một ADR mới của app ghi việc đó. Không dùng `hold=core/ads`, vì `hold=` giữ cả module ở mốc cũ và chặn mọi cập nhật quảng cáo của mẫu.
 4. Ngoại lệ khác ở phần của dự án mẫu cần ADR riêng của app; không mở rộng ADR này.
 
 ## Các phương án đã cân nhắc
@@ -39,4 +39,4 @@ Không ghi `supersedes` cho ADR-0030: app không chuyển ADR của dự án m�
 
 - **Tích cực:** test `:core:ads` qua trên CI Java 17 với 22 vị trí mới (chạy thử 2026-11-23, `pr-check` lần chạy 45087289839 xanh); T-007 và các ticket đặt quảng cáo không bị chặn.
 - **Phải chấp nhận:** một file của dự án mẫu lệch bản mẫu tới khi mẫu nhận thay đổi; JVM test của `:core:ads` dùng tới 2 GB bộ nhớ trên máy chạy CI.
-- **Việc AI phải tuân thủ:** trong `:core:ads`, ngoài `AdPlacement.kt` app chỉ được giữ khối `maxHeapSize` của task `Test` trong `core/ads/build.gradle.kts`; đợt `template-sync` giữ khối đó khi dự án mẫu chưa có thay đổi tương đương, lấy bản mẫu khi đã có; ngoại lệ khác ở phần của dự án mẫu cần ADR riêng của app
+- **Việc AI phải tuân thủ:** trong `:core:ads`, ngoài `AdPlacement.kt` app chỉ được giữ khối `maxHeapSize` của task `Test` trong `core/ads/build.gradle.kts`; khối heap là phần app chưa đưa về theo ADR-0030 tới khi issue `from-app` được dự án mẫu nhận hay đóng; không dùng `hold=core/ads` cho ngoại lệ này; ngoại lệ khác ở phần của dự án mẫu cần ADR riêng của app

@@ -337,5 +337,6 @@ ADR có `origin: template` đến từ dự án mẫu: trong app, không sửa; 
 ### [ADR-1001](adr/1001-heap-test-core-ads.md): App nâng heap của JVM test trong core/ads/build.gradle.kts, là ngoại lệ tạm của quy tắc app không sửa :core:ads, chờ dự án mẫu nhận thay đổi
 
 - trong `:core:ads`, ngoài `AdPlacement.kt` app chỉ được giữ khối `maxHeapSize` của task `Test` trong `core/ads/build.gradle.kts`
-- đợt `template-sync` giữ khối đó khi dự án mẫu chưa có thay đổi tương đương, lấy bản mẫu khi đã có
+- khối heap là phần app chưa đưa về theo ADR-0030 tới khi issue `from-app` được dự án mẫu nhận hay đóng
+- không dùng `hold=core/ads` cho ngoại lệ này
 - ngoại lệ khác ở phần của dự án mẫu cần ADR riêng của app

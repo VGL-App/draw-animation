@@ -1,7 +1,7 @@
 ---
 ticket: T-007
 title: Vị trí quảng cáo của Frameloop
-status: draft                   # draft | approved | stopped | done
+status: stopped                 # draft | approved | stopped | done
 version: 2                   # tăng khi plan được sửa lại sau phản hồi hoặc sau khi dừng
 risk_score:                  # tổng điểm theo risk-scoring.md, để trống nếu chạm điểm chặn
 risk_level: high             # low | medium | high
@@ -69,13 +69,13 @@ Hai ô lưới dùng `native_in_collection` theo câu trả lời của anh Nh�
 
 Thiết kế tham chiếu: Không có thiết kế riêng (ticket không có màn hình; vùng quảng cáo trên thiết kế của từng feature thuộc ticket màn hình, docs/ops/design-workflow.md).
 
-ADR liên quan: ADR-0045 (quảng cáo, MC-01 tới MC-05; mục 4.9: thêm vị trí không thêm code vào `:core:ads`), ADR-0046 (Remote Config, khóa suy ra), ADR-0030 (`AdPlacement.kt` là phần app được sửa trong `:core:ads`).
+ADR liên quan: ADR-0045 (quảng cáo, MC-01 tới MC-05; mục 4.9: thêm vị trí không thêm code vào `:core:ads`), ADR-0046 (Remote Config, khóa suy ra), ADR-0030 (`AdPlacement.kt` là phần app được sửa trong `:core:ads`), ADR-1001 (phiên bản 2: khối heap test trong `core/ads/build.gradle.kts`).
 
 ## 3. Giải pháp
 
 ### 3.1. Cách làm
 
-Làm theo `docs/ops/ads-guide.md` mục 5, bước 2 và 3. Chỉ sửa `AdPlacement.kt`, file mà app được sửa trong `:core:ads` (`docs/ops/to-app.md` mục 2); không thêm code nào khác vào `:core:ads`, đúng ADR-0045 mục 4.9.
+Làm theo `docs/ops/ads-guide.md` mục 5, bước 2 và 3. Chỉ sửa `AdPlacement.kt`, file mà app được sửa trong `:core:ads` (`docs/ops/to-app.md` mục 2); không thêm code nào khác vào `:core:ads` ngoài khối heap của `core/ads/build.gradle.kts` (phiên bản 2, ADR-1001), đúng ADR-0045 mục 4.9.
 
 Thêm 22 dòng ngay sau `RESUME_INTER`, trước khối `gallery_*`, theo thứ tự của bảng ở mục 2. Mỗi dòng một khai báo mà `scripts/release.sh` đọc được, dưới 120 ký tự (dòng dài nhất `EDITOR_RW_BRUSHES` khoảng 110 ký tự). Chính sách viết thẳng `noAdPolicy = RewardedNoAdPolicy.AllowAfter(2)` trên dòng, không đặt thành hằng, vì `scripts/ads-plan.py` chỉ đọc chính sách viết trên dòng. Mỗi dòng có một dòng KDoc ngay trên, nói màn hình, nhóm (A hay B) và spec; dòng rewarded ghi thêm hành động nó giữ (`ads-guide.md` mục 5). Ví dụ:
 
@@ -122,7 +122,7 @@ Nơi đọc các file bị đổi (`grep -rn` trong `scripts/`, `.github/`, `*/s
 - `AdPlacement.kt`: `scripts/release.sh` và `AdPlacementSourceTest` (đọc khai báo một dòng; 22 dòng mới đúng mẫu, lần thử ở mục 4.1 qua), `scripts/ads-plan.py` (đọc mã, định dạng, `nativeEvery`, chính sách, `firstOpenOnly` và chú thích; lần thử đọc đủ 22 dòng). `StagingRemoteValuesModule` bật mọi vị trí không phải toàn app trên staging, kể cả 22 vị trí mới, không phải sửa (ảnh hưởng ở mục 6). Không sửa `scripts/release.sh` (CLAUDE.md, Không được làm). Bản production cần 22 mã đơn vị thật (mục 6).
 - `docs/remote-config-keys.md`, `docs/remote-config-template.json`: `app/src/test/kotlin/com/vgl/draw/animation/config/RemoteConfigKeysTest.kt` (so hai file với code; không sửa, vì câu khẳng định vẫn đúng sau khi sinh lại, mục 3.5), `app/build.gradle.kts` (truyền đường dẫn, không đổi), `scripts/ads-plan.py` (khóa `is_show_`, `native_every_` vào nhóm khóa suy ra, không sửa), `scripts/main-guard-verified.sh` (chỉ phân loại tệp), `scripts/tests/run.sh` (chỉ dùng tên tệp trong dữ liệu thử của script, không đọc nội dung).
 
-Không sửa `docs/ops/*` (tài liệu của dự án mẫu) hay file chính nào khác của `:core:ads`. Không đọc hay sửa file của T-005.
+Không sửa `docs/ops/*` (tài liệu của dự án mẫu) hay file chính nào khác của `:core:ads` ngoài `build.gradle.kts` (khối heap, phiên bản 2). Không đọc hay sửa file của T-005.
 
 ### 3.3. Cờ tính năng, quảng cáo, dữ liệu, quyền, thư viện
 
@@ -173,7 +173,7 @@ Test mới là unit test JVM của `:core:ads` (không cần Robolectric), trong
 
 Không có test dựng lại activity, đưa app ra nền hay cờ tắt giữa chừng: plan không thêm trạng thái ở vỏ app, không có bước chờ, không giữ tài nguyên mới (khóa đổi giữa chừng đã có test trong `:core:ads` cho mọi vị trí). Không có bước kiểm trên máy: chưa màn nào đặt 22 vị trí, nên người dùng staging không thấy gì mới (khe nạp sẵn thì có đổi, mục 6).
 
-**Ngoại lệ viết test trước:** hai file bảng khóa sinh bằng lệnh, `RemoteConfigKeysTest` có sẵn kiểm; KDoc. Năm test cập nhật dữ liệu ở mục 3.5 (bốn file) đỏ chỉ sau khi 22 dòng có mặt, nên vào commit code của bước 4 cùng 22 dòng.
+**Ngoại lệ viết test trước:** hai file bảng khóa sinh bằng lệnh, `RemoteConfigKeysTest` có sẵn kiểm; KDoc. Năm test cập nhật dữ liệu ở mục 3.5 (bốn file) đỏ chỉ sau khi 22 dòng có mặt, nên vào commit code của bước 4 cùng 22 dòng. Khối heap của `core/ads/build.gradle.kts` (phiên bản 2) là cấu hình build, không có test JVM riêng; kiểm bằng `pr-check` Java 17 (mục 4.1).
 
 ### 4.1. Chạy thử
 
@@ -186,11 +186,11 @@ Không cần (E dưới 2). Để viết mục 3.5 chính xác, đã thử một
 
 ## 5. Chấm rủi ro
 
-**Điểm chặn bị chạm:** 1 (quảng cáo: thêm 22 vị trí), 7 (module core dùng chung `:core:ads`, chỉ ở `AdPlacement.kt`). Không chạm điểm 4 (không thêm sự kiện hay tham số phân tích), điểm 5 (cổng đồng ý và thứ tự khởi tạo SDK không đổi), điểm 9 (không thêm khóa DataStore). Người phụ trách sản phẩm cần biết trước khi duyệt (`risk-scoring.md` mục 3).
+**Điểm chặn bị chạm:** 1 (quảng cáo: thêm 22 vị trí), 7 (module core dùng chung `:core:ads`, ở `AdPlacement.kt` và cấu hình build của `:core:ads`). Không chạm điểm 4 (không thêm sự kiện hay tham số phân tích), điểm 5 (cổng đồng ý và thứ tự khởi tạo SDK không đổi), điểm 9 (không thêm khóa DataStore). Người phụ trách sản phẩm cần biết trước khi duyệt (`risk-scoring.md` mục 3).
 
 | Tiêu chí | Điểm (0 đến 3) | Lý do |
 | --- | --- | --- |
-| A. Phạm vi thay đổi | 1 | Code chính chỉ ở một file (`AdPlacement.kt`), thêm 22 hằng công khai; cộng test của cùng module và hai file bảng khóa sinh ra |
+| A. Phạm vi thay đổi | 1 | Code chính chỉ ở một file (`AdPlacement.kt`), thêm 22 hằng công khai; một khối cấu hình test trong `core/ads/build.gradle.kts` (phiên bản 2); cộng test của cùng module và hai file bảng khóa sinh ra |
 | B. Độ rõ của yêu cầu | 0 | Bảng vị trí rõ; sáu spec đang `changed` chỉ vì bỏ luật trước nét vẽ đầu tiên và được xác nhận lại cùng lời duyệt đợt; câu hỏi về định dạng ô lưới đã được anh Nhật trả lời (mục 8) |
 | C. Khả năng kiểm chứng tự động | 0 | Mọi thuộc tính khai báo có unit test; bảng khóa có test so với code |
 | D. Ảnh hưởng chéo | 2 | Sửa `AdPlacement.kt` mà T-008 cũng sửa, và hai file bảng khóa mà T-006, T-048, T-008 cũng sinh lại; mọi ticket đặt quảng cáo dùng các hằng này |
@@ -209,7 +209,7 @@ Không cần (E dưới 2). Để viết mục 3.5 chính xác, đã thử một
   - Bản staging: `StagingRemoteValuesModule` bật mọi vị trí mới, nên sau khi merge, 4 khe rewarded và 5 khe interstitial nạp sẵn quảng cáo thử của Google ngay lúc mở app, dù chưa màn nào hiện chúng. Không ảnh hưởng production (khóa mặc định tắt).
   - Bản production: `scripts/release.sh` đòi mã đơn vị thật cho cả 22 vị trí mới; người phát hành tạo 22 đơn vị trên AdMob (và MAX nếu dùng) trước bản production đầu tiên. Đơn vị MREC (`restore_mrec`, `export_options_mrec`, `export_wait_mrec`) tắt tự làm mới (`ads-guide.md` mục 5, bước 6).
 - Đề xuất thứ tự chạy: sau T-006, trước mọi ticket đặt quảng cáo, nhất là T-008.
-- `core/ads/build.gradle.kts` là file của dự án mẫu (`docs/ops/to-app.md`, mục 2): ngoại lệ ở ADR-1001; sau khi task merge, mở issue `from-app` ở repo dự án mẫu đề xuất nâng heap test (ở `:core:ads` hay chung trong `build-logic/`); đợt `template-sync` kế tiếp gộp tay theo ADR-1001. T-008 và mọi ticket thêm vị trí sau này dùng chung khối heap này.
+- `core/ads/build.gradle.kts` là file của dự án mẫu (`docs/ops/to-app.md`, mục 2): ngoại lệ ở ADR-1001; sau khi task merge, người (hay AI trong phiên có người theo dõi) mở issue `from-app` ở repo dự án mẫu trong vòng một tuần, đề xuất nâng heap test (ở `:core:ads` hay chung trong `build-logic/`); phiên tự chạy không mở issue ở repo khác, chỉ ghi một dòng vào mục Cần người kiểm tra của báo cáo; mô tả PR #20 ghi rằng thay đổi được đề xuất về dự án mẫu; số issue ghi vào dòng Áp dụng của bài học về `OutOfMemoryError` trong `docs/lessons.md`; đợt `template-sync` kế tiếp gộp tay theo ADR-1001. T-008 và mọi ticket thêm vị trí sau này dùng chung khối heap này.
 
 
 ## 7. Điều kiện dừng riêng
