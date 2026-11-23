@@ -45,3 +45,8 @@ dependencies {
     testImplementation(libs.roborazzi.compose)
     testImplementation(libs.roborazzi.junit.rule)
 }
+
+// Screenshot tests compare full-page bitmaps; the default 512 MB test heap runs out on CI (Java 17).
+tasks.withType<Test>().configureEach {
+    maxHeapSize = "2g"
+}
