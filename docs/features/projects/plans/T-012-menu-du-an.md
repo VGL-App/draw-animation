@@ -1,7 +1,7 @@
 ---
 ticket: T-012
 title: Menu dự án - mở, đổi tên, nhân bản, xóa
-status: approved                # draft | approved | stopped | done
+status: done                    # draft | approved | stopped | done
 version: 1                   # tăng khi plan được sửa lại sau phản hồi hoặc sau khi dừng
 risk_score: 8                # tổng điểm theo risk-scoring.md, để trống nếu chạm điểm chặn
 risk_level: medium           # low | medium | high
@@ -627,3 +627,15 @@ Ticket ghi rủi ro sơ bộ `low`; chấm theo thang được 8 (Trung bình) v
 - **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
 
 ## 10. Nhật ký thực hiện
+
+### RUN-20261123-01, phiên bản plan 1
+
+- **Kết quả:** đã merge (commit `a6bb121` trên nhánh chính, 2026-11-23 09:50 UTC).
+- **Nhánh, PR:** `claude/T-012-menu-du-an`, PR #36. Commit: `1030b5d` (test), `107db16` (code).
+- **Đã làm:** menu dự án mở bằng nhấn giữ thẻ (năm mục; thẻ hỏng chỉ còn Delete), hộp thoại đổi tên và xác nhận xóa, nhân bản có "Duplicating…" chặn bấm lại và cuộn lên đầu, sao lưu `.frameloop`, lỗi ghi thành thông báo; luồng `items` dùng chung một người thu. Bước 3 đến 5 do phiên con làm trong worktree riêng; trước bước 3 chạy lại các test tạm của mục 4.1 (7/7 qua, `scripts/check.sh` có test tạm qua), không commit.
+- **Test viết trước:** 74 test (`ProjectMenuViewModelTest` 35, `ProjectMenuTest` 27, `EditedAtTest` 6, `DefaultProjectsRepositoryTest` +3) và 9 test ảnh; trên khung rỗng 71 test thất bại đúng lý do (menu không mở, không có node, `editedAt` luôn `Today`, `TODO()` của kho, tệp chưa dùng `ModalBottomSheet`). 11 test viết chặt bằng đối chứng. Test JVM mọi module ở bước 3: chỉ test mới của `:feature:projects` đỏ.
+- **Rà soát độc lập:** 0 chặn, 1 nên sửa, 7 ghi chú. Nên sửa chưa sửa, để người quyết: đang nhân bản mà có hai thông báo khác trong 4 giây thì thông báo thứ hai chờ tới khi nhân bản xong (trái câu "thông báo mới hiện ngay" của mục 3.1, nhưng do chính quy tắc "chỉ ẩn thông báo `Indefinite`" của mục 3.1); sửa cần chuyển sang dự phòng host riêng của mục 3.4 khi điều kiện chuyển chưa gặp, tức lệch cơ chế đã duyệt. Phương án ở mô tả PR #36. Ghi chú: sheet góc vuông theo câu 10 nhưng ảnh thiết kế có bo góc trên; icon Open, Delete dạng đặc so với dạng nét; `renameText_survivesRestore` không còn phủ cửa sổ hộp thoại thật; host chung giờ chỉ ẩn thông báo `Indefinite` (hành vi T-009 đổi, mục 3.5 không ghi); kiểm tay nền tối của sheet, bàn phím, nhấn giữ trên máy.
+- **Kết quả CI:** `scripts/check.sh` trên máy: QUA, 2921 test JVM, 0 lỗi, 117 ảnh. `pr-check` của PR #36 (commit `107db16`, lần chạy 45148539027): xanh, một vòng.
+- **Lệch so với plan:** không có file ngoài mục 3.2; không dùng phương án dự phòng. Bước 4 (chi tiết test), sửa file test sau commit test, không câu nào đổi hay nới: `deleteDialog_confirmUsesErrorColor` thêm khung `w411dp-h891dp-xxhdpi` (mdpi: 185/292 = 63% điểm gần `primary`, đỏ dù màu đúng; xxhdpi: 1531/1897 = 81%; nút Delete 0% ở cả hai); `renameText_survivesRestore` dựng `RenameDialogCard` thay hộp thoại thật (cửa sổ hộp thoại lưu trạng thái qua registry riêng; trước: `expected:<Walk [lo]> but was:<Walk [cycle]>`, sau: qua). Code: xếp `showSnackbar` vào hàng chờ trước rồi mới ẩn thông báo `Indefinite` (đổi thứ tự hai lệnh của mục 3.1 vì thứ tự chữ làm `duplicating_otherMessageShowsImmediately` đỏ; lần sửa đầu bằng `launch(UNDISPATCHED)` trong lambda bấm làm đỏ hai test của T-009 nên bỏ). Khác chữ plan: `FakeProjectsRepository` đếm người thu bằng `collectors` có sẵn; bản giả `RecordingProjectRepository` dùng `error(...)`; `onMenuBackUp` dùng `card.name ?: return`; mục Duplicate bị tắt làm mờ alpha 0.38. Không có câu khẳng định cũ viết lại, không bỏ test nào.
+- **Việc còn lại:** điểm nên sửa về thứ tự thông báo (người quyết); kiểm tay trên máy khi có T-011.
+- **Cần người xem:** 9 ảnh chuẩn mới `feature/projects/src/test/screenshots/ProjectsScreen_{menu_light,menu_dark,menu_small,menuUnreadable_light,rename_light,rename_dark,delete_light,delete_dark,duplicating_light}.png`; bo góc sheet và kiểu icon so với thiết kế.

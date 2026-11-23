@@ -82,3 +82,13 @@ Bài học trước ngày 2026-11-20 nằm trong sổ bài học của repo dự
 - **Đề xuất:** `docs/auto-run.md`, mục Chuẩn bị cho người khi task dừng: ghi rõ phiên bản mới sửa ngay trong file plan, `status` giữ `stopped`, mục nào thêm (đoạn "Phiên bản N" ở mục 1, "Cách tiếp tục" ở mục 3.1, khối "Phiên bản N:" ở mục 9); `docs/templates/plan.md` có ví dụ.
 - **Áp dụng:**
 - **Kiểm chứng:**
+
+### L-007. Commit duyệt đợt chèn lặp khối quyết định vào khắp tệp plan
+
+- **Trạng thái:** proposed. **Loại:** quy trình. **Phạm vi:** chung.
+- **Nguồn:** RUN-20261123-01, T-012.
+- **Chuyện gì:** khi ghi trạng thái duyệt cho đợt 20261123-02, khối "Quyết định / Người duyệt / Ghi chú" của mục 9 bị chèn sau gần như mọi đoạn của plan T-012 (70 lần, kể cả trong khối code); plan T-009 cùng commit thì đúng. `plan-check.py` và `run-check.py` đều qua nên lỗi lên nhánh chính và tới phiên tự chạy; phiên con và rà soát độc lập phải lọc tệp mới đọc được.
+- **Bằng chứng:** `git show f5bc141:docs/features/projects/plans/T-012-menu-du-an.md | grep -c 'Người duyệt'` ra 70; bản trước commit đó không có dòng nào.
+- **Đề xuất:** `scripts/plan-check.py` báo lỗi khi dòng `**Quyết định:**` hay `**Người duyệt:**` xuất hiện ngoài mục 9, hay nhiều hơn số khối phiên bản của mục 9; người duyệt dọn tệp plan T-012 trong một PR tài liệu.
+- **Áp dụng:**
+- **Kiểm chứng:**
