@@ -21,7 +21,7 @@ class AppLaunchTest {
     @Test
     fun appStarts_andReachesStartScreen() {
         composeRule.waitUntil(timeoutMillis = START_SCREEN_TIMEOUT_MILLIS) {
-            composeRule.onAllNodesWithTag("sample_screen").fetchSemanticsNodes().isNotEmpty()
+            composeRule.onAllNodesWithTag("projects_screen").fetchSemanticsNodes().isNotEmpty()
         }
     }
 

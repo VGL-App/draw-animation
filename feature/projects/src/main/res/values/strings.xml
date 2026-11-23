@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="projects_wordmark" translatable="false">Frameloop</string>
+    <string name="projects_import">Open a backup file</string>
+    <string name="projects_settings">Settings</string>
+    <string name="projects_empty_title">Make your first animation</string>
+    <string name="projects_empty_body">Draw frame by frame, add sound, then export a video or GIF. Everything saves on your phone as you go.</string>
+    <string name="projects_new">New animation</string>
+    <string name="projects_try_lesson">Try a free lesson</string>
+    <string name="projects_your_projects">Your projects</string>
+    <string name="projects_recent">Recent</string>
+    <string name="projects_coming_soon">Coming soon</string>
+    <string name="projects_cannot_open">Can\'t open this project.</string>
+    <string name="projects_card_unnamed">Untitled project</string>
+    <plurals name="projects_card_frames">
+        <item quantity="one">%1$d frame · %2$d fps</item>
+        <item quantity="other">%1$d frames · %2$d fps</item>
+    </plurals>
+</resources>

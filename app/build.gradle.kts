@@ -211,9 +211,11 @@ dependencies {
     implementation(project(":core:logging"))
     implementation(project(":core:network"))
     implementation(project(":core:lessons"))
+    implementation(project(":core:project"))
 
     implementation(project(":feature:sample"))
     implementation(project(":feature:loading"))
+    implementation(project(":feature:projects"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
