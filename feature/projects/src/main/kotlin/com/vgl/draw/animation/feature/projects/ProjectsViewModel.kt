@@ -97,12 +97,17 @@ class ProjectsViewModel @Inject constructor(
                 return
             }
             if (loading.containsKey(key)) return
+            // A load of an older version of this project must not finish later and replace the newer image.
+            loading.entries.removeAll { (other, job) ->
+                (other.id == key.id && other != key).also { older -> if (older) job.cancel() }
+            }
             // Lazy: on an immediate dispatcher the body could finish before the job is stored, leaving a stale entry.
             val job = viewModelScope.launch(start = CoroutineStart.LAZY) {
                 val image = repository.thumbnail(card.id, maxWidthPx)
                 if (image == null) logger.warn(LOG_TAG, "Thumbnail not loaded")
                 synchronized(lock) {
-                    loading.remove(key)
+                    // Removed from loading: replaced by a newer version or the project left the list.
+                    if (loading.remove(key) == null) return@launch
                     cache.keys.removeAll { it.id == key.id && it != key }
                     cache[key] = image
                     while (cache.size > THUMBNAIL_CACHE_SIZE) cache.remove(cache.keys.first())
