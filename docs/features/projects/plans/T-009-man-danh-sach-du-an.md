@@ -1,7 +1,7 @@
 ---
 ticket: T-009
 title: Màn danh sách dự án, thanh điều hướng của vỏ app, màn bắt đầu
-status: approved                # draft | approved | stopped | done
+status: done                    # draft | approved | stopped | done
 version: 1                   # tăng khi plan được sửa lại sau phản hồi hoặc sau khi dừng
 risk_score: 9                # tổng điểm theo risk-scoring.md, để trống nếu chạm điểm chặn
 risk_level: high             # low | medium | high
@@ -334,3 +334,15 @@ Thứ tự commit: bước 3 commit các tệp test, `FakeProjectsRepository.kt`
 ## 10. Nhật ký thực hiện
 
 <!-- AI ghi khi task đã có kết quả cuối (đã merge hoặc đã dừng), trên nhánh báo cáo của phiên (auto-run.md, bước 10). Mục mới thêm vào cuối, không sửa mục cũ. -->
+
+### RUN-20261123-01, phiên bản plan 1
+
+- **Kết quả:** đã merge (commit `e2bac2f` trên nhánh chính, 2026-11-23 08:43 UTC).
+- **Nhánh, PR:** `claude/T-009-man-danh-sach-du-an`, PR #35. Commit: `8c972d6` (test), `b361522` (code), `86734e5` (test theo rà soát), `0ffbd7f` (sửa theo rà soát).
+- **Đã làm:** module `:feature:projects` (màn danh sách trống và lưới, thẻ dự án, ảnh thu nhỏ với bộ nhớ LRU 40, thẻ hỏng, "Coming soon" khi chưa có đích); `:app` vào danh sách sau Loading, về màn mẫu khi cờ projects tắt, `AppNavigationBar` khi cờ Bài học bật; câu khẳng định cũ viết lại theo mục 3.5 (`AppLaunchTest`, kịch bản T-024); kịch bản emulator `T-009-danh-sach-du-an.txt`. Bước 3 đến 5 do phiên con làm trong worktree riêng.
+- **Test viết trước:** 72 test (`:feature:projects` 57, `:app` 15); 62 test thất bại đúng lý do trên khung rỗng, 9 test ảnh chụp chỉ ghi ảnh chuẩn mới; 1 test lỗi sai lý do (NPE tạo `ImageBitmap` ở chế độ đồ họa mặc định) được thêm `@GraphicsMode(NATIVE)` trước commit test rồi thất bại đúng lý do. 4 test viết chặt bằng đối chứng (`unreadableProject_doesNotUpdate`, `backOnProjects_finishesActivity`, `projectsFlagOnAfterDisabled_staysOnSample`, `scrollGrid_topBarStays`). Thêm 1 test theo rà soát (`thumbnail_olderLoadFinishingLast_keepsNewerImage`), đỏ trên code cũ. Test JVM mọi module ở bước 3: chỉ test mới đỏ.
+- **Rà soát độc lập:** vòng 1: 0 chặn, 1 nên sửa, 10 ghi chú. Nên sửa (job ảnh thu nhỏ của phiên bản cũ xong sau thì đè ảnh mới) đã sửa với test viết trước. Vòng rà soát lại: 0 chặn, 0 nên sửa, 4 ghi chú. Ghi chú để người xem: cỡ nút `PrimaryButton` 52 dp bo 16 so với thiết kế 48 dp bo 14; icon cài đặt đặc so với nét viền của thiết kế; hình minh họa không có vạch `onCanvas` (số liệu thiết kế đặt vạch ngoài khung); `ProjectsRoute` thu hiệu ứng không theo vòng đời (xem lại ở T-018); `drawMissing` đọc `project.json` hai lần; test mới không tách riêng từng phần của cách sửa (dispatcher test một luồng).
+- **Kết quả CI:** `scripts/check.sh` trên máy: QUA, 2841 test JVM, 0 lỗi, 108 ảnh. `pr-check` của PR #35 (commit `0ffbd7f`, lần chạy 45137444606): xanh, một vòng.
+- **Lệch so với plan:** không có file ngoài mục 3.2. Trong file của mục 3.2: `app/build.gradle.kts` thêm `implementation(project(":core:project"))` ngoài dòng plan nêu (`projectsScreen` lộ kiểu `ProjectId` ra `:app`; ADR-0029, phụ thuộc core đúng ADR-0001). Bước 4 (chi tiết test): `ProjectsRoute` thêm tham số `snackbarHostState` có mặc định; tag `project_thumbnail_<id>`; 8 test viết thêm và 2 đối chứng tách ra test riêng (liệt kê ở mô tả PR #35), mọi câu khẳng định của mục 4 còn đủ. Sửa file test sau commit test: `ProjectsScreenTest.longName_isEllipsizedOnOneLine` tìm node bằng `useUnmergedTree = true` (thẻ `clickable` gộp ngữ nghĩa; trước khi sửa đỏ với hai khung bằng nhau, sau khi sửa qua), cộng một chỗ ktlint ngắt dòng (L5). Câu khẳng định cũ viết lại chỉ đúng các câu mục 3.5 viết sẵn. Không dùng phương án dự phòng. `design/review/` không commit (không có trong mục 3.2).
+- **Việc còn lại:** T-012 (menu dự án) chạy tiếp trong phiên; KB-2 "từ màn vẽ quay về" kiểm đầy đủ sau T-018; quay lại từ Cài đặt kiểm sau T-016.
+- **Cần người xem:** 9 ảnh chuẩn mới (`feature/projects/src/test/screenshots/ProjectsScreen_*.png`, `app/src/test/screenshots/AppNavigationBar_*.png`); màn bắt đầu của staging nay là danh sách dự án; kiểm thủ công 100 dự án cuộn không giật (máy thật).
