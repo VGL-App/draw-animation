@@ -254,9 +254,9 @@ Các test ViewModel dùng `MainDispatcherRule`, `FakeFeatureFlags` hay `MutableS
 
 ### 4.1. Chạy thử
 
-- **Đã chạy thử:** (điền ở bước 2 của phiên soạn plan)
-- **Lệnh:** `scripts/check.sh`
-- **Kết quả:** (điền ở bước 2)
+- **Đã chạy thử:** 2026-11-23, trên `fd811d0` (nhánh chính), test tạm `TmpPhotoTrialTest` trong `feature/projects/src/test` (Robolectric `NATIVE`, sdk 35), không commit, đã xóa. Test dựng JPEG 40 × 20 (nửa trái đỏ, nửa phải xanh), ghi EXIF hướng 6 bằng `android.media.ExifInterface.saveAttributes`, đọc lại hướng qua `ContentResolver.openInputStream` của uri `file://` bằng `ExifInterface(InputStream)`, giải mã bằng `BitmapFactory.decodeStream`, xoay 90 bằng `Matrix`; gọi `ActivityResultContracts.PickVisualMedia().createIntent(context, PickVisualMediaRequest(ImageOnly))`.
+- **Lệnh:** `./gradlew :feature:projects:testDebugUnitTest --tests '*TmpPhotoTrialTest*'`. Chạy thử: chưa chạy xong (`scripts/check.sh` chưa chạy vì hết thời hạn 40 phút của phiên soạn plan; câu hỏi 8).
+- **Kết quả:** qua. Hướng đọc được là 6; ảnh giải mã 40 × 20, sau khi xoay 20 × 40; điểm (10, 5) là `#FE0000` (đỏ), điểm (10, 35) là `#0000FE` (xanh), đúng chiều xoay của mục 3.1 và đủ cho câu khẳng định của `PhotoPreparerTest.prepare_rotatesByExif` (sai số 40 mỗi kênh). `PickVisualMedia().createIntent` trên Robolectric sdk 35 trả action `android.provider.action.PICK_IMAGES`, type `image/*`, không có lớp nào thiếu trên classpath test của `:feature:projects`. Phương án dự phòng ở mục 3.4 chưa cần thử. Chưa chạy thử: đọc EXIF của PNG, thu nhỏ 8000 × 2000, `ActivityResultRegistry` giả.
 
 ## 5. Chấm rủi ro
 
@@ -294,6 +294,7 @@ Các test ViewModel dùng `MainDispatcherRule`, `FakeFeatureFlags` hay `MutableS
 5. **Bộ chọn ảnh bản Google Play cho Android 8 đến 10.** Muốn máy cũ có bộ chọn ảnh giống Android 13 thì thêm một khai báo dịch vụ `ModuleDependencies` vào manifest (không thêm quyền). Đề xuất của AI: không thêm ở ticket này; máy cũ không có bộ chọn qua Google Play thì dùng bộ chọn tài liệu của hệ thống, vẫn không hỏi quyền, đúng spec.
 6. **Mất ảnh đã chọn khi hệ thống đóng app ở nền.** Lựa chọn giữ qua xoay và gập máy (ViewModel), nhưng khi hệ thống đóng app lúc ở nền rồi mở lại, màn Tạo dự án mở với giá trị chọn sẵn (ảnh đã chuẩn bị không được lưu). Đề xuất của AI: chấp nhận ở bản đầu; KB-12 chỉ đòi xoay và gập.
 7. **Ô màu thứ hai lệch ảnh thiết kế** (`#22262E` thay `#E3E6EA`), theo quyết định đã có (plan T-004, câu hỏi 1). Ảnh so sánh của `scripts/design-compare.sh` sẽ báo lệch ở ô này tới khi Figma được sửa. Đề xuất của AI: giữ màu cố định, ghi lệch có chủ ý trong mô tả PR.
+8. **`scripts/check.sh` chưa chạy cho phần chạy thử.** Lần chạy thử bằng Gradle ở mục 4.1 đã qua, nhưng `docs/CLAUDE.md` đòi chạy bằng `scripts/check.sh`; phiên soạn plan hết thời hạn trước khi chạy. Đề xuất của AI: người duyệt hay phiên sau chạy lại test tạm của mục 4.1 cùng `scripts/check.sh` trước khi duyệt; hoặc chấp nhận vì test tạm chỉ dùng API nền tảng và lớp đã có trên classpath.
 
 ## 9. Quyết định duyệt
 
