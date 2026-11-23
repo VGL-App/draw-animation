@@ -47,8 +47,16 @@ class AdPreloadPlanTest {
         assertEquals(2, groups.size)
         assertTrue(AdFormat.REWARDED in groups[1])
         assertTrue(AdFormat.REWARDED !in groups[0])
-        // Control (L-055): without the rewarded placement of the gallery, no group has REWARDED.
-        val withoutRewarded = AdPreloadPlan.fromPlacements(AdPlacement.entries - AdPlacement.GALLERY_RW_ACTION)
+        // Control (L-055): without the rewarded placements (gallery and Frameloop, plan T-007), no group has REWARDED.
+        val withoutRewarded = AdPreloadPlan.fromPlacements(
+            AdPlacement.entries - setOf(
+                AdPlacement.GALLERY_RW_ACTION,
+                AdPlacement.EDITOR_RW_LAYER,
+                AdPlacement.EDITOR_RW_BRUSHES,
+                AdPlacement.EDITOR_RW_SOUNDS,
+                AdPlacement.EXPORT_RW_EXTRA,
+            ),
+        )
         assertTrue(AdFormat.REWARDED !in withoutRewarded.groups.flatten())
     }
 
