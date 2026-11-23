@@ -1,16 +1,16 @@
 ---
 ticket: T-009
 title: Màn danh sách dự án, thanh điều hướng của vỏ app, màn bắt đầu
-status: draft                # draft | approved | stopped | done
+status: approved                # draft | approved | stopped | done
 version: 1                   # tăng khi plan được sửa lại sau phản hồi hoặc sau khi dừng
 risk_score: 9                # tổng điểm theo risk-scoring.md, để trống nếu chạm điểm chặn
 risk_level: high             # low | medium | high
 token_estimate: 15.2M        # tổng token dự kiến, ví dụ 20M; số gợi ý: scripts/token-usage.py estimate (docs/ops/token-usage.md)
 blocking_points: []          # các điểm chặn bị chạm, ví dụ [ads, sdk]
 run_order:                   # AI điền khi lập danh sách chạy
-reviewer:                    # người duyệt
-cross_reviewer:              # cần điền: risk_level high; bắt buộc khi risk_level là high
-approved_at:
+reviewer: Nhật               # người duyệt
+cross_reviewer: Nhật         # bắt buộc khi risk_level là high
+approved_at: 2026-11-23
 lane:                        # để trống: phiên tự chạy; quick: đường làm nhanh có người theo dõi (ADR-0048)
 ---
 
@@ -324,3 +324,13 @@ Thứ tự commit: bước 3 commit các tệp test, `FakeProjectsRepository.kt`
    - Trả lời (anh Nhật, 2026-11-23, chọn trong phiên): Đồng ý đề xuất.
 10. **Tăng heap của test `:feature:projects` khi CI hết bộ nhớ** (mục 3.4, dự phòng thứ hai). `pr-check` chạy Java 17 với heap mặc định; T-007 từng đỏ vì `OutOfMemoryError` ở `:core:ads` (bài học L-004). Đề xuất: cho phiên thêm `tasks.withType<Test>().configureEach { maxHeapSize = "2g" }` vào `feature/projects/build.gradle.kts` chỉ khi `pr-check` đỏ vì `OutOfMemoryError` trong test của module này; tệp là của app, không chạm `build-logic/`. Phương án khác: không cho, phiên dừng task khi gặp lỗi này.
    - Trả lời (anh Nhật, 2026-11-23, chọn trong phiên): Đồng ý dự phòng heap 2 GB; áp dụng cho cả T-012.
+
+## 9. Quyết định duyệt
+
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-02 ngày 2026-11-23, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-02: plan T-009, T-012 và danh sách RUN-20261123-01, bắt đầu phiên khi merge. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8 ghi ở từng câu hỏi.
+
+## 10. Nhật ký thực hiện
+
+<!-- AI ghi khi task đã có kết quả cuối (đã merge hoặc đã dừng), trên nhánh báo cáo của phiên (auto-run.md, bước 10). Mục mới thêm vào cuối, không sửa mục cũ. -->
