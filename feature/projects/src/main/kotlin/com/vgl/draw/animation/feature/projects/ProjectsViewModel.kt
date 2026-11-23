@@ -8,7 +8,10 @@ import com.vgl.draw.animation.core.config.FeatureFlag
 import com.vgl.draw.animation.core.config.FeatureFlags
 import com.vgl.draw.animation.core.logging.AppLogger
 import com.vgl.draw.animation.core.project.model.ProjectId
+import com.vgl.draw.animation.core.project.repository.ProjectFailure
 import com.vgl.draw.animation.core.project.repository.ProjectListItem
+import com.vgl.draw.animation.core.project.repository.ProjectNames
+import com.vgl.draw.animation.core.project.repository.ProjectResult
 import com.vgl.draw.animation.feature.projects.data.ProjectsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -21,11 +24,14 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 
 /**
  * The project list (spec projects, KB-1, KB-2, KB-11, KB-13). Flags are observed, never read once (ADR-0003).
@@ -34,6 +40,9 @@ import kotlinx.coroutines.launch
  * Thumbnails are kept here, not in the repository: at most [THUMBNAIL_CACHE_SIZE] images, least recently used dropped
  * first, keyed by (id, updatedAtMillis) so an edited project loads its new image. Images of projects no longer in the
  * list are dropped each time the list changes, on the same collection as [uiState] (no second collector).
+ *
+ * The project menu (spec projects, KB-4 to KB-7) lives here too, so it survives a configuration change (KB-12). The
+ * list is read once for [uiState] and [menuState] through a shared flow.
  */
 @HiltViewModel
 class ProjectsViewModel @Inject constructor(
@@ -62,8 +71,17 @@ class ProjectsViewModel @Inject constructor(
     private val items = repository.items
         .shareIn(viewModelScope, SharingStarted.WhileSubscribed(), replay = 1)
 
+    // The source of truth of the menu: the functions below read and write it, also when nobody collects menuState.
     private val _menuState = MutableStateFlow(ProjectsMenuState())
-    val menuState: StateFlow<ProjectsMenuState> = _menuState.asStateFlow()
+
+    /** The menu and its dialogs. Collecting it also closes a menu whose project left the list. */
+    val menuState: StateFlow<ProjectsMenuState> = _menuState
+        .combine(items.onEach(::closeOverlayIfCardMissing)) { menu, _ -> menu }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS),
+            initialValue = ProjectsMenuState(),
+        )
 
     val uiState: StateFlow<ProjectsUiState> = combine(
         items.onEach(::retainThumbnails),
@@ -96,23 +114,154 @@ class ProjectsViewModel @Inject constructor(
         effectChannel.trySend(effect)
     }
 
-    fun onProjectLongClick(card: ProjectCardUi) = Unit
+    /** Opens the project menu (KB-4). Ignored while a menu or dialog is open. */
+    fun onProjectLongClick(card: ProjectCardUi) {
+        if (_menuState.value.overlay != ProjectsOverlay.None) return
+        _menuState.update { it.copy(overlay = ProjectsOverlay.Menu(card)) }
+        logger.info(LOG_TAG, "Menu opened")
+    }
 
-    fun onMenuOpen() = Unit
+    /** "Open": the same way as a tap on the card, with the editor flag of this moment. */
+    fun onMenuOpen() {
+        val card = menuCard() ?: return
+        _menuState.update { it.copy(overlay = ProjectsOverlay.None) }
+        onProjectClick(card)
+    }
 
-    fun onMenuRename() = Unit
+    fun onMenuRename() {
+        val card = menuCard() ?: return
+        if (!card.readable) return
+        _menuState.update { it.copy(overlay = ProjectsOverlay.Rename(card)) }
+    }
 
-    fun onRenameConfirm(name: String) = Unit
+    /** Saves the new name (KB-5). A blank name is ignored; the same name closes the dialog without writing. */
+    fun onRenameConfirm(name: String) {
+        val state = _menuState.value
+        val card = (state.overlay as? ProjectsOverlay.Rename)?.card ?: return
+        if (name.isBlank() || state.busy) return
+        if (ProjectNames.normalize(name) == card.name) {
+            _menuState.update { it.copy(overlay = ProjectsOverlay.None) }
+            return
+        }
+        _menuState.update { it.copy(busy = true) }
+        viewModelScope.launch {
+            try {
+                val result = repository.rename(card.id, name)
+                _menuState.update { it.copy(overlay = ProjectsOverlay.None) }
+                when (result) {
+                    is ProjectResult.Success -> logger.info(LOG_TAG, "Rename done")
+                    is ProjectResult.Failure -> {
+                        logger.warn(LOG_TAG, "Rename failed: ${result.reason}")
+                        val message = if (result.reason == ProjectFailure.NO_SPACE) {
+                            ProjectsMessage.NO_SPACE
+                        } else {
+                            ProjectsMessage.RENAME_FAILED
+                        }
+                        effectChannel.trySend(ProjectsEffect.ShowMessage(message))
+                    }
+                }
+            } finally {
+                _menuState.update { it.copy(busy = false) }
+            }
+        }
+    }
 
-    fun onMenuDuplicate() = Unit
+    /**
+     * Copies the project of the open menu (KB-6). One copy at a time: while one runs, another is ignored. The copy
+     * comes first in the list; once the list shows it, the grid scrolls to the top.
+     */
+    fun onMenuDuplicate() {
+        val card = menuCard() ?: return
+        _menuState.update { it.copy(overlay = ProjectsOverlay.None) }
+        if (_menuState.value.duplicatingName != null || !card.readable) return
+        _menuState.update { it.copy(duplicatingName = card.name.orEmpty()) }
+        logger.info(LOG_TAG, "Duplicate started")
+        viewModelScope.launch {
+            try {
+                val result = repository.duplicate(card.id)
+                // The "Duplicating…" message goes away before any result message shows.
+                _menuState.update { it.copy(duplicatingName = null) }
+                when (result) {
+                    is ProjectResult.Success -> {
+                        logger.info(LOG_TAG, "Duplicate done")
+                        // The repository sends the new list after duplicate returns: wait for the copy on top.
+                        val shown = withTimeoutOrNull(SCROLL_WAIT_MILLIS) {
+                            items.first { it.firstOrNull()?.id == result.value.id }
+                        }
+                        if (shown != null) effectChannel.trySend(ProjectsEffect.ScrollToTop)
+                    }
+                    is ProjectResult.Failure -> {
+                        logger.warn(LOG_TAG, "Duplicate failed: ${result.reason}")
+                        val message = if (result.reason == ProjectFailure.NO_SPACE) {
+                            ProjectsMessage.NO_SPACE
+                        } else {
+                            ProjectsMessage.DUPLICATE_FAILED
+                        }
+                        effectChannel.trySend(ProjectsEffect.ShowMessage(message))
+                    }
+                }
+            } finally {
+                _menuState.update { it.copy(duplicatingName = null) }
+            }
+        }
+    }
 
-    fun onMenuDelete() = Unit
+    /** Asks before deleting (KB-7), also for an unreadable project. */
+    fun onMenuDelete() {
+        val card = menuCard() ?: return
+        _menuState.update { it.copy(overlay = ProjectsOverlay.ConfirmDelete(card)) }
+    }
 
-    fun onDeleteConfirm() = Unit
+    fun onDeleteConfirm() {
+        val state = _menuState.value
+        val card = (state.overlay as? ProjectsOverlay.ConfirmDelete)?.card ?: return
+        if (state.busy) return
+        _menuState.update { it.copy(busy = true) }
+        viewModelScope.launch {
+            try {
+                val result = repository.delete(card.id)
+                _menuState.update { it.copy(overlay = ProjectsOverlay.None) }
+                when (result) {
+                    is ProjectResult.Success -> logger.info(LOG_TAG, "Delete done")
+                    is ProjectResult.Failure -> {
+                        logger.warn(LOG_TAG, "Delete failed: ${result.reason}")
+                        effectChannel.trySend(ProjectsEffect.ShowMessage(ProjectsMessage.DELETE_FAILED))
+                    }
+                }
+            } finally {
+                _menuState.update { it.copy(busy = false) }
+            }
+        }
+    }
 
-    fun onMenuBackUp() = Unit
+    /** "Back up to a file": the route hands the project to the backup screen (T-013), or shows "Coming soon". */
+    fun onMenuBackUp() {
+        val card = menuCard() ?: return
+        val name = card.name ?: return
+        _menuState.update { it.copy(overlay = ProjectsOverlay.None) }
+        effectChannel.trySend(ProjectsEffect.BackUpProject(card.id, name))
+    }
 
-    fun dismissOverlay() = Unit
+    /** Back, a tap outside, a swipe down or "Cancel". Ignored while a rename or delete is written. */
+    fun dismissOverlay() {
+        if (_menuState.value.busy) return
+        _menuState.update { it.copy(overlay = ProjectsOverlay.None) }
+    }
+
+    private fun menuCard(): ProjectCardUi? = (_menuState.value.overlay as? ProjectsOverlay.Menu)?.card
+
+    /** The project of the open menu or dialog left the list (deleted elsewhere): close it. */
+    private fun closeOverlayIfCardMissing(items: List<ProjectListItem>) {
+        _menuState.update { state ->
+            val card = when (val overlay = state.overlay) {
+                ProjectsOverlay.None -> return@update state
+                is ProjectsOverlay.Menu -> overlay.card
+                is ProjectsOverlay.Rename -> overlay.card
+                is ProjectsOverlay.ConfirmDelete -> overlay.card
+            }
+            if (state.busy || items.any { it.id == card.id }) state else state.copy(overlay = ProjectsOverlay.None)
+        }
+    }
 
     /** The card is on screen: loads its thumbnail unless it is in memory or loading. Unreadable cards get none. */
     fun onThumbnailNeeded(card: ProjectCardUi, maxWidthPx: Int) {
@@ -200,5 +349,6 @@ class ProjectsViewModel @Inject constructor(
         const val STOP_TIMEOUT_MILLIS = 5_000L
         const val THUMBNAIL_CACHE_SIZE = 40
         const val LOG_TAG = "Projects"
+        const val SCROLL_WAIT_MILLIS = 2_000L
     }
 }

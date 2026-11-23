@@ -6,10 +6,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -27,6 +30,7 @@ import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -55,6 +59,8 @@ import com.vgl.draw.animation.core.designsystem.component.PrimaryButton
 import com.vgl.draw.animation.core.designsystem.theme.Spacing
 import com.vgl.draw.animation.core.project.model.ProjectId
 import java.time.ZoneId
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 // Numbers of design/context/ProjectsScreen_*.md that have no Spacing token.
@@ -70,6 +76,7 @@ private val ButtonIcon = 18.dp
 /**
  * Stateful entry point used by navigation. A null callback means its destination does not exist yet: the screen
  * shows "Coming soon" instead. [onFeatureDisabled] is called once, also across recreations, when the flag is off.
+ * [onBackUpProject] receives the project chosen with "Back up to a file" (T-013).
  */
 @Composable
 internal fun ProjectsRoute(
@@ -86,23 +93,37 @@ internal fun ProjectsRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val thumbnails by viewModel.thumbnails.collectAsStateWithLifecycle()
+    val menuState by viewModel.menuState.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
     val comingSoon = stringResource(R.string.projects_coming_soon)
     val cannotOpen = stringResource(R.string.projects_cannot_open)
+    val messages = ProjectsMessage.entries.associateWith { stringResource(it.textRes) }
+    // Each message shows at once: a running "Duplicating…" (the only message that never hides) steps aside and comes
+    // back after it, since its loop queues again on the same host. Another short message is not cut off.
+    // The new message queues on the host before "Duplicating…" is dismissed: dismissing first could let the loop
+    // take the host again before the new message is waiting for it.
     val show: (String) -> Unit = { message ->
         scope.launch {
-            snackbarHostState.currentSnackbarData?.dismiss()
-            snackbarHostState.showSnackbar(message)
+            val duplicating = snackbarHostState.currentSnackbarData
+                ?.takeIf { it.visuals.duration == SnackbarDuration.Indefinite }
+            launch(start = CoroutineStart.UNDISPATCHED) { snackbarHostState.showSnackbar(message) }
+            duplicating?.dismiss()
         }
     }
     val currentOpenProject by rememberUpdatedState(onOpenProject)
+    val currentBackUpProject by rememberUpdatedState(onBackUpProject)
+    val currentGridState by rememberUpdatedState(gridState)
+    val currentMessages by rememberUpdatedState(messages)
     LaunchedEffect(viewModel) {
         viewModel.effects.collect { effect ->
             when (effect) {
                 is ProjectsEffect.OpenProject -> currentOpenProject?.invoke(effect.id) ?: show(comingSoon)
                 ProjectsEffect.ShowCannotOpen -> show(cannotOpen)
                 ProjectsEffect.ShowComingSoon -> show(comingSoon)
-                is ProjectsEffect.ShowMessage, is ProjectsEffect.BackUpProject, ProjectsEffect.ScrollToTop -> Unit
+                is ProjectsEffect.ShowMessage -> show(currentMessages.getValue(effect.message))
+                is ProjectsEffect.BackUpProject ->
+                    currentBackUpProject?.invoke(effect.id, effect.name) ?: show(comingSoon)
+                ProjectsEffect.ScrollToTop -> scope.launch { currentGridState.animateScrollToItem(0) }
             }
         }
     }
@@ -114,6 +135,8 @@ internal fun ProjectsRoute(
             currentOnFeatureDisabled()
         }
     }
+    // Read once when a menu or dialog opens, for its "edited <when>".
+    val nowMillis = remember(menuState.overlay) { System.currentTimeMillis() }
     ProjectsScreen(
         uiState = uiState,
         thumbnails = thumbnails,
@@ -125,13 +148,33 @@ internal fun ProjectsRoute(
         onImport = { onImport?.invoke() ?: show(comingSoon) },
         onThumbnailNeeded = viewModel::onThumbnailNeeded,
         gridState = gridState,
+        menuState = menuState,
+        nowMillis = nowMillis,
+        onProjectLongClick = viewModel::onProjectLongClick,
+        onMenuOpen = viewModel::onMenuOpen,
+        onMenuRename = viewModel::onMenuRename,
+        onMenuDuplicate = viewModel::onMenuDuplicate,
+        onMenuBackUp = viewModel::onMenuBackUp,
+        onMenuDelete = viewModel::onMenuDelete,
+        onRenameConfirm = viewModel::onRenameConfirm,
+        onDeleteConfirm = viewModel::onDeleteConfirm,
+        onDismissOverlay = viewModel::dismissOverlay,
     )
 }
+
+private val ProjectsMessage.textRes: Int
+    get() = when (this) {
+        ProjectsMessage.RENAME_FAILED -> R.string.projects_message_rename_failed
+        ProjectsMessage.DELETE_FAILED -> R.string.projects_message_delete_failed
+        ProjectsMessage.DUPLICATE_FAILED -> R.string.projects_message_duplicate_failed
+        ProjectsMessage.NO_SPACE -> R.string.projects_message_no_space
+    }
 
 /**
  * Stateless screen. The top bar (wordmark, import, settings) is outside the scrolling content, so it stays in place.
  * [gridState] is remembered above the state switch, so the scroll position is saved with the back stack entry even
- * when the state passes through Loading (KB-11).
+ * when the state passes through Loading (KB-11). [menuState] draws the project menu or one of its dialogs over the
+ * list, and the "Duplicating…" message while a copy runs. [nowMillis] and [zone] give the menu's "edited <when>".
  */
 @Composable
 fun ProjectsScreen(
@@ -184,12 +227,84 @@ fun ProjectsScreen(
                     gridState = gridState,
                     onNewProject = onNewProject,
                     onProjectClick = onProjectClick,
+                    onProjectLongClick = onProjectLongClick,
                     onThumbnailNeeded = onThumbnailNeeded,
                     modifier = Modifier.weight(1f),
                 )
             }
         }
         SnackbarHost(hostState = snackbarHostState, modifier = Modifier.align(Alignment.BottomCenter))
+    }
+    ProjectOverlay(
+        menuState = menuState,
+        thumbnails = thumbnails,
+        nowMillis = nowMillis,
+        zone = zone,
+        onMenuOpen = onMenuOpen,
+        onMenuRename = onMenuRename,
+        onMenuDuplicate = onMenuDuplicate,
+        onMenuBackUp = onMenuBackUp,
+        onMenuDelete = onMenuDelete,
+        onRenameConfirm = onRenameConfirm,
+        onDeleteConfirm = onDeleteConfirm,
+        onDismissOverlay = onDismissOverlay,
+    )
+    val duplicatingName = menuState.duplicatingName
+    if (duplicatingName != null) {
+        val text = stringResource(R.string.projects_duplicating, duplicatingName)
+        // Never hides by itself; another message dismisses it, then the loop queues it again (see ProjectsRoute).
+        // Leaving the composition (the copy ended) cancels it and the message goes away.
+        LaunchedEffect(text) {
+            while (isActive) snackbarHostState.showSnackbar(text, duration = SnackbarDuration.Indefinite)
+        }
+    }
+}
+
+/** The project menu or one of its dialogs, each in a window of its own over the screen. */
+@Composable
+private fun ProjectOverlay(
+    menuState: ProjectsMenuState,
+    thumbnails: Map<ProjectId, ImageBitmap?>,
+    nowMillis: Long,
+    zone: ZoneId,
+    onMenuOpen: () -> Unit,
+    onMenuRename: () -> Unit,
+    onMenuDuplicate: () -> Unit,
+    onMenuBackUp: () -> Unit,
+    onMenuDelete: () -> Unit,
+    onRenameConfirm: (String) -> Unit,
+    onDeleteConfirm: () -> Unit,
+    onDismissOverlay: () -> Unit,
+) {
+    when (val overlay = menuState.overlay) {
+        ProjectsOverlay.None -> Unit
+        is ProjectsOverlay.Menu -> ProjectMenuSheet(
+            card = overlay.card,
+            thumbnail = if (overlay.card.readable) thumbnails[overlay.card.id] else null,
+            nowMillis = nowMillis,
+            zone = zone,
+            duplicateEnabled = menuState.duplicatingName == null,
+            // Read on the activity window: the sheet's window adds no inset (contentWindowInsets is zero).
+            bottomInset = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding(),
+            onDismissRequest = onDismissOverlay,
+            onOpen = onMenuOpen,
+            onRename = onMenuRename,
+            onDuplicate = onMenuDuplicate,
+            onBackUp = onMenuBackUp,
+            onDelete = onMenuDelete,
+        )
+        is ProjectsOverlay.Rename -> RenameProjectDialog(
+            initialName = overlay.card.name.orEmpty(),
+            busy = menuState.busy,
+            onConfirm = onRenameConfirm,
+            onDismiss = onDismissOverlay,
+        )
+        is ProjectsOverlay.ConfirmDelete -> DeleteProjectDialog(
+            name = overlay.card.name ?: stringResource(R.string.projects_card_unnamed),
+            busy = menuState.busy,
+            onConfirm = onDeleteConfirm,
+            onDismiss = onDismissOverlay,
+        )
     }
 }
 

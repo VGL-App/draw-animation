@@ -424,8 +424,11 @@ class ProjectMenuTest {
         }
     }
 
+    // The design's frame: at the default mdpi most pixels of 14 sp letters are anti-aliased edges, and a light edge of
+    // a primary letter is closer to error than to primary (error is light in red, like the background).
     @Test
     @GraphicsMode(GraphicsMode.Mode.NATIVE)
+    @Config(qualifiers = "w411dp-h891dp-xxhdpi")
     fun deleteDialog_confirmUsesErrorColor() {
         lateinit var colors: ColorScheme
         composeRule.setContent {
@@ -669,12 +672,15 @@ class ProjectMenuTest {
         }
     }
 
+    // The dialog body without its window: the dialog window keeps its saved state in the activity's registry, which
+    // StateRestorationTester does not save; the text state itself lives in RenameDialogCard.
     @Test
     fun renameText_survivesRestore() {
         val restorationTester = StateRestorationTester(composeRule)
-        val state = mutableStateOf(ProjectsMenuState(overlay = ProjectsOverlay.Rename(walk)))
         restorationTester.setContent {
-            AppTheme(darkTheme = false) { Screen(state, listOf(walk), openOnLongClick = true) }
+            AppTheme(darkTheme = false) {
+                RenameDialogCard(initialName = "Walk cycle", busy = false, onConfirm = {}, onDismiss = {})
+            }
         }
         composeRule.waitForIdle()
         // Control: the field starts with the current name.

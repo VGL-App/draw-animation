@@ -13,6 +13,7 @@ data object ProjectsDestination
 /**
  * A null callback means its destination does not exist yet: the screen shows "Coming soon" instead.
  * [onFeatureDisabled] is called once when the projects flag is off; the app then opens the sample screen (KB-13).
+ * [onBackUpProject] receives the project chosen with "Back up to a file" in the project menu (T-013).
  */
 fun NavGraphBuilder.projectsScreen(
     onNewProject: (() -> Unit)?,
@@ -21,6 +22,7 @@ fun NavGraphBuilder.projectsScreen(
     onOpenSettings: (() -> Unit)?,
     onImport: (() -> Unit)?,
     onFeatureDisabled: () -> Unit,
+    onBackUpProject: ((ProjectId, String) -> Unit)? = null,
 ) {
     composable<ProjectsDestination> {
         ProjectsRoute(
@@ -30,6 +32,7 @@ fun NavGraphBuilder.projectsScreen(
             onOpenSettings = onOpenSettings,
             onImport = onImport,
             onFeatureDisabled = onFeatureDisabled,
+            onBackUpProject = onBackUpProject,
         )
     }
 }

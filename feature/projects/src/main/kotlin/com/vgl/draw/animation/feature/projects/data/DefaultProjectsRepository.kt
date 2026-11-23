@@ -36,11 +36,13 @@ internal class DefaultProjectsRepository @Inject constructor(
         }
     }
 
-    override suspend fun rename(id: ProjectId, name: String): ProjectResult<Project> = TODO()
+    // ProjectRepository turns every write error into a ProjectResult.Failure: nothing to catch here.
+    override suspend fun rename(id: ProjectId, name: String): ProjectResult<Project> =
+        projectRepository.rename(id, name)
 
-    override suspend fun duplicate(id: ProjectId): ProjectResult<Project> = TODO()
+    override suspend fun duplicate(id: ProjectId): ProjectResult<Project> = projectRepository.duplicate(id)
 
-    override suspend fun delete(id: ProjectId): ProjectResult<Unit> = TODO()
+    override suspend fun delete(id: ProjectId): ProjectResult<Unit> = projectRepository.delete(id)
 
     /** A project just created has no thumbnail until the drawing screen is left: draw it once, then read it again. */
     private suspend fun drawMissing(id: ProjectId): ByteArray? {

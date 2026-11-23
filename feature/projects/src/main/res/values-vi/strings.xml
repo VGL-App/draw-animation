@@ -14,4 +14,25 @@
     <plurals name="projects_card_frames">
         <item quantity="other">%1$d khung · %2$d fps</item>
     </plurals>
+    <string name="projects_menu_open">Mở</string>
+    <string name="projects_menu_rename">Đổi tên</string>
+    <string name="projects_menu_duplicate">Nhân bản</string>
+    <string name="projects_menu_backup">Sao lưu ra file</string>
+    <string name="projects_menu_delete">Xóa</string>
+    <string name="projects_menu_edited_today">sửa hôm nay</string>
+    <string name="projects_menu_edited_yesterday">sửa hôm qua</string>
+    <string name="projects_menu_edited_on">sửa %1$s</string>
+    <string name="projects_card_long_click_label">Tùy chọn dự án</string>
+    <string name="projects_rename_title">Đổi tên</string>
+    <string name="projects_rename_save">Lưu</string>
+    <string name="projects_rename_cancel">Hủy</string>
+    <string name="projects_delete_title">Xóa “%1$s”?</string>
+    <string name="projects_delete_message">Không hoàn tác được.</string>
+    <string name="projects_delete_confirm">Xóa</string>
+    <string name="projects_delete_cancel">Hủy</string>
+    <string name="projects_duplicating">Đang nhân bản “%1$s”…</string>
+    <string name="projects_message_no_space">Điện thoại không đủ chỗ trống. Hãy giải phóng bớt dung lượng rồi thử lại.</string>
+    <string name="projects_message_rename_failed">Không đổi tên được dự án. Hãy thử lại.</string>
+    <string name="projects_message_duplicate_failed">Không nhân bản được dự án. Hãy thử lại.</string>
+    <string name="projects_message_delete_failed">Không xóa được dự án. Hãy thử lại.</string>
 </resources>
