@@ -347,7 +347,7 @@ shot projects_after_create
 
 ## 8. Câu hỏi cho người duyệt
 
-Người phụ trách sản phẩm đã nói ngày 2026-11-23: "Duyệt mọi đề xuất của AI". Mỗi ý dưới là một đề xuất duy nhất, plan đã viết theo nó; người duyệt chỉ cần ghi lại nếu muốn khác.
+Các đề xuất dưới đây chờ người phụ trách sản phẩm trả lời trong phiên duyệt đợt (ADR-0048, phần C); lời duyệt ghi nguyên văn ở mục 9. Lời "Duyệt mọi đề xuất của AI" ngày 2026-11-23 có trước các đề xuất này, nên không thay cho lời duyệt. Mỗi ý là một đề xuất duy nhất, plan đã viết theo nó.
 
 **Một dòng cho người phụ trách sản phẩm:** `new_project_native` thuộc nhóm B, mặc định tắt; `create_inter` không bao giờ hiện ở lần "Create" đầu tiên của máy, từ lần sau theo `ads_interval` (mặc định 45 giây, tính cả quảng cáo mở app) và có thể nối `native_combo`; `project_create` gửi 5 tham số (`ratio`, `size`, `fps`, `background`, `is_default`), không gửi tên; có hai lời báo lỗi mới không có trên thiết kế (ý 4).
 
