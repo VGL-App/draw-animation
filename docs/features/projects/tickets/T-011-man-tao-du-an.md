@@ -5,12 +5,12 @@ feature: projects
 spec: features/projects/spec.md
 scenarios: [KB-3]
 owner: Nhật
-status: backlog
+status: approved
 risk: high
 size: M
 depends_on: [T-005, T-007, T-009]
 sprint:
-plan:
+plan: features/projects/plans/T-011-man-tao-du-an.md
 auto_run:
 created: 2026-11-22
 ---
