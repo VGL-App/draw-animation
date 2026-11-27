@@ -1,16 +1,16 @@
 ---
 ticket: T-012
 title: Menu dự án - mở, đổi tên, nhân bản, xóa
-status: draft                   # draft | approved | stopped | done
+status: approved                   # draft | approved | stopped | done
 version: 2                   # tăng khi plan được sửa lại sau phản hồi hoặc sau khi dừng
 risk_score: 5                # tổng điểm theo risk-scoring.md, để trống nếu chạm điểm chặn
 risk_level: medium           # low | medium | high
 token_estimate: 5.0M         # tổng token dự kiến, ví dụ 20M; số gợi ý: scripts/token-usage.py estimate (docs/ops/token-usage.md)
 blocking_points: []          # các điểm chặn bị chạm, ví dụ [ads, sdk]
 run_order:                   # AI điền khi lập danh sách chạy
-reviewer:                    # người duyệt
-cross_reviewer:              # bắt buộc khi risk_level là high
-approved_at:
+reviewer: Nhật             # người duyệt
+cross_reviewer: Nhật       # bắt buộc khi risk_level là high
+approved_at: 2026-11-27
 lane:                        # để trống: phiên tự chạy; quick: đường làm nhanh có người theo dõi (ADR-0048)
 ---
 
@@ -465,9 +465,9 @@ Phiên bản 1:
 
 Phiên bản 2:
 
-- **Quyết định:** Duyệt / Dừng / Duyệt có điều kiện
-- **Người duyệt:** <tên>, **duyệt chéo:** <tên, nếu rủi ro cao>
-- **Ghi chú:** <điều kiện, yêu cầu sửa, trả lời câu hỏi 11 đến 14 ở mục 8>
+- **Quyết định:** Duyệt
+- **Người duyệt:** Nhật, **duyệt chéo:** Nhật (nhóm chỉ có một dev, theo risk-scoring.md mục 3)
+- **Ghi chú:** Duyệt cả đợt 20261123-03 ngày 2026-11-27, trong phiên, lời đồng ý nguyên văn: "Duyệt đợt 20261123-03: plan T-012 phiên bản 2, T-010, T-011, T-056 và danh sách RUN-20261123-02, bắt đầu phiên khi merge; đồng ý mọi đề xuất ở mục 8 của bốn plan, kể cả chọn (a) cho FB-20261123-01. Tôi vừa duyệt vừa duyệt chéo vì nhóm chỉ có một dev." Câu trả lời cho mục 8: đồng ý câu 11 tới 14, chọn (a) host riêng cho "Duplicating…" cho FB-20261123-01.
 
 ## 10. Nhật ký thực hiện
 

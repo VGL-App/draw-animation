@@ -5,7 +5,7 @@ feature: projects
 spec: features/projects/spec.md
 scenarios: [KB-3]
 owner: Nhật
-status: planned
+status: approved
 risk: high
 size: M
 depends_on: [T-005, T-007, T-009]
