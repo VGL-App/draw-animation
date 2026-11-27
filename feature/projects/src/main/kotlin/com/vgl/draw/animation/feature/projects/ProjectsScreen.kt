@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
@@ -78,7 +77,8 @@ private val EmptyAdTopPadding = 24.dp
 /**
  * Stateful entry point used by navigation. A null callback means its destination does not exist yet: the screen
  * shows "Coming soon" instead. [onFeatureDisabled] is called once, also across recreations, when the flag is off.
- * [onBackUpProject] receives the project chosen with "Back up to a file" (T-013).
+ * [onBackUpProject] receives the project chosen with "Back up to a file" (T-013). [privacyOptionsButton] goes to
+ * [ProjectsScreen].
  */
 @Composable
 internal fun ProjectsRoute(
@@ -158,6 +158,7 @@ internal fun ProjectsRoute(
         onRenameConfirm = viewModel::onRenameConfirm,
         onDeleteConfirm = viewModel::onDeleteConfirm,
         onDismissOverlay = viewModel::dismissOverlay,
+        privacyOptionsButton = privacyOptionsButton,
     )
 }
 
@@ -177,7 +178,8 @@ private val ProjectsMessage.textRes: Int
  * when the state passes through Loading (KB-11). [menuState] draws the project menu or one of its dialogs over the
  * list, and the "Duplicating…" message while a copy runs. "Duplicating…" has a host of its own, shown only while
  * [snackbarHostState] has no message, so other messages show at once over it. [nowMillis] and [zone] give the menu's
- * "edited <when>".
+ * "edited <when>". [privacyOptionsButton] is shown in place of the settings button when the Settings flag is off. The
+ * default renders only where the consent law requires the privacy options entry; tests pass a fake (plan T-056).
  */
 @Composable
 fun ProjectsScreen(
@@ -219,7 +221,12 @@ fun ProjectsScreen(
             when (uiState) {
                 ProjectsUiState.Loading, ProjectsUiState.Disabled -> Unit
                 is ProjectsUiState.Empty -> Column(Modifier.fillMaxSize()) {
-                    ProjectsTopBar(uiState.showSettingsButton, onImport = onImport, onOpenSettings = onOpenSettings)
+                    ProjectsTopBar(
+                        showSettingsButton = uiState.showSettingsButton,
+                        onImport = onImport,
+                        onOpenSettings = onOpenSettings,
+                        privacyOptionsButton = privacyOptionsButton,
+                    )
                     EmptyContent(
                         showLessonButton = uiState.showLessonButton,
                         onNewProject = onNewProject,
@@ -229,7 +236,12 @@ fun ProjectsScreen(
                     )
                 }
                 is ProjectsUiState.List -> Column(Modifier.fillMaxSize()) {
-                    ProjectsTopBar(uiState.showSettingsButton, onImport = onImport, onOpenSettings = onOpenSettings)
+                    ProjectsTopBar(
+                        showSettingsButton = uiState.showSettingsButton,
+                        onImport = onImport,
+                        onOpenSettings = onOpenSettings,
+                        privacyOptionsButton = privacyOptionsButton,
+                    )
                     // Inside the List branch: leaving it (last project deleted) destroys the grid's ads.
                     val gridAds = adSlots.rememberGridAds()
                     adSlots.BottomBar { padding ->
@@ -358,11 +370,17 @@ private fun ProjectOverlay(
 }
 
 @Composable
-private fun ProjectsTopBar(showSettingsButton: Boolean, onImport: () -> Unit, onOpenSettings: () -> Unit) {
+private fun ProjectsTopBar(
+    showSettingsButton: Boolean,
+    onImport: () -> Unit,
+    onOpenSettings: () -> Unit,
+    privacyOptionsButton: @Composable (Modifier) -> Unit,
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(TopBarHeight)
+            // At least the design's height; taller with large fonts, so the privacy button's text is never cut.
+            .heightIn(min = TopBarHeight)
             .padding(start = TopBarStartPadding, end = Spacing.xs),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -389,6 +407,8 @@ private fun ProjectsTopBar(showSettingsButton: Boolean, onImport: () -> Unit, on
                     tint = MaterialTheme.colorScheme.onBackground,
                 )
             }
+        } else {
+            privacyOptionsButton(Modifier.testTag(ProjectsTestTags.PRIVACY))
         }
     }
 }
