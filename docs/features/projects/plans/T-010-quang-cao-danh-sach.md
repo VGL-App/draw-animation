@@ -1,7 +1,7 @@
 ---
 ticket: T-010
 title: Quảng cáo ở danh sách dự án
-status: approved                # draft | approved | stopped | done
+status: done                    # draft | approved | stopped | done
 version: 1                   # tăng khi plan được sửa lại sau phản hồi hoặc sau khi dừng
 risk_score:                  # tổng điểm theo risk-scoring.md, để trống nếu chạm điểm chặn
 risk_level: high             # low | medium | high
@@ -233,3 +233,15 @@ Các đề xuất dưới đây chờ người phụ trách sản phẩm trả l
 
 <!-- AI ghi khi task đã có kết quả cuối (đã merge hoặc đã dừng), trên nhánh báo cáo của phiên (auto-run.md, bước 10). Mục mới thêm vào cuối, không sửa mục cũ.
 Đường làm nhanh (ADR-0048): tiêu đề "Làm nhanh YYYY-MM-DD, phiên bản plan N", ghi trong lần đẩy cuối của PR, sau rà soát độc lập và trước CI; Kết quả ghi "merge bằng PR này", Kết quả CI ghi "CI của PR này", bỏ dòng Cần người xem sáng nay, ghi việc cần người kiểm. -->
+
+### RUN-20261123-02, phiên bản plan 1
+
+- **Kết quả:** đã merge (commit `3d6377b` trên nhánh chính, 2026-11-27 07:08 UTC).
+- **Nhánh, PR:** `claude/T-010-quang-cao-danh-sach`, PR #44. Commit: `deaa8b7` (test, kèm khung rỗng để biên dịch), `c196eb5` (code), `20ffbff` (ảnh so sánh thiết kế, theo rà soát).
+- **Đã làm:** `projects_empty_native` dưới hai nút của màn trống, `projects_bottom` (thanh đáy, chỉ ở trạng thái có dự án), `projects_grid` (thẻ dọc một ô sau mỗi 6 dự án, cao 228 dp, media 122 dp); `AdPlacement.PROJECTS_GRID` có `keepSpaceWhenPoolEmpty = true`; gốc màn bọc `InContentAds(projectsInContentAds())`; `ProjectsSnackbars` (hai host của T-012) nằm trong nội dung thanh đáy ở trạng thái `List` (bọc `Box(fillMaxSize)` theo ghi chú của danh sách chạy). Bước 3 đến 5 do phiên con làm trong worktree riêng.
+- **Test viết trước:** 20 test (`ProjectsAdsTest` 17, `ProjectsInContentAdsTest` 3); trên khung rỗng 18 test thất bại đúng lý do (không có node quảng cáo, `keepSpaceWhenPoolEmpty` còn false, danh sách vị trí rỗng, lưới không có ô quảng cáo); `noFirstStrokeRule` (canh) và `inContentAds_rejectsInterstitial` (đối chứng) qua ngay như plan nêu. 2 test viết chặt bằng đối chứng (`gridAd_noneWithSixProjects`, `inContentAds_doNotThrow`). Test JVM mọi module ở bước 3: chỉ 18 test trên đỏ.
+- **Rà soát độc lập:** 0 chặn, 1 nên sửa, 6 ghi chú. Nên sửa: commit `design/review/` cùng PR (auto-run.md bước 7): đã sửa (`20ffbff`), `scripts/check.sh` chạy lại QUA, rà soát lại vòng 1: 0 chặn, 0 nên sửa, 2 ghi chú. Ghi chú: native medium và thanh đáy khác thiết kế (thứ tự media, tiêu đề, CTA; khe đáy 106 dp so với 72 dp) do `NativeAdCard` và D-02 của `:core:ads`; đối chứng ở `Empty` của `snackbar_aboveBottomBar` chỉ kiểm chữ (đúng plan); pool cạn thì ô giữ khung chờ 228 dp; chiều cao ô quảng cáo thật dựa vào `adCellHeight`, kiểm trên staging; câu hỏi 1 và 8; 8 ảnh thiết kế thiếu ảnh chuẩn (của T-011, T-013, T-014, có từ trước).
+- **Kết quả CI:** `scripts/check.sh` trên máy: QUA, 2946 test JVM, 0 lỗi, 119 ảnh. `pr-check` của PR #44 (commit `20ffbff`, lần chạy 45954599020): xanh, một vòng.
+- **Lệch so với plan:** ngoài mục 3.2: `docs/features/projects/design/review/` (tài liệu, 7 tệp: 6 ảnh `*_compare.png` và `summary.md`), theo rà soát. Không dùng phương án dự phòng (không đổi `feature/projects/build.gradle.kts`). Bước 4 (chi tiết test): vị trí đo bằng `positionInRoot` cộng `size`; đối chứng của `gridAd_heightKeepsMediaFloor` dựng trong cùng `setContent` bằng đổi một state; mọi câu của mục 4 còn đủ, không nới. `ProjectsScreen_menu_{light,dark}` ghi lại không đổi byte nên không commit. Không sửa file test sau commit test, không câu khẳng định cũ viết lại, không bỏ test.
+- **Việc còn lại:** ba bước kiểm thủ công trên staging (khóa bật, tắt; dòng log `Floating ads off on this screen`; ô lưới cao hơn thẻ dự án), phần có dự án cần T-011.
+- **Cần người xem:** 6 ảnh chuẩn ghi lại `feature/projects/src/test/screenshots/ProjectsScreen_{empty,list}_{light,dark,small}.png`, 2 ảnh mới `ProjectsScreen_listGridAd_{light,small}.png`; ảnh so sánh `docs/features/projects/design/review/`.

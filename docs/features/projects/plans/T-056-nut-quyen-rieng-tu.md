@@ -1,7 +1,7 @@
 ---
 ticket: T-056
 title: Nút lựa chọn quyền riêng tư quảng cáo trên thanh trên khi cờ Cài đặt tắt
-status: approved                # draft | approved | stopped | done
+status: done                    # draft | approved | stopped | done
 version: 1                   # tăng khi plan được sửa lại sau phản hồi hoặc sau khi dừng
 risk_score:                  # tổng điểm theo risk-scoring.md, để trống nếu chạm điểm chặn
 risk_level: high             # low | medium | high
@@ -192,3 +192,15 @@ Mọi test UI dùng `AppTheme(darkTheme = false)`, khung mặc định của l�
 ## 10. Nhật ký thực hiện
 
 <!-- AI ghi khi task đã có kết quả cuối (đã merge hoặc đã dừng), trên nhánh báo cáo của phiên (auto-run.md, bước 10). Mục mới thêm vào cuối, không sửa mục cũ. -->
+
+### RUN-20261123-02, phiên bản plan 1
+
+- **Kết quả:** đã merge (commit `d423d80` trên nhánh chính, 2026-11-27 08:55 UTC).
+- **Nhánh, PR:** `claude/T-056-nut-quyen-rieng-tu`, PR #46. Commit: `c78e5bb` (test, kèm khung rỗng: tham số `privacyOptionsButton` chưa dùng, tag `PRIVACY`), `02f8f9a` (code, 4 ảnh chuẩn mới).
+- **Đã làm:** khi cờ Cài đặt tắt, thanh trên của màn danh sách dự án đặt `PrivacyOptionsButton` của `:core:ads` vào chỗ nút cài đặt; tham số `privacyOptionsButton` ở `ProjectsRoute` và `ProjectsScreen`; thanh trên dùng `heightIn`. Bước 3 đến 5 do phiên con làm trong worktree riêng.
+- **Test viết trước:** 14 test (`ProjectsScreenTest` 7, `ProjectsRouteTest` 2, `ProjectsViewModelTest` 1, 4 test ảnh); 6 test thất bại đúng lý do (không có node `PRIVACY`, không có chữ "Privacy settings", đối chứng `slotComposed`); 3 test qua trước code như mục 4 nêu; 1 test viết chặt bằng đối chứng (`settingsOff_emptySlot_noTopButton`). Test JVM mọi module ở bước 3: chỉ 6 test trên đỏ.
+- **Rà soát độc lập:** 0 chặn, 0 nên sửa, 3 ghi chú: chỗ đặt nút khác câu chữ ADR-0045 mục 3.5 (đã xác nhận ở spec KB-11, câu hỏi 23); trong `privacy_small` (và `list_small` của T-010) khung thanh đáy quảng cáo giả đè hàng thẻ thứ ba, bố cục của T-010; nút chỉ hiện ở vùng bắt buộc và mở form UMP kiểm tay sau merge.
+- **Kết quả CI:** `scripts/check.sh` trên máy: QUA, 3051 test JVM, 0 lỗi, 128 ảnh. `pr-check` của PR #46 (commit `02f8f9a`, lần chạy 45967639879): xanh, một vòng.
+- **Lệch so với plan:** không có file ngoài mục 3.2; không dùng dự phòng 3.4; không sửa file test sau commit test; không câu khẳng định cũ viết lại, không bỏ test. Bước 4 (chi tiết test): `ProjectsScreenTest.show()` gọi composable riêng `Screen(...)` rẽ nhánh khe null/khác null, hai test đổi trạng thái dùng `showChanging(MutableState, slot)`; `Screen` của screenshot test mặc định `privacyOptionsButton = { PrivacyOptionsButton(it) }`; ảnh mới truyền `FakeProjectsAdSlots()` theo ghi chú của danh sách chạy.
+- **Việc còn lại:** kiểm tay sau merge: bản staging dựng trên máy với `settings()` bỏ khỏi `StagingFeatureFlagsModule` (không commit), nút mở form UMP, log `Privacy options form opened`. Hai đề xuất về dự án mẫu ghi ở PR #46.
+- **Cần người xem:** 4 ảnh chuẩn mới `feature/projects/src/test/screenshots/ProjectsScreen_{privacy_light,privacy_dark,privacy_small,noSettings_light}.png`.

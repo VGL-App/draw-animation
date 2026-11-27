@@ -92,3 +92,33 @@ Bài học trước ngày 2026-11-20 nằm trong sổ bài học của repo dự
 - **Đề xuất:** `scripts/plan-check.py` báo lỗi khi dòng `**Quyết định:**` hay `**Người duyệt:**` xuất hiện ngoài mục 9, hay nhiều hơn số khối phiên bản của mục 9; người duyệt dọn tệp plan T-012 trong một PR tài liệu.
 - **Áp dụng:**
 - **Kiểm chứng:**
+
+### L-008. Tên nhánh task lấy từ plan khi plan đã ghi tên
+
+- **Trạng thái:** proposed. **Loại:** quy trình. **Phạm vi:** chung.
+- **Nguồn:** RUN-20261123-02, T-012 phiên bản 2.
+- **Chuyện gì:** bước 1 tạo nhánh theo mẫu `claude/T-NNN-<tu-khoa>` trước khi đọc plan. Plan phiên bản 2 đã ghi sẵn tên nhánh mới ở mục 3.1 (`claude/T-012-thong-bao-nhan-ban`). Phiên đổi sang tên của plan, nhưng lệnh xóa nhánh nhầm trên GitHub bị từ chối ("remote end hung up"), nên còn một nhánh thừa không có commit riêng.
+- **Bằng chứng:** báo cáo phiên RUN-20261123-02, dòng thời gian 05:34; nhánh `claude/T-012-snackbar-nhan-ban` trên origin.
+- **Đề xuất:** `docs/auto-run.md`, bước 1: khi mục 3.1 của plan ghi tên nhánh (thường ở plan phiên bản 2 trở lên, "Tiếp tục trên nhánh cũ" hay "làm lại trên nhánh mới"), dùng đúng tên đó; đọc mục 3.1 trước khi tạo nhánh.
+- **Áp dụng:**
+- **Kiểm chứng:**
+
+### L-009. Test dựng lại activity kiểm `rememberSaveable` phải dùng một lambda nội dung
+
+- **Trạng thái:** proposed. **Loại:** plan. **Phạm vi:** chung.
+- **Nguồn:** RUN-20261123-02, T-011 (PR #45).
+- **Chuyện gì:** test `recreatedWhileAdPending_opensOnce` của plan gọi `composeRule.setContent { Content() }` lúc đầu và `onActivity { setContent { Content() } }` sau `recreate()`. Khóa của `rememberSaveable` theo vị trí lambda nội dung (rule còn bọc thêm composable), nên giá trị đã lưu trong Bundle không được tìm thấy và test đỏ dù cơ chế đúng. Phiên con đổi cơ chế đã duyệt sang ViewModel để test qua; rà soát xếp mức chặn, phiên sửa lại phần dựng test (một lambda dùng chung) và cơ chế về đúng plan.
+- **Bằng chứng:** nhật ký plan T-011 (RUN-20261123-02); mô tả PR #45, mục Đã sửa theo rà soát và Bước 4 (chi tiết test).
+- **Đề xuất:** `CLAUDE.md`, mục Viết một feature mới, ý Test: test dựng lại activity kiểm trạng thái `rememberSaveable` gọi `setContent` của activity với cùng một lambda nội dung trước và sau `recreate()`, không dùng `composeRule.setContent` cho lần đầu. `docs/CLAUDE.md`, mục Khi viết plan: cơ chế dựa vào `rememberSaveable` qua dựng lại activity thì chạy thử test đó bằng test tạm.
+- **Áp dụng:**
+- **Kiểm chứng:**
+
+### L-010. Lời giao phiên con chưa cấm đổi cơ chế của plan để test qua
+
+- **Trạng thái:** proposed. **Loại:** quy trình. **Phạm vi:** chung.
+- **Nguồn:** RUN-20261123-02, T-011 (PR #45).
+- **Chuyện gì:** lời giao chung cho phiên con (auto-run.md, mục Giao bước 3 đến 5 cho phiên con) cấm sửa test để qua, nhưng không nói gì khi test của plan không qua với cơ chế mà mục 3.1 đã chọn. Phiên con tự thay cơ chế (`rememberSaveable` sang ViewModel), coi là lệch nhỏ; rà soát độc lập xếp mức chặn, tốn một lần sửa, một vòng phiên con và một vòng rà soát lại (khoảng 20 phút).
+- **Bằng chứng:** như L-009.
+- **Đề xuất:** `docs/auto-run.md`, mục Giao bước 3 đến 5 cho phiên con, phần giao việc tối thiểu: thêm vế "không thay cơ chế mà mục 3.1 của plan đã chọn để test qua; tìm lỗi ở phần dựng test, hay dừng và báo".
+- **Áp dụng:**
+- **Kiểm chứng:**

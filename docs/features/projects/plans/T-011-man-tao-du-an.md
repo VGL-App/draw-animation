@@ -1,7 +1,7 @@
 ---
 ticket: T-011
 title: Màn Tạo dự án
-status: approved                # draft | approved | stopped | done
+status: done                    # draft | approved | stopped | done
 version: 1                   # tăng khi plan được sửa lại sau phản hồi hoặc sau khi dừng
 risk_score:                  # tổng điểm theo risk-scoring.md, để trống nếu chạm điểm chặn
 risk_level: high             # low | medium | high
@@ -375,3 +375,15 @@ Các đề xuất dưới đây chờ người phụ trách sản phẩm trả l
 ## 10. Nhật ký thực hiện
 
 <!-- AI ghi khi task đã có kết quả cuối (đã merge hoặc đã dừng), trên nhánh báo cáo của phiên (auto-run.md, bước 10). Mục mới thêm vào cuối, không sửa mục cũ. -->
+
+### RUN-20261123-02, phiên bản plan 1
+
+- **Kết quả:** đã merge (commit `cc32b8b` trên nhánh chính, 2026-11-27 08:22 UTC).
+- **Nhánh, PR:** `claude/T-011-man-tao-du-an`, PR #45. Commit: `5ccca07` (test, kèm khung rỗng và `@Binds` của `di/ProjectsModule.kt` để đồ thị Hilt của `:app` biên dịch), `2daa086` (code), `fd30be3` (test, sửa theo rà soát), `28d85b9` (code, sửa theo rà soát).
+- **Đã làm:** màn Tạo dự án (tên, khung hình, fps, màu nền hay ảnh, đọc EXIF), `new_project_native` và `create_inter`, sự kiện `project_create`, nối `AppNavHost`, kịch bản emulator `T-011-tao-du-an.txt`, ngân sách kịch bản 600 lên 800 giây. Bước 3 đến 5 do phiên con làm trong worktree riêng.
+- **Test viết trước:** 85 test (79 ở `:feature:projects`, 6 ở `AppNavHostTest`), đều thất bại đúng lý do trên khung rỗng; 5 test ảnh qua ngay (ảnh chỉ ghi sau), đúng plan; 11 test viết chặt bằng đối chứng. Test JVM mọi module ở bước 3: không test cũ nào đỏ.
+- **Rà soát độc lập:** lần 1: 1 chặn, 1 nên sửa, 6 ghi chú. Chặn: mã dự án chờ mở giữ trong ViewModel, khác cơ chế `rememberSaveable` của mục 3.1: đã sửa về `rememberSaveable` `pendingOpen` (lần sửa 1), thêm dấu `LeftMark` vì trạng thái của composition cũ còn giữ mã sau khi dựng lại (rà soát lại xếp là chi tiết cài đặt; câu cuối của mục 3.1 dòng "Dựng lại activity" mô tả chưa đủ). Nên sửa: xoay máy khi đang tạo có thể vừa mở dự án vừa hiện `create_inter` (cơ chế ViewModel): test mới `recreatedWhileCreating_writtenAfterOldScreenLeft_opensOnce`, đỏ với `2daa086`, qua với cơ chế của plan, đột biến (bỏ ghi `pendingOpen`; mở trước khi gọi quảng cáo) làm nó đỏ; khẳng định `adCalls == 1` theo mục 3.1. Rà soát lại vòng 1: 0 chặn, 0 nên sửa, 3 ghi chú. Ghi chú khác: nút "Create" cao 52 dp (sàn `PrimaryButton`) so với 48 dp thiết kế; thẻ native giả theo `NativeAdCard`; ô khung hình và chip không tắt khi đang tạo; `aspectRatioOf` gọi lại chính nó với giá trị mặc định.
+- **Kết quả CI:** `scripts/check.sh` trên máy: QUA, 3037 test JVM, 0 lỗi. `pr-check` của PR #45 (commit `28d85b9`, lần chạy 45962606211): xanh, một vòng.
+- **Lệch so với plan:** ngoài mục 3.2: `docs/features/projects/design/review/` (`summary.md`, `NewProjectScreen_default_{light,dark}_compare.png`, tài liệu, auto-run.md bước 7). Bước 4 (chi tiết test), sửa file test sau commit test: `NewProjectRouteTest` dùng chung một lambda nội dung cho `show()` và `recreate()` qua `setContent` của activity, `recreate()` thêm `beforeContent` (khóa của `rememberSaveable` theo vị trí lambda; trước: `recreatedWhileAdPending_opensOnce` đỏ với cơ chế của plan, sau: 20/20 qua; không câu nào đổi hay nới); `newAnimation_opensNewProject` tách hai (`newAnimation_twiceFast_oneEntry`); "ViewModel giả" của `NewProjectRouteTest` là ViewModel thật trên kho giả, đo qua `OrderLogger` và `prepare:<uri>`. Không dùng phương án dự phòng. Không câu khẳng định cũ viết lại, không bỏ test.
+- **Việc còn lại:** kiểm trên máy thật (Photo Picker hệ thống, EXIF ảnh camera thật, `create_inter` thật); kịch bản emulator ở `device-session` cuối phiên.
+- **Cần người xem:** 5 ảnh chuẩn mới `feature/projects/src/test/screenshots/NewProjectScreen_{default_light,default_dark,default_small,photo_light,default_unfolded}.png`; ảnh so sánh `docs/features/projects/design/review/NewProjectScreen_default_*_compare.png`; nút "Create" 52 dp.

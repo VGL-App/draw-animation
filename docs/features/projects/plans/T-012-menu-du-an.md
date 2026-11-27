@@ -1,7 +1,7 @@
 ---
 ticket: T-012
 title: Menu dự án - mở, đổi tên, nhân bản, xóa
-status: approved                   # draft | approved | stopped | done
+status: done                       # draft | approved | stopped | done
 version: 2                   # tăng khi plan được sửa lại sau phản hồi hoặc sau khi dừng
 risk_score: 5                # tổng điểm theo risk-scoring.md, để trống nếu chạm điểm chặn
 risk_level: medium           # low | medium | high
@@ -482,3 +482,15 @@ Phiên bản 2:
 - **Lệch so với plan:** không có file ngoài mục 3.2; không dùng phương án dự phòng. Bước 4 (chi tiết test), sửa file test sau commit test, không câu nào đổi hay nới: `deleteDialog_confirmUsesErrorColor` thêm khung `w411dp-h891dp-xxhdpi` (mdpi: 185/292 = 63% điểm gần `primary`, đỏ dù màu đúng; xxhdpi: 1531/1897 = 81%; nút Delete 0% ở cả hai); `renameText_survivesRestore` dựng `RenameDialogCard` thay hộp thoại thật (cửa sổ hộp thoại lưu trạng thái qua registry riêng; trước: `expected:<Walk [lo]> but was:<Walk [cycle]>`, sau: qua). Code: xếp `showSnackbar` vào hàng chờ trước rồi mới ẩn thông báo `Indefinite` (đổi thứ tự hai lệnh của mục 3.1 vì thứ tự chữ làm `duplicating_otherMessageShowsImmediately` đỏ; lần sửa đầu bằng `launch(UNDISPATCHED)` trong lambda bấm làm đỏ hai test của T-009 nên bỏ). Khác chữ plan: `FakeProjectsRepository` đếm người thu bằng `collectors` có sẵn; bản giả `RecordingProjectRepository` dùng `error(...)`; `onMenuBackUp` dùng `card.name ?: return`; mục Duplicate bị tắt làm mờ alpha 0.38. Không có câu khẳng định cũ viết lại, không bỏ test nào.
 - **Việc còn lại:** điểm nên sửa về thứ tự thông báo (người quyết); kiểm tay trên máy khi có T-011.
 - **Cần người xem:** 9 ảnh chuẩn mới `feature/projects/src/test/screenshots/ProjectsScreen_{menu_light,menu_dark,menu_small,menuUnreadable_light,rename_light,rename_dark,delete_light,delete_dark,duplicating_light}.png`; bo góc sheet và kiểu icon so với thiết kế.
+
+### RUN-20261123-02, phiên bản plan 2
+
+- **Kết quả:** đã merge (commit `ee8f026` trên nhánh chính, 2026-11-27 06:19 UTC).
+- **Nhánh, PR:** `claude/T-012-thong-bao-nhan-ban`, PR #43. Commit: `125edec` (test), `03965b5` (code).
+- **Đã làm:** "Duplicating…" ở `SnackbarHostState` riêng, chỉ nằm trong cây khi host chung trống (`ProjectsSnackbars`); `show` của `ProjectsRoute` trở lại cách của T-009; chú thích và KDoc theo cơ chế mới. Bước 3 đến 5 do phiên con làm trong worktree riêng.
+- **Test viết trước:** 3 test; `duplicating_twoMessagesInARow_bothShowAtOnce` và `twoMessagesInARow_secondReplacesFirst` thất bại đúng lý do trên code cũ (không thấy "Can't open this project."), `duplicating_copyEndsDuringOtherMessage_doesNotReturn` là đối chứng, qua trước và sau như plan ghi. Test JVM mọi module ở bước 3: chỉ hai test trên đỏ. Không viết chặt thêm.
+- **Rà soát độc lập:** 0 chặn, 0 nên sửa, 3 ghi chú: có thể chớp một khung hình và TalkBack đọc lại "Duplicating…" khi thông báo thay nhau (câu hỏi 13, kiểm tay); thứ tự hai host không quan trọng; phương án dự phòng 3.4 không cần (test đầu xác nhận host vào lại cây hiện thông báo đang chờ).
+- **Kết quả CI:** `scripts/check.sh` trên máy: QUA, 2924 test JVM, 0 lỗi, 117 ảnh. `pr-check` của PR #43 (commit `03965b5`, lần chạy 45949380497): xanh, một vòng.
+- **Lệch so với plan:** không có file ngoài mục 3.2; không dùng phương án dự phòng; không sửa file test sau commit test; không câu khẳng định cũ viết lại, không bỏ test. Ghi chú rà soát của danh sách chạy (bộ chọn `Dismiss`): bộ chọn viết theo chữ plan (`hasAnyDescendant(hasText(...)) and keyIsDefined(Dismiss)`, `useUnmergedTree = true`) đã chọn `Box` có thao tác `Dismiss`, chạy được ngay, không cần sửa.
+- **Việc còn lại:** không có.
+- **Cần người xem:** kiểm tay trên máy với TalkBack: hai thông báo liên tiếp khi đang nhân bản (câu hỏi 13).
