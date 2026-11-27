@@ -55,6 +55,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.vgl.draw.animation.core.ads.InContentAds
 import com.vgl.draw.animation.core.designsystem.component.PrimaryButton
 import com.vgl.draw.animation.core.designsystem.theme.Spacing
 import com.vgl.draw.animation.core.project.model.ProjectId
@@ -71,6 +72,7 @@ private val EmptyGap = 12.dp
 private val ButtonMinHeight = 52.dp
 private val ButtonCorner = 16.dp
 private val ButtonIcon = 18.dp
+private val EmptyAdTopPadding = 24.dp
 
 /**
  * Stateful entry point used by navigation. A null callback means its destination does not exist yet: the screen
@@ -167,6 +169,8 @@ private val ProjectsMessage.textRes: Int
 
 /**
  * Stateless screen. The top bar (wordmark, import, settings) is outside the scrolling content, so it stays in place.
+ * [adSlots] draws the ads (plan T-010): a native medium card under the empty state's buttons, the bottom bar and the
+ * grid's cards in the list state; in the list state the messages sit over the bottom bar.
  * [gridState] is remembered above the state switch, so the scroll position is saved with the back stack entry even
  * when the state passes through Loading (KB-11). [menuState] draws the project menu or one of its dialogs over the
  * list, and the "Duplicating…" message while a copy runs. "Duplicating…" has a host of its own, shown only while
@@ -202,42 +206,62 @@ fun ProjectsScreen(
 ) {
     // Outside the state switch, so a running "Duplicating…" is kept when the screen moves between List and Empty.
     val duplicatingHostState = remember { SnackbarHostState() }
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .testTag(ProjectsTestTags.SCREEN),
-    ) {
-        when (uiState) {
-            ProjectsUiState.Loading, ProjectsUiState.Disabled -> Unit
-            is ProjectsUiState.Empty -> Column(Modifier.fillMaxSize()) {
-                ProjectsTopBar(uiState.showSettingsButton, onImport = onImport, onOpenSettings = onOpenSettings)
-                EmptyContent(
-                    showLessonButton = uiState.showLessonButton,
-                    onNewProject = onNewProject,
-                    onOpenLessons = onOpenLessons,
-                    modifier = Modifier.weight(1f),
-                )
+    InContentAds(projectsInContentAds()) {
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .testTag(ProjectsTestTags.SCREEN),
+        ) {
+            when (uiState) {
+                ProjectsUiState.Loading, ProjectsUiState.Disabled -> Unit
+                is ProjectsUiState.Empty -> Column(Modifier.fillMaxSize()) {
+                    ProjectsTopBar(uiState.showSettingsButton, onImport = onImport, onOpenSettings = onOpenSettings)
+                    EmptyContent(
+                        showLessonButton = uiState.showLessonButton,
+                        onNewProject = onNewProject,
+                        onOpenLessons = onOpenLessons,
+                        emptyAd = { adModifier -> adSlots.EmptyAd(adModifier) },
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+                is ProjectsUiState.List -> Column(Modifier.fillMaxSize()) {
+                    ProjectsTopBar(uiState.showSettingsButton, onImport = onImport, onOpenSettings = onOpenSettings)
+                    // Inside the List branch: leaving it (last project deleted) destroys the grid's ads.
+                    val gridAds = adSlots.rememberGridAds()
+                    adSlots.BottomBar { padding ->
+                        Box(Modifier.fillMaxSize()) {
+                            ProjectGrid(
+                                cards = uiState.cards,
+                                thumbnails = thumbnails,
+                                gridState = gridState,
+                                onNewProject = onNewProject,
+                                onProjectClick = onProjectClick,
+                                onProjectLongClick = onProjectLongClick,
+                                onThumbnailNeeded = onThumbnailNeeded,
+                                gridAds = gridAds,
+                                bottomPadding = padding.calculateBottomPadding(),
+                            )
+                            // Over the bar, never over the ad.
+                            ProjectsSnackbars(
+                                snackbarHostState = snackbarHostState,
+                                duplicatingHostState = duplicatingHostState,
+                                modifier = Modifier
+                                    .align(Alignment.BottomCenter)
+                                    .padding(bottom = padding.calculateBottomPadding()),
+                            )
+                        }
+                    }
+                }
             }
-            is ProjectsUiState.List -> Column(Modifier.fillMaxSize()) {
-                ProjectsTopBar(uiState.showSettingsButton, onImport = onImport, onOpenSettings = onOpenSettings)
-                ProjectGrid(
-                    cards = uiState.cards,
-                    thumbnails = thumbnails,
-                    gridState = gridState,
-                    onNewProject = onNewProject,
-                    onProjectClick = onProjectClick,
-                    onProjectLongClick = onProjectLongClick,
-                    onThumbnailNeeded = onThumbnailNeeded,
-                    modifier = Modifier.weight(1f),
+            if (uiState !is ProjectsUiState.List) {
+                ProjectsSnackbars(
+                    snackbarHostState = snackbarHostState,
+                    duplicatingHostState = duplicatingHostState,
+                    modifier = Modifier.align(Alignment.BottomCenter),
                 )
             }
         }
-        ProjectsSnackbars(
-            snackbarHostState = snackbarHostState,
-            duplicatingHostState = duplicatingHostState,
-            modifier = Modifier.align(Alignment.BottomCenter),
-        )
     }
     ProjectOverlay(
         menuState = menuState,
@@ -366,12 +390,16 @@ private fun ProjectsTopBar(showSettingsButton: Boolean, onImport: () -> Unit, on
     }
 }
 
-/** No project yet: picture, title, text, "New animation", "Try a free lesson". Scrolls on short screens. */
+/**
+ * No project yet: picture, title, text, "New animation", "Try a free lesson", then [emptyAd] under the last button.
+ * Scrolls on short screens.
+ */
 @Composable
 private fun EmptyContent(
     showLessonButton: Boolean,
     onNewProject: () -> Unit,
     onOpenLessons: () -> Unit,
+    emptyAd: @Composable (Modifier) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -420,6 +448,8 @@ private fun EmptyContent(
                 )
             }
         }
+        // 24 dp plus the column's 12 dp gap: 36 dp under the last button, as in the design.
+        emptyAd(Modifier.fillMaxWidth().padding(top = EmptyAdTopPadding).testTag(ProjectsTestTags.EMPTY_AD))
     }
 }
 

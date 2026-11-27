@@ -17,7 +17,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -35,6 +34,7 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.vgl.draw.animation.core.designsystem.theme.AppTheme
 import com.vgl.draw.animation.core.designsystem.theme.Spacing
@@ -52,8 +52,9 @@ private const val THUMBNAIL_ASPECT = 168f / 94f
 internal const val PROJECT_GRID_COLUMNS = 2
 
 /**
- * The list state: "New animation" first, the "Your projects" header, then two columns of cards. The button and the
- * header span the whole row, so they scroll with the cards; the top bar stays outside the grid.
+ * The list state: "New animation" first, the "Your projects" header, then two columns of cards, with the ads of
+ * [gridAds] between them. The button and the header span the whole row, so they scroll with the cards; the top bar
+ * stays outside the grid. [bottomPadding] is the bottom bar's space, so the last card scrolls above the bar.
  */
 @Composable
 internal fun ProjectGrid(
@@ -64,13 +65,20 @@ internal fun ProjectGrid(
     onProjectClick: (ProjectCardUi) -> Unit,
     onProjectLongClick: (ProjectCardUi) -> Unit,
     onThumbnailNeeded: (ProjectCardUi, Int) -> Unit,
+    gridAds: ProjectsGridAds,
+    bottomPadding: Dp,
     modifier: Modifier = Modifier,
 ) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
+        columns = GridCells.Fixed(PROJECT_GRID_COLUMNS),
         state = gridState,
         modifier = modifier.fillMaxSize().testTag(ProjectsTestTags.GRID),
-        contentPadding = PaddingValues(start = Spacing.md, end = Spacing.md, top = Spacing.sm, bottom = Spacing.md),
+        contentPadding = PaddingValues(
+            start = Spacing.md,
+            end = Spacing.md,
+            top = Spacing.sm,
+            bottom = Spacing.md + bottomPadding,
+        ),
         horizontalArrangement = Arrangement.spacedBy(GridGap),
         verticalArrangement = Arrangement.spacedBy(GridGap),
     ) {
@@ -80,7 +88,7 @@ internal fun ProjectGrid(
         item(key = "header", span = { GridItemSpan(maxLineSpan) }) {
             SectionHeader(Modifier.padding(vertical = SectionGap - GridGap))
         }
-        items(cards, key = { it.id.value }) { card ->
+        gridAds.cards(this, cards, PROJECT_GRID_COLUMNS) { card ->
             ProjectCard(
                 card = card,
                 thumbnail = if (card.readable) thumbnails[card.id] else null,
