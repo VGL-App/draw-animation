@@ -23,6 +23,7 @@ import com.vgl.draw.animation.R
 import com.vgl.draw.animation.feature.loading.navigation.LoadingDestination
 import com.vgl.draw.animation.feature.loading.navigation.loadingScreen
 import com.vgl.draw.animation.feature.projects.navigation.ProjectsDestination
+import com.vgl.draw.animation.feature.projects.navigation.newProjectScreen
 import com.vgl.draw.animation.feature.projects.navigation.projectsScreen
 import com.vgl.draw.animation.feature.sample.navigation.SampleDestination
 import com.vgl.draw.animation.feature.sample.navigation.sampleScreen
@@ -90,32 +91,49 @@ fun AppNavHost(
                     popUpTo<LoadingDestination> { inclusive = true }
                 }
             }
-            screens.projects(this) {
-                // Called once from the list's LaunchedEffect, on the main thread. The sample screen does not watch
-                // the flag: the user stays there until the next start (plan T-009, question 7).
-                navController.navigate(SampleDestination) {
-                    popUpTo<ProjectsDestination> { inclusive = true }
-                }
-            }
+            screens.projects(
+                this,
+                ProjectsCallbacks(
+                    onFeatureDisabled = {
+                        // Called once from the list's LaunchedEffect, on the main thread. The sample screen does not
+                        // watch the flag: the user stays there until the next start (plan T-009, question 7).
+                        navController.navigate(SampleDestination) {
+                            popUpTo<ProjectsDestination> { inclusive = true }
+                        }
+                    },
+                    // Test-first skeleton (T-011): wired by the code commit.
+                    onNewProject = {},
+                ),
+            )
             screens.sample(this)
         }
     }
 }
 
+/** What the project list asks of the shell. Later tickets add fields here, not parameters to [AppScreens.projects]. */
+data class ProjectsCallbacks(val onFeatureDisabled: () -> Unit, val onNewProject: () -> Unit)
+
+/** What the Create screen asks of the shell. T-018 adds `onOpenProject`. */
+data class NewProjectCallbacks(val onClose: () -> Unit)
+
 /** The destinations [AppNavHost] wires. Tests pass fakes, because the real routes need Hilt ViewModels. */
 data class AppScreens(
     val loading: NavGraphBuilder.(onFinished: () -> Unit) -> Unit = { loadingScreen(it) },
-    val projects: NavGraphBuilder.(onFeatureDisabled: () -> Unit) -> Unit = {
-        // Destinations not built yet (Create T-011, editor T-018, lessons T-050, settings T-016, restore T-013):
+    val projects: NavGraphBuilder.(ProjectsCallbacks) -> Unit = {
+        // Destinations not built yet (editor T-018, lessons T-050, settings T-016, restore T-013):
         // null callbacks show "Coming soon".
         projectsScreen(
-            onNewProject = null,
+            onNewProject = it.onNewProject,
             onOpenProject = null,
             onOpenLessons = null,
             onOpenSettings = null,
             onImport = null,
-            onFeatureDisabled = it,
+            onFeatureDisabled = it.onFeatureDisabled,
         )
+    },
+    // No drawing screen yet (T-018): after creating, the Create screen goes back to the list.
+    val newProject: NavGraphBuilder.(NewProjectCallbacks) -> Unit = {
+        newProjectScreen(onClose = it.onClose, onOpenProject = null)
     },
     val sample: NavGraphBuilder.() -> Unit = { sampleScreen() },
 )
