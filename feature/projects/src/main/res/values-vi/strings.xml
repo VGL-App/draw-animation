@@ -35,4 +35,19 @@
     <string name="projects_message_rename_failed">Không đổi tên được dự án. Hãy thử lại.</string>
     <string name="projects_message_duplicate_failed">Không nhân bản được dự án. Hãy thử lại.</string>
     <string name="projects_message_delete_failed">Không xóa được dự án. Hãy thử lại.</string>
+    <string name="new_project_title">Hoạt hình mới</string>
+    <string name="new_project_close">Đóng</string>
+    <string name="new_project_name">Tên</string>
+    <string name="new_project_canvas">Khung hình</string>
+    <string name="new_project_size">Độ phân giải</string>
+    <string name="new_project_frame_rate">Tốc độ khung hình</string>
+    <string name="new_project_background">Nền</string>
+    <string name="new_project_photo">Ảnh</string>
+    <string name="new_project_create">Tạo</string>
+    <string name="new_project_color_white">Trắng</string>
+    <string name="new_project_color_dark">Xám đậm</string>
+    <string name="new_project_color_blue">Xanh dương</string>
+    <string name="new_project_first_layer_name">Lớp 1</string>
+    <string name="new_project_create_failed">Không tạo được dự án. Hãy thử lại.</string>
+    <string name="new_project_photo_failed">Không dùng được ảnh này. Hãy thử ảnh khác.</string>
 </resources>
