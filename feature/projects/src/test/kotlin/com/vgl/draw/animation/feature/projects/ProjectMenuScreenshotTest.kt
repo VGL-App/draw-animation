@@ -45,14 +45,14 @@ class ProjectMenuScreenshotTest {
     @Test
     fun menu_light() {
         captureRoboImage("src/test/screenshots/ProjectsScreen_menu_light.png") {
-            Frame(darkTheme = false) { Menu(walk) }
+            Frame(darkTheme = false, adSlots = FakeProjectsAdSlots()) { Menu(walk) }
         }
     }
 
     @Test
     fun menu_dark() {
         captureRoboImage("src/test/screenshots/ProjectsScreen_menu_dark.png") {
-            Frame(darkTheme = true) { Menu(walk) }
+            Frame(darkTheme = true, adSlots = FakeProjectsAdSlots()) { Menu(walk) }
         }
     }
 
@@ -106,11 +106,15 @@ class ProjectMenuScreenshotTest {
         }
     }
 
-    /** The list of the design's four projects; [overlay] is drawn over a scrim when not null. */
+    /**
+     * The list of the design's four projects; [overlay] is drawn over a scrim when not null. The design's menu frames
+     * have the bottom bar under the scrim: they pass fake [adSlots] (plan T-010).
+     */
     @Composable
     private fun Frame(
         darkTheme: Boolean,
         menuState: ProjectsMenuState = ProjectsMenuState(),
+        adSlots: ProjectsAdSlots = DefaultProjectsAdSlots,
         overlay: (@Composable () -> Unit)? = null,
     ) {
         val cards = designCards()
@@ -129,6 +133,7 @@ class ProjectMenuScreenshotTest {
                     menuState = menuState,
                     nowMillis = NOW,
                     zone = ZoneOffset.UTC,
+                    adSlots = adSlots,
                 )
                 if (overlay != null) {
                     Box(

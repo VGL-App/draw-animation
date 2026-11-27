@@ -199,8 +199,11 @@ enum class AdPlacement(
     /** Projects list with projects, bottom bar (projects spec, section 5). Group A. */
     PROJECTS_BOTTOM("projects_bottom", AdFormat.NATIVE_SMALL),
 
-    /** Projects grid, one cell after every 6 projects (projects spec, section 5). Group A. */
-    PROJECTS_GRID("projects_grid", AdFormat.NATIVE_IN_COLLECTION, nativeEvery = 6),
+    /**
+     * Projects grid, one cell after every 6 projects (projects spec, section 5). Group A. Keeps its placeholder while
+     * the pool is exhausted, so project cards never move (plan T-010).
+     */
+    PROJECTS_GRID("projects_grid", AdFormat.NATIVE_IN_COLLECTION, nativeEvery = 6, keepSpaceWhenPoolEmpty = true),
 
     /** Restore project dialog, while restoring, under the progress bar (projects spec, section 5). Group A. */
     RESTORE_MREC("restore_mrec", AdFormat.BANNER_MREC),
