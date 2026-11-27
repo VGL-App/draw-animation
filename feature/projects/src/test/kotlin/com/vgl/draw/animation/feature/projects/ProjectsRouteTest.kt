@@ -1,7 +1,10 @@
 package com.vgl.draw.animation.feature.projects
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -32,24 +35,39 @@ class ProjectsRouteTest {
     private var disabledCalls = 0
     private val opened = mutableListOf<ProjectId>()
 
-    private fun show(openProject: Boolean = false) {
+    /** [privacyOptionsButton] null: the route's own default slot. */
+    private fun show(openProject: Boolean = false, privacyOptionsButton: (@Composable (Modifier) -> Unit)? = null) {
         val viewModel = ProjectsViewModel(
             repository = repository,
             featureFlags = flags,
             analytics = NoAnalytics(),
             logger = RecordingAppLogger(),
         )
+        val onOpenProject: ((ProjectId) -> Unit)? = if (openProject) ({ opened += it }) else null
         composeRule.setContent {
             AppTheme(darkTheme = false) {
-                ProjectsRoute(
-                    viewModel = viewModel,
-                    onNewProject = null,
-                    onOpenProject = if (openProject) ({ opened += it }) else null,
-                    onOpenLessons = null,
-                    onOpenSettings = null,
-                    onImport = null,
-                    onFeatureDisabled = { disabledCalls++ },
-                )
+                if (privacyOptionsButton == null) {
+                    ProjectsRoute(
+                        viewModel = viewModel,
+                        onNewProject = null,
+                        onOpenProject = onOpenProject,
+                        onOpenLessons = null,
+                        onOpenSettings = null,
+                        onImport = null,
+                        onFeatureDisabled = { disabledCalls++ },
+                    )
+                } else {
+                    ProjectsRoute(
+                        viewModel = viewModel,
+                        onNewProject = null,
+                        onOpenProject = onOpenProject,
+                        onOpenLessons = null,
+                        onOpenSettings = null,
+                        onImport = null,
+                        onFeatureDisabled = { disabledCalls++ },
+                        privacyOptionsButton = privacyOptionsButton,
+                    )
+                }
             }
         }
         composeRule.waitForIdle()
@@ -152,6 +170,35 @@ class ProjectsRouteTest {
         flags[FeatureFlag.PROJECTS] = false
         composeRule.waitForIdle()
         assertEquals(1, disabledCalls)
+    }
+
+    @Test
+    fun settingsFlag_flipsBetweenSettingsAndPrivacy() {
+        flags[FeatureFlag.SETTINGS] = false
+        show(privacyOptionsButton = { FakePrivacyButton(modifier = it) })
+        composeRule.mainClock.autoAdvance = true
+        composeRule.onNodeWithTag(ProjectsTestTags.PRIVACY).assertExists()
+        composeRule.onAllNodesWithTag(ProjectsTestTags.SETTINGS).assertCountEquals(0)
+
+        flags[FeatureFlag.SETTINGS] = true
+        composeRule.waitForIdle()
+        composeRule.onNodeWithTag(ProjectsTestTags.SETTINGS).assertExists()
+        composeRule.onAllNodesWithTag(ProjectsTestTags.PRIVACY).assertCountEquals(0)
+
+        flags[FeatureFlag.SETTINGS] = false
+        composeRule.waitForIdle()
+        composeRule.onNodeWithTag(ProjectsTestTags.PRIVACY).assertExists()
+        composeRule.onAllNodesWithTag(ProjectsTestTags.SETTINGS).assertCountEquals(0)
+    }
+
+    // Guard: PrivacyOptionsButton, the default slot, draws nothing without an ads controller.
+    @Test
+    fun settingsFlagOff_defaultSlot_noButtonWithoutAds() {
+        flags[FeatureFlag.SETTINGS] = false
+        show()
+        composeRule.onAllNodesWithText("Privacy settings").assertCountEquals(0)
+        composeRule.onAllNodesWithTag(ProjectsTestTags.SETTINGS).assertCountEquals(0)
+        composeRule.onNodeWithTag(ProjectsTestTags.IMPORT).assertExists()
     }
 
     private companion object {

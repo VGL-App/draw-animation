@@ -4,6 +4,7 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Canvas
@@ -12,6 +13,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.Paint
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.takahirom.roborazzi.captureRoboImage
+import com.vgl.draw.animation.core.ads.PrivacyOptionsButton
 import com.vgl.draw.animation.core.designsystem.theme.AppTheme
 import com.vgl.draw.animation.core.project.model.ProjectId
 import org.junit.Test
@@ -124,6 +126,57 @@ class ProjectsScreenScreenshotTest {
         }
     }
 
+    /** Settings flag off where the privacy options entry is required (plan T-056): the button replaces settings. */
+    @Test
+    fun privacy_light() {
+        captureRoboImage("src/test/screenshots/ProjectsScreen_privacy_light.png") {
+            Screen(
+                ProjectsUiState.List(designCards(), showSettingsButton = false),
+                darkTheme = false,
+                adSlots = FakeProjectsAdSlots(),
+                privacyOptionsButton = { FakePrivacyButton(modifier = it) },
+            )
+        }
+    }
+
+    @Test
+    fun privacy_dark() {
+        captureRoboImage("src/test/screenshots/ProjectsScreen_privacy_dark.png") {
+            Screen(
+                ProjectsUiState.List(designCards(), showSettingsButton = false),
+                darkTheme = true,
+                adSlots = FakeProjectsAdSlots(),
+                privacyOptionsButton = { FakePrivacyButton(modifier = it) },
+            )
+        }
+    }
+
+    @Test
+    @Config(qualifiers = "en-w360dp-h640dp-xxhdpi")
+    fun privacy_small() {
+        captureRoboImage("src/test/screenshots/ProjectsScreen_privacy_small.png") {
+            Screen(
+                ProjectsUiState.List(eightCards(), showSettingsButton = false),
+                darkTheme = false,
+                adSlots = FakeProjectsAdSlots(),
+                privacyOptionsButton = { FakePrivacyButton(modifier = it) },
+            )
+        }
+    }
+
+    /** Settings flag off where the privacy options entry is not required: the slot draws nothing. */
+    @Test
+    fun noSettings_light() {
+        captureRoboImage("src/test/screenshots/ProjectsScreen_noSettings_light.png") {
+            Screen(
+                ProjectsUiState.List(designCards(), showSettingsButton = false),
+                darkTheme = false,
+                adSlots = FakeProjectsAdSlots(),
+                privacyOptionsButton = {},
+            )
+        }
+    }
+
     private fun eightCards(): List<ProjectCardUi> = designCards() + listOf(
         readableCard(5, "A very long project name that never fits on one card", frames = 120, fps = 24),
         readableCard(6, "Run cycle", frames = 12, fps = 12),
@@ -137,6 +190,7 @@ class ProjectsScreenScreenshotTest {
         darkTheme: Boolean,
         adSlots: ProjectsAdSlots = DefaultProjectsAdSlots,
         firstVisibleItem: Int = 0,
+        privacyOptionsButton: @Composable (Modifier) -> Unit = { PrivacyOptionsButton(it) },
     ) {
         val cards = (uiState as? ProjectsUiState.List)?.cards.orEmpty()
         // Every id gets an image, also unreadable ones: the screen must not draw it for them.
@@ -153,6 +207,7 @@ class ProjectsScreenScreenshotTest {
                 onImport = {},
                 gridState = rememberLazyGridState(initialFirstVisibleItemIndex = firstVisibleItem),
                 adSlots = adSlots,
+                privacyOptionsButton = privacyOptionsButton,
             )
         }
     }
