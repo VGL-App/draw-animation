@@ -59,7 +59,6 @@ import com.vgl.draw.animation.core.designsystem.component.PrimaryButton
 import com.vgl.draw.animation.core.designsystem.theme.Spacing
 import com.vgl.draw.animation.core.project.model.ProjectId
 import java.time.ZoneId
-import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
@@ -98,16 +97,12 @@ internal fun ProjectsRoute(
     val comingSoon = stringResource(R.string.projects_coming_soon)
     val cannotOpen = stringResource(R.string.projects_cannot_open)
     val messages = ProjectsMessage.entries.associateWith { stringResource(it.textRes) }
-    // Each message shows at once: a running "Duplicating…" (the only message that never hides) steps aside and comes
-    // back after it, since its loop queues again on the same host. Another short message is not cut off.
-    // The new message queues on the host before "Duplicating…" is dismissed: dismissing first could let the loop
-    // take the host again before the new message is waiting for it.
+    // Each message shows at once: the one showing is dismissed. This host only has short messages that hide by
+    // themselves; "Duplicating…" has a host of its own (ProjectsScreen) and steps aside while this host shows one.
     val show: (String) -> Unit = { message ->
         scope.launch {
-            val duplicating = snackbarHostState.currentSnackbarData
-                ?.takeIf { it.visuals.duration == SnackbarDuration.Indefinite }
-            launch(start = CoroutineStart.UNDISPATCHED) { snackbarHostState.showSnackbar(message) }
-            duplicating?.dismiss()
+            snackbarHostState.currentSnackbarData?.dismiss()
+            snackbarHostState.showSnackbar(message)
         }
     }
     val currentOpenProject by rememberUpdatedState(onOpenProject)
@@ -174,7 +169,9 @@ private val ProjectsMessage.textRes: Int
  * Stateless screen. The top bar (wordmark, import, settings) is outside the scrolling content, so it stays in place.
  * [gridState] is remembered above the state switch, so the scroll position is saved with the back stack entry even
  * when the state passes through Loading (KB-11). [menuState] draws the project menu or one of its dialogs over the
- * list, and the "Duplicating…" message while a copy runs. [nowMillis] and [zone] give the menu's "edited <when>".
+ * list, and the "Duplicating…" message while a copy runs. "Duplicating…" has a host of its own, shown only while
+ * [snackbarHostState] has no message, so other messages show at once over it. [nowMillis] and [zone] give the menu's
+ * "edited <when>".
  */
 @Composable
 fun ProjectsScreen(
@@ -202,6 +199,8 @@ fun ProjectsScreen(
     onDeleteConfirm: () -> Unit = {},
     onDismissOverlay: () -> Unit = {},
 ) {
+    // Outside the state switch, so a running "Duplicating…" is kept when the screen moves between List and Empty.
+    val duplicatingHostState = remember { SnackbarHostState() }
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -233,7 +232,11 @@ fun ProjectsScreen(
                 )
             }
         }
-        SnackbarHost(hostState = snackbarHostState, modifier = Modifier.align(Alignment.BottomCenter))
+        ProjectsSnackbars(
+            snackbarHostState = snackbarHostState,
+            duplicatingHostState = duplicatingHostState,
+            modifier = Modifier.align(Alignment.BottomCenter),
+        )
     }
     ProjectOverlay(
         menuState = menuState,
@@ -252,11 +255,29 @@ fun ProjectsScreen(
     val duplicatingName = menuState.duplicatingName
     if (duplicatingName != null) {
         val text = stringResource(R.string.projects_duplicating, duplicatingName)
-        // Never hides by itself; another message dismisses it, then the loop queues it again (see ProjectsRoute).
-        // Leaving the composition (the copy ended) cancels it and the message goes away.
+        // Never hides by itself and has its host to itself; dismissed with TalkBack, the loop shows it again since
+        // the copy still runs. Leaving the composition (the copy ended) cancels it and the message goes away, also
+        // while another message covers it.
         LaunchedEffect(text) {
-            while (isActive) snackbarHostState.showSnackbar(text, duration = SnackbarDuration.Indefinite)
+            while (isActive) duplicatingHostState.showSnackbar(text, duration = SnackbarDuration.Indefinite)
         }
+    }
+}
+
+/**
+ * The two message hosts at one place. The host of "Duplicating…" is in the composition only while
+ * [snackbarHostState] has no message: another message shows at once, and "Duplicating…" comes back after it, since
+ * its showSnackbar is still waiting.
+ */
+@Composable
+private fun ProjectsSnackbars(
+    snackbarHostState: SnackbarHostState,
+    duplicatingHostState: SnackbarHostState,
+    modifier: Modifier = Modifier,
+) {
+    Box(modifier, contentAlignment = Alignment.BottomCenter) {
+        if (snackbarHostState.currentSnackbarData == null) SnackbarHost(duplicatingHostState)
+        SnackbarHost(snackbarHostState)
     }
 }
 
