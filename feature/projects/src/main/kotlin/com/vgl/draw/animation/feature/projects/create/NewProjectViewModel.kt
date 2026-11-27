@@ -10,7 +10,6 @@ import com.vgl.draw.animation.core.logging.AppLogger
 import com.vgl.draw.animation.core.project.model.AspectRatio
 import com.vgl.draw.animation.core.project.model.BackgroundColor
 import com.vgl.draw.animation.core.project.model.FrameRate
-import com.vgl.draw.animation.core.project.model.ProjectId
 import com.vgl.draw.animation.core.project.model.Resolution
 import com.vgl.draw.animation.core.project.repository.NewBackground
 import com.vgl.draw.animation.core.project.repository.NewProject
@@ -63,10 +62,6 @@ class NewProjectViewModel @Inject constructor(
     private var photo: PreparedPhoto? = null
     private var photoJob: Job? = null
     private var created = false
-    private var pendingOpen: ProjectId? = null
-
-    /** A created project that has not been opened yet (the interstitial may still cover the screen). */
-    val hasPendingOpen: Boolean get() = pendingOpen != null
 
     init {
         viewModelScope.launch { featureFlags.enabled(FeatureFlag.EDITOR).collect { editorEnabled = it } }
@@ -190,7 +185,6 @@ class NewProjectViewModel @Inject constructor(
             when (val result = repository.create(request)) {
                 is ProjectResult.Success -> {
                     created = true
-                    pendingOpen = result.value.id
                     analytics.log(createEvent(choices))
                     logger.info(LOG_TAG, "Project created")
                     effectChannel.trySend(
@@ -209,9 +203,6 @@ class NewProjectViewModel @Inject constructor(
             }
         }
     }
-
-    /** The created project to open, once: later calls return null. */
-    fun takePendingOpen(): ProjectId? = pendingOpen.also { pendingOpen = null }
 
     /** The error message was shown. */
     fun onErrorShown() = updateReady { it.copy(error = null) }

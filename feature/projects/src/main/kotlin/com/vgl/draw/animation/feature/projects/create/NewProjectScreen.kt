@@ -34,9 +34,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
@@ -77,8 +80,8 @@ private val MaxContentWidth = 600.dp
  * [onPhotoPickerResult] hold and release the ads that show by themselves around the system photo picker (G-03, way
  * 1; null: [rememberAdSuppression]). [newProjectAd] draws `new_project_native`. Tests pass fakes for the four.
  *
- * The view model keeps the id of a created project until it opens, so a recreation while the interstitial still
- * covers the screen opens it at once; an `onFinished` of the composition left behind then opens nothing.
+ * The id of a created project is saved until the project opens, so a recreation while the interstitial still covers
+ * the screen opens it at once; an `onFinished` of the composition left behind then opens nothing.
  */
 @Composable
 internal fun NewProjectRoute(
@@ -110,17 +113,23 @@ internal fun NewProjectRoute(
 
     val currentOnClose by rememberUpdatedState(onClose)
     val currentOnOpenProject by rememberUpdatedState(onOpenProject)
-    // Set when this composition leaves: an onFinished it handed to the ad must not open the project again.
+    // The project created and not opened yet; saved, so a recreation while the ad covers the screen opens it.
+    // ProjectId is a value class and cannot go into a Bundle by itself: its value is kept.
+    var pendingOpen by rememberSaveable { mutableStateOf<String?>(null) }
+    // Set when this composition leaves: an onFinished it handed to the ad must not open the project again (the state
+    // object of a composition that left still holds the id).
     val left = remember { LeftMark() }
     DisposableEffect(Unit) { onDispose { left.value = true } }
     val openPending: () -> Unit = {
-        if (!left.value) {
-            viewModel.takePendingOpen()?.let { id -> currentOnOpenProject?.invoke(id) ?: currentOnClose() }
+        val id = pendingOpen
+        if (id != null && !left.value) {
+            pendingOpen = null
+            currentOnOpenProject?.invoke(ProjectId(id)) ?: currentOnClose()
         }
     }
     val showAd = createAd(openPending)
     val currentShowAd by rememberUpdatedState(showAd)
-    val pendingAtStart = remember { viewModel.hasPendingOpen }
+    val pendingAtStart = remember { pendingOpen != null }
     LaunchedEffect(Unit) {
         // Built again while the interstitial covered the screen: open now, without another ad.
         if (pendingAtStart) openPending()
@@ -130,6 +139,7 @@ internal fun NewProjectRoute(
         viewModel.effects.collect { effect ->
             when (effect) {
                 is NewProjectEffect.ProjectCreated -> {
+                    pendingOpen = effect.id.value
                     // Created while the app was in the background: no ad when it comes back.
                     if (effect.interstitialAllowed && lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
                         currentShowAd()
