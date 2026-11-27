@@ -336,6 +336,16 @@ class ProjectsViewModelTest {
     }
 
     @Test
+    fun settingsFlagTurnsOff_hidesSettings() = runTest {
+        repository.projects.value = listOf(readableItem(1))
+        val viewModel = started()
+        assertEquals(true, (viewModel.uiState.value as ProjectsUiState.List).showSettingsButton)
+        flags[FeatureFlag.SETTINGS] = false
+        runCurrent()
+        assertEquals(false, (viewModel.uiState.value as ProjectsUiState.List).showSettingsButton)
+    }
+
+    @Test
     fun projectsFlagOff_givesDisabled() = runTest {
         flags[FeatureFlag.PROJECTS] = false
         repository.projects.value = listOf(readableItem(1))

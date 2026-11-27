@@ -56,6 +56,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vgl.draw.animation.core.ads.InContentAds
+import com.vgl.draw.animation.core.ads.PrivacyOptionsButton
 import com.vgl.draw.animation.core.designsystem.component.PrimaryButton
 import com.vgl.draw.animation.core.designsystem.theme.Spacing
 import com.vgl.draw.animation.core.project.model.ProjectId
@@ -91,6 +92,7 @@ internal fun ProjectsRoute(
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     onBackUpProject: ((ProjectId, String) -> Unit)? = null,
     gridState: LazyGridState = rememberLazyGridState(),
+    privacyOptionsButton: @Composable (Modifier) -> Unit = { PrivacyOptionsButton(it) },
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val thumbnails by viewModel.thumbnails.collectAsStateWithLifecycle()
@@ -203,6 +205,7 @@ fun ProjectsScreen(
     onDeleteConfirm: () -> Unit = {},
     onDismissOverlay: () -> Unit = {},
     adSlots: ProjectsAdSlots = DefaultProjectsAdSlots,
+    privacyOptionsButton: @Composable (Modifier) -> Unit = { PrivacyOptionsButton(it) },
 ) {
     // Outside the state switch, so a running "Duplicating…" is kept when the screen moves between List and Empty.
     val duplicatingHostState = remember { SnackbarHostState() }
@@ -473,6 +476,7 @@ object ProjectsTestTags {
     const val EMPTY_AD = "projects_empty_ad"
     const val SETTINGS = "projects_settings"
     const val IMPORT = "projects_import"
+    const val PRIVACY = "projects_privacy"
     const val MENU = "project_menu"
     const val MENU_OPEN = "project_menu_open"
     const val MENU_RENAME = "project_menu_rename"

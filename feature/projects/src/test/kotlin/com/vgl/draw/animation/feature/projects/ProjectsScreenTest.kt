@@ -3,9 +3,14 @@ package com.vgl.draw.animation.feature.projects
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.semantics.SemanticsNode
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.hasTestTag
@@ -15,10 +20,12 @@ import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vgl.draw.animation.core.designsystem.theme.AppTheme
 import com.vgl.draw.animation.core.project.model.ProjectId
@@ -46,20 +53,59 @@ class ProjectsScreenTest {
         uiState: ProjectsUiState,
         thumbnails: Map<ProjectId, ImageBitmap?> = emptyMap(),
         gridState: (() -> LazyGridState)? = null,
+        privacyOptionsButton: (@Composable (Modifier) -> Unit)? = null,
     ) {
         composeRule.setContent {
             AppTheme(darkTheme = false) {
-                ProjectsScreen(
-                    uiState = uiState,
-                    thumbnails = thumbnails,
-                    snackbarHostState = remember { SnackbarHostState() },
-                    onNewProject = { newClicks++ },
-                    onProjectClick = { clickedCards += it },
-                    onOpenLessons = { lessonClicks++ },
-                    onOpenSettings = { settingsClicks++ },
-                    onImport = {},
-                    gridState = gridState?.invoke() ?: rememberLazyGridState(),
-                )
+                Screen(uiState, thumbnails, gridState?.invoke() ?: rememberLazyGridState(), privacyOptionsButton)
+            }
+        }
+    }
+
+    /** [privacyOptionsButton] null: the screen's own default slot. */
+    @Composable
+    private fun Screen(
+        uiState: ProjectsUiState,
+        thumbnails: Map<ProjectId, ImageBitmap?> = emptyMap(),
+        gridState: LazyGridState = rememberLazyGridState(),
+        privacyOptionsButton: (@Composable (Modifier) -> Unit)? = null,
+    ) {
+        if (privacyOptionsButton == null) {
+            ProjectsScreen(
+                uiState = uiState,
+                thumbnails = thumbnails,
+                snackbarHostState = remember { SnackbarHostState() },
+                onNewProject = { newClicks++ },
+                onProjectClick = { clickedCards += it },
+                onOpenLessons = { lessonClicks++ },
+                onOpenSettings = { settingsClicks++ },
+                onImport = {},
+                gridState = gridState,
+            )
+        } else {
+            ProjectsScreen(
+                uiState = uiState,
+                thumbnails = thumbnails,
+                snackbarHostState = remember { SnackbarHostState() },
+                onNewProject = { newClicks++ },
+                onProjectClick = { clickedCards += it },
+                onOpenLessons = { lessonClicks++ },
+                onOpenSettings = { settingsClicks++ },
+                onImport = {},
+                gridState = gridState,
+                privacyOptionsButton = privacyOptionsButton,
+            )
+        }
+    }
+
+    /** Sets the screen once over [uiState], which the test changes afterwards. */
+    private fun showChanging(
+        uiState: MutableState<ProjectsUiState>,
+        privacyOptionsButton: @Composable (Modifier) -> Unit,
+    ) {
+        composeRule.setContent {
+            AppTheme(darkTheme = false) {
+                Screen(uiState.value, privacyOptionsButton = privacyOptionsButton)
             }
         }
     }
@@ -264,5 +310,144 @@ class ProjectsScreenTest {
     fun vietnamese_framesLineKeepsNumbers() {
         show(list(listOf(readableCard(1, "Bouncing ball", frames = 48, fps = 12))))
         composeRule.onNodeWithText("48 khung · 12 fps").assertExists()
+    }
+
+    @Test
+    fun settingsOff_showsPrivacyButtonInPlaceOfSettings() {
+        val uiState = mutableStateOf<ProjectsUiState>(
+            ProjectsUiState.Empty(showLessonButton = true, showSettingsButton = false),
+        )
+        showChanging(uiState) { FakePrivacyButton(modifier = it) }
+        assertPrivacyInPlaceOfSettings()
+
+        uiState.value = ProjectsUiState.List(designCards(), showSettingsButton = false)
+        composeRule.waitForIdle()
+        composeRule.onNodeWithTag(ProjectsTestTags.GRID).assertExists()
+        assertPrivacyInPlaceOfSettings()
+    }
+
+    private fun assertPrivacyInPlaceOfSettings() {
+        val privacy = composeRule.onNodeWithTag(ProjectsTestTags.PRIVACY).fetchSemanticsNode().boundsInRoot
+        composeRule.onAllNodesWithTag(ProjectsTestTags.SETTINGS).assertCountEquals(0)
+        val import = composeRule.onNodeWithTag(ProjectsTestTags.IMPORT).fetchSemanticsNode().boundsInRoot
+        assertTrue("privacy $privacy after import $import", privacy.left >= import.right)
+        val topBarBottom = with(composeRule.density) { 64.dp.toPx() }
+        assertTrue("privacy $privacy inside the top bar ($topBarBottom px)", privacy.bottom <= topBarBottom)
+    }
+
+    @Test
+    fun settingsOn_doesNotComposePrivacySlot() {
+        var slotComposed = false
+        val uiState = mutableStateOf<ProjectsUiState>(list(designCards()))
+        showChanging(uiState) {
+            slotComposed = true
+            FakePrivacyButton(modifier = it)
+        }
+        assertEquals(false, slotComposed)
+        composeRule.onNodeWithTag(ProjectsTestTags.SETTINGS).assertExists()
+        composeRule.onAllNodesWithTag(ProjectsTestTags.PRIVACY).assertCountEquals(0)
+
+        // Control: with the flag off the same slot is composed.
+        uiState.value = ProjectsUiState.List(designCards(), showSettingsButton = false)
+        composeRule.waitForIdle()
+        assertEquals(true, slotComposed)
+    }
+
+    @Test
+    fun privacyButton_tapReachesButton() {
+        var privacyClicks = 0
+        show(
+            ProjectsUiState.List(designCards(), showSettingsButton = false),
+            privacyOptionsButton = { FakePrivacyButton(modifier = it, onClick = { privacyClicks++ }) },
+        )
+        composeRule.onNodeWithTag(ProjectsTestTags.PRIVACY).performClick()
+        assertEquals(1, privacyClicks)
+        assertEquals(0, settingsClicks)
+    }
+
+    @Test
+    fun settingsOff_emptySlot_noTopButton() {
+        var slotComposed = false
+        show(
+            ProjectsUiState.List(designCards(), showSettingsButton = false),
+            privacyOptionsButton = { slotComposed = true },
+        )
+        // Control: the slot was called, it just draws nothing (like PrivacyOptionsButton where not required).
+        assertEquals(true, slotComposed)
+        composeRule.onAllNodesWithTag(ProjectsTestTags.SETTINGS).assertCountEquals(0)
+        composeRule.onAllNodesWithTag(ProjectsTestTags.PRIVACY).assertCountEquals(0)
+        composeRule.onAllNodesWithText(PRIVACY_TEXT).assertCountEquals(0)
+        composeRule.onNodeWithTag(ProjectsTestTags.IMPORT).assertExists()
+    }
+
+    // Guard: passes as soon as the tag compiles; catches a default slot that draws something else than
+    // PrivacyOptionsButton, which draws nothing without an ads controller.
+    @Test
+    fun settingsOff_defaultSlot_rendersNothingWithoutAds() {
+        show(ProjectsUiState.List(designCards(), showSettingsButton = false))
+        composeRule.onAllNodesWithText(PRIVACY_TEXT).assertCountEquals(0)
+        composeRule.onAllNodesWithTag(ProjectsTestTags.PRIVACY).assertCountEquals(0)
+        composeRule.onAllNodesWithTag(ProjectsTestTags.SETTINGS).assertCountEquals(0)
+        // Control: the top bar is drawn.
+        composeRule.onNodeWithTag(ProjectsTestTags.IMPORT).assertExists()
+    }
+
+    @Test
+    @Config(qualifiers = "en-w360dp-h640dp-xxhdpi")
+    @GraphicsMode(GraphicsMode.Mode.NATIVE)
+    fun privacyButton_fitsTopBar_small() {
+        show(
+            ProjectsUiState.List(designCards(), showSettingsButton = false),
+            privacyOptionsButton = { FakePrivacyButton(modifier = it) },
+        )
+        val textNode = composeRule.onNodeWithText(PRIVACY_TEXT, useUnmergedTree = true).fetchSemanticsNode()
+        val layout = textLayout(textNode)
+        assertEquals(1, layout.lineCount)
+        assertEquals(false, layout.isLineEllipsized(0))
+        assertTrue(
+            "line right ${layout.getLineRight(0)} within ${textNode.boundsInRoot.width}",
+            layout.getLineRight(0) <= textNode.boundsInRoot.width,
+        )
+        val wordmark = composeRule.onNodeWithText("Frameloop", useUnmergedTree = true).fetchSemanticsNode().boundsInRoot
+        val import = composeRule.onNodeWithTag(ProjectsTestTags.IMPORT).fetchSemanticsNode().boundsInRoot
+        val privacy = composeRule.onNodeWithTag(ProjectsTestTags.PRIVACY).fetchSemanticsNode().boundsInRoot
+        val root = composeRule.onRoot().fetchSemanticsNode().boundsInRoot
+        assertTrue("wordmark $wordmark before import $import", wordmark.right <= import.left)
+        assertTrue("import $import before privacy $privacy", import.right <= privacy.left)
+        assertTrue("privacy $privacy inside root $root", privacy.right <= root.width)
+    }
+
+    @Test
+    @Config(qualifiers = "en-w360dp-h640dp-xxhdpi", fontScale = 2.0f)
+    @GraphicsMode(GraphicsMode.Mode.NATIVE)
+    fun privacyButton_largeFont_notClipped() {
+        show(
+            ProjectsUiState.List(designCards(), showSettingsButton = false),
+            privacyOptionsButton = { FakePrivacyButton(modifier = it) },
+        )
+        val textNode = composeRule.onNodeWithText(PRIVACY_TEXT, useUnmergedTree = true).fetchSemanticsNode()
+        val layout = textLayout(textNode)
+        assertEquals(false, layout.hasVisualOverflow)
+        val lastLineBottom = layout.getLineBottom(layout.lineCount - 1)
+        assertTrue(
+            "last line bottom $lastLineBottom within ${textNode.boundsInRoot.height}",
+            lastLineBottom <= textNode.boundsInRoot.height,
+        )
+        (0 until layout.lineCount).forEach { line ->
+            assertEquals("line $line ellipsized", false, layout.isLineEllipsized(line))
+        }
+        val privacy = composeRule.onNodeWithTag(ProjectsTestTags.PRIVACY).fetchSemanticsNode().boundsInRoot
+        val grid = composeRule.onNodeWithTag(ProjectsTestTags.GRID).fetchSemanticsNode().boundsInRoot
+        assertTrue("privacy $privacy above the grid $grid", privacy.bottom <= grid.top)
+    }
+
+    private fun textLayout(node: SemanticsNode): TextLayoutResult {
+        val layouts = mutableListOf<TextLayoutResult>()
+        node.config.getOrNull(SemanticsActions.GetTextLayoutResult)?.action?.invoke(layouts)
+        return layouts.single()
+    }
+
+    private companion object {
+        const val PRIVACY_TEXT = "Privacy settings"
     }
 }
