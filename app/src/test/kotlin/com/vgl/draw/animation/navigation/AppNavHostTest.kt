@@ -1,8 +1,10 @@
 package com.vgl.draw.animation.navigation
 
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
@@ -17,10 +19,12 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.composable
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vgl.draw.animation.core.designsystem.theme.AppTheme
 import com.vgl.draw.animation.feature.loading.navigation.LoadingDestination
+import com.vgl.draw.animation.feature.projects.navigation.NewProjectDestination
 import com.vgl.draw.animation.feature.projects.navigation.ProjectsDestination
 import com.vgl.draw.animation.feature.sample.navigation.SampleDestination
 import kotlin.math.abs
@@ -48,6 +52,7 @@ class AppNavHostTest {
     private var disabledCalls = 0
     private val projectsOff = mutableStateOf(false)
     private val lessonsEnabled = mutableStateOf(false)
+    private var onNewProject: (() -> Unit)? = null
 
     private val fakeScreens = AppScreens(
         loading = { onFinished ->
@@ -58,14 +63,24 @@ class AppNavHostTest {
                 }
             }
         },
-        projects = { onFeatureDisabled ->
+        projects = { callbacks ->
             composable<ProjectsDestination> {
-                Box(Modifier.fillMaxSize().testTag(PROJECTS))
+                Box(Modifier.fillMaxSize().testTag(PROJECTS)) {
+                    Box(Modifier.size(48.dp).testTag(FAKE_NEW).clickable { callbacks.onNewProject() })
+                }
+                onNewProject = callbacks.onNewProject
                 if (projectsOff.value) {
                     LaunchedEffect(Unit) {
                         disabledCalls++
-                        onFeatureDisabled()
+                        callbacks.onFeatureDisabled()
                     }
+                }
+            }
+        },
+        newProject = { callbacks ->
+            composable<NewProjectDestination> {
+                Box(Modifier.fillMaxSize().testTag(NEW_PROJECT)) {
+                    Box(Modifier.size(48.dp).testTag(FAKE_CLOSE).clickable { callbacks.onClose() })
                 }
             }
         },
@@ -220,9 +235,97 @@ class AppNavHostTest {
         assertNear("content bottom", windowBottom() - TEST_NAVIGATION_BAR_PX, bounds(PROJECTS).bottom)
     }
 
+    @Test
+    fun newAnimation_opensNewProject() {
+        show()
+        assertFalse(exists(NEW_PROJECT))
+        composeRule.onNodeWithTag(FAKE_NEW).performClick()
+        composeRule.waitForIdle()
+        assertTrue(exists(NEW_PROJECT))
+        assertFalse(exists(PROJECTS))
+    }
+
+    @Test
+    fun newAnimation_twiceFast_oneEntry() {
+        show()
+        // Two taps before the first navigation shows: one entry in the back stack.
+        composeRule.runOnUiThread {
+            onNewProject!!.invoke()
+            onNewProject!!.invoke()
+        }
+        composeRule.waitForIdle()
+        assertTrue(exists(NEW_PROJECT))
+        composeRule.runOnUiThread { composeRule.activity.onBackPressedDispatcher.onBackPressed() }
+        composeRule.waitForIdle()
+        assertTrue(exists(PROJECTS))
+        assertFalse(exists(NEW_PROJECT))
+        assertFalse(composeRule.activity.isFinishing)
+    }
+
+    @Test
+    fun newProject_closeReturnsToProjects() {
+        show()
+        composeRule.onNodeWithTag(FAKE_NEW).performClick()
+        composeRule.waitForIdle()
+        assertTrue(exists(NEW_PROJECT))
+        composeRule.onNodeWithTag(FAKE_CLOSE).performClick()
+        composeRule.waitForIdle()
+        assertTrue(exists(PROJECTS))
+        assertFalse(exists(NEW_PROJECT))
+        assertFalse(composeRule.activity.isFinishing)
+    }
+
+    @Test
+    fun newProject_backReturnsToProjects() {
+        show()
+        composeRule.onNodeWithTag(FAKE_NEW).performClick()
+        composeRule.waitForIdle()
+        assertTrue(exists(NEW_PROJECT))
+        composeRule.runOnUiThread { composeRule.activity.onBackPressedDispatcher.onBackPressed() }
+        composeRule.waitForIdle()
+        assertTrue(exists(PROJECTS))
+        assertFalse(exists(NEW_PROJECT))
+        assertFalse(composeRule.activity.isFinishing)
+    }
+
+    @Test
+    fun newProject_hasNoNavigationBar() {
+        lessonsEnabled.value = true
+        show()
+        // Control: the list has the bar.
+        assertTrue(exists(APP_NAVIGATION_BAR_TAG))
+        composeRule.onNodeWithTag(FAKE_NEW).performClick()
+        composeRule.waitForIdle()
+        assertTrue(exists(NEW_PROJECT))
+        assertFalse(exists(APP_NAVIGATION_BAR_TAG))
+        assertTrue(composeRule.onAllNodesWithText("Lessons").fetchSemanticsNodes().isEmpty())
+    }
+
+    @Test
+    fun recreate_keepsNewProjectScreen() {
+        val restorationTester = StateRestorationTester(composeRule)
+        restorationTester.setContent {
+            AppTheme(darkTheme = false) { AppNavHost(screens = fakeScreens) }
+        }
+        composeRule.waitForIdle()
+        composeRule.onNodeWithTag(FAKE_NEW).performClick()
+        composeRule.waitForIdle()
+        assertTrue(exists(NEW_PROJECT))
+
+        restorationTester.emulateSavedInstanceStateRestore()
+        composeRule.waitForIdle()
+        assertTrue(exists(NEW_PROJECT))
+        composeRule.runOnUiThread { composeRule.activity.onBackPressedDispatcher.onBackPressed() }
+        composeRule.waitForIdle()
+        assertTrue(exists(PROJECTS))
+    }
+
     private companion object {
         const val PROJECTS = "projects_screen"
         const val SAMPLE = "sample_screen"
+        const val NEW_PROJECT = "new_project_screen"
+        const val FAKE_NEW = "fake_new_animation"
+        const val FAKE_CLOSE = "fake_new_project_close"
         const val COMING_SOON = "Coming soon"
         const val SNACKBAR_WAIT_MILLIS = 500L
     }

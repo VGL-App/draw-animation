@@ -1,0 +1,19 @@
+ticket: T-011
+criterion: Từ danh sách trống bấm "New animation" mở màn Tạo dự án; bấm "Create" thì về danh sách có một dự án mới
+timeout: 120
+# Same entry as T-009: the first-open app open ad may show over loading, and loading may stop with a retry button.
+fresh
+consent decline 30
+wait id=projects_screen | text="Continue to app" | desc="Continue to app" | id=loading_retry 60
+tap_if id=loading_retry
+wait id=projects_screen | text="Continue to app" | desc="Continue to app" 60
+tap_if text="Continue to app" | desc="Continue to app"
+wait id=projects_screen 30
+tap id=projects_new
+wait id=new_project_screen 15
+wait id=new_project_create enabled=true 15
+shot new_project
+tap id=new_project_create
+wait id=projects_screen 30
+count idp=project_card_ 1
+shot projects_after_create

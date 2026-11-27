@@ -1,7 +1,7 @@
 | Màn hình | Điểm ảnh khác | Ảnh so sánh (thiết kế, thật, khác biệt) |
 | --- | --- | --- |
-| NewProjectScreen_default_dark | thiếu ảnh chuẩn screenshot | |
-| NewProjectScreen_default_light | thiếu ảnh chuẩn screenshot | |
+| NewProjectScreen_default_dark | 12.1% | `NewProjectScreen_default_dark_compare.png` |
+| NewProjectScreen_default_light | 7.5% | `NewProjectScreen_default_light_compare.png` |
 | ProjectsScreen_empty_dark | 18.5% | `ProjectsScreen_empty_dark_compare.png` |
 | ProjectsScreen_empty_light | 12.0% | `ProjectsScreen_empty_light_compare.png` |
 | ProjectsScreen_list_dark | 23.4% | `ProjectsScreen_list_dark_compare.png` |

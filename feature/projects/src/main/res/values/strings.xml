@@ -39,4 +39,27 @@
     <string name="projects_message_rename_failed">Couldn\'t rename the project. Try again.</string>
     <string name="projects_message_duplicate_failed">Couldn\'t duplicate the project. Try again.</string>
     <string name="projects_message_delete_failed">Couldn\'t delete the project. Try again.</string>
+    <string name="new_project_title">New animation</string>
+    <string name="new_project_close">Close</string>
+    <string name="new_project_name">Name</string>
+    <string name="new_project_canvas">Canvas</string>
+    <string name="new_project_size">Size</string>
+    <string name="new_project_frame_rate">Frame rate</string>
+    <string name="new_project_background">Background</string>
+    <string name="new_project_photo">Photo</string>
+    <string name="new_project_create">Create</string>
+    <string name="new_project_color_white">White</string>
+    <string name="new_project_color_dark">Dark gray</string>
+    <string name="new_project_color_blue">Blue</string>
+    <string name="new_project_first_layer_name">Layer 1</string>
+    <string name="new_project_create_failed">Couldn\'t create the project. Try again.</string>
+    <string name="new_project_photo_failed">Couldn\'t use this photo. Try another one.</string>
+    <string name="new_project_default_name" translatable="false">My animation %1$d</string>
+    <string name="new_project_fps" translatable="false">%1$d fps</string>
+    <string name="new_project_fps_number" translatable="false">%1$d</string>
+    <string name="new_project_size_720p" translatable="false">720p</string>
+    <string name="new_project_size_1080p" translatable="false">1080p</string>
+    <string name="new_project_ratio_9_16" translatable="false">9:16</string>
+    <string name="new_project_ratio_16_9" translatable="false">16:9</string>
+    <string name="new_project_ratio_1_1" translatable="false">1:1</string>
 </resources>
