@@ -120,6 +120,21 @@ class ProjectsRouteTest {
     }
 
     @Test
+    fun twoMessagesInARow_secondReplacesFirst() {
+        repository.projects.value = listOf(unreadableItem(2, name = "Broken"), readableItem(3))
+        show()
+        assertSnackbarAfterTap(COMING_SOON) {
+            composeRule.onNodeWithTag(ProjectsTestTags.card(testProjectId(3))).performClick()
+        }
+
+        composeRule.mainClock.advanceTimeBy(SNACKBAR_WAIT_MILLIS)
+        composeRule.onNodeWithTag(ProjectsTestTags.card(testProjectId(2))).performClick()
+        composeRule.mainClock.advanceTimeBy(SNACKBAR_WAIT_MILLIS)
+        composeRule.onNodeWithText("Can't open this project.").assertExists()
+        composeRule.onAllNodesWithText(COMING_SOON).assertCountEquals(0)
+    }
+
+    @Test
     fun disabled_callsOnFeatureDisabledOnce() {
         show()
         composeRule.mainClock.autoAdvance = true
