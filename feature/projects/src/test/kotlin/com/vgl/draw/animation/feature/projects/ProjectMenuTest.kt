@@ -34,6 +34,7 @@ import androidx.compose.ui.test.assertIsFocused
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.hasAnyDescendant
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isRoot
@@ -47,6 +48,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToIndex
+import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.test.performTouchInput
@@ -578,6 +580,90 @@ class ProjectMenuTest {
     }
 
     @Test
+    @Config(qualifiers = "w411dp-h891dp-xxhdpi")
+    fun duplicating_twoMessagesInARow_bothShowAtOnce() {
+        val repository = FakeProjectsRepository()
+        repository.projects.value = listOf(
+            readableItem(1, name = "Walk cycle", frames = 24),
+            readableItem(3),
+            unreadableItem(2, name = "Broken"),
+        )
+        val gate = CompletableDeferred<Unit>()
+        repository.duplicateGate = gate
+        val viewModel = viewModel(repository, FakeFeatureFlags(FeatureFlag.EDITOR))
+        composeRule.setContent { AppTheme(darkTheme = false) { Route(viewModel) } }
+        composeRule.waitForIdle()
+        composeRule.onNodeWithTag(ProjectsTestTags.card(WALK)).performTouchInput { longClick() }
+        waitForMenu()
+        composeRule.onNodeWithTag(ProjectsTestTags.MENU_DUPLICATE).performClick()
+        composeRule.waitUntil(WAIT_MILLIS) {
+            composeRule.onAllNodesWithText(DUPLICATING_WALK).fetchSemanticsNodes().isNotEmpty()
+        }
+
+        composeRule.mainClock.autoAdvance = false
+        // Hidden with TalkBack: the copy still runs, so "Duplicating…" shows again.
+        composeRule.onNode(
+            hasAnyDescendant(hasText(DUPLICATING_WALK)) and SemanticsMatcher.keyIsDefined(SemanticsActions.Dismiss),
+            useUnmergedTree = true,
+        ).performSemanticsAction(SemanticsActions.Dismiss)
+        composeRule.mainClock.advanceTimeBy(500)
+        composeRule.onNodeWithText(DUPLICATING_WALK).assertExists()
+
+        composeRule.onNodeWithTag(ProjectsTestTags.card(testProjectId(3))).performClick()
+        composeRule.mainClock.advanceTimeBy(500)
+        composeRule.onNodeWithText(COMING_SOON).assertExists()
+        composeRule.onAllNodesWithText("Duplicating", substring = true).assertCountEquals(0)
+
+        composeRule.mainClock.advanceTimeBy(500)
+        composeRule.onNodeWithTag(ProjectsTestTags.card(testProjectId(2))).performClick()
+        composeRule.mainClock.advanceTimeBy(500)
+        composeRule.onNodeWithText(CANNOT_OPEN).assertExists()
+        composeRule.onAllNodesWithText(COMING_SOON).assertCountEquals(0)
+        composeRule.onAllNodesWithText("Duplicating", substring = true).assertCountEquals(0)
+
+        // "Can't open this project." hides after 4 s; the copy still runs, so "Duplicating…" shows again.
+        composeRule.mainClock.advanceTimeBy(5_000)
+        composeRule.onNodeWithText(DUPLICATING_WALK).assertExists()
+        composeRule.onAllNodesWithText(CANNOT_OPEN).assertCountEquals(0)
+
+        gate.complete(Unit)
+        composeRule.mainClock.advanceTimeBy(500)
+        composeRule.onAllNodesWithText("Duplicating", substring = true).assertCountEquals(0)
+    }
+
+    @Test
+    fun duplicating_copyEndsDuringOtherMessage_doesNotReturn() {
+        val repository = FakeProjectsRepository()
+        repository.projects.value = listOf(readableItem(1, name = "Walk cycle", frames = 24), readableItem(3))
+        val gate = CompletableDeferred<Unit>()
+        repository.duplicateGate = gate
+        val viewModel = viewModel(repository, FakeFeatureFlags(FeatureFlag.EDITOR))
+        composeRule.setContent { AppTheme(darkTheme = false) { Route(viewModel) } }
+        composeRule.waitForIdle()
+        composeRule.onNodeWithTag(ProjectsTestTags.card(WALK)).performTouchInput { longClick() }
+        waitForMenu()
+        composeRule.onNodeWithTag(ProjectsTestTags.MENU_DUPLICATE).performClick()
+        composeRule.waitUntil(WAIT_MILLIS) {
+            composeRule.onAllNodesWithText(DUPLICATING_WALK).fetchSemanticsNodes().isNotEmpty()
+        }
+
+        composeRule.mainClock.autoAdvance = false
+        composeRule.onNodeWithTag(ProjectsTestTags.card(testProjectId(3))).performClick()
+        composeRule.mainClock.advanceTimeBy(500)
+        composeRule.onNodeWithText(COMING_SOON).assertExists()
+
+        // The copy ends while "Coming soon" covers "Duplicating…": it must not come back.
+        gate.complete(Unit)
+        composeRule.mainClock.advanceTimeBy(500)
+        composeRule.onNodeWithText(COMING_SOON).assertExists()
+        composeRule.onAllNodesWithText("Duplicating", substring = true).assertCountEquals(0)
+
+        composeRule.mainClock.advanceTimeBy(5_000)
+        composeRule.onAllNodesWithText(COMING_SOON).assertCountEquals(0)
+        composeRule.onAllNodesWithText("Duplicating", substring = true).assertCountEquals(0)
+    }
+
+    @Test
     fun backUp_withoutDestination_showsComingSoon() {
         val repository = FakeProjectsRepository()
         repository.projects.value = listOf(readableItem(1, name = "Walk cycle", frames = 24))
@@ -810,6 +896,7 @@ class ProjectMenuTest {
         const val CLOSER_SHARE = 0.7f
         const val INK_THRESHOLD = 24
         const val COMING_SOON = "Coming soon"
+        const val CANNOT_OPEN = "Can't open this project."
         const val DUPLICATING_WALK = "Duplicating “Walk cycle”…"
     }
 }
