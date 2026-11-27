@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
+import android.os.Looper
 import android.provider.MediaStore
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.LocalActivityResultRegistryOwner
@@ -47,6 +48,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 
 /**
@@ -119,16 +121,27 @@ class NewProjectRouteTest {
         }
     }
 
+    /**
+     * The one content lambda of the test, set on the activity at start and after each recreation, as the app sets one
+     * content in `onCreate`. The keys of `rememberSaveable` follow where the content lambda is written: two
+     * different lambdas (or the rule's `setContent`, which wraps the content) would not find the saved state.
+     */
+    private val content: @Composable () -> Unit = { Content() }
+
     private fun show() {
-        composeRule.setContent { Content() }
+        composeRule.activityRule.scenario.onActivity { it.setContent(content = content) }
         composeRule.waitForIdle()
         order.clear()
     }
 
-    /** Builds the activity again, then sets the content again, as the app does in `onCreate`. */
-    private fun recreate() {
+    /**
+     * Builds the activity again, then sets the content again, as the app does in `onCreate`. [beforeContent] runs
+     * after the old content left and before the new one is set.
+     */
+    private fun recreate(beforeContent: () -> Unit = {}) {
         composeRule.activityRule.scenario.recreate()
-        composeRule.activityRule.scenario.onActivity { it.setContent { Content() } }
+        beforeContent()
+        composeRule.activityRule.scenario.onActivity { it.setContent(content = content) }
         composeRule.waitForIdle()
     }
 
@@ -364,6 +377,34 @@ class NewProjectRouteTest {
         composeRule.runOnUiThread { oldFinish() }
         composeRule.waitForIdle()
         assertEquals(listOf(repository.createdId), opened)
+    }
+
+    @Test
+    fun recreatedWhileCreating_writtenAfterOldScreenLeft_opensOnce() {
+        repository.count = 2
+        val gate = CompletableDeferred<Unit>()
+        repository.createGate = gate
+        show()
+        tapCreate()
+
+        // The write ends after the old content left and before the new one is set: ProjectCreated waits in the
+        // view model's channel for the new screen.
+        recreate(
+            beforeContent = {
+                gate.complete(Unit)
+                shadowOf(Looper.getMainLooper()).idle()
+            },
+        )
+        assertEquals(1, repository.created.size)
+        // No project was pending when the new screen started: it gets ProjectCreated while resumed, so create_inter
+        // shows once (plan T-011, section 3.1), and nothing opens before the ad closed.
+        assertEquals(1, adCalls)
+        assertEquals(emptyList<ProjectId>(), opened)
+
+        composeRule.runOnUiThread { heldFinish!!.invoke() }
+        composeRule.waitForIdle()
+        assertEquals(listOf(repository.createdId), opened)
+        assertEquals(1, adCalls)
     }
 
     @Test
