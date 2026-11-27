@@ -22,6 +22,7 @@ import androidx.navigation.compose.rememberNavController
 import com.vgl.draw.animation.R
 import com.vgl.draw.animation.feature.loading.navigation.LoadingDestination
 import com.vgl.draw.animation.feature.loading.navigation.loadingScreen
+import com.vgl.draw.animation.feature.projects.navigation.NewProjectDestination
 import com.vgl.draw.animation.feature.projects.navigation.ProjectsDestination
 import com.vgl.draw.animation.feature.projects.navigation.newProjectScreen
 import com.vgl.draw.animation.feature.projects.navigation.projectsScreen
@@ -38,7 +39,8 @@ import kotlinx.coroutines.launch
  * back stack has no entry yet, so a recreation never looks like a passage through loading ([reportsScreen]).
  *
  * Loading leads to the project list; with the projects flag off, the list hands over to the sample screen once
- * (spec projects, KB-13). The bottom bar shows on the list when [lessonsEnabled]; it takes the system navigation bar
+ * (spec projects, KB-13). "New animation" on the list opens the Create screen, which goes back to the list when
+ * closed and, while there is no drawing screen (T-018), after creating. The bottom bar shows on the list when [lessonsEnabled]; it takes the system navigation bar
  * inset itself, so the content consumes the bar's padding before its own safe drawing padding.
  * [screens] is replaced by tests with fake destinations; the default is the real feature screens.
  */
@@ -101,8 +103,14 @@ fun AppNavHost(
                             popUpTo<ProjectsDestination> { inclusive = true }
                         }
                     },
-                    // Test-first skeleton (T-011): wired by the code commit.
-                    onNewProject = {},
+                    // Two quick taps open one Create screen.
+                    onNewProject = { navController.navigate(NewProjectDestination) { launchSingleTop = true } },
+                ),
+            )
+            screens.newProject(
+                this,
+                NewProjectCallbacks(
+                    onClose = { navController.popBackStack(NewProjectDestination, inclusive = true) },
                 ),
             )
             screens.sample(this)
