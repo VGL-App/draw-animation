@@ -48,6 +48,9 @@ private val CardBottomPadding = 12.dp
 private val ThumbnailCorner = 8.dp
 private const val THUMBNAIL_ASPECT = 168f / 94f
 
+/** Columns of the grid, also given to the grid's ads. */
+internal const val PROJECT_GRID_COLUMNS = 2
+
 /**
  * The list state: "New animation" first, the "Your projects" header, then two columns of cards. The button and the
  * header span the whole row, so they scroll with the cards; the top bar stays outside the grid.

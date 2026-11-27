@@ -198,6 +198,7 @@ fun ProjectsScreen(
     onRenameConfirm: (String) -> Unit = {},
     onDeleteConfirm: () -> Unit = {},
     onDismissOverlay: () -> Unit = {},
+    adSlots: ProjectsAdSlots = DefaultProjectsAdSlots,
 ) {
     // Outside the state switch, so a running "Duplicating…" is kept when the screen moves between List and Empty.
     val duplicatingHostState = remember { SnackbarHostState() }
@@ -439,6 +440,7 @@ object ProjectsTestTags {
     const val GRID = "projects_grid"
     const val NEW = "projects_new"
     const val LESSON = "projects_lesson"
+    const val EMPTY_AD = "projects_empty_ad"
     const val SETTINGS = "projects_settings"
     const val IMPORT = "projects_import"
     const val MENU = "project_menu"
